@@ -1,0 +1,3 @@
+% time (s), %bandwidth (bps), %latency (ms),hdr0
+0.0,100000,10,hdr0
+100.0,500000,100,hdr0

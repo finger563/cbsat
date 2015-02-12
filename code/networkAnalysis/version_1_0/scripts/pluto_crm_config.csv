@@ -1,0 +1,6 @@
+% time (s), %bandwidth (bps), %latency (ms),wics0
+1.0,100000,10,wics0
+4.0,300000,10,wics0
+% time (s), %bandwidth (bps), %latency (ms),hdr0
+1.0,200000,10,hdr0
+2.0,2000000,10,hdr0
