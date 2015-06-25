@@ -38,10 +38,7 @@ namespace NetworkMiddleware {
     sleepTime.tv_sec = 0;
     sleepTime.tv_nsec = 0;
 
-    while (true) {
-      if (threadSendDie) {
-        break;
-      }
+    while (!threadSendDie) {
       if ( timeDiff > 0 ) {
         nanosleep(&sleepTime,&remainingTime);
 	timeDiff = 0;

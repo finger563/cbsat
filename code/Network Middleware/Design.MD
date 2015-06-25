@@ -1,3 +1,15 @@
+Enhancements:
+-------------
+* Middleware:
+  * Server side receive middleware
+  * Enable out-of-band communication between servers & clients
+    * Communication of profiles?
+    * Allow receiver to stop sender
+* Sever Functionality:
+  * reads all profiles for all clients connected
+  * checks all incoming client data against the client's profile
+  * sends STOP command to client if client has been deemed a threat
+
 Questions:
 ----------
 * What do we do about server (receiver)?
