@@ -35,7 +35,8 @@ int main(int argc, char **argv) {
   std::string bufferProfileFile = options.bufferFile;
   bufferProfile.initializeFromFile(bufferProfileFile.c_str());
 
-  if ( NetworkMiddleware::InitClient(bufferProfile,options.ip,options.port) != 0 ) {
+  uint64_t clientID = 0;
+  if ( clientID = NetworkMiddleware::InitClient(bufferProfile,options.ip,options.port) < 0 ) {
     TG_LOG("ERROR: couldn't initialize network middleware!\n");
     return -1;
   }
@@ -45,7 +46,7 @@ int main(int argc, char **argv) {
   clock_gettime(CLOCK_REALTIME,&startTime);
 
   while (true) {
-    Message* data = new Message(messageBitLength, id, 0);
+    Message* data = new Message(messageBitLength, id, clientID);
     messages.push_back(data);      
     data->TimeStamp();
     NetworkMiddleware::send(data);

@@ -166,18 +166,36 @@ namespace NetworkMiddleware {
       threadSendDie = true;
       threadRecvDie = true;
       int retVal;
+
       TG_LOG("Joining thread %lu\n",
 	     threadSend);
       pthread_join(threadSend,(void **)&retVal);
       TG_LOG("exited join thread!\n");
       pthread_mutex_destroy(&threadSendMutex);
       pthread_cond_destroy(&threadSendCV);
+
       TG_LOG("Joining thread %lu\n",
 	     threadRecv);
       pthread_join(threadRecv,(void **)&retVal);
       TG_LOG("exited join thread!\n");
       pthread_mutex_destroy(&threadRecvMutex);
       pthread_cond_destroy(&threadRecvCV);
+
+      std::map<uint64_t,IPV6_Connection*>::iterator it;
+      for (it=data_conns.begin();it!=data_conns.end();it++)
+	{
+	  if (it->second != NULL) {
+	    it->second->Close();
+	    delete it->second;
+	  }
+	}
+      for (it=oob_conns.begin();it!=oob_conns.end();it++)
+	{
+	  if (it->second != NULL) {
+	    it->second->Close();
+	    delete it->second;
+	  }
+	}
     }
   }
 
