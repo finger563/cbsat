@@ -39,11 +39,6 @@ int main(int argc, char **argv) {
     return -1;
   }
 
-  interface.serverIP = options.ip;
-  interface.serverPort = options.port;
-  if ( interface.Initialize(false,false) != 0 )
-    return -1;
-
   std::string outputFile = options.outputFile;
   messageBitLength = options.bitLength;
   messageStrLength = ceil((double)messageBitLength/8.0f);
@@ -52,7 +47,7 @@ int main(int argc, char **argv) {
   std::string bufferProfileFile = options.bufferFile;
   bufferProfile.initializeFromFile(bufferProfileFile.c_str());
 
-  if ( NetworkMiddleware::Init(bufferProfile, sendFunc) != 0 ) {
+  if ( NetworkMiddleware::InitClient(bufferProfile,options.ip,options.port) != 0 ) {
     TG_LOG("ERROR: couldn't initialize network middleware!\n");
     return -1;
   }

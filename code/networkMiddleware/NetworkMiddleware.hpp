@@ -19,9 +19,6 @@
 #include "NetworkProfile.hpp"
 #include "NetworkMiddleware.hpp"
 
-typedef void* (*sendFunc_t)(Message* data);
-typedef void* (*recvFunc_t)(Message* data);
-
 namespace NetworkMiddleware {
 
   static NetworkBuffer buffer;
@@ -32,16 +29,15 @@ namespace NetworkMiddleware {
   static bool threadSendDie;
   static pthread_cond_t threadSendCV;
   static pthread_mutex_t threadSendMutex;
-  sendFunc_t sendFunctionPtr;
 
   static pthread_t threadRecv;
   static bool threadRecvDie;
   static pthread_cond_t threadRecvCV;
   static pthread_mutex_t threadRecvMutex;
-  recvFunc_t recvFunctionPtr;
 
-  std::map<uint64_t,IPV6_Connection*> data_conns;
-  std::map<uint64_t,IPV6_Connection*> oob_conns;
+  static uint64_t new_conn_id = 1;
+  static std::map<uint64_t,IPV6_Connection*> data_conns;
+  static std::map<uint64_t,IPV6_Connection*> oob_conns;
   
   void *threadRecvFunction(void * arg){
   }
@@ -72,7 +68,7 @@ namespace NetworkMiddleware {
       pthread_mutex_unlock(&threadSendMutex);
       if ( sendData && data != NULL ) {
 	data->TimeStamp();
-        (*sendFunctionPtr)(data);
+        // NEED TO SEND HERE USING PROPER INTERFACE
         timeDiff = profile.Delay(data->Bits(),data->LastEpochTime());
 	double fractpart,intpart;
 	fractpart = modf(timeDiff,&intpart);
@@ -85,12 +81,40 @@ namespace NetworkMiddleware {
     pthread_exit(NULL);
   }
 
-  int Init( NetworkProfile p, sendFunc_t func ,long capacity = 0 ) {
-    if ( func == NULL ) {
-      TG_LOG("ERROR: Send func is NULL!\n");
-      return -1;
-    }
-    sendFunctionPtr = func;
+  int Init()
+  {
+    // CREATE OOB RECV THREAD HERE
+    // CREATE DATA RECV THREAD HERE
+    // CREATE DATA SEND THREAD HERE ( ONE BUFFER OR WHAT?)
+  }
+
+  int InitClient( NetworkProfile p,
+		  std::string serverIP,
+		  int serverPort,
+		  long capacity = 0 ) {
+    uint64_t conn_id = new_conn_id++;
+    data_conns[conn_id] = new IPV6_Connection();
+    data_conns[conn_id]->serverIP = serverIP;
+    data_conns[conn_id]->serverPort = serverPort;
+    if ( data_conns[conn_id]->Initialize(false,false) != 0 )
+      {
+	TG_LOG("ERROR:: could't initialize data interface to %s : %d",
+	       data_conns[conn_id]->serverIP.c_str(),
+	       data_conns[conn_id]->serverPort);
+	return -1;
+      }
+
+    oob_conns[conn_id] = new IPV6_Connection();
+    oob_conns[conn_id]->serverIP = serverIP;
+    oob_conns[conn_id]->serverPort = serverPort+1;
+    if ( oob_conns[conn_id]->Initialize(false,false) != 0 )
+      {
+	TG_LOG("ERROR:: could't initialize oob interface to %s : %d",
+	       data_conns[conn_id]->serverIP.c_str(),
+	       data_conns[conn_id]->serverPort);
+	return -1;
+      }
+
     nextSendTime.tv_sec = 0;
     nextSendTime.tv_nsec = 0;
     buffer.Capacity(capacity);
@@ -98,14 +122,35 @@ namespace NetworkMiddleware {
     if (!profile.Initialized()) {
       TG_LOG("WARNING: couldn't initialize buffer profile!\n");
       TG_LOG("\tActing as a pass-through buffer!\n");
+      new_conn_id--;
+      data_conns.erase(new_conn_id);
+      return 0;
     }
     else {
       threadSendDie = false;
       pthread_mutex_init (&threadSendMutex, NULL);
       pthread_cond_init (&threadSendCV, NULL);
       pthread_create(&threadSend, NULL, NetworkMiddleware::threadSendFunction, (void *)NULL);
-      TG_LOG("Created thread %lu\n",
+      TG_LOG("Created client MW thread %lu\n",
 	     threadSend);
+      return conn_id;
+    }
+  }
+
+  int InitServer( NetworkProfile p, long capacity = 0 ) {
+    buffer.Capacity(capacity);
+    profile = p;
+    if (!profile.Initialized()) {
+      TG_LOG("WARNING: couldn't initialize buffer profile!\n");
+      TG_LOG("\tActing as a pass-through buffer!\n");
+    }
+    else {
+      threadRecvDie = false;
+      pthread_mutex_init (&threadRecvMutex, NULL);
+      pthread_cond_init (&threadRecvCV, NULL);
+      pthread_create(&threadRecv, NULL, NetworkMiddleware::threadRecvFunction, (void *)NULL);
+      TG_LOG("Created server MW thread %lu\n",
+	     threadRecv);
     }
     return 0;
   }
@@ -113,6 +158,7 @@ namespace NetworkMiddleware {
   int Exit() {
     if ( profile.Initialized() == true ) {
       threadSendDie = true;
+      threadRecvDie = true;
       int retVal;
       TG_LOG("Joining thread %lu\n",
 	     threadSend);
@@ -120,6 +166,12 @@ namespace NetworkMiddleware {
       TG_LOG("exited join thread!\n");
       pthread_mutex_destroy(&threadSendMutex);
       pthread_cond_destroy(&threadSendCV);
+      TG_LOG("Joining thread %lu\n",
+	     threadRecv);
+      pthread_join(threadRecv,(void **)&retVal);
+      TG_LOG("exited join thread!\n");
+      pthread_mutex_destroy(&threadRecvMutex);
+      pthread_cond_destroy(&threadRecvCV);
     }
   }
 
@@ -149,7 +201,7 @@ namespace NetworkMiddleware {
       }
     }
     else {
-      (*sendFunctionPtr)(data);      
+      // NEED TO SEND DATA HERE
     }
     return retVal;
   }
