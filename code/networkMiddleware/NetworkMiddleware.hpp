@@ -68,7 +68,13 @@ namespace NetworkMiddleware {
       pthread_mutex_unlock(&threadSendMutex);
       if ( sendData && data != NULL ) {
 	data->TimeStamp();
-        // NEED TO SEND HERE USING PROPER INTERFACE
+	int retVal =
+	  data_conns[data->connection_id]->send(data->Buffer().c_str(),
+						data->Bytes());
+	if ( retVal <= 0 )
+	  TG_LOG("Couldn't send message %lu on connection %lu\n",
+		 data->Id(),
+		 data->connection_id);
         timeDiff = profile.Delay(data->Bits(),data->LastEpochTime());
 	double fractpart,intpart;
 	fractpart = modf(timeDiff,&intpart);
@@ -200,8 +206,14 @@ namespace NetworkMiddleware {
 	nextSendTime.tv_nsec = nextSendTime.tv_nsec - 1000000000;
       }
     }
-    else {
-      // NEED TO SEND DATA HERE
+    else {      
+      int retVal =
+	data_conns[data->connection_id]->send(data->Buffer().c_str(),
+					      data->Bytes());
+      if ( retVal <= 0 )
+	TG_LOG("Couldn't send message %lu on connection %lu\n",
+	       data->Id(),
+	       data->connection_id);
     }
     return retVal;
   }

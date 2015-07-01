@@ -13,18 +13,6 @@ static long id = 0;
 
 long precision = 30;// for file output
 
-void *sendFunc(Message* data) {
-  if ( data != NULL ) {
-    int retVal = interface.send(data->Buffer().c_str(),data->Bytes());
-    if ( retVal <= 0 ) {
-      TG_LOG("Couldn't send Message %lu with buffer %s\n",data->Id(),data->Buffer().c_str());
-    }
-    return (void *) retVal;
-  }
-  else
-    return (void *) NULL;
-}
-
 int main(int argc, char **argv) {
   timespec timeout, remaining;
 
@@ -57,7 +45,7 @@ int main(int argc, char **argv) {
   clock_gettime(CLOCK_REALTIME,&startTime);
 
   while (true) {
-    Message* data = new Message(messageBitLength, id);
+    Message* data = new Message(messageBitLength, id, 0);
     messages.push_back(data);      
     data->TimeStamp();
     NetworkMiddleware::send(data);
