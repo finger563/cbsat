@@ -10,13 +10,13 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 all: client server tcWrapper
 
 client: Client.cpp
-	$(CC) -o ${@} $^ $(CFLAGS) $(LIBS)
+	$(CC) -o ${@}.a $^ $(CFLAGS) $(LIBS)
 
 server: Server.cpp
-	$(CC) -o ${@} $^ $(CFLAGS) $(LIBS)
+	$(CC) -o ${@}.a $^ $(CFLAGS) $(LIBS)
 
 tcWrapper: tcWrapper.cpp
-	$(CC) -o ${@} $^ $(CFLAGS) $(LIBS)
+	$(CC) -o ${@}.a $^ $(CFLAGS) $(LIBS)
 
 .PHONY: clean
 

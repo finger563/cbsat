@@ -12,23 +12,39 @@
 #include <vector>
 #include <string>
 
+#include <map>
+
 #include "log_macro.hpp"
 #include "NetworkBuffer.hpp"
 #include "NetworkProfile.hpp"
 #include "NetworkMiddleware.hpp"
 
 typedef void* (*sendFunc_t)(Message* data);
+typedef void* (*recvFunc_t)(Message* data);
 
 namespace NetworkMiddleware {
 
   static NetworkBuffer buffer;
   NetworkProfile profile;
   timespec nextSendTime;
+
   static pthread_t threadSend;
   static bool threadSendDie;
   static pthread_cond_t threadSendCV;
   static pthread_mutex_t threadSendMutex;
   sendFunc_t sendFunctionPtr;
+
+  static pthread_t threadRecv;
+  static bool threadRecvDie;
+  static pthread_cond_t threadRecvCV;
+  static pthread_mutex_t threadRecvMutex;
+  recvFunc_t recvFunctionPtr;
+
+  std::map<uint64_t,IPV6_Connection*> data_conns;
+  std::map<uint64_t,IPV6_Connection*> oob_conns;
+  
+  void *threadRecvFunction(void * arg){
+  }
 
   void *threadSendFunction(void * arg){
     Message* data;
