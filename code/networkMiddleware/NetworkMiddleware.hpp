@@ -39,10 +39,10 @@ namespace NetworkMiddleware {
   static std::map<uint64_t,IPV6_Connection*> data_conns;
   static std::map<uint64_t,IPV6_Connection*> oob_conns;
   
-  void *threadRecvFunction(void * arg){
+  void *dataRecvThread(void * arg){
   }
 
-  void *threadSendFunction(void * arg){
+  void *dataSendThread(void * arg){
     Message* data;
     bool sendData = false;
     double timeDiff = 0;
@@ -136,7 +136,7 @@ namespace NetworkMiddleware {
       threadSendDie = false;
       pthread_mutex_init (&threadSendMutex, NULL);
       pthread_cond_init (&threadSendCV, NULL);
-      pthread_create(&threadSend, NULL, NetworkMiddleware::threadSendFunction, (void *)NULL);
+      pthread_create(&threadSend, NULL, NetworkMiddleware::dataSendThread, (void *)NULL);
       TG_LOG("Created client MW thread %lu\n",
 	     threadSend);
       return conn_id;
@@ -154,7 +154,7 @@ namespace NetworkMiddleware {
       threadRecvDie = false;
       pthread_mutex_init (&threadRecvMutex, NULL);
       pthread_cond_init (&threadRecvCV, NULL);
-      pthread_create(&threadRecv, NULL, NetworkMiddleware::threadRecvFunction, (void *)NULL);
+      pthread_create(&threadRecv, NULL, NetworkMiddleware::dataRecvThread, (void *)NULL);
       TG_LOG("Created server MW thread %lu\n",
 	     threadRecv);
     }
