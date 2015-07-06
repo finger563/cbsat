@@ -21,16 +21,19 @@ public:
   std::string buffer;
   long bits;
   long id;
+  uint64_t connection_id;
   std::vector<timespec> times;
   Message ()
     : bits(0),
-      id(0)
+      id(0),
+      connection_id(0)
   {
   }
 
-  Message ( long len, long i )
+  Message ( long len, long i, uint64_t conn_id )
     : bits (len),
-      id(i)
+      id(i),
+      connection_id(conn_id)
   {
     buffer = std::string(this->Bytes()+2,'A');
     long templen = 256;

@@ -84,6 +84,8 @@ public:
     }
   }
 
+  virtual void Close() {}
+
   virtual long Send(const char *buffer, long len) {
     TG_LOG("Error: you called the base class virtual send function\n");
     return -1;
@@ -147,9 +149,14 @@ public:
     std::swap (remote_addr, s.remote_addr);
   }
 
-  ~IPV6_Connection() 
+  virtual void Close()
   {
     close(sockfd);
+  }
+
+  ~IPV6_Connection() 
+  {
+    Close();
   }
 
   virtual long send(const char *buffer, long len) {
