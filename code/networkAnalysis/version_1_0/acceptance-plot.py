@@ -9,20 +9,75 @@ network utilization.  Therefore each node's bandwidth is modeled as a network
 """ 
 
 # QoS files have 4 columns: time (s), BW(bps), latency (ms), Network Link (id #)
-import sys, os, csv, matplotlib, copy, glob
-import matplotlib.pyplot as plt
+import sys, os, csv, copy, glob
 
 from acceptancemathlib import *
+from utils import havePLT, getDataAtTimeFromProfile, plotProfile, get_app_node_map, get_appProfiles, get_nodeProfiles,plt
 
-orbital_period = (90*60)    # orbital period in seconds
-plot_profiles = True
-num_periods = 1
-selected_node = ''
-selected_interface = ''
-PLOT_WIDTH = 4 # line width for plots
-FONT_SIZE = 25 # font size for plots
-NC_MODE = False
-NC_STEP = 1
+class Options:
+    def __init__(self):
+        self.period = (90*60)    # orbital period in seconds
+        self.plot_profiles = havePLT
+        self.num_periods = 1
+        self.selected_node = ''
+        self.selected_interface = ''
+        self.plot_line_width = 4 # line width for plots
+        self.font_size = 25 # font size for plots
+        self.nc_mode = False
+        self.nc_step_size = 1
+
+    def parse_args(self,args):
+        argind = 1
+        while argind < len(args):
+            if args[argind] == "-P":
+                self.period = int(args[argind+1])
+                if self.period <= 0:
+                    print "Error! You must specify a time period > 0"
+                    return -1
+                argind += 2
+            elif args[argind] == "-n":
+                self.num_periods = int(args[argind+1])
+                if self.num_periods <= 0:
+                    print "Error! You must specify a number of periods > 0"
+                    return -1
+                argind += 2
+            elif args[argind] == "-p":
+                self.plot_profiles = False
+                argind += 1
+            elif args[argind] == "-nc_mode":
+                self.nc_mode = True
+                argind += 1
+            elif args[argind] == "-nc_step_size":
+                self.nc_step_size = float(args[argind+1])
+                argind += 2
+            elif args[argind] == "-N":
+                self.selected_node = args[argind+1]
+                argind += 2
+            elif args[argind] == "-I":
+                self.selected_interface = args[argind+1]
+                argind += 2
+            elif args[argind] == "-?" or args[argind] == "-h":
+                print "Usage:\n\tpython ",args[0],"""
+                \t\t-N <node name>
+                \t\t-I <node interface name>
+                \t\t-P <period (s)>
+                \t\t-n <number of periods to analyze>
+                \t\t-nc_mode (to run network calculus calcs)
+                \t\t-nc_step_size <step size for windows in NC>
+                \t\t-p (to not output any plots)\n"""
+                return -1
+            else:
+                print """Usage:\n\t""",args[0],"""
+                \t\t-N <node name>
+                \t\t-I <node interface name>
+                \t\t-P <period (s)>
+                \t\t-n <number of periods to analyze>
+                \t\t-nc_mode (to run network calculus calcs)
+                \t\t-nc_step_size <step size for windows in NC>
+                \t\t-p (to not output any plots)\n"""
+                return -1
+        return 0
+
 
 class ProfileEntry:
     def __init__(self,start=0,end=0,slope=0,data=0,interface='none',ptype='none'):
@@ -43,21 +98,15 @@ class ProfileEntry:
     def __str__(self):
         return "{0},{1},{2},{3},{4},{5}".format(self.start,self.end,self.slope,self.data,self.interface,self.ptype)
 
-def getDataAtTimeFromProfile(p,t):
-    i = 0
-    while i < len(p) and t > p[i].end:
-        i += 1
-    retVal = p[i].data - p[i].slope * (p[i].end - t)
-    #print "@ {} has value {}\n".format(t,retVal)
-    return retVal
 
 class NodeProfile:
-    def __init__(self,period=orbital_period):
+    def __init__(self,period,num_periods):
         self.profile = []
         self.required = []
         self.provided = []
         self.link = []
         self.period = period
+        self.num_periods = num_periods
         self.buffer = [0,0,0]
         self.delay = [0,0,0]
         self.interfaces = []
@@ -105,7 +154,7 @@ class NodeProfile:
         for intf in self.interfaces:
             prof = self.getProvidedProfile(intf)
             pData[intf] = prof[-1].data
-        for i in range(1,num_periods):
+        for i in range(1,self.num_periods):
             tmpProvided = copy.deepcopy(originalProvided)
             for e in tmpProvided:
                 e.data += pData[e.interface]
@@ -189,7 +238,7 @@ class NodeProfile:
         if len(self.required) > 0:
             originalRequired = copy.deepcopy(self.required)
             pData = self.required[-1].data
-            for i in range(1,num_periods):
+            for i in range(1,self.num_periods):
                 tmpRequired = copy.deepcopy(originalRequired)
                 for e in tmpRequired:
                     e.data += pData
@@ -403,48 +452,28 @@ class NodeProfile:
             e.data = pData[e.interface]
         return
 
-    def plotProfile(self,dtype,profile,ptype,dashes,label=''):
-        xvals = []
-        yvals = []
-        if dtype == 'data':
-            xvals.append(0)
-            yvals.append(0)
-        for e in profile:
-            if e.ptype == ptype:
-                if dtype == 'slope':
-                    xvals.append(e.start)
-                    yvals.append(e.slope)
-                    yvals.append(e.slope)
-                else:
-                    yvals.append(e.data)
-                xvals.append(e.end)
-
-        line, =plt.plot(xvals,yvals,label=r"{0}{1} {2}".format(label,ptype,dtype),linewidth=PLOT_WIDTH)
-        line.set_dashes(dashes)  
-        return
-
-    def plotData(self):
+    def plotData(self,line_width):
         plt.figure(2)
         plt.hold(True)
-        self.plotProfile('data',self.profile,'required',[8,4,2,4,2,4],'r[t]: ')
-        self.plotProfile('data',self.profile,'provided',[2,4],'p[t]: ')
-        self.plotProfile('data',self.link,'link',[6,12],'l[t]: ')
+        plotProfile('data',self.profile,'required',[8,4,2,4,2,4],'r[t]: ',line_width)
+        plotProfile('data',self.profile,'provided',[2,4],'p[t]: ',line_width)
+        plotProfile('data',self.link,'link',[6,12],'l[t]: ',line_width)
 
         buffplotx = [self.buffer[0],self.buffer[0]]
         buffploty = [self.buffer[1],self.buffer[1]+self.buffer[2]]
-        plt.plot(buffplotx,buffploty,'0.5',label=r"Buffer",linewidth=PLOT_WIDTH) #:%d B"%(int(buff)/8)
+        plt.plot(buffplotx,buffploty,'0.5',label=r"Buffer",linewidth=line_width) #:%d B"%(int(buff)/8)
 
         delayplotx = [self.delay[0],self.delay[0]+self.delay[2]]
         delayploty = [self.delay[1],self.delay[1]]
-        plt.plot(delayplotx,delayploty,'0.8',label=r"Delay",linewidth=PLOT_WIDTH) #:%0.4f s"%float(delay)
+        plt.plot(delayplotx,delayploty,'0.8',label=r"Delay",linewidth=line_width) #:%0.4f s"%float(delay)
     
         '''
-        line, =plt.plot([orbital_period,orbital_period],[0,max(column(req,1))],linewidth=2,color='black', label=r"Period End")
-        for i in range(2,num_periods+1):
-        line, =plt.plot([orbital_period*i,orbital_period*i],[0,max(column(req,1))],linewidth=2,color='black')
+        line, =plt.plot([self.period,self.period],[0,max(column(req,1))],linewidth=2,color='black', label=r"Period End")
+        for i in range(2,self.num_periods+1):
+        line, =plt.plot([period*i,period*i],[0,max(column(req,1))],linewidth=2,color='black')
         '''
 
-        plt.title("Network Traffic vs. Time over %d period(s)"%num_periods)
+        plt.title("Network Traffic vs. Time over %d period(s)"%self.num_periods)
         plt.ylabel("Data (bits)")
         plt.xlabel("Time (s)")
         plt.legend(loc='upper left')
@@ -455,20 +484,20 @@ class NodeProfile:
         plt.show()
         return
 
-    def plotSlope(self):
+    def plotSlope(self,line_width):
         plt.figure(1)
         plt.hold(True)
-        self.plotProfile('slope',self.profile,'required',[4,8])
-        self.plotProfile('slope',self.profile,'provided',[2,4])
-        self.plotProfile('slope',self.link,'link',[2,4])
+        plotProfile('slope',self.profile,'required',[4,8],'',line_width)
+        plotProfile('slope',self.profile,'provided',[2,4],'',line_width)
+        plotProfile('slope',self.link,'link',[2,4],'',line_width)
     
         '''
-        line, =plt.plot([orbital_period,orbital_period],[0,max(column(linkbw,1))],linewidth=2,color='black', label=r"Period End")
-        for i in range(2,num_periods+1):
-        line, =plt.plot([orbital_period*i,orbital_period*i],[0,max(column(linkbw,1))],linewidth=2,color='black')
+        line, =plt.plot([self.period,self.period],[0,max(column(linkbw,1))],linewidth=2,color='black', label=r"Period End")
+        for i in range(2,self.num_periods+1):
+        line, =plt.plot([self.period*i,self.period*i],[0,max(column(linkbw,1))],linewidth=2,color='black')
         '''
 
-        plt.title("Network Bandwidth vs. Time over %d period(s)"%num_periods)
+        plt.title("Network Bandwidth vs. Time over %d period(s)"%self.num_periods)
         plt.ylabel("Bandwidth (bps)")
         plt.xlabel("Time (s)")
         plt.legend(loc='lower left')
@@ -493,9 +522,10 @@ class NodeProfile:
         return retStr
 
 class NetworkProfile:
-    def __init__(self,_period=orbital_period):
+    def __init__(self,_period,_num_periods):
         self.nodeProfiles = {}
-        self.period = _period        
+        self.period = _period
+        self.num_periods = _num_periods
 
     def addNodeProfile(self,node,profile):
         self.nodeProfiles[node] = profile
@@ -535,137 +565,27 @@ def get_entry_from_line(line=None):
         entry.interface = fields[3]
     return entry
 
-def gen_network_profile(nodeProfiles,appProfiles,app_node_map,period):
-    profiles = NetworkProfile()
+def gen_network_profile(nodeProfiles,appProfiles,app_node_map,period,num_periods):
+    profiles = NetworkProfile(period,num_periods)
     for node,apps in app_node_map.iteritems():
-        nodeProfile = NodeProfile()
+        nodeProfile = NodeProfile(period,num_periods)
         nodeProfile.addProvidedProfile(nodeProfiles[node])
         for app in profiles:
             nodeProfile.addRequiredProfile(profiles[app])
         profiles.addNodeProfile(node,nodeProfile)
 
-def get_app_node_map(nodes,apps):
-    app_node_map = {}
-    for node,nprofile in nodes.iteritems():
-        for app,aprofile in apps.iteritems():
-            if app.find(node) != -1:
-                if app_node_map.has_key(node):
-                    app_node_map[node].append(app)
-                else:
-                    app_node_map[node] = [app]
-    return app_node_map
-
-def get_appProfiles(folder):
-    profile_dir = os.getcwd()+os.sep+folder
-    apps = {}
-    if os.path.isdir(profile_dir):
-        print 'Found ',profile_dir
-        for file in glob.glob(profile_dir+os.sep+'*profile.csv'):
-            app_name = file.replace('_profile.csv','')
-            app_name = app_name.replace(profile_dir+os.sep,'')
-            with open(file,'r+') as f:
-                content = f.read()
-                apps[app_name] = content
-    else:
-        print "ERROR: ",profile_dir," doesn't exist!"
-    return apps
-
-def get_nodeProfiles(folder):
-    profile_dir = os.getcwd()+os.sep+folder
-    nodes = {}
-    if os.path.isdir(profile_dir):
-        print 'Found ',profile_dir
-        for file in glob.glob(profile_dir+os.sep+'*config.csv'):
-            node_name = file.replace('_crm_config.csv','')
-            node_name = node_name.replace(profile_dir+os.sep,'')
-            if node_name != 'crm_config.csv':
-                with open(file,'r+') as f:
-                    content = f.read()
-                    nodes[node_name] = content
-    else:
-        print "ERROR: ",profile_dir," doesn't exist!"
-    return nodes
-
-def parse_args(args):
-    global orbital_period
-    global num_periods
-    global selected_node
-    global plot_profiles
-    global NC_MODE
-    global NC_STEP
-    
-    argind = 1
-    while argind < len(args):
-        if args[argind] == "-P":
-            orbital_period = int(args[argind+1])
-            if orbital_period <= 0:
-                print "Error! You must specify a time period > 0"
-                return -1
-            argind += 2
-        elif args[argind] == "-n":
-            num_periods = int(args[argind+1])
-            if num_periods <= 0:
-                print "Error! You must specify a number of periods > 0"
-                return -1
-            argind += 2
-        elif args[argind] == "-p":
-            plot_profiles = False
-            argind += 1
-        elif args[argind] == "-nc_mode":
-            NC_MODE = True
-            argind += 1
-        elif args[argind] == "-nc_step":
-            NC_STEP = float(args[argind+1])
-            argind += 2
-        elif args[argind] == "-N":
-            selected_node = args[argind+1]
-            argind += 2
-        elif args[argind] == "-I":
-            selected_interface = args[argind+1]
-            argind += 2
-        elif args[argind] == "-?" or args[argind] == "-h":
-            print "Usage:\n\tpython ",args[0],"""
-            \t\t-N <node name>
-            \t\t-I <node interface name>
-            \t\t-P <period (s)>
-            \t\t-n <number of periods to analyze>
-            \t\t-nc_mode (to run network calculus calcs)
-            \t\t-nc_step <step size for windows in NC>
-            \t\t-p (to not output any plots)\n"""
-            return -1
-        else:
-            print """Usage:\n\t""",args[0],"""
-            \t\t-N <node name>
-            \t\t-I <node interface name>
-            \t\t-P <period (s)>
-            \t\t-n <number of periods to analyze>
-            \t\t-nc_mode (to run network calculus calcs)
-            \t\t-nc_step <step size for windows in NC>
-            \t\t-p (to not output any plots)\n"""
-            return -1
-    return 0
-
 def main():    
-    global plot_profiles
-    global PLOT_WIDTH
-    global FONT_SIZE
-    global selected_node
-    global selected_interface
-    global orbital_period
-    global num_periods
-    global NC_MODE
-    global NC_STEP
     args = sys.argv
-
-    if parse_args(args):
+    options = Options()
+    if options.parse_args(args):
         return -1
 
     nodes = get_nodeProfiles('scripts')
     apps = get_appProfiles('profiles')
     app_node_map = get_app_node_map(nodes,apps)
-    networkProfile = NetworkProfile()
+    networkProfile = NetworkProfile(options.period,options.num_periods)
     for node,profile in nodes.iteritems():
-        nodeProfile = NodeProfile(orbital_period)
+        nodeProfile = NodeProfile(options.period,options.num_periods)
         nodeProfile.addProvidedProfile(profile)
         if node in app_node_map.keys():
             for app in app_node_map[node]:
@@ -674,46 +594,46 @@ def main():
         networkProfile.addNodeProfile(node,nodeProfile)
     networkProfile.calcData()
 
-    if selected_node == '':
-        selected_node=nodes.keys()[0]
-    if selected_node not in nodes:
-        print 'ERROR: node {0} not found in system!'.format(selected_node)
+    if options.selected_node == '':
+        options.selected_node=nodes.keys()[0]
+    if options.selected_node not in nodes:
+        print 'ERROR: node {0} not found in system!'.format(options.selected_node)
         return -1
 
-    if selected_interface == '':
-        if len(networkProfile.nodeProfiles[selected_node].interfaces) > 0:
-            selected_interface = networkProfile.nodeProfiles[selected_node].interfaces[0]
+    if options.selected_interface == '':
+        if len(networkProfile.nodeProfiles[options.selected_node].interfaces) > 0:
+            options.selected_interface = networkProfile.nodeProfiles[options.selected_node].interfaces[0]
         else:
-            print 'ERROR: node {0} has no interfaces that can be analyzed!'.format(selected_node)
+            print 'ERROR: node {0} has no interfaces that can be analyzed!'.format(options.selected_node)
             return -1
-    if selected_interface not in networkProfile.nodeProfiles[selected_node].interfaces:
-        print 'ERROR: node {0} has no interface named {1}!'.format(selected_node,selected_interface)
+    if options.selected_interface not in networkProfile.nodeProfiles[options.selected_node].interfaces:
+        print 'ERROR: node {0} has no interface named {1}!'.format(options.selected_node,options.selected_interface)
         return -1
 
-    print 'Using node: interface {0} on node {1}'.format(selected_interface,selected_node)
-    print "Using period ",orbital_period," over ",num_periods," periods"
+    print 'Using node: interface {0} on node {1}'.format(options.selected_interface,options.selected_node)
+    print "Using period ",options.period," over ",options.num_periods," periods"
 
-    if NC_MODE:
-        networkProfile.makeNetworkCalculusCurves(selected_node,NC_STEP)
+    if options.nc_mode:
+        networkProfile.makeNetworkCalculusCurves(options.selected_node,options.nc_step_size)
 
-    if networkProfile.convolve(selected_node,selected_interface) == -1:
-        print 'Node {0} has cannot be analyzed for interface {1}: no usable profile'.format(selected_node,selected_interface)
+    if networkProfile.convolve(options.selected_node,options.selected_interface) == -1:
+        print 'Node {0} has cannot be analyzed for interface {1}: no usable profile'.format(options.selected_node,options.selected_interface)
 
     '''
     font = {'family' : 'monospace',
             'weight' : 'bold',
-            'size'   : FONT_SIZE}
+            'size'   : options.font_size}
     matplotlib.rc('font', **font)
     '''
 
-    if plot_profiles == True:
-        networkProfile.nodeProfiles[selected_node].plotSlope()
-        networkProfile.nodeProfiles[selected_node].plotData()
+    if options.plot_profiles == True:
+        networkProfile.nodeProfiles[options.selected_node].plotSlope(options.plot_line_width)
+        networkProfile.nodeProfiles[options.selected_node].plotData(options.plot_line_width)
 
-    buff = networkProfile.nodeProfiles[selected_node].buffer
+    buff = networkProfile.nodeProfiles[options.selected_node].buffer
     print "\n[Time location, buffersize]:",[buff[0],buff[2]]
 
-    delay = networkProfile.nodeProfiles[selected_node].delay
+    delay = networkProfile.nodeProfiles[options.selected_node].delay
     print "[Time location, delay]:",[delay[0],delay[2]]
 
 
