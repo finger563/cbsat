@@ -23,10 +23,10 @@ PLOT_WIDTH = 4 # line width for plots
 FONT_SIZE = 25 # font size for plots
 
 class ProfileEntry:
-    def __init__(self,start=0,end=0,bandwidth=0,data=0,interface='none',ptype='none'):
+    def __init__(self,start=0,end=0,slope=0,data=0,interface='none',ptype='none'):
         self.start = start
         self.end = end
-        self.bandwidth = bandwidth
+        self.slope = slope
         self.data = data
         self.interface = interface
         self.ptype = ptype
@@ -38,7 +38,14 @@ class ProfileEntry:
         return "ProfileEntry()"
     
     def __str__(self):
-        return "{0},{1},{2},{3},{4},{5}".format(self.start,self.end,self.bandwidth,self.data,self.interface,self.ptype)
+        return "{0},{1},{2},{3},{4},{5}".format(self.start,self.end,self.slope,self.data,self.interface,self.ptype)
+
+def getDataAtTimeFromProfile(p,t):
+    i = 0
+    while p[i].start < t:
+        i += 1
+    i = i - 1
+    return p[i-1].data + p[i].slope * (t-p[i].start)
 
 class NodeProfile:
     def __init__(self,period=orbital_period):
@@ -109,7 +116,7 @@ class NodeProfile:
         if self.required == [] or entry.start >= self.required[-1].end:
             self.required.append(entry)
         elif entry.start > self.required[-1].start:
-            entry.bandwidth += self.required[-1].bandwidth
+            entry.slope += self.required[-1].slope
             self.required[-1].end = entry.start
             self.required.append(entry)
         elif entry.end < self.required[0].start:
@@ -118,20 +125,20 @@ class NodeProfile:
             for i in range(0,len(self.required)):
                 if entry.start <= self.required[i].start:
                     endTime = entry.end
-                    addedBW = entry.bandwidth
+                    addedBW = entry.slope
                     if i != 0:
                         self.required[i-1].end = entry.start
-                        entry.bandwidth = self.required[i-1].bandwidth + addedBW
+                        entry.slope = self.required[i-1].slope + addedBW
                     if endTime >= self.required[i-1].end:
                         entry.end = self.required[i].start
                         self.required.insert(i,entry)
                         i+=1                        
                     while i < len(self.required) and endTime >= self.required[i].end:
-                        self.required[i].bandwidth += addedBW
+                        self.required[i].slope += addedBW
                         i+=1
                     if i < len(self.required) and endTime < self.required[i].end:
-                        remainingEntry = ProfileEntry(start=endTime,end=self.required[i].end,bandwidth=self.required[i].bandwidth,ptype='required')
-                        self.required[i].bandwidth += addedBW
+                        remainingEntry = ProfileEntry(start=endTime,end=self.required[i].end,slope=self.required[i].slope,ptype='required')
+                        self.required[i].slope += addedBW
                         self.required[i].end = endTime
                         self.required.insert(i+1,remainingEntry)
                     break
@@ -188,6 +195,61 @@ class NodeProfile:
                 pData += pData
         return
 
+    def makeNetworkCalculusCurves(self):
+        # MUST UPDATE THE SLOPE FOR ALL ENTRIES
+        # CONVERT self.required into max arrival curve
+        self.required_nc = []
+        time_list = []
+        prof = self.required
+        for e in prof:
+            time_list.append(e.end - e.start)
+        time_set = set(sorted(time_list))
+        start_time = 0
+        for tw in time_set:
+            max_data = 0
+            for t in range(tw,prof[-1].end):
+                startData = getDataAtTimeFromProfile(prof,t-tw)
+                endData = getDataAtTimeFromProfile(prof,t)
+                diff = endData - startData
+                if diff > max_data:
+                    max_data = diff
+                entry = ProfileEntry()
+                entry.data = max_data
+                entry.start = start_time
+                start_time += tw
+                entry.end = start_time
+                entry.ptype = 'required'
+                entry.slope = entry.data / (entry.end - entry.start)
+                entry.interface = 'none'
+                self.required_nc.append(entry)
+        # CONVERT self.provided into min service curve
+        self.provided_nc = []
+        time_list = []
+        for intf in self.interfaces:
+            prof = self.getProvidedProfile(intf)
+            for e in prof:
+                time_list.append(e.end - e.start)
+            time_set = set(sorted(time_list))
+            start_time = 0
+            for tw in time_set:
+                min_srv = prof[-1].data
+                for t in range(tw,prof[-1].end):
+                    startData = getDataAtTimeFromProfile(prof,t-tw)
+                    endData = getDataAtTimeFromProfile(prof,t)
+                    diff = endData - startData
+                    if diff < min_srv:
+                        min_srv = diff
+                    entry = ProfileEntry()
+                    entry.data = min_srv
+                    entry.start = start_time
+                    start_time += tw
+                    entry.end = start_time
+                    entry.ptype = 'provided'
+                    entry.slope = entry.data / (entry.end - entry.start)
+                    entry.interface = intf
+                    self.provided_nc.append(entry)
+            
+    
     def convolve(self,interface):
         if len(self.required) == 0 or len(self.provided) == 0:
             return -1
@@ -228,14 +290,14 @@ class NodeProfile:
                 if pInterval.end < rInterval.end:
                     end = pInterval.end
                     pEndData = pInterval.data - pOffset
-                    rEndData = rInterval.data - rInterval.bandwidth*(rInterval.end-end)
+                    rEndData = rInterval.data - rInterval.slope*(rInterval.end-end)
                 elif pInterval.end == rInterval.end:
                     end = pInterval.end
                     pEndData = pInterval.data - pOffset
                     rEndData = rInterval.data
                 elif pInterval.end > rInterval.end:
                     end = rInterval.end
-                    pEndData = pInterval.data - pOffset - pInterval.bandwidth*(pInterval.end-end)
+                    pEndData = pInterval.data - pOffset - pInterval.slope*(pInterval.end-end)
                     rEndData = rInterval.data 
                 # create interval entry for link profile
                 entry = ProfileEntry()
@@ -252,9 +314,9 @@ class NodeProfile:
                 else:
                     # set entry data and see if there was a profile crossing
                     if len(self.link) == 0 or self.link[-1].data < rEndData:
-                        rData = rInterval.bandwidth*(rInterval.end - start)
-                        rStart= rInterval.data - rInterval.bandwidth*(rInterval.end - rInterval.start)
-                        pStart= pInterval.data - pOffset - pInterval.bandwidth*(pInterval.end - pInterval.start)
+                        rData = rInterval.slope*(rInterval.end - start)
+                        rStart= rInterval.data - rInterval.slope*(rInterval.end - rInterval.start)
+                        pStart= pInterval.data - pOffset - pInterval.slope*(pInterval.end - pInterval.start)
                         point = get_intersection([pInterval.start,pStart],[pInterval.end,pInterval.data-pOffset],[rInterval.start,rStart],[rInterval.end,rInterval.data])
                         if point[0] != -1:
                             xEntry = ProfileEntry()
@@ -272,7 +334,7 @@ class NodeProfile:
         self.link = [e for e in self.link if e.start != e.end]
         lData = 0
         for e in self.link:
-            e.bandwidth = (e.data - lData)/(e.end-e.start)
+            e.slope = (e.data - lData)/(e.end-e.start)
             lData = e.data
         self.calcDelay()
         return 0
@@ -285,7 +347,7 @@ class NodeProfile:
         for r in self.required:
             for l in self.link:
                 if l.data > r.data:
-                    offset = l.end-(l.data-r.data)/l.bandwidth
+                    offset = l.end-(l.data-r.data)/l.slope
                     timeDiff = offset-r.end
                     if timeDiff > delay[2]:
                         delay = [r.end,r.data,timeDiff]
@@ -299,7 +361,7 @@ class NodeProfile:
         for l in self.link:
             for r in self.required:
                 if l.data < r.data:
-                    offset = r.end-(r.data-l.data)/r.bandwidth
+                    offset = r.end-(r.data-l.data)/r.slope
                     timeDiff = l.end - offset
                     if timeDiff > delay[2]:
                         delay = [offset,l.data,timeDiff]
@@ -315,10 +377,10 @@ class NodeProfile:
         for intf in self.interfaces:
             pData[intf] = 0
         for e in self.required:
-            rData += e.bandwidth*(e.end-e.start)
+            rData += e.slope*(e.end-e.start)
             e.data = rData
         for e in self.provided:
-            pData[e.interface] += e.bandwidth*(e.end-e.start)
+            pData[e.interface] += e.slope*(e.end-e.start)
             e.data = pData[e.interface]
         return
 
@@ -330,10 +392,10 @@ class NodeProfile:
             yvals.append(0)
         for e in profile:
             if e.ptype == ptype:
-                if dtype == 'bandwidth':
+                if dtype == 'slope':
                     xvals.append(e.start)
-                    yvals.append(e.bandwidth)
-                    yvals.append(e.bandwidth)
+                    yvals.append(e.slope)
+                    yvals.append(e.slope)
                 else:
                     yvals.append(e.data)
                 xvals.append(e.end)
@@ -374,12 +436,12 @@ class NodeProfile:
         plt.show()
         return
 
-    def plotBandwidth(self):
+    def plotSlope(self):
         plt.figure(1)
         plt.hold(True)
-        self.plotProfile('bandwidth',self.profile,'required',[4,8])
-        self.plotProfile('bandwidth',self.profile,'provided',[2,4])
-        self.plotProfile('bandwidth',self.link,'link',[2,4])
+        self.plotProfile('slope',self.profile,'required',[4,8])
+        self.plotProfile('slope',self.profile,'provided',[2,4])
+        self.plotProfile('slope',self.link,'link',[2,4])
     
         '''
         line, =plt.plot([orbital_period,orbital_period],[0,max(column(linkbw,1))],linewidth=2,color='black', label=r"Period End")
@@ -445,7 +507,7 @@ def get_entry_from_line(line=None):
         return None
     entry = ProfileEntry()
     entry.start = float(fields[0])
-    entry.bandwidth = float(fields[1])
+    entry.slope = float(fields[1])
     entry.latency = float(fields[2])
     if len(fields) == 4:
         entry.interface = fields[3]
@@ -606,7 +668,7 @@ def main():
     '''
 
     if plot_profiles == True:
-        networkProfile.nodeProfiles[selected_node].plotBandwidth()
+        networkProfile.nodeProfiles[selected_node].plotSlope()
         networkProfile.nodeProfiles[selected_node].plotData()
 
     buff = networkProfile.nodeProfiles[selected_node].buffer
