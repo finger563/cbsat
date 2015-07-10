@@ -22,6 +22,7 @@ selected_interface = ''
 PLOT_WIDTH = 4 # line width for plots
 FONT_SIZE = 25 # font size for plots
 NC_MODE = False
+NC_STEP = 1
 
 class ProfileEntry:
     def __init__(self,start=0,end=0,slope=0,data=0,interface='none',ptype='none'):
@@ -198,7 +199,7 @@ class NodeProfile:
                 pData += pData
         return
 
-    def makeNetworkCalculusCurves(self):
+    def makeNetworkCalculusCurves(self,step):
         # MUST UPDATE THE SLOPE FOR ALL ENTRIES
         # CONVERT self.required into max arrival curve
         self.required_nc = []
@@ -211,13 +212,14 @@ class NodeProfile:
         prev_data = 0
         for tw in time_list:
             max_data = 0
-            for t in range(int(tw),int(prof[-1].end)+1):
-                t = float(t)
+            t = tw
+            while t <= prof[-1].end:
                 startData = getDataAtTimeFromProfile(prof,t-tw)
                 endData = getDataAtTimeFromProfile(prof,t)
                 diff = endData - startData
                 if diff > max_data:
                     max_data = diff
+                t += step
             entry = ProfileEntry()
             #print "NEW POINT @ {} has {}\n".format(start_time,max_data)
             entry.data = max_data
@@ -241,13 +243,14 @@ class NodeProfile:
             prev_data = 0
             for tw in time_list:
                 min_srv = prof[-1].data
-                for t in range(int(tw),int(prof[-1].end)+1):
-                    t = float(t)
+                t = tw
+                while t <= prof[-1].end:
                     startData = getDataAtTimeFromProfile(prof,t-tw)
                     endData = getDataAtTimeFromProfile(prof,t)
                     diff = endData - startData
                     if diff < min_srv:
                         min_srv = diff
+                    t += step
                 entry = ProfileEntry()
                 #print "NEW POINT @ {} has {}\n".format(start_time,min_srv)
                 entry.data = min_srv
@@ -505,8 +508,8 @@ class NetworkProfile:
         self.nodeProfiles[node].convolve(interface)
         return self.nodeProfiles[node]
 
-    def makeNetworkCalculusCurves(self, node):
-        self.nodeProfiles[node].makeNetworkCalculusCurves()
+    def makeNetworkCalculusCurves(self, node, step):
+        self.nodeProfiles[node].makeNetworkCalculusCurves(step)
 
     def __repr__(self):
         return "NetworkProfile()"
@@ -589,6 +592,7 @@ def parse_args(args):
     global selected_node
     global plot_profiles
     global NC_MODE
+    global NC_STEP
     
     argind = 1
     while argind < len(args):
@@ -610,6 +614,9 @@ def parse_args(args):
         elif args[argind] == "-nc_mode":
             NC_MODE = True
             argind += 1
+        elif args[argind] == "-nc_step":
+            NC_STEP = float(args[argind+1])
+            argind += 2
         elif args[argind] == "-N":
             selected_node = args[argind+1]
             argind += 2
@@ -622,6 +629,8 @@ def parse_args(args):
             \t\t-I <node interface name>
             \t\t-P <period (s)>
             \t\t-n <number of periods to analyze>
+            \t\t-nc_mode (to run network calculus calcs)
+            \t\t-nc_step <step size for windows in NC>
             \t\t-p (to not output any plots)\n"""
             return -1
         else:
@@ -631,6 +640,7 @@ def parse_args(args):
             \t\t-P <period (s)>
             \t\t-n <number of periods to analyze>
             \t\t-nc_mode (to run network calculus calcs)
+            \t\t-nc_step <step size for windows in NC>
             \t\t-p (to not output any plots)\n"""
             return -1
     return 0
@@ -644,6 +654,7 @@ def main():
     global orbital_period
     global num_periods
     global NC_MODE
+    global NC_STEP
     args = sys.argv
 
     if parse_args(args):
@@ -683,7 +694,7 @@ def main():
     print "Using period ",orbital_period," over ",num_periods," periods"
 
     if NC_MODE:
-        networkProfile.makeNetworkCalculusCurves(selected_node)
+        networkProfile.makeNetworkCalculusCurves(selected_node,NC_STEP)
 
     if networkProfile.convolve(selected_node,selected_interface) == -1:
         print 'Node {0} has cannot be analyzed for interface {1}: no usable profile'.format(selected_node,selected_interface)
