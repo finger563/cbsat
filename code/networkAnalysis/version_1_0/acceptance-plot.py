@@ -204,9 +204,8 @@ class NodeProfile:
         time_list = []
         prof = self.required
         for e in prof:
-            if e.end != e.start:
-                time_list.append(e.end - e.start)
-        time_set = set(sorted(time_list))
+            time_list.append(e.end)
+        time_set = sorted(time_list)
         start_time = 0
         for tw in time_set:
             max_data = 0
@@ -220,7 +219,7 @@ class NodeProfile:
             entry = ProfileEntry()
             entry.data = max_data
             entry.start = start_time
-            start_time += tw
+            start_time = tw
             entry.end = start_time
             entry.ptype = 'required'
             entry.slope = entry.data / (entry.end - entry.start)
@@ -232,9 +231,8 @@ class NodeProfile:
         for intf in self.interfaces:
             prof = self.getProvidedProfile(intf)
             for e in prof:
-                if e.end != e.start:
-                    time_list.append(e.end - e.start)
-            time_set = set(sorted(time_list))
+                time_list.append(e.end)
+            time_set = sorted(time_list)
             start_time = 0
             for tw in time_set:
                 min_srv = prof[-1].data
@@ -248,7 +246,7 @@ class NodeProfile:
                 entry = ProfileEntry()
                 entry.data = min_srv
                 entry.start = start_time
-                start_time += tw
+                start_time = tw
                 entry.end = start_time
                 entry.ptype = 'provided'
                 entry.slope = entry.data / (entry.end - entry.start)
