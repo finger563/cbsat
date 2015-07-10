@@ -21,6 +21,7 @@ selected_node = ''
 selected_interface = ''
 PLOT_WIDTH = 4 # line width for plots
 FONT_SIZE = 25 # font size for plots
+NC_MODE = False
 
 class ProfileEntry:
     def __init__(self,start=0,end=0,slope=0,data=0,interface='none',ptype='none'):
@@ -35,17 +36,18 @@ class ProfileEntry:
         return self.start < other.start
 
     def __repr__(self):
-        return "ProfileEntry()"
+        retstr = "{}\n".format(self)
+        return retstr #"ProfileEntry()"
     
     def __str__(self):
         return "{0},{1},{2},{3},{4},{5}".format(self.start,self.end,self.slope,self.data,self.interface,self.ptype)
 
 def getDataAtTimeFromProfile(p,t):
     i = 0
-    while p[i].start < t:
+    while i < len(p) and t > p[i].end:
         i += 1
-    i = i - 1
-    return p[i-1].data + p[i].slope * (t-p[i].start)
+    retVal = p[i].data - p[i].slope * (p[i].end - t)
+    return retVal
 
 class NodeProfile:
     def __init__(self,period=orbital_period):
@@ -202,53 +204,62 @@ class NodeProfile:
         time_list = []
         prof = self.required
         for e in prof:
-            time_list.append(e.end - e.start)
+            if e.end != e.start:
+                time_list.append(e.end - e.start)
         time_set = set(sorted(time_list))
         start_time = 0
         for tw in time_set:
             max_data = 0
-            for t in range(tw,prof[-1].end):
+            for t in range(int(tw),int(prof[-1].end)):
+                t = float(t)
                 startData = getDataAtTimeFromProfile(prof,t-tw)
                 endData = getDataAtTimeFromProfile(prof,t)
                 diff = endData - startData
                 if diff > max_data:
                     max_data = diff
-                entry = ProfileEntry()
-                entry.data = max_data
-                entry.start = start_time
-                start_time += tw
-                entry.end = start_time
-                entry.ptype = 'required'
-                entry.slope = entry.data / (entry.end - entry.start)
-                entry.interface = 'none'
-                self.required_nc.append(entry)
+            entry = ProfileEntry()
+            entry.data = max_data
+            entry.start = start_time
+            start_time += tw
+            entry.end = start_time
+            entry.ptype = 'required'
+            entry.slope = entry.data / (entry.end - entry.start)
+            entry.interface = 'none'
+            self.required_nc.append(entry)
         # CONVERT self.provided into min service curve
         self.provided_nc = []
         time_list = []
         for intf in self.interfaces:
             prof = self.getProvidedProfile(intf)
             for e in prof:
-                time_list.append(e.end - e.start)
+                if e.end != e.start:
+                    time_list.append(e.end - e.start)
             time_set = set(sorted(time_list))
             start_time = 0
             for tw in time_set:
                 min_srv = prof[-1].data
-                for t in range(tw,prof[-1].end):
+                for t in range(int(tw),int(prof[-1].end)):
+                    t = float(t)
                     startData = getDataAtTimeFromProfile(prof,t-tw)
                     endData = getDataAtTimeFromProfile(prof,t)
                     diff = endData - startData
                     if diff < min_srv:
                         min_srv = diff
-                    entry = ProfileEntry()
-                    entry.data = min_srv
-                    entry.start = start_time
-                    start_time += tw
-                    entry.end = start_time
-                    entry.ptype = 'provided'
-                    entry.slope = entry.data / (entry.end - entry.start)
-                    entry.interface = intf
-                    self.provided_nc.append(entry)
-            
+                entry = ProfileEntry()
+                entry.data = min_srv
+                entry.start = start_time
+                start_time += tw
+                entry.end = start_time
+                entry.ptype = 'provided'
+                entry.slope = entry.data / (entry.end - entry.start)
+                entry.interface = intf
+                self.provided_nc.append(entry)
+        #print self.provided
+        #print self.provided_nc
+        #print self.required
+        #print self.required_nc
+        self.provided = self.provided_nc
+        self.required = self.required_nc
     
     def convolve(self,interface):
         if len(self.required) == 0 or len(self.provided) == 0:
@@ -489,6 +500,9 @@ class NetworkProfile:
         self.nodeProfiles[node].convolve(interface)
         return self.nodeProfiles[node]
 
+    def makeNetworkCalculusCurves(self, node):
+        self.nodeProfiles[node].makeNetworkCalculusCurves()
+
     def __repr__(self):
         return "NetworkProfile()"
 
@@ -569,7 +583,8 @@ def parse_args(args):
     global num_periods
     global selected_node
     global plot_profiles
-
+    global NC_MODE
+    
     argind = 1
     while argind < len(args):
         if args[argind] == "-P":
@@ -586,6 +601,9 @@ def parse_args(args):
             argind += 2
         elif args[argind] == "-p":
             plot_profiles = False
+            argind += 1
+        elif args[argind] == "-nc_mode":
+            NC_MODE = True
             argind += 1
         elif args[argind] == "-N":
             selected_node = args[argind+1]
@@ -607,6 +625,7 @@ def parse_args(args):
             \t\t-I <node interface name>
             \t\t-P <period (s)>
             \t\t-n <number of periods to analyze>
+            \t\t-nc_mode (to run network calculus calcs)
             \t\t-p (to not output any plots)\n"""
             return -1
     return 0
@@ -619,6 +638,7 @@ def main():
     global selected_interface
     global orbital_period
     global num_periods
+    global NC_MODE
     args = sys.argv
 
     if parse_args(args):
@@ -656,6 +676,9 @@ def main():
 
     print 'Using node: interface {0} on node {1}'.format(selected_interface,selected_node)
     print "Using period ",orbital_period," over ",num_periods," periods"
+
+    if NC_MODE:
+        networkProfile.makeNetworkCalculusCurves(selected_node)
 
     if networkProfile.convolve(selected_node,selected_interface) == -1:
         print 'Node {0} has cannot be analyzed for interface {1}: no usable profile'.format(selected_node,selected_interface)
