@@ -47,6 +47,7 @@ def getDataAtTimeFromProfile(p,t):
     while i < len(p) and t > p[i].end:
         i += 1
     retVal = p[i].data - p[i].slope * (p[i].end - t)
+    #print "@ {} has value {}\n".format(t,retVal)
     return retVal
 
 class NodeProfile:
@@ -205,11 +206,12 @@ class NodeProfile:
         prof = self.required
         for e in prof:
             time_list.append(e.end)
-        time_set = sorted(time_list)
         start_time = 0
-        for tw in time_set:
+        #print prof
+        prev_data = 0
+        for tw in time_list:
             max_data = 0
-            for t in range(int(tw),int(prof[-1].end)):
+            for t in range(int(tw),int(prof[-1].end)+1):
                 t = float(t)
                 startData = getDataAtTimeFromProfile(prof,t-tw)
                 endData = getDataAtTimeFromProfile(prof,t)
@@ -217,26 +219,29 @@ class NodeProfile:
                 if diff > max_data:
                     max_data = diff
             entry = ProfileEntry()
+            #print "NEW POINT @ {} has {}\n".format(start_time,max_data)
             entry.data = max_data
             entry.start = start_time
             start_time = tw
             entry.end = start_time
             entry.ptype = 'required'
-            entry.slope = entry.data / (entry.end - entry.start)
+            entry.slope = (entry.data-prev_data) / (entry.end - entry.start)
+            prev_data = entry.data
             entry.interface = 'none'
             self.required_nc.append(entry)
         # CONVERT self.provided into min service curve
         self.provided_nc = []
-        time_list = []
         for intf in self.interfaces:
             prof = self.getProvidedProfile(intf)
+            #print prof
+            time_list = []
             for e in prof:
                 time_list.append(e.end)
-            time_set = sorted(time_list)
             start_time = 0
-            for tw in time_set:
+            prev_data = 0
+            for tw in time_list:
                 min_srv = prof[-1].data
-                for t in range(int(tw),int(prof[-1].end)):
+                for t in range(int(tw),int(prof[-1].end)+1):
                     t = float(t)
                     startData = getDataAtTimeFromProfile(prof,t-tw)
                     endData = getDataAtTimeFromProfile(prof,t)
@@ -244,12 +249,14 @@ class NodeProfile:
                     if diff < min_srv:
                         min_srv = diff
                 entry = ProfileEntry()
+                #print "NEW POINT @ {} has {}\n".format(start_time,min_srv)
                 entry.data = min_srv
                 entry.start = start_time
                 start_time = tw
                 entry.end = start_time
                 entry.ptype = 'provided'
-                entry.slope = entry.data / (entry.end - entry.start)
+                entry.slope = (entry.data-prev_data) / (entry.end - entry.start)
+                prev_data = entry.data
                 entry.interface = intf
                 self.provided_nc.append(entry)
         #print self.provided
