@@ -12,17 +12,12 @@ Enhancements:
 
 Questions:
 ----------
-* How do we get middlewares to know about each other?
-* How do we spawn socket connections to new middlewares?
-* Do we match a profile to each flow (connection)?
-* Or do we match a profile to a process (multiple flows)?
 * What do we do about server (receiver)?
-
-* Need to move the interface code into the middleware:
-  * Remove explicit connection handling from application code
-  * provide simple interface for passing data / amount of data
-  * provide simple interface for receiving data / amount of data
-  
+* How to create process specific buffers?
+	* Singleton instance used by each process
+	* each process has single buffer?
+* how to properly meter out data from the buffer
+	* break up packets?
 
 Goals:
 ------

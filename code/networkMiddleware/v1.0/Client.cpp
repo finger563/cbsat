@@ -13,6 +13,18 @@ static long id = 0;
 
 long precision = 30;// for file output
 
+void *sendFunc(Message* data) {
+  if ( data != NULL ) {
+    int retVal = interface.send(data->Buffer().c_str(),data->Bytes());
+    if ( retVal <= 0 ) {
+      TG_LOG("Couldn't send Message %lu with buffer %s\n",data->Id(),data->Buffer().c_str());
+    }
+    return (void *) retVal;
+  }
+  else
+    return (void *) NULL;
+}
+
 int main(int argc, char **argv) {
   timespec timeout, remaining;
 
@@ -27,6 +39,11 @@ int main(int argc, char **argv) {
     return -1;
   }
 
+  interface.serverIP = options.ip;
+  interface.serverPort = options.port;
+  if ( interface.Initialize(false,false) != 0 )
+    return -1;
+
   std::string outputFile = options.outputFile;
   messageBitLength = options.bitLength;
   messageStrLength = ceil((double)messageBitLength/8.0f);
@@ -35,8 +52,7 @@ int main(int argc, char **argv) {
   std::string bufferProfileFile = options.bufferFile;
   bufferProfile.initializeFromFile(bufferProfileFile.c_str());
 
-  uint64_t clientID = 0;
-  if ( clientID = NetworkMiddleware::InitClient(bufferProfile,options.ip,options.port) < 0 ) {
+  if ( NetworkMiddleware::Init(bufferProfile, sendFunc) != 0 ) {
     TG_LOG("ERROR: couldn't initialize network middleware!\n");
     return -1;
   }
@@ -46,7 +62,7 @@ int main(int argc, char **argv) {
   clock_gettime(CLOCK_REALTIME,&startTime);
 
   while (true) {
-    Message* data = new Message(messageBitLength, id, clientID);
+    Message* data = new Message(messageBitLength, id);
     messages.push_back(data);      
     data->TimeStamp();
     NetworkMiddleware::send(data);

@@ -1,45 +1,20 @@
 #include "Server.hpp"
 
-long messageBitLength;
-long messageStrLength;
-char *messageData;
-std::string outputFile;
-IPV6_Connection interface;
-
-
-void *recvFunc(Message* data) {
-  if ( data != NULL )
-    {
-      memset(messageData,0,messageStrLength+2);
-      if ( interface.receive(messageData,messageStrLength) > 0 )
-	{
-	  long id = atol(messageData);
-	  if ( id >=0 )
-	    {
-	      data->TimeStamp();
-	      data->Id(id);
-	      data->Bytes(strlen(messageData));
-	      append_data(outputFile,*data);
-	    }
-	}
-    }
-  else
-    return (void *)NULL;
-}
-
 int main(int argc, char **argv) {
   Options options;
   if ( options.Parse(argc,argv) == -1 )
     return -1;
   options.Print();
 
-  outputFile = options.outputFile;
+  IPV6_Connection interface;
+
+  std::string outputFile = options.outputFile;
   interface.serverIP = options.ip;
   interface.serverPort = options.port;
 
-  messageBitLength = options.bitLength;
-  messageStrLength = ceil((double)messageBitLength/8.0f);
-  messageData = new char[messageStrLength+2];
+  long messageBitLength = options.bitLength;
+  long messageStrLength = ceil((double)messageBitLength/8.0f);
+  char *messageData = new char[messageStrLength+2];
 
   if ( interface.Initialize(true,false) != 0 ) {
     TG_LOG("ERROR: Couldn't initialize interface!\n");
