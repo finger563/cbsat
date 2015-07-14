@@ -95,32 +95,20 @@ public:
       return -1;
     }
     TG_LOG("Reading profile %s:\n",fname);
-    std::vector<std::vector<double> > csv;
-
-    for (CSVIterator loop(file);loop != CSVIterator();++loop) {
-      std::vector<double> rowvec;
-      if ( (*loop).size() > 0 && (*loop)[0].c_str()[0] != '%' ) {
-        for (int i=0;i<(*loop).size();i++) {
-          rowvec.push_back( atof( (*loop)[i].c_str() ) );
-        }
-        csv.push_back(rowvec);
-      }
-    }
-    if ( parse_csv(csv) ) {
-      return -1;
-    }
-    else {
-      initialized = true;
-      return 0;
-    }
+    return initializeFromIStream(file);
   }
 
   int initializeFromString(char* buffer) {
     profileMemBuf sbuf(buffer,buffer + strlen(buffer));
     std::istream file(&sbuf);
+    return initializeFromIStream(file);
+  }
+
+  int initializeFromIStream(std::istream& stream)
+  {
     std::vector<std::vector<double> > csv;
 
-    for (CSVIterator loop(file);loop != CSVIterator();++loop) {
+    for (CSVIterator loop(stream);loop != CSVIterator();++loop) {
       std::vector<double> rowvec;
       if ( (*loop).size() > 0 && (*loop)[0].c_str()[0] != '%' ) {
         for (int i=0;i<(*loop).size();i++) {
