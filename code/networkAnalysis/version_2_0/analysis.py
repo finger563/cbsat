@@ -69,7 +69,7 @@ class Options:
 \t--provided       <fileName containing the provided profile>
 \t--period         <period of the profiles in seconds>
 \t--num_periods    <number of periods to analyze>
-\t--nc_step_size   <step size for windows in NC mode>
+\t--nc_step_size   <step size for time-windows in NC mode>
 """.format(name)
 
 def main():    
