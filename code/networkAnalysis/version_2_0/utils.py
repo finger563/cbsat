@@ -8,12 +8,15 @@ except ImportError:
     print "Package python-matplotlib not found, plotting disabled."
     
 
-def getDataAtTimeFromProfile(p,t):
-    i = 0
+def getIndexByStartTime(p,t):
+    i=0
     while i < len(p) and t > p[i].end:
         i += 1
+    return i
+    
+def getDataAtTimeFromProfile(p,t):
+    i = getIndexByStartTime(p,t)
     retVal = p[i].data - p[i].slope * (p[i].end - t)
-    #print "@ {} has value {}\n".format(t,retVal)
     return retVal
 
 def plotProfile(dtype,profile,ptype,dashes,label,line_width):

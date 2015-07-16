@@ -74,12 +74,12 @@ class Options:
 
 
 class ProfileEntry:
-    def __init__(self,start=0,end=0,slope=0,data=0,ptype='none'):
+    def __init__(self,start=0,end=0,slope=0,data=0,kind='none'):
         self.start = start
         self.end = end
         self.slope = slope
         self.data = data
-        self.ptype = ptype
+        self.kind = kind
 
     def __lt__(self, other):
         return self.start < other.start
@@ -89,7 +89,7 @@ class ProfileEntry:
         return retstr #"ProfileEntry()"
     
     def __str__(self):
-        return "{},{},{},{},{},{}".format(self.start,self.end,self.slope,self.data,self.ptype)
+        return "{},{},{},{},{}".format(self.start,self.end,self.slope,self.data,self.kind)
 
     def FromLine(self,line):
         if line != None and len(line) != 0 and '%' not in line:
@@ -98,6 +98,85 @@ class ProfileEntry:
                 self.start = float(fields[0])
                 self.slope = float(fields[1])
                 self.latency = float(fields[2])
+
+class Profile:
+    def __init__(self,period,num_periods,prof_str=None,kind=None):
+        self.period = period
+        self.num_periods = num_periods
+        if prof_str != None:
+            self.BuildProfile(prof_str,kind)
+
+    def BuildProfile(self,prof_str,kind):
+        if prof_str == '':
+            return
+        self.entries = []
+        self.kind = kind
+        p = prof_str.split('\n')
+        for line in p:
+            entry = ProfileEntry()
+            entry.FromLine(line)
+            if entry != None:
+                entry.kind = kind
+                self.entries.append(entry)
+        if len(self.entries) != 0:
+            self.entries = sorted(self.entries)
+            for i in range(0,len(self.entries)-1):
+                self.entries[i].end = self.entries[i+1].start
+            self.entries[-1].end = self.period        
+            if self.entries[0].start > 0:
+                entry = ProfileEntry()
+                entry.start = 0
+                entry.end = self.entries[0].start
+                entry.kind = kind
+                self.entries.insert(0,entry)
+            originalProf = copy.deepcopy(self.entries)
+            data = self.entries[-1].data
+            for i in range(1,self.num_periods):
+                tmpProf = copy.deepcopy(originalProf)
+                for e in tmpProf:
+                    e.data += data
+                    e.start += self.period*i
+                    e.end += self.period*i
+                    self.entries.append(e)
+                data += data
+
+    def AddProfile(self,profile):
+        for e in profile:
+            self.addEntry(e)
+
+    def ConvertToNC(self,step,filterFunc):
+        time_list = []
+        for e in self.entries:
+            time_list.append(e.end)
+        start_time = 0
+        prev_data = 0
+        for tw in time_list:
+            extremeData = 0
+            t = tw
+            while t <= prof[-1].end:
+                startData = getDataAtTimeFromProfile(prof,t-tw)
+                endData = getDataAtTimeFromProfile(prof,t)
+                diff = endData - startData
+                extremeData = filterFunc(diff,extremeData)
+                t += step
+            entry = ProfileEntry()
+            entry.data = extremeData
+            entry.start = start_time
+            start_time = tw
+            entry.end = start_time
+            entry.kind = self.kind
+            entry.slope = (entry.data-prev_data) / (entry.end - entry.start)
+            prev_data = entry.data
+            self.required_nc.append(entry)
+
+    def addEntry(self, entry):
+        if self.entries == [] or entry.start >= self.entries[-1].end:
+            self.entries.append(entry)
+        elif entry.end <= self.entries[0].start:
+            self.entries.insert(0,entry)
+        else:
+            startInd = getIndexByStartTime(self.entries,entry.start)
+            endInd = getIndexByStartTime(self.entries,entry.end)
 
 class NodeProfile:
     def __init__(self,period,num_periods):
@@ -110,190 +189,6 @@ class NodeProfile:
         self.buffer = [0,0,0]
         self.delay = [0,0,0]
 
-    def addProvidedProfile(self,profile):
-        p = profile.split('\n')
-        self.provided = []
-        if p == None or profile == '':
-            return
-        for line in p:
-            entry = ProfileEntry().FromLine(line)
-            if entry != None:
-                entry.ptype = 'provided'
-                self.provided.append(entry)
-        if len(self.provided) == 0:
-            return
-        self.provided = sorted(self.provided)
-        for i in range(0,len(self.provided)-1):
-            self.provided[i].end = self.provided[i+1].start
-        self.provided[-1].end = self.period        
-        prof = self.provided
-        if prof[0].start > 0:
-            entry = ProfileEntry()
-            entry.start = 0
-            entry.end = prof[0].start
-            entry.ptype = 'provided'
-            self.provided.insert(0,entry)
-
-        originalProvided = copy.deepcopy(self.provided)
-        pData = self.provided[-1].data
-        for i in range(1,self.num_periods):
-            tmpProvided = copy.deepcopy(originalProvided)
-            for e in tmpProvided:
-                e.data += pData
-                e.start += self.period*i
-                e.end += self.period*i
-                self.provided.append(e)
-            pData += pData
-        return
-
-    def addRequiredEntry(self, entry):
-        if self.required == [] or entry.start >= self.required[-1].end:
-            self.required.append(entry)
-        elif entry.start > self.required[-1].start:
-            entry.slope += self.required[-1].slope
-            self.required[-1].end = entry.start
-            self.required.append(entry)
-        elif entry.end < self.required[0].start:
-            self.required.insert(0,entry)
-        else:
-            for i in range(0,len(self.required)):
-                if entry.start <= self.required[i].start:
-                    endTime = entry.end
-                    addedBW = entry.slope
-                    if i != 0:
-                        self.required[i-1].end = entry.start
-                        entry.slope = self.required[i-1].slope + addedBW
-                    if endTime >= self.required[i-1].end:
-                        entry.end = self.required[i].start
-                        self.required.insert(i,entry)
-                        i+=1                        
-                    while i < len(self.required) and endTime >= self.required[i].end:
-                        self.required[i].slope += addedBW
-                        i+=1
-                    if i < len(self.required) and endTime < self.required[i].end:
-                        remainingEntry = ProfileEntry(start=endTime,end=self.required[i].end,slope=self.required[i].slope,ptype='required')
-                        self.required[i].slope += addedBW
-                        self.required[i].end = endTime
-                        self.required.insert(i+1,remainingEntry)
-                    break
-            for r in self.required:
-                if r.start == r.end:
-                    self.required.remove(r)
-        return
-
-    def addRequiredProfile(self,profile):
-        p = profile.split('\n')
-        if p == None or profile == '':
-            return
-        if len(self.required) == 0:
-            for line in p:
-                entry = ProfileEntry().FromLine(line)
-                if entry != None:
-                    entry.ptype = 'required'
-                    self.required.append(entry)
-            if len(self.required) > 0:
-                self.required = sorted(self.required)
-                for i in range(0,len(self.required)-1):
-                    self.required[i].end = self.required[i+1].start
-                self.required[-1].end = self.period
-        else:
-            entryList = []
-            for line in p:
-                entry = ProfileEntry().FromLine(line)
-                if entry != None:
-                    entry.ptype = 'required'
-                    entryList.append(entry)
-            entryList = sorted(entryList)
-            for i in range(0,len(entryList)-1):
-                entryList[i].end = entryList[i+1].start
-            entryList[-1].end = self.period
-            for e in entryList:
-                self.addRequiredEntry(e)
-        if len(self.required) > 0 and self.required[0].start > 0:
-            entry = ProfileEntry()
-            entry.start = 0
-            entry.end = self.required[0].start
-            entry.ptype = 'required'
-            self.required.insert(0,entry)
-
-        if len(self.required) > 0:
-            originalRequired = copy.deepcopy(self.required)
-            pData = self.required[-1].data
-            for i in range(1,self.num_periods):
-                tmpRequired = copy.deepcopy(originalRequired)
-                for e in tmpRequired:
-                    e.data += pData
-                    e.start += self.period*i
-                    e.end += self.period*i
-                    self.required.append(e)
-                pData += pData
-        return
-
-    def makeNetworkCalculusCurves(self,step):
-        # MUST UPDATE THE SLOPE FOR ALL ENTRIES
-        # CONVERT self.required into max arrival curve
-        self.required_nc = []
-        time_list = []
-        prof = self.required
-        for e in prof:
-            time_list.append(e.end)
-        start_time = 0
-        prev_data = 0
-        for tw in time_list:
-            max_data = 0
-            t = tw
-            while t <= prof[-1].end:
-                startData = getDataAtTimeFromProfile(prof,t-tw)
-                endData = getDataAtTimeFromProfile(prof,t)
-                diff = endData - startData
-                if diff > max_data:
-                    max_data = diff
-                t += step
-            entry = ProfileEntry()
-            #print "NEW POINT @ {} has {}\n".format(start_time,max_data)
-            entry.data = max_data
-            entry.start = start_time
-            start_time = tw
-            entry.end = start_time
-            entry.ptype = 'required'
-            entry.slope = (entry.data-prev_data) / (entry.end - entry.start)
-            prev_data = entry.data
-            self.required_nc.append(entry)
-        # CONVERT self.provided into min service curve
-        self.provided_nc = []
-        prof = self.provided
-        time_list = []
-        for e in prof:
-            time_list.append(e.end)
-        start_time = 0
-        prev_data = 0
-        for tw in time_list:
-            min_srv = prof[-1].data
-            t = tw
-            while t <= prof[-1].end:
-                startData = getDataAtTimeFromProfile(prof,t-tw)
-                endData = getDataAtTimeFromProfile(prof,t)
-                diff = endData - startData
-                if diff < min_srv:
-                    min_srv = diff
-                t += step
-            entry = ProfileEntry()
-            #print "NEW POINT @ {} has {}\n".format(start_time,min_srv)
-            entry.data = min_srv
-            entry.start = start_time
-            start_time = tw
-            entry.end = start_time
-            entry.ptype = 'provided'
-            entry.slope = (entry.data-prev_data) / (entry.end - entry.start)
-            prev_data = entry.data
-            self.provided_nc.append(entry)
-        #print self.provided
-        #print self.provided_nc
-        #print self.required
-        #print self.required_nc
-        self.provided = self.provided_nc
-        self.required = self.required_nc
-    
     def convolve(self):
         if len(self.required) == 0 or len(self.provided) == 0:
             return -1
@@ -312,7 +207,7 @@ class NodeProfile:
         pEndData = 0
         rEndData = 0
         for e in self.profile:
-            if e.ptype == 'provided':
+            if e.kind == 'provided':
                 pInterval = e
             else:
                 rInterval = e
@@ -344,7 +239,7 @@ class NodeProfile:
                     rEndData = rInterval.data 
                 # create interval entry for link profile
                 entry = ProfileEntry()
-                entry.ptype = 'link'
+                entry.kind = 'link'
                 entry.start = start
                 entry.end = end
                 # link interval time bounds configured; now to calc data
@@ -363,7 +258,7 @@ class NodeProfile:
                         point = get_intersection([pInterval.start,pStart],[pInterval.end,pInterval.data-pOffset],[rInterval.start,rStart],[rInterval.end,rInterval.data])
                         if point[0] != -1:
                             xEntry = ProfileEntry()
-                            xEntry.ptype = 'link'
+                            xEntry.kind = 'link'
                             xEntry.start = start
                             xEntry.end = point[0]
                             xEntry.data = point[1]
@@ -434,18 +329,12 @@ class NodeProfile:
 
         buffplotx = [self.buffer[0],self.buffer[0]]
         buffploty = [self.buffer[1],self.buffer[1]+self.buffer[2]]
-        plt.plot(buffplotx,buffploty,'0.5',label=r"Buffer",linewidth=line_width) #:%d B"%(int(buff)/8)
+        plt.plot(buffplotx,buffploty,'0.5',label=r"Buffer",linewidth=line_width)
 
         delayplotx = [self.delay[0],self.delay[0]+self.delay[2]]
         delayploty = [self.delay[1],self.delay[1]]
-        plt.plot(delayplotx,delayploty,'0.8',label=r"Delay",linewidth=line_width) #:%0.4f s"%float(delay)
+        plt.plot(delayplotx,delayploty,'0.8',label=r"Delay",linewidth=line_width)
     
-        '''
-        line, =plt.plot([self.period,self.period],[0,max(column(req,1))],linewidth=2,color='black', label=r"Period End")
-        for i in range(2,self.num_periods+1):
-        line, =plt.plot([period*i,period*i],[0,max(column(req,1))],linewidth=2,color='black')
-        '''
-
         plt.title("Network Traffic vs. Time over %d period(s)"%self.num_periods)
         plt.ylabel("Data (bits)")
         plt.xlabel("Time (s)")
@@ -464,12 +353,6 @@ class NodeProfile:
         plotProfile('slope',self.profile,'provided',[2,4],'',line_width)
         plotProfile('slope',self.link,'link',[2,4],'',line_width)
     
-        '''
-        line, =plt.plot([self.period,self.period],[0,max(column(linkbw,1))],linewidth=2,color='black', label=r"Period End")
-        for i in range(2,self.num_periods+1):
-        line, =plt.plot([self.period*i,self.period*i],[0,max(column(linkbw,1))],linewidth=2,color='black')
-        '''
-
         plt.title("Network Bandwidth vs. Time over %d period(s)"%self.num_periods)
         plt.ylabel("Bandwidth (bps)")
         plt.xlabel("Time (s)")
@@ -565,12 +448,8 @@ def main():
     if options.nc_mode:
         networkProfile.makeNetworkCalculusCurves(options.selected_node,options.nc_step_size)
 
-    '''
-    font = {'family' : 'monospace',
-            'weight' : 'bold',
-            'size'   : options.font_size}
-    matplotlib.rc('font', **font)
-    '''
+    if networkProfile.convolve(options.selected_node) == -1:
+        print 'Node {0} has cannot be analyzed: no usable profile'.format(options.selected_node)
 
     if options.plot_profiles == True:
         networkProfile.nodeProfiles[options.selected_node].plotSlope(options.plot_line_width)
