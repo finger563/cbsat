@@ -20,7 +20,6 @@ class Options:
         self.plot_profiles = havePLT
         self.num_periods = 1
         self.selected_node = ''
-        self.selected_interface = ''
         self.plot_line_width = 4 # line width for plots
         self.font_size = 25 # font size for plots
         self.nc_mode = False
@@ -53,13 +52,9 @@ class Options:
             elif args[argind] == "-N":
                 self.selected_node = args[argind+1]
                 argind += 2
-            elif args[argind] == "-I":
-                self.selected_interface = args[argind+1]
-                argind += 2
             elif args[argind] == "-?" or args[argind] == "-h":
                 print "Usage:\n\tpython ",args[0],"""
                 \t\t-N <node name>
-                \t\t-I <node interface name>
                 \t\t-P <period (s)>
                 \t\t-n <number of periods to analyze>
                 \t\t-nc_mode (to run network calculus calcs)
@@ -69,7 +64,6 @@ class Options:
             else:
                 print """Usage:\n\t""",args[0],"""
                 \t\t-N <node name>
-                \t\t-I <node interface name>
                 \t\t-P <period (s)>
                 \t\t-n <number of periods to analyze>
                 \t\t-nc_mode (to run network calculus calcs)
@@ -80,12 +74,11 @@ class Options:
 
 
 class ProfileEntry:
-    def __init__(self,start=0,end=0,slope=0,data=0,interface='none',ptype='none'):
+    def __init__(self,start=0,end=0,slope=0,data=0,ptype='none'):
         self.start = start
         self.end = end
         self.slope = slope
         self.data = data
-        self.interface = interface
         self.ptype = ptype
 
     def __lt__(self, other):
@@ -96,8 +89,15 @@ class ProfileEntry:
         return retstr #"ProfileEntry()"
     
     def __str__(self):
-        return "{0},{1},{2},{3},{4},{5}".format(self.start,self.end,self.slope,self.data,self.interface,self.ptype)
+        return "{},{},{},{},{},{}".format(self.start,self.end,self.slope,self.data,self.ptype)
 
+    def FromLine(self,line):
+        if line != None and len(line) != 0:
+            fields = line.split(',')
+            if len(fields) != 0 and fields[0][0] != '%':
+                self.start = float(fields[0])
+                self.slope = float(fields[1])
+                self.latency = float(fields[2])
 
 class NodeProfile:
     def __init__(self,period,num_periods):
@@ -109,14 +109,6 @@ class NodeProfile:
         self.num_periods = num_periods
         self.buffer = [0,0,0]
         self.delay = [0,0,0]
-        self.interfaces = []
-
-    def getProvidedProfile(self,interface):
-        retProfile = []
-        for e in self.provided:
-            if e.interface == interface:
-                retProfile.append(e)
-        return retProfile
 
     def addProvidedProfile(self,profile):
         p = profile.split('\n')
@@ -124,45 +116,34 @@ class NodeProfile:
         if p == None or profile == '':
             return
         for line in p:
-            entry = get_entry_from_line(line)
+            entry = ProfileEntry().FromLine(line)
             if entry != None:
                 entry.ptype = 'provided'
                 self.provided.append(entry)
         if len(self.provided) == 0:
             return
-        for i in range(0,len(self.provided)-1):
-            if self.provided[i].interface not in self.interfaces:
-                self.interfaces.append(self.provided[i].interface)
-            if self.provided[i].interface == self.provided[i+1].interface:
-                self.provided[i].end = self.provided[i+1].start
-            else:
-                self.provided[i].end = self.period
-        self.provided[-1].end = self.period        
         self.provided = sorted(self.provided)
-        for intf in self.interfaces:
-            prof = self.getProvidedProfile(intf)
-            if prof[0].start > 0:
-                entry = ProfileEntry()
-                entry.start = 0
-                entry.end = prof[0].start
-                entry.ptype = 'provided'
-                entry.interface = intf
-                self.provided.insert(0,entry)
+        for i in range(0,len(self.provided)-1):
+            self.provided[i].end = self.provided[i+1].start
+        self.provided[-1].end = self.period        
+        prof = self.provided
+        if prof[0].start > 0:
+            entry = ProfileEntry()
+            entry.start = 0
+            entry.end = prof[0].start
+            entry.ptype = 'provided'
+            self.provided.insert(0,entry)
 
         originalProvided = copy.deepcopy(self.provided)
-        pData = {}
-        for intf in self.interfaces:
-            prof = self.getProvidedProfile(intf)
-            pData[intf] = prof[-1].data
+        pData = self.provided[-1].data
         for i in range(1,self.num_periods):
             tmpProvided = copy.deepcopy(originalProvided)
             for e in tmpProvided:
-                e.data += pData[e.interface]
+                e.data += pData
                 e.start += self.period*i
                 e.end += self.period*i
                 self.provided.append(e)
-            for data in pData:
-                data += data
+            pData += pData
         return
 
     def addRequiredEntry(self, entry):
@@ -206,7 +187,7 @@ class NodeProfile:
             return
         if len(self.required) == 0:
             for line in p:
-                entry = get_entry_from_line(line)
+                entry = ProfileEntry().FromLine(line)
                 if entry != None:
                     entry.ptype = 'required'
                     self.required.append(entry)
@@ -218,7 +199,7 @@ class NodeProfile:
         else:
             entryList = []
             for line in p:
-                entry = get_entry_from_line(line)
+                entry = ProfileEntry().FromLine(line)
                 if entry != None:
                     entry.ptype = 'required'
                     entryList.append(entry)
@@ -278,39 +259,36 @@ class NodeProfile:
             entry.ptype = 'required'
             entry.slope = (entry.data-prev_data) / (entry.end - entry.start)
             prev_data = entry.data
-            entry.interface = 'none'
             self.required_nc.append(entry)
         # CONVERT self.provided into min service curve
         self.provided_nc = []
-        for intf in self.interfaces:
-            prof = self.getProvidedProfile(intf)
-            #print prof
-            time_list = []
-            for e in prof:
-                time_list.append(e.end)
-            start_time = 0
-            prev_data = 0
-            for tw in time_list:
-                min_srv = prof[-1].data
-                t = tw
-                while t <= prof[-1].end:
-                    startData = getDataAtTimeFromProfile(prof,t-tw)
-                    endData = getDataAtTimeFromProfile(prof,t)
-                    diff = endData - startData
-                    if diff < min_srv:
-                        min_srv = diff
-                    t += step
-                entry = ProfileEntry()
-                #print "NEW POINT @ {} has {}\n".format(start_time,min_srv)
-                entry.data = min_srv
-                entry.start = start_time
-                start_time = tw
-                entry.end = start_time
-                entry.ptype = 'provided'
-                entry.slope = (entry.data-prev_data) / (entry.end - entry.start)
-                prev_data = entry.data
-                entry.interface = intf
-                self.provided_nc.append(entry)
+        prof = self.provided
+        #print prof
+        time_list = []
+        for e in prof:
+            time_list.append(e.end)
+        start_time = 0
+        prev_data = 0
+        for tw in time_list:
+            min_srv = prof[-1].data
+            t = tw
+            while t <= prof[-1].end:
+                startData = getDataAtTimeFromProfile(prof,t-tw)
+                endData = getDataAtTimeFromProfile(prof,t)
+                diff = endData - startData
+                if diff < min_srv:
+                    min_srv = diff
+                t += step
+            entry = ProfileEntry()
+            #print "NEW POINT @ {} has {}\n".format(start_time,min_srv)
+            entry.data = min_srv
+            entry.start = start_time
+            start_time = tw
+            entry.end = start_time
+            entry.ptype = 'provided'
+            entry.slope = (entry.data-prev_data) / (entry.end - entry.start)
+            prev_data = entry.data
+            self.provided_nc.append(entry)
         #print self.provided
         #print self.provided_nc
         #print self.required
@@ -318,13 +296,12 @@ class NodeProfile:
         self.provided = self.provided_nc
         self.required = self.required_nc
     
-    def convolve(self,interface):
+    def convolve(self):
         if len(self.required) == 0 or len(self.provided) == 0:
             return -1
         self.profile = []
         for e in self.provided:
-            if e.interface == interface:
-                self.profile.append(e)
+            self.profile.append(e)
         for e in self.required:
             self.profile.append(e)
         self.profile = sorted(self.profile)
@@ -441,15 +418,13 @@ class NodeProfile:
         if len(self.required) == 0 or len(self.provided) == 0:
             return
         rData = 0
-        pData = {}
-        for intf in self.interfaces:
-            pData[intf] = 0
+        pData = 0
         for e in self.required:
             rData += e.slope*(e.end-e.start)
             e.data = rData
         for e in self.provided:
-            pData[e.interface] += e.slope*(e.end-e.start)
-            e.data = pData[e.interface]
+            pData += e.slope*(e.end-e.start)
+            e.data = pData
         return
 
     def plotData(self,line_width):
@@ -509,16 +484,16 @@ class NodeProfile:
         return "NodeProfile()"
 
     def __str__(self):
-        retStr = 'Buffer: {0}\nDelay: {1}\n'.format(self.buffer,self.delay)
+        retStr = 'Buffer: {}\nDelay: {}\n'.format(self.buffer,self.delay)
         retStr += "Provided:\n"
         for e in self.provided:
-            retStr += "{0}\n".format(e)
+            retStr += "{}\n".format(e)
         retStr += "Required:\n"
         for e in self.required:
-            retStr += "{0}\n".format(e)
+            retStr += "{}\n".format(e)
         retStr += "Link:\n"
         for e in self.link:
-            retStr += "{0}\n".format(e)
+            retStr += "{}\n".format(e)
         return retStr
 
 class NetworkProfile:
@@ -534,8 +509,8 @@ class NetworkProfile:
         for n,p in self.nodeProfiles.iteritems():
             p.calcData()
 
-    def convolve(self,node,interface):
-        self.nodeProfiles[node].convolve(interface)
+    def convolve(self,node):
+        self.nodeProfiles[node].convolve()
         return self.nodeProfiles[node]
 
     def makeNetworkCalculusCurves(self, node, step):
@@ -546,24 +521,10 @@ class NetworkProfile:
 
     def __str__(self):
         retStr = "NetworkProfile:\n"
-        retStr += "has period {0} and node profiles:\n".format(self.period)
+        retStr += "has period {} and node profiles:\n".format(self.period)
         for n,p in self.nodeProfiles.iteritems():
-            retStr += "Node {0} has profiles:\n{1}\n".format(n,p)
+            retStr += "Node {} has profiles:\n{}\n".format(n,p)
         return retStr
-
-def get_entry_from_line(line=None):
-    if line == None or len(line) == 0:
-        return None
-    fields = line.split(',')
-    if len(fields) == 0 or fields[0][0] == '%':
-        return None
-    entry = ProfileEntry()
-    entry.start = float(fields[0])
-    entry.slope = float(fields[1])
-    entry.latency = float(fields[2])
-    if len(fields) == 4:
-        entry.interface = fields[3]
-    return entry
 
 def gen_network_profile(nodeProfiles,appProfiles,app_node_map,period,num_periods):
     profiles = NetworkProfile(period,num_periods)
@@ -597,27 +558,14 @@ def main():
     if options.selected_node == '':
         options.selected_node=nodes.keys()[0]
     if options.selected_node not in nodes:
-        print 'ERROR: node {0} not found in system!'.format(options.selected_node)
+        print 'ERROR: node {} not found in system!'.format(options.selected_node)
         return -1
 
-    if options.selected_interface == '':
-        if len(networkProfile.nodeProfiles[options.selected_node].interfaces) > 0:
-            options.selected_interface = networkProfile.nodeProfiles[options.selected_node].interfaces[0]
-        else:
-            print 'ERROR: node {0} has no interfaces that can be analyzed!'.format(options.selected_node)
-            return -1
-    if options.selected_interface not in networkProfile.nodeProfiles[options.selected_node].interfaces:
-        print 'ERROR: node {0} has no interface named {1}!'.format(options.selected_node,options.selected_interface)
-        return -1
-
-    print 'Using node: interface {0} on node {1}'.format(options.selected_interface,options.selected_node)
+    print 'Using node: {}'.format(options.selected_node)
     print "Using period ",options.period," over ",options.num_periods," periods"
 
     if options.nc_mode:
         networkProfile.makeNetworkCalculusCurves(options.selected_node,options.nc_step_size)
-
-    if networkProfile.convolve(options.selected_node,options.selected_interface) == -1:
-        print 'Node {0} has cannot be analyzed for interface {1}: no usable profile'.format(options.selected_node,options.selected_interface)
 
     '''
     font = {'family' : 'monospace',
