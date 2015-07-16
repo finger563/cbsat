@@ -67,102 +67,12 @@ class Options:
 \t--no_plot        (to not output any plots)
 """.format(name)
 
-def convolve(required,provided):
-    # OUTPUTS FROM THIS FUNCTION
-    link = Profile()
-    link.kind = 'link'
-    buff = [0,0,0]
-    if len(required) == 0 or len(provided) == 0:
-        return link,buff
-    profile = []
-    for e in provided:
-        profile.append(e)
-    for e in required:
-        profile.append(e)
-    profile = sorted(profile)
-    pInterval = None
-    rInterval = None
-    buffSize = 0
-    pOffset = 0
-    pEndData = 0
-    rEndData = 0
-    for e in self.profile:
-        if e.kind == 'provided':
-            pInterval = e
-        else:
-            rInterval = e
-        # note: the way intervals are created, the
-        #       req and prov intervals will always overlap
-        #       and adjacent intervals will never overlap
-        if pInterval != None and rInterval != None:
-            start = 0
-            end = 0
-            # get the later start value
-            if pInterval.start < rInterval.start:
-                start = rInterval.start
-            elif pInterval.start == rInterval.start:
-                start = rInterval.start
-            elif pInterval.start > rInterval.start:
-                start = pInterval.start
-            # get the earlier end value
-            if pInterval.end < rInterval.end:
-                end = pInterval.end
-                pEndData = pInterval.data - pOffset
-                rEndData = rInterval.data - rInterval.slope*(rInterval.end-end)
-            elif pInterval.end == rInterval.end:
-                end = pInterval.end
-                pEndData = pInterval.data - pOffset
-                rEndData = rInterval.data
-            elif pInterval.end > rInterval.end:
-                end = rInterval.end
-                pEndData = pInterval.data - pOffset - pInterval.slope*(pInterval.end-end)
-                rEndData = rInterval.data 
-            # create interval entry for link profile
-            entry = ProfileEntry()
-            entry.kind = 'link'
-            entry.start = start
-            entry.end = end
-            # link interval time bounds configured; now to calc data
-            if pEndData <= rEndData:
-                # set entry data
-                entry.data = pEndData
-                buffSize = rEndData - pEndData
-                if buffSize > buff[2]:
-                    buff = [entry.end,entry.data,buffSize]
-            else:
-                # set entry data and see if there was a profile crossing
-                if len(link) == 0 orlink[-1].data < rEndData:
-                    rData = rInterval.slope*(rInterval.end - start)
-                    rStart= rInterval.data - rInterval.slope*(rInterval.end - rInterval.start)
-                    pStart= pInterval.data - pOffset - pInterval.slope*(pInterval.end - pInterval.start)
-                    point = get_intersection([pInterval.start,pStart],[pInterval.end,pInterval.data-pOffset],[rInterval.start,rStart],[rInterval.end,rInterval.data])
-                    if point[0] != -1 and start != point[0]:
-                        xEntry = ProfileEntry()
-                        xEntry.kind = 'link'
-                        xEntry.start = start
-                        xEntry.end = point[0]
-                        xEntry.data = point[1]
-                        link.addEntry(xEntry,integrate=False)
-                        entry.start = xEntry.end
-                entry.data = rEndData
-            if entry.start != entry.end:
-                link.addEntry(entry,integrate=False)
-            # do we need to add to the offset?
-            if pEndData >= rEndData:
-                pOffset += pEndData - rEndData
-    return link, buff
-
 def main():    
     args = sys.argv
     options = Options()
     if options.parse_args(args):
         return -1
 
-    if options.selected_node not in nodes:
-        print 'ERROR: node {} not found in system!'.format(options.selected_node)
-        return -1
-
-    print 'Using node: {}'.format(options.selected_node)
     print "Using period ",options.period," over ",options.num_periods," periods"
 
     if options.nc_mode:

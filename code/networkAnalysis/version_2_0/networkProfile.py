@@ -1,4 +1,4 @@
-
+import copy
 from utils import *
 
 class ProfileEntry:
@@ -46,41 +46,50 @@ class ProfileEntry:
 
 class Profile:
     def __init__(self,period,num_periods,prof_str,kind):
-        self.BuildProfile(prof_str,period,num_periods,kind)
-
-    def BuildProfile(self,prof_str,period,num_periods,kind):
-        if prof_str == '':
-            return
         self.entries = []
         self.kind = kind
+        self.period = period
+        self.BuildProfile(prof_str,num_periods)
+
+    def BuildProfile(self,prof_str,num_periods):
+        if prof_str == '':
+            return
         p = prof_str.split('\n')
         for line in p:
             entry = ProfileEntry()
             entry.FromLine(line)
             if entry != None:
-                entry.kind = kind
+                entry.kind = self.kind
                 self.entries.append(entry)
         if len(self.entries) != 0:
             self.entries = sorted(self.entries)
             for i in range(0,len(self.entries)-1):
                 self.entries[i].end = self.entries[i+1].start
-            self.entries[-1].end = period
+            self.entries[-1].end = self.period
             if self.entries[0].start > 0:
                 entry = ProfileEntry()
                 entry.start = 0
                 entry.end = self.entries[0].start
-                entry.kind = kind
+                entry.kind = self.kind
                 self.entries.insert(0,entry)
-            originalProf = copy.deepcopy(self.entries)
-            data = self.entries[-1].data
-            for i in range(1,num_periods):
-                tmpProf = copy.deepcopy(originalProf)
-                for e in tmpProf:
-                    e.data += data
-                    e.start += period*i
-                    e.end += period*i
-                    self.entries.append(e)
-                data += data
+            self.RepeatProfile(num_periods)
+
+    def RepeatProfile(self, num_periods):
+        originalProf = copy.deepcopy(self.entries)
+        data = self.entries[-1].data
+        for i in range(1,num_periods):
+            tmpProf = copy.deepcopy(originalProf)
+            for e in tmpProf:
+                e.data += data
+                e.start += self.period*i
+                e.end += self.period*i
+                self.entries.append(e)
+            data += data
+
+    def Kind(self,kind):
+        self.kind = kind;
+        for e in self.entries:
+            e.kind = kind
 
     def Integrate(self):
         prevData = 0
@@ -167,3 +176,66 @@ class Profile:
             xvals.append(e.end)
             yvals.append(e.slope)
         line, = plt.plot(xvals,yvals, label=r"{}{} {}".format(label,self.kind,"slope"))
+
+    def convolve(self, provided):
+        output = Profile()
+        maxBuffer = [0,0,0] # [x, y, bufferSize]
+        if len(provided.entries) == 0 or len(self.entries) == 0:
+            return link,buff
+        profile = []
+        for e in provided.entries:
+            newEntry = copy.copy(e)
+            newEntry.kind = "provided"
+            profile.append(newEntry)
+        for e in self.entries:
+            newEntry = copy.copy(e)
+            newEntry.kind = "required"
+            profile.append(newEntry)
+        profile = sorted(profile)
+        pEntry = None
+        rEntry = None
+        buffSize = 0
+        pOffset = 0  # amount of data that wasn't utilized 
+        pEndData = 0 # amount of data at the END time in the provided profile
+        rEndData = 0 # amount of data at the END time in the required profile
+        for e in profile:
+            if e.kind == 'provided':
+                pEntry = e
+            else:
+                rEntry = e
+            if pEntry != None and rEntry != None:
+                start = max(pEntry.start, rEntry.start)
+                end = min(pEntry.end, rEntry.end)
+                if start != end:
+                    pEndData = pEntry.GetDataAtTime(end) - pOffset
+                    rEndData = rEntry.GetDataAtTime(end)
+                    entry = ProfileEntry()
+                    entry.kind = 'output'
+                    entry.start = start
+                    entry.end = end
+                    entry.data = min(pEndData,rEndData)
+                    if pEndData <= rEndData:
+                        buffSize = rEndData - pEndData
+                        if buffSize > maxBuffer[2]:
+                            maxBuffer = [entry.end, entry.data, buffSize]
+                    else:
+                        if len(output) == 0 or link[-1].data < rEndData:
+                            rStartData = rEntry.GetDataAtTime(rEntry.start)
+                            pStartData = pEntry.GetDataAtTime(pEntry.start) - pOffset
+                            point = get_intersection([pEntry.start, pStartData],
+                                                     [pEntry.end, pEntry.data - pOffset],
+                                                     [rEntry.start, rStartData],
+                                                     [rEntry.end, rEntry.data])
+                            if point[0] != -1 and start != point[0]:
+                                xEntry = ProfileEntry()
+                                xEntry.kind = 'output'
+                                xEntry.start = start
+                                xEntry.end = point[0]
+                                xEntry.data = point[1]
+                                output.addEntry(xEntry, integrate=False)
+                                entry.start = xEntry.end
+                    if entry.start != entry.end:
+                        link.addEntry(entry, integrate=False)
+                    if pEndData >= rEndData:
+                        pOffset += pEndData - rEndData
+        return output, maxBuffer
