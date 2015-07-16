@@ -92,9 +92,9 @@ class ProfileEntry:
         return "{},{},{},{},{},{}".format(self.start,self.end,self.slope,self.data,self.ptype)
 
     def FromLine(self,line):
-        if line != None and len(line) != 0:
+        if line != None and len(line) != 0 and '%' not in line:
             fields = line.split(',')
-            if len(fields) != 0 and fields[0][0] != '%':
+            if len(fields) != 0:
                 self.start = float(fields[0])
                 self.slope = float(fields[1])
                 self.latency = float(fields[2])
@@ -238,7 +238,6 @@ class NodeProfile:
         for e in prof:
             time_list.append(e.end)
         start_time = 0
-        #print prof
         prev_data = 0
         for tw in time_list:
             max_data = 0
@@ -263,7 +262,6 @@ class NodeProfile:
         # CONVERT self.provided into min service curve
         self.provided_nc = []
         prof = self.provided
-        #print prof
         time_list = []
         for e in prof:
             time_list.append(e.end)
