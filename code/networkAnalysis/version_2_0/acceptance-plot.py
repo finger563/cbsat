@@ -12,7 +12,7 @@ network utilization.  Therefore each node's bandwidth is modeled as a network
 import sys, os, csv, copy, glob
 
 from acceptancemathlib import *
-from utils import havePLT, getDataAtTimeFromProfile, plotProfile, get_app_node_map, get_appProfiles, get_nodeProfiles,plt
+from utils import *
 
 class Options:
     def __init__(self):
@@ -91,6 +91,11 @@ class ProfileEntry:
     def __str__(self):
         return "{},{},{},{},{}".format(self.start,self.end,self.slope,self.data,self.kind)
 
+    def UpdateData(self,prevData):
+        self.data = prevData
+        if self.start != self.end:
+            self.data += self.slope * (self.end - self.start)
+
     def FromLine(self,line):
         if line != None and len(line) != 0 and '%' not in line:
             fields = line.split(',')
@@ -99,14 +104,23 @@ class ProfileEntry:
                 self.slope = float(fields[1])
                 self.latency = float(fields[2])
 
-class Profile:
-    def __init__(self,period,num_periods,prof_str=None,kind=None):
-        self.period = period
-        self.num_periods = num_periods
-        if prof_str != None:
-            self.BuildProfile(prof_str,kind)
+    def GetDataAtTime(self,t):
+        if t > self.end or t < self.start:
+            return -1
+        return (self.data - self.slope * (self.end - t))
 
-    def BuildProfile(self,prof_str,kind):
+    def GetTimesAtData(self,d):
+        if d > self.data or d < (self.data - self.slope * (self.end-self.start)):
+            return []
+        if self.slope == 0:
+            return [self.start,self.end]
+        return [self.end - (self.data - d)/self.slope]
+
+class Profile:
+    def __init__(self,period,num_periods,prof_str,kind):
+        self.BuildProfile(prof_str,period,num_periods,kind)
+
+    def BuildProfile(self,prof_str,period,num_periods,kind):
         if prof_str == '':
             return
         self.entries = []
@@ -122,7 +136,7 @@ class Profile:
             self.entries = sorted(self.entries)
             for i in range(0,len(self.entries)-1):
                 self.entries[i].end = self.entries[i+1].start
-            self.entries[-1].end = self.period        
+            self.entries[-1].end = period
             if self.entries[0].start > 0:
                 entry = ProfileEntry()
                 entry.start = 0
@@ -131,18 +145,56 @@ class Profile:
                 self.entries.insert(0,entry)
             originalProf = copy.deepcopy(self.entries)
             data = self.entries[-1].data
-            for i in range(1,self.num_periods):
+            for i in range(1,num_periods):
                 tmpProf = copy.deepcopy(originalProf)
                 for e in tmpProf:
                     e.data += data
-                    e.start += self.period*i
-                    e.end += self.period*i
+                    e.start += period*i
+                    e.end += period*i
                     self.entries.append(e)
                 data += data
+
+    def Integrate(self):
+        prevData = 0
+        for e in self.entries:
+            e.updateData(prevData)
+            prevData = e.data
 
     def AddProfile(self,profile):
         for e in profile:
             self.addEntry(e)
+
+    def addEntry(self, entry):
+        if self.entries == [] or entry.start >= self.entries[-1].end:
+            self.entries.append(entry)
+        elif entry.end <= self.entries[0].start:
+            self.entries.insert(0,entry)
+        else:
+            startInd = getIndexContainingTime(self.entries,entry.start)
+            # split start entry : shorten the existing entry and add a new entry
+            if entry.start > self.entries[startInd].start:
+                self.entries[startInd].end = entry.start
+                newEntry = ProfileEntry()
+                newEntry.start = entry.start
+                newEntry.end = self.entries[startInd].end
+                newEntry.slope = self.entries[startInd].slope
+                newEntry.kind = self.kind
+                startInd += 1
+                self.entries.insert(startInd, newEntry)
+            endInd = getIndexContainingTime(self.entries,entry.end)
+            # iterate through all entries between start and end to update with new bandwidth
+            for i in range(startInd,endInd+1):
+                self.entries[i].slope += entry.slope
+            # split end entry : shorten existing entry and add a new one
+            if entry.end < self.entries[endInd].end:
+                newEntry = ProfileEntry()
+                newEntry.start = entry.end
+                newEntry.end = self.entries[endInd].end
+                newEntry.slope = self.entries[endInd].slope - entry.slope
+                newEntry.kind = self.kind
+                self.entries[endInd].end = entry.end
+                self.entries.insert(endInd+1, newEntry)
+        self.Integrate()
 
     def ConvertToNC(self,step,filterFunc):
         time_list = []
@@ -169,14 +221,23 @@ class Profile:
             prev_data = entry.data
             self.required_nc.append(entry)
 
-    def addEntry(self, entry):
-        if self.entries == [] or entry.start >= self.entries[-1].end:
-            self.entries.append(entry)
-        elif entry.end <= self.entries[0].start:
-            self.entries.insert(0,entry)
-        else:
-            startInd = getIndexByStartTime(self.entries,entry.start)
-            endInd = getIndexByStartTime(self.entries,entry.end)
+    def plotData(self,dashes,label,line_width):
+        xvals = [0]
+        yvals = [0]
+        for e in self.entries:
+            xvals.append(e.end)
+            yvals.append(e.data)
+        line, = plt.plot(xvals,yvals, label=r"{}{} {}".format(label,self.kind,"data"))
+        
+    def plotSlope(self,dashes,label,line_width):
+        xvals = []
+        yvals = []
+        for e in self.entries:
+            xvals.append(e.start)
+            yvals.append(e.slope)
+            xvals.append(e.end)
+            yvals.append(e.slope)
+        line, = plt.plot(xvals,yvals, label=r"{}{} {}".format(label,self.kind,"slope"))
 
 class NodeProfile:
     def __init__(self,period,num_periods):
@@ -282,50 +343,25 @@ class NodeProfile:
             return
         delay = [0,0,0]
         # match required points to link profile horizontally
-        for r in self.required:
-            for l in self.link:
-                if l.data > r.data:
-                    offset = l.end-(l.data-r.data)/l.slope
-                    timeDiff = offset-r.end
-                    if timeDiff > delay[2]:
-                        delay = [r.end,r.data,timeDiff]
-                    break
-                elif l.data == r.data:
-                    timeDiff = l.end - r.end
-                    if timeDiff > delay[2]:
-                        delay = [r.end,r.data,timeDiff]
-                    break
-        # match link points to required profile horizontally
-        for l in self.link:
-            for r in self.required:
-                if l.data < r.data:
-                    offset = r.end-(r.data-l.data)/r.slope
-                    timeDiff = l.end - offset
-                    if timeDiff > delay[2]:
-                        delay = [offset,l.data,timeDiff]
-                    break
-        self.delay = delay
-        return
-
-    def calcData(self):
-        if len(self.required) == 0 or len(self.provided) == 0:
-            return
-        rData = 0
-        pData = 0
         for e in self.required:
-            rData += e.slope*(e.end-e.start)
-            e.data = rData
-        for e in self.provided:
-            pData += e.slope*(e.end-e.start)
-            e.data = pData
-        return
+            times=getTimesAtDataFromProfile(self.link, e.data)
+            timeDiff = times[1] - e.end
+            if timeDiff > delay[2]:
+                delay = [e.end, e.data, timeDiff]
+        # match link points to required profile horizontally
+        for e in self.link:
+            times=getTimesAtDataFromProfile(self.requried, e.data)
+            timeDiff = e.end - times[0]
+            if timeDiff > delay[2]:
+                delay = [times[0], e.data, timeDiff]
+        self.delay = delay
 
     def plotData(self,line_width):
         plt.figure(2)
         plt.hold(True)
-        plotProfile('data',self.profile,'required',[8,4,2,4,2,4],'r[t]: ',line_width)
-        plotProfile('data',self.profile,'provided',[2,4],'p[t]: ',line_width)
-        plotProfile('data',self.link,'link',[6,12],'l[t]: ',line_width)
+        self.required.plotData([8,4,2,4,2,4],'r[t]: ',line_width)
+        self.provided.plotData([2,4],'p[t]: ',line_width)
+        self.link.plotData([6,12],'l[t]: ',line_width)
 
         buffplotx = [self.buffer[0],self.buffer[0]]
         buffploty = [self.buffer[1],self.buffer[1]+self.buffer[2]]
@@ -349,9 +385,9 @@ class NodeProfile:
     def plotSlope(self,line_width):
         plt.figure(1)
         plt.hold(True)
-        plotProfile('slope',self.profile,'required',[4,8],'',line_width)
-        plotProfile('slope',self.profile,'provided',[2,4],'',line_width)
-        plotProfile('slope',self.link,'link',[2,4],'',line_width)
+        self.required.plotSlope([4,8],'',line_width)
+        self.provided.plotSlope([2,4],'',line_width)
+        self.link.plotSlope([2,4],'',line_width)
     
         plt.title("Network Bandwidth vs. Time over %d period(s)"%self.num_periods)
         plt.ylabel("Bandwidth (bps)")
