@@ -11,7 +11,7 @@ network utilization.  Therefore each node's bandwidth is modeled as a network
 # QoS files have 4 columns: time (s), BW(bps), latency (ms), Network Link (id #)
 import sys, os, csv, copy, glob
 
-from utils import *
+from networkProfile import *
 
 class Options:
     def __init__(self):
@@ -67,270 +67,90 @@ class Options:
 \t--no_plot        (to not output any plots)
 """.format(name)
 
-class ProfileEntry:
-    def __init__(self,start=0,end=0,slope=0,data=0,kind='none'):
-        self.start = start
-        self.end = end
-        self.slope = slope
-        self.data = data
-        self.kind = kind
-
-    def __lt__(self, other):
-        return self.start < other.start
-
-    def __repr__(self):
-        retstr = "{}\n".format(self)
-        return retstr #"ProfileEntry()"
-    
-    def __str__(self):
-        return "{},{},{},{},{}".format(self.start,self.end,self.slope,self.data,self.kind)
-
-    def UpdateData(self,prevData):
-        self.data = prevData
-        if self.start != self.end:
-            self.data += self.slope * (self.end - self.start)
-
-    def FromLine(self,line):
-        if line != None and len(line) != 0 and '%' not in line:
-            fields = line.split(',')
-            if len(fields) != 0:
-                self.start = float(fields[0])
-                self.slope = float(fields[1])
-                self.latency = float(fields[2])
-
-    def GetDataAtTime(self,t):
-        if t > self.end or t < self.start:
-            return -1
-        return (self.data - self.slope * (self.end - t))
-
-    def GetTimesAtData(self,d):
-        if d > self.data or d < (self.data - self.slope * (self.end-self.start)):
-            return []
-        if self.slope == 0:
-            return [self.start,self.end]
-        return [self.end - (self.data - d)/self.slope]
-
-class Profile:
-    def __init__(self,period,num_periods,prof_str,kind):
-        self.BuildProfile(prof_str,period,num_periods,kind)
-
-    def BuildProfile(self,prof_str,period,num_periods,kind):
-        if prof_str == '':
-            return
-        self.entries = []
-        self.kind = kind
-        p = prof_str.split('\n')
-        for line in p:
-            entry = ProfileEntry()
-            entry.FromLine(line)
-            if entry != None:
-                entry.kind = kind
-                self.entries.append(entry)
-        if len(self.entries) != 0:
-            self.entries = sorted(self.entries)
-            for i in range(0,len(self.entries)-1):
-                self.entries[i].end = self.entries[i+1].start
-            self.entries[-1].end = period
-            if self.entries[0].start > 0:
-                entry = ProfileEntry()
-                entry.start = 0
-                entry.end = self.entries[0].start
-                entry.kind = kind
-                self.entries.insert(0,entry)
-            originalProf = copy.deepcopy(self.entries)
-            data = self.entries[-1].data
-            for i in range(1,num_periods):
-                tmpProf = copy.deepcopy(originalProf)
-                for e in tmpProf:
-                    e.data += data
-                    e.start += period*i
-                    e.end += period*i
-                    self.entries.append(e)
-                data += data
-
-    def Integrate(self):
-        prevData = 0
-        for e in self.entries:
-            e.updateData(prevData)
-            prevData = e.data
-
-    def AddProfile(self,profile):
-        for e in profile:
-            self.addEntry(e)
-
-    def addEntry(self, entry):
-        if self.entries == [] or entry.start >= self.entries[-1].end:
-            self.entries.append(entry)
-        elif entry.end <= self.entries[0].start:
-            self.entries.insert(0,entry)
+def convolve(required,provided):
+    # OUTPUTS FROM THIS FUNCTION
+    link = Profile()
+    link.kind = 'link'
+    buff = [0,0,0]
+    if len(required) == 0 or len(provided) == 0:
+        return link,buff
+    profile = []
+    for e in provided:
+        profile.append(e)
+    for e in required:
+        profile.append(e)
+    profile = sorted(profile)
+    pInterval = None
+    rInterval = None
+    buffSize = 0
+    pOffset = 0
+    pEndData = 0
+    rEndData = 0
+    for e in self.profile:
+        if e.kind == 'provided':
+            pInterval = e
         else:
-            startInd = getIndexContainingTime(self.entries,entry.start)
-            # split start entry : shorten the existing entry and add a new entry
-            if entry.start > self.entries[startInd].start:
-                self.entries[startInd].end = entry.start
-                newEntry = ProfileEntry()
-                newEntry.start = entry.start
-                newEntry.end = self.entries[startInd].end
-                newEntry.slope = self.entries[startInd].slope
-                newEntry.kind = self.kind
-                startInd += 1
-                self.entries.insert(startInd, newEntry)
-            endInd = getIndexContainingTime(self.entries,entry.end)
-            # iterate through all entries between start and end to update with new bandwidth
-            for i in range(startInd,endInd+1):
-                self.entries[i].slope += entry.slope
-            # split end entry : shorten existing entry and add a new one
-            if entry.end < self.entries[endInd].end:
-                newEntry = ProfileEntry()
-                newEntry.start = entry.end
-                newEntry.end = self.entries[endInd].end
-                newEntry.slope = self.entries[endInd].slope - entry.slope
-                newEntry.kind = self.kind
-                self.entries[endInd].end = entry.end
-                self.entries.insert(endInd+1, newEntry)
-        self.Integrate()
-
-    def ConvertToNC(self,step,filterFunc):
-        time_list = []
-        for e in self.entries:
-            time_list.append(e.end)
-        start_time = 0
-        prev_data = 0
-        for tw in time_list:
-            extremeData = 0
-            t = tw
-            while t <= prof[-1].end:
-                startData = getDataAtTimeFromProfile(prof,t-tw)
-                endData = getDataAtTimeFromProfile(prof,t)
-                diff = endData - startData
-                extremeData = filterFunc(diff,extremeData)
-                t += step
+            rInterval = e
+        # note: the way intervals are created, the
+        #       req and prov intervals will always overlap
+        #       and adjacent intervals will never overlap
+        if pInterval != None and rInterval != None:
+            start = 0
+            end = 0
+            # get the later start value
+            if pInterval.start < rInterval.start:
+                start = rInterval.start
+            elif pInterval.start == rInterval.start:
+                start = rInterval.start
+            elif pInterval.start > rInterval.start:
+                start = pInterval.start
+            # get the earlier end value
+            if pInterval.end < rInterval.end:
+                end = pInterval.end
+                pEndData = pInterval.data - pOffset
+                rEndData = rInterval.data - rInterval.slope*(rInterval.end-end)
+            elif pInterval.end == rInterval.end:
+                end = pInterval.end
+                pEndData = pInterval.data - pOffset
+                rEndData = rInterval.data
+            elif pInterval.end > rInterval.end:
+                end = rInterval.end
+                pEndData = pInterval.data - pOffset - pInterval.slope*(pInterval.end-end)
+                rEndData = rInterval.data 
+            # create interval entry for link profile
             entry = ProfileEntry()
-            entry.data = extremeData
-            entry.start = start_time
-            start_time = tw
-            entry.end = start_time
-            entry.kind = self.kind
-            entry.slope = (entry.data-prev_data) / (entry.end - entry.start)
-            prev_data = entry.data
-            self.required_nc.append(entry)
-
-    def plotData(self,dashes,label,line_width):
-        xvals = [0]
-        yvals = [0]
-        for e in self.entries:
-            xvals.append(e.end)
-            yvals.append(e.data)
-        line, = plt.plot(xvals,yvals, label=r"{}{} {}".format(label,self.kind,"data"))
-        
-    def plotSlope(self,dashes,label,line_width):
-        xvals = []
-        yvals = []
-        for e in self.entries:
-            xvals.append(e.start)
-            yvals.append(e.slope)
-            xvals.append(e.end)
-            yvals.append(e.slope)
-        line, = plt.plot(xvals,yvals, label=r"{}{} {}".format(label,self.kind,"slope"))
-
-class NodeProfile:
-    def __init__(self,period,num_periods):
-        self.profile = []
-        self.required = []
-        self.provided = []
-        self.link = []
-        self.period = period
-        self.num_periods = num_periods
-        self.buffer = [0,0,0]
-        self.delay = [0,0,0]
-
-    def convolve(self):
-        if len(self.required) == 0 or len(self.provided) == 0:
-            return -1
-        self.profile = []
-        for e in self.provided:
-            self.profile.append(e)
-        for e in self.required:
-            self.profile.append(e)
-        self.profile = sorted(self.profile)
-        pInterval = None
-        rInterval = None
-        self.link = []
-        buff = 0
-        delay = [0,0,0]
-        pOffset = 0
-        pEndData = 0
-        rEndData = 0
-        for e in self.profile:
-            if e.kind == 'provided':
-                pInterval = e
+            entry.kind = 'link'
+            entry.start = start
+            entry.end = end
+            # link interval time bounds configured; now to calc data
+            if pEndData <= rEndData:
+                # set entry data
+                entry.data = pEndData
+                buffSize = rEndData - pEndData
+                if buffSize > buff[2]:
+                    buff = [entry.end,entry.data,buffSize]
             else:
-                rInterval = e
-            # note: the way intervals are created, the
-            #       req and prov intervals will always overlap
-            #       and adjacent intervals will never overlap
-            if pInterval != None and rInterval != None:
-                start = 0
-                end = 0
-                # get the later start value
-                if pInterval.start < rInterval.start:
-                    start = rInterval.start
-                elif pInterval.start == rInterval.start:
-                    start = rInterval.start
-                elif pInterval.start > rInterval.start:
-                    start = pInterval.start
-                # get the earlier end value
-                if pInterval.end < rInterval.end:
-                    end = pInterval.end
-                    pEndData = pInterval.data - pOffset
-                    rEndData = rInterval.data - rInterval.slope*(rInterval.end-end)
-                elif pInterval.end == rInterval.end:
-                    end = pInterval.end
-                    pEndData = pInterval.data - pOffset
-                    rEndData = rInterval.data
-                elif pInterval.end > rInterval.end:
-                    end = rInterval.end
-                    pEndData = pInterval.data - pOffset - pInterval.slope*(pInterval.end-end)
-                    rEndData = rInterval.data 
-                # create interval entry for link profile
-                entry = ProfileEntry()
-                entry.kind = 'link'
-                entry.start = start
-                entry.end = end
-                # link interval time bounds configured; now to calc data
-                if pEndData <= rEndData:
-                    # set entry data
-                    entry.data = pEndData
-                    buff = rEndData - pEndData
-                    if buff > self.buffer[2]:
-                        self.buffer = [entry.end,entry.data,buff]
-                else:
-                    # set entry data and see if there was a profile crossing
-                    if len(self.link) == 0 or self.link[-1].data < rEndData:
-                        rData = rInterval.slope*(rInterval.end - start)
-                        rStart= rInterval.data - rInterval.slope*(rInterval.end - rInterval.start)
-                        pStart= pInterval.data - pOffset - pInterval.slope*(pInterval.end - pInterval.start)
-                        point = get_intersection([pInterval.start,pStart],[pInterval.end,pInterval.data-pOffset],[rInterval.start,rStart],[rInterval.end,rInterval.data])
-                        if point[0] != -1:
-                            xEntry = ProfileEntry()
-                            xEntry.kind = 'link'
-                            xEntry.start = start
-                            xEntry.end = point[0]
-                            xEntry.data = point[1]
-                            self.link.append(xEntry)
-                            entry.start = xEntry.end
-                    entry.data = rEndData
-                self.link.append(entry)
-                # do we need to add to the offset?
-                if pEndData >= rEndData:
-                    pOffset += pEndData - rEndData
-        self.link = [e for e in self.link if e.start != e.end]
-        lData = 0
-        for e in self.link:
-            e.slope = (e.data - lData)/(e.end-e.start)
-            lData = e.data
-        self.calcDelay()
-        return 0
+                # set entry data and see if there was a profile crossing
+                if len(link) == 0 orlink[-1].data < rEndData:
+                    rData = rInterval.slope*(rInterval.end - start)
+                    rStart= rInterval.data - rInterval.slope*(rInterval.end - rInterval.start)
+                    pStart= pInterval.data - pOffset - pInterval.slope*(pInterval.end - pInterval.start)
+                    point = get_intersection([pInterval.start,pStart],[pInterval.end,pInterval.data-pOffset],[rInterval.start,rStart],[rInterval.end,rInterval.data])
+                    if point[0] != -1 and start != point[0]:
+                        xEntry = ProfileEntry()
+                        xEntry.kind = 'link'
+                        xEntry.start = start
+                        xEntry.end = point[0]
+                        xEntry.data = point[1]
+                        link.addEntry(xEntry,integrate=False)
+                        entry.start = xEntry.end
+                entry.data = rEndData
+            if entry.start != entry.end:
+                link.addEntry(entry,integrate=False)
+            # do we need to add to the offset?
+            if pEndData >= rEndData:
+                pOffset += pEndData - rEndData
+    return link, buff
 
 def main():    
     args = sys.argv
