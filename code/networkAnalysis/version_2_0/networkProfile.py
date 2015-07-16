@@ -206,7 +206,7 @@ class Profile:
         line.set_dashes(dashes)
 
     def Convolve(self, provided):
-        output = Profile()
+        output = Profile(kind='output')
         maxBuffer = [0,0,0] # [x, y, bufferSize]
         maxDelay  = [0,0,0] # [x, y, delayLength]
         if len(provided.entries) == 0 or len(self.entries) == 0:
