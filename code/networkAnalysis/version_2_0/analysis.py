@@ -33,43 +33,43 @@ class Options:
                 if self.period <= 0:
                     print "Error! You must specify a time period > 0"
                     return -1
-                argind += 2
+                argind += 1
             elif args[argind] == "--num_periods":
                 self.num_periods = int(args[argind+1])
                 if self.num_periods <= 0:
                     print "Error! You must specify a number of periods > 0"
                     return -1
-                argind += 2
+                argind += 1
             elif args[argind] == "--no_plot":
                 self.plot_profiles = False
-                argind += 1
             elif args[argind] == "--nc_mode":
                 self.nc_mode = True
-                argind += 1
             elif args[argind] == "--nc_step_size":
                 self.nc_step_size = float(args[argind+1])
-                argind += 2
+                argind += 1
             elif args[argind] == "--required":
                 self.required_fileName = args[argind+1]
-                argind += 2
+                argind += 1
             elif args[argind] == "--provided":
                 self.provided_fileName = args[argind+1]
-                argind += 2
-            else:
+                argind += 1
+            elif args[argind] == "--help":
                 self.print_usage(args[0])
                 return -1
+            argind += 1
         return 0
 
     def print_usage(self,name):
         print """Usage:
 {}
+\t--help           (to show this help and exit)
+\t--nc_mode        (to run network calculus calcs)
+\t--no_plot        (to not output any plots)
 \t--required       <fileName containing the required profile>
 \t--provided       <fileName containing the provided profile>
-\t--period         <period (s)>
+\t--period         <period of the profiles in seconds>
 \t--num_periods    <number of periods to analyze>
-\t--nc_mode        (to run network calculus calcs)
 \t--nc_step_size   <step size for windows in NC mode>
-\t--no_plot        (to not output any plots)
 """.format(name)
 
 def main():    
