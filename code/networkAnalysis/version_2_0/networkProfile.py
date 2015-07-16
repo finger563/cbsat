@@ -273,5 +273,6 @@ class Profile:
                         output.AddEntry(entry, integrate=False)
                     if pEndData >= rEndData:
                         pOffset += pEndData - rEndData
+        output.Derive()
         maxDelay = calcDelay(self.entries, output.entries)
         return output, maxBuffer, maxDelay

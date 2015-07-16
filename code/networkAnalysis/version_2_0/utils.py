@@ -38,20 +38,19 @@ def calcDelay(required,output):
     delay = [0,0,0]
     if len(required) == 0 or len(output) == 0:
         return delay
-    # match required points to output profile horizontally
+    dataList = []
     for e in required:
-        times=getTimesAtDataFromProfile(output, e.data)
-        if times != []:
-            timeDiff = times[1] - e.end
-            if timeDiff > delay[2]:
-                delay = [e.end, e.data, timeDiff]
-    # match output points to required profile horizontally
+        dataList.append(e.data)
     for e in output:
-        times=getTimesAtDataFromProfile(required, e.data)
-        if times != []:
-            timeDiff = e.end - times[0]
+        dataList.append(e.data)
+    dataList = set(sorted(dataList))
+    for data in dataList:
+        rTimes = getTimesAtDataFromProfile(required, data)
+        oTimes = getTimesAtDataFromProfile(output, data)
+        if rTimes != [] and oTimes != []:
+            timeDiff = oTimes[0] - rTimes[0]
             if timeDiff > delay[2]:
-                delay = [times[0], e.data, timeDiff]
+                delay = [ rTimes[0], data, timeDiff ]
     return delay
 
 def plotData(r,p,o,b,d,num_periods,line_width):
