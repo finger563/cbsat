@@ -51,28 +51,21 @@ class ProfileEntry:
         return [self.end - (self.data - d)/self.slope]
 
 class Profile:
-    def __init__(self,
-                 kind = None,
-                 period = 0,
-                 num_periods = 1,
-                 prof_str = None,
-                 prof_fName = None):
+    def __init__(self, kind = None, period = 0):
         self.entries = []
         self.kind = kind
         self.period = period
-        if prof_str != None:
-            self.BuildProfile(prof_str,num_periods)
-        elif prof_fName != None:
+
+    def BuildProfile(self, prof_str = None, prof_fName = None, num_periods = 1):
+        if prof_str == None and prof_fName != None:
             try:
                 with open(prof_fName, 'r+') as f:
                     prof_str = f.read()
-                    self.BuildProfile(prof_str, num_periods)
             except:
                 print >> sys.stderr, "ERROR: Couldn't find/open {}".format(prof_fName)
-
-    def BuildProfile(self,prof_str,num_periods):
-        if prof_str == '':
-            return
+                return -1
+        if prof_str == None:
+            return -1
         p = prof_str.split('\n')
         for line in p:
             entry = ProfileEntry()
@@ -160,19 +153,21 @@ class Profile:
 
     def ConvertToNC(self,step,filterFunc):
         time_list = []
+        data_list = []
         for e in self.entries:
             time_list.append(e.end)
+            data_list.append(-e.data)
         start_time = 0
         prev_data = 0
         new_entries = []
         for tw in time_list:
-            extremeData = 0
+            extremeData = -filterFunc(data_list)
             t = tw
-            while t <= prof[-1].end:
-                startData = getDataAtTimeFromProfile(prof,t-tw)
-                endData = getDataAtTimeFromProfile(prof,t)
+            while t <= self.entries[-1].end:
+                startData = getDataAtTimeFromProfile(self.entries,t-tw)
+                endData = getDataAtTimeFromProfile(self.entries,t)
                 diff = endData - startData
-                extremeData = filterFunc(diff,extremeData)
+                extremeData = filterFunc([diff,extremeData])
                 t += step
             entry = ProfileEntry()
             entry.data = extremeData

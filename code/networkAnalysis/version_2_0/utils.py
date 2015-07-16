@@ -13,8 +13,8 @@ def getIndexContainingTime(p,t):
     return i
     
 def getDataAtTimeFromProfile(p,t):
-    i = getIndexByStartTime(p,t)
-    return retVal
+    i = getIndexContainingTime(p,t)
+    return p[i].GetDataAtTime(t)
 
 def getTimesAtDataFromProfile(p,d):
     times = []

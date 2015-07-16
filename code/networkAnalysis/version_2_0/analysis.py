@@ -85,23 +85,27 @@ def main():
 
     required = Profile(
         kind = 'required',
-        period = options.period,
-        num_periods = options.num_periods,
-        prof_fName = options.required_fileName)
+        period = options.period)
+    if required.BuildProfile(
+            num_periods = options.num_periods,
+            prof_fName = options.required_fileName) == -1:
+        return -1
 
     provided = Profile(
         kind = 'provided',
-        period = options.period,
-        num_periods = options.num_periods,
-        prof_fName = options.provided_fileName)
+        period = options.period)
+    if provided.BuildProfile(
+            num_periods = options.num_periods,
+            prof_fName = options.provided_fileName) == -1:
+        return -1
 
     required.Integrate()
     provided.Integrate()
 
     if options.nc_mode:
         print "Performing NC-based analysis"
-        provided.ConvertToNC( options.nc_step_size, lambda x,y : min(x,y) )
-        required.ConvertToNC( options.nc_step_size, lambda x,y : max(x,y) )
+        provided.ConvertToNC( options.nc_step_size, lambda l: min(l) )
+        required.ConvertToNC( options.nc_step_size, lambda l: max(l) )
 
     output, maxBuffer, maxDelay = required.Convolve(provided)
 
