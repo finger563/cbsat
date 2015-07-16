@@ -18,11 +18,12 @@ class Options:
         self.period = (90*60)    # orbital period in seconds
         self.plot_profiles = havePLT
         self.num_periods = 1
-        self.selected_node = ''
         self.plot_line_width = 4 # line width for plots
         self.font_size = 25 # font size for plots
         self.nc_mode = False
         self.nc_step_size = 1
+        self.required_fileName = "required.csv"
+        self.provided_fileName = "provided.csv"
 
     def parse_args(self,args):
         argind = 1
@@ -48,8 +49,11 @@ class Options:
             elif args[argind] == "--nc_step_size":
                 self.nc_step_size = float(args[argind+1])
                 argind += 2
-            elif args[argind] == "--node_name":
-                self.selected_node = args[argind+1]
+            elif args[argind] == "--required":
+                self.required_fileName = args[argind+1]
+                argind += 2
+            elif args[argind] == "--provided":
+                self.provided_fileName = args[argind+1]
                 argind += 2
             else:
                 self.print_usage(args[0])
@@ -59,7 +63,8 @@ class Options:
     def print_usage(self,name):
         print """Usage:
 {}
-\t--node_name      <node name>
+\t--required       <fileName containing the required profile>
+\t--provided       <fileName containing the provided profile>
 \t--period         <period (s)>
 \t--num_periods    <number of periods to analyze>
 \t--nc_mode        (to run network calculus calcs)
@@ -73,24 +78,43 @@ def main():
     if options.parse_args(args):
         return -1
 
-    print "Using period ",options.period," over ",options.num_periods," periods"
+    print "Analyzing required profile:\n\t{}\nagainst provided profile:\n\t{}".format(
+        options.required_fileName, options.provided_fileName)
+    print "Using period {} seconds over {} periods".format(
+        options.period, options.num_periods)
+
+    required = Profile(
+        kind = 'required',
+        period = options.period,
+        num_periods = options.num_periods,
+        prof_fName = options.required_fileName)
+
+    provided = Profile(
+        kind = 'provided',
+        period = options.period,
+        num_periods = options.num_periods,
+        prof_fName = options.provided_fileName)
+
+    required.Integrate()
+    provided.Integrate()
 
     if options.nc_mode:
-        networkProfile.makeNetworkCalculusCurves(options.selected_node,options.nc_step_size)
+        print "Performing NC-based analysis"
+        provided.ConvertToNC( options.nc_step_size, lambda x,y : min(x,y) )
+        required.ConvertToNC( options.nc_step_size, lambda x,y : max(x,y) )
 
-    if networkProfile.convolve(options.selected_node) == -1:
-        print >> sys.stderr, 'Node {0} has cannot be analyzed: no usable profile'.format(options.selected_node)
+    output, maxBuffer, maxDelay = required.Convolve(provided)
+    output.Derive()
 
     if options.plot_profiles == True:
-        networkProfile.nodeProfiles[options.selected_node].plotSlope(options.plot_line_width)
-        networkProfile.nodeProfiles[options.selected_node].plotData(options.plot_line_width)
+        plotSlope(required, provided, output,
+                  options.num_periods, options.plot_line_width)
+        plotData(required, provided, output,
+                 maxBuffer, maxDelay,
+                 options.num_periods, options.plot_line_width)
 
-    buff = networkProfile.nodeProfiles[options.selected_node].buffer
-    print "\n[Time location, buffersize]:",[buff[0],buff[2]]
-
-    delay = networkProfile.nodeProfiles[options.selected_node].delay
-    print "[Time location, delay]:",[delay[0],delay[2]]
-
+    print "\n[Time location, buffersize]:",[maxBuffer[0], maxBuffer[2]]
+    print "[Time location, delay]:",[maxDelay[0], maxDelay[2]]
 
     #if max(column(req,1)) > max(column(util,1)):
     #    print "\nWARNING: DATA HAS NOT BEEN SENT BY END OF THE ANALYZED PERIOD(s)"

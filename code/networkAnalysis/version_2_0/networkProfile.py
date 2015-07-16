@@ -1,4 +1,4 @@
-import copy
+import copy,sys
 from utils import *
 
 class ProfileEntry:
@@ -19,6 +19,10 @@ class ProfileEntry:
     def __str__(self):
         return "{},{},{},{},{}".format(self.start,self.end,self.slope,self.data,self.kind)
 
+    def UpdateSlope(self,startData):
+        if self.start != self.end:
+            self.slope = (self.data - startData) / (self.end - self.start)
+
     def UpdateData(self,prevData):
         self.data = prevData
         if self.start != self.end:
@@ -31,6 +35,8 @@ class ProfileEntry:
                 self.start = float(fields[0])
                 self.slope = float(fields[1])
                 self.latency = float(fields[2])
+                return 0
+        return -1
 
     def GetDataAtTime(self,t):
         if t > self.end or t < self.start:
@@ -45,12 +51,24 @@ class ProfileEntry:
         return [self.end - (self.data - d)/self.slope]
 
 class Profile:
-    def __init__(self,kind,period,num_periods=None,prof_str=None):
+    def __init__(self,
+                 kind = None,
+                 period = 0,
+                 num_periods = 1,
+                 prof_str = None,
+                 prof_fName = None):
         self.entries = []
         self.kind = kind
         self.period = period
-        if prof_str != None and num_periods != None:
+        if prof_str != None:
             self.BuildProfile(prof_str,num_periods)
+        elif prof_fName != None:
+            try:
+                with open(prof_fName, 'r+') as f:
+                    prof_str = f.read()
+                    self.BuildProfile(prof_str, num_periods)
+            except:
+                print >> sys.stderr, "ERROR: Couldn't find/open {}".format(prof_fName)
 
     def BuildProfile(self,prof_str,num_periods):
         if prof_str == '':
@@ -58,8 +76,7 @@ class Profile:
         p = prof_str.split('\n')
         for line in p:
             entry = ProfileEntry()
-            entry.FromLine(line)
-            if entry != None:
+            if entry.FromLine(line) == 0:
                 entry.kind = self.kind
                 self.entries.append(entry)
         if len(self.entries) != 0:
@@ -95,7 +112,13 @@ class Profile:
     def Integrate(self):
         prevData = 0
         for e in self.entries:
-            e.updateData(prevData)
+            e.UpdateData(prevData)
+            prevData = e.data
+
+    def Derive(self):
+        prevData = 0
+        for e in self.entries:
+            e.UpdateSlope(prevData)
             prevData = e.data
 
     def AddProfile(self,profile):
@@ -168,7 +191,10 @@ class Profile:
         for e in self.entries:
             xvals.append(e.end)
             yvals.append(e.data)
-        line, = plt.plot(xvals,yvals, label=r"{}{} {}".format(label,self.kind,"data"))
+        line, = plt.plot( xvals, yvals,
+                          label=r"{}{} {}".format(label,self.kind,"data"),
+                          linewidth = line_width)
+        line.set_dashes(dashes)
         
     def PlotSlope(self,dashes,label,line_width):
         xvals = []
@@ -178,14 +204,18 @@ class Profile:
             yvals.append(e.slope)
             xvals.append(e.end)
             yvals.append(e.slope)
-        line, = plt.plot(xvals,yvals, label=r"{}{} {}".format(label,self.kind,"slope"))
+        line, = plt.plot( xvals,
+                          yvals,
+                          label=r"{}{} {}".format(label,self.kind,"slope"),
+                          linewidth = line_width)
+        line.set_dashes(dashes)
 
     def Convolve(self, provided):
         output = Profile()
         maxBuffer = [0,0,0] # [x, y, bufferSize]
         maxDelay  = [0,0,0] # [x, y, delayLength]
         if len(provided.entries) == 0 or len(self.entries) == 0:
-            print "Cannot convolve these two profiles."
+            print >> sys.stderr, "ERROR: Cannot convolve these two profiles."
             return output, maxBuffer, maxDelay
         profile = []
         for e in provided.entries:
@@ -224,7 +254,7 @@ class Profile:
                         if buffSize > maxBuffer[2]:
                             maxBuffer = [entry.end, entry.data, buffSize]
                     else:
-                        if len(output) == 0 or link[-1].data < rEndData:
+                        if len(output.entries) == 0 or output.entries[-1].data < rEndData:
                             rStartData = rEntry.GetDataAtTime(rEntry.start)
                             pStartData = pEntry.GetDataAtTime(pEntry.start) - pOffset
                             point = get_intersection([pEntry.start, pStartData],
@@ -237,10 +267,10 @@ class Profile:
                                 xEntry.start = start
                                 xEntry.end = point[0]
                                 xEntry.data = point[1]
-                                output.addEntry(xEntry, integrate=False)
+                                output.AddEntry(xEntry, integrate=False)
                                 entry.start = xEntry.end
                     if entry.start != entry.end:
-                        link.addEntry(entry, integrate=False)
+                        output.AddEntry(entry, integrate=False)
                     if pEndData >= rEndData:
                         pOffset += pEndData - rEndData
         maxDelay = calcDelay(self.entries, output.entries)

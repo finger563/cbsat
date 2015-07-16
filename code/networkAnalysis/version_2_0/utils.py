@@ -14,7 +14,6 @@ def getIndexContainingTime(p,t):
     
 def getDataAtTimeFromProfile(p,t):
     i = getIndexByStartTime(p,t)
-    retVal = p[i].data - p[i].slope * (p[i].end - t)
     return retVal
 
 def getTimesAtDataFromProfile(p,d):
@@ -26,9 +25,14 @@ def getTimesAtDataFromProfile(p,d):
     while i < len(p) and d == p[i].data:
         i += 1
     endInd = i
-    for i in range(startInd,endInd+1):
-        times.extend(p[i].GetTimesAtData(d))
-    return [min(times), max(times)]
+    if startInd < len(p):
+        for i in range(startInd,endInd+1):
+            if i >= len(p):
+                break
+            times.extend(p[i].GetTimesAtData(d))
+    if times != []:
+        times = [min(times), max(times)]
+    return times
 
 def calcDelay(required,output):
     delay = [0,0,0]
@@ -37,33 +41,35 @@ def calcDelay(required,output):
     # match required points to output profile horizontally
     for e in required:
         times=getTimesAtDataFromProfile(output, e.data)
-        timeDiff = times[1] - e.end
-        if timeDiff > delay[2]:
-            delay = [e.end, e.data, timeDiff]
+        if times != []:
+            timeDiff = times[1] - e.end
+            if timeDiff > delay[2]:
+                delay = [e.end, e.data, timeDiff]
     # match output points to required profile horizontally
-    for e in self.output:
-        times=getTimesAtDataFromProfile(requried, e.data)
-        timeDiff = e.end - times[0]
-        if timeDiff > delay[2]:
-            delay = [times[0], e.data, timeDiff]
+    for e in output:
+        times=getTimesAtDataFromProfile(required, e.data)
+        if times != []:
+            timeDiff = e.end - times[0]
+            if timeDiff > delay[2]:
+                delay = [times[0], e.data, timeDiff]
     return delay
 
-def plotData(self,line_width):
+def plotData(r,p,o,b,d,num_periods,line_width):
     plt.figure(2)
     plt.hold(True)
-    self.required.plotData([8,4,2,4,2,4],'r[t]: ',line_width)
-    self.provided.plotData([2,4],'p[t]: ',line_width)
-    self.link.plotData([6,12],'l[t]: ',line_width)
+    r.PlotData([8,4,2,4,2,4],'r[t]: ',line_width)
+    p.PlotData([2,4],'p[t]: ',line_width)
+    o.PlotData([6,12],'o[t]: ',line_width)
 
-    buffplotx = [self.buffer[0],self.buffer[0]]
-    buffploty = [self.buffer[1],self.buffer[1]+self.buffer[2]]
+    buffplotx = [b[0],b[0]]
+    buffploty = [b[1],b[1]+b[2]]
     plt.plot(buffplotx,buffploty,'0.5',label=r"Buffer",linewidth=line_width)
 
-    delayplotx = [self.delay[0],self.delay[0]+self.delay[2]]
-    delayploty = [self.delay[1],self.delay[1]]
+    delayplotx = [d[0],d[0]+d[2]]
+    delayploty = [d[1],d[1]]
     plt.plot(delayplotx,delayploty,'0.8',label=r"Delay",linewidth=line_width)
         
-    plt.title("Network Traffic vs. Time over %d period(s)"%self.num_periods)
+    plt.title("Network Traffic vs. Time over {} period(s)".format(num_periods))
     plt.ylabel("Data (bits)")
     plt.xlabel("Time (s)")
     plt.legend(loc='upper left')
@@ -74,14 +80,14 @@ def plotData(self,line_width):
     plt.show()
     return
 
-def plotSlope(self,line_width):
+def plotSlope(r,p,o,num_periods,line_width):
     plt.figure(1)
     plt.hold(True)
-    self.required.plotSlope([4,8],'',line_width)
-    self.provided.plotSlope([2,4],'',line_width)
-    self.link.plotSlope([2,4],'',line_width)
+    r.PlotSlope([4,8],'',line_width)
+    p.PlotSlope([2,4],'',line_width)
+    o.PlotSlope([2,4],'',line_width)
     
-    plt.title("Network Bandwidth vs. Time over %d period(s)"%self.num_periods)
+    plt.title("Network Bandwidth vs. Time over {} period(s)".format(num_periods))
     plt.ylabel("Bandwidth (bps)")
     plt.xlabel("Time (s)")
     plt.legend(loc='lower left')
