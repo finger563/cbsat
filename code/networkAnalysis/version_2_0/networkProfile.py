@@ -45,11 +45,12 @@ class ProfileEntry:
         return [self.end - (self.data - d)/self.slope]
 
 class Profile:
-    def __init__(self,period,num_periods,prof_str,kind):
+    def __init__(self,kind,period,num_periods=None,prof_str=None):
         self.entries = []
         self.kind = kind
         self.period = period
-        self.BuildProfile(prof_str,num_periods)
+        if prof_str != None and num_periods != None:
+            self.BuildProfile(prof_str,num_periods)
 
     def BuildProfile(self,prof_str,num_periods):
         if prof_str == '':
@@ -99,9 +100,9 @@ class Profile:
 
     def AddProfile(self,profile):
         for e in profile:
-            self.addEntry(e)
+            self.AddEntry(copy.copy(e),False)
 
-    def addEntry(self, entry, integrate = True):
+    def AddEntry(self, entry, integrate = True):
         if self.entries == [] or entry.start >= self.entries[-1].end:
             self.entries.append(entry)
         elif entry.end <= self.entries[0].start:
@@ -140,6 +141,7 @@ class Profile:
             time_list.append(e.end)
         start_time = 0
         prev_data = 0
+        new_entries = []
         for tw in time_list:
             extremeData = 0
             t = tw
@@ -157,9 +159,10 @@ class Profile:
             entry.kind = self.kind
             entry.slope = (entry.data-prev_data) / (entry.end - entry.start)
             prev_data = entry.data
-            self.required_nc.append(entry)
+            new_entries.append(entry)
+        self.entries = new_entries
 
-    def plotData(self,dashes,label,line_width):
+    def PlotData(self,dashes,label,line_width):
         xvals = [0]
         yvals = [0]
         for e in self.entries:
@@ -167,7 +170,7 @@ class Profile:
             yvals.append(e.data)
         line, = plt.plot(xvals,yvals, label=r"{}{} {}".format(label,self.kind,"data"))
         
-    def plotSlope(self,dashes,label,line_width):
+    def PlotSlope(self,dashes,label,line_width):
         xvals = []
         yvals = []
         for e in self.entries:
@@ -177,11 +180,13 @@ class Profile:
             yvals.append(e.slope)
         line, = plt.plot(xvals,yvals, label=r"{}{} {}".format(label,self.kind,"slope"))
 
-    def convolve(self, provided):
+    def Convolve(self, provided):
         output = Profile()
         maxBuffer = [0,0,0] # [x, y, bufferSize]
+        maxDelay  = [0,0,0] # [x, y, delayLength]
         if len(provided.entries) == 0 or len(self.entries) == 0:
-            return link,buff
+            print "Cannot convolve these two profiles."
+            return output, maxBuffer, maxDelay
         profile = []
         for e in provided.entries:
             newEntry = copy.copy(e)
@@ -238,4 +243,5 @@ class Profile:
                         link.addEntry(entry, integrate=False)
                     if pEndData >= rEndData:
                         pOffset += pEndData - rEndData
-        return output, maxBuffer
+        maxDelay = calcDelay(self.entries, output.entries)
+        return output, maxBuffer, maxDelay

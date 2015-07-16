@@ -30,18 +30,18 @@ def getTimesAtDataFromProfile(p,d):
         times.extend(p[i].GetTimesAtData(d))
     return [min(times), max(times)]
 
-def calcDelay(required,link):
+def calcDelay(required,output):
     delay = [0,0,0]
-    if len(required) == 0 or len(link) == 0:
+    if len(required) == 0 or len(output) == 0:
         return delay
-    # match required points to link profile horizontally
+    # match required points to output profile horizontally
     for e in required:
-        times=getTimesAtDataFromProfile(link, e.data)
+        times=getTimesAtDataFromProfile(output, e.data)
         timeDiff = times[1] - e.end
         if timeDiff > delay[2]:
             delay = [e.end, e.data, timeDiff]
-    # match link points to required profile horizontally
-    for e in self.link:
+    # match output points to required profile horizontally
+    for e in self.output:
         times=getTimesAtDataFromProfile(requried, e.data)
         timeDiff = e.end - times[0]
         if timeDiff > delay[2]:

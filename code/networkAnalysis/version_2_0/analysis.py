@@ -79,7 +79,7 @@ def main():
         networkProfile.makeNetworkCalculusCurves(options.selected_node,options.nc_step_size)
 
     if networkProfile.convolve(options.selected_node) == -1:
-        print 'Node {0} has cannot be analyzed: no usable profile'.format(options.selected_node)
+        print >> sys.stderr, 'Node {0} has cannot be analyzed: no usable profile'.format(options.selected_node)
 
     if options.plot_profiles == True:
         networkProfile.nodeProfiles[options.selected_node].plotSlope(options.plot_line_width)
