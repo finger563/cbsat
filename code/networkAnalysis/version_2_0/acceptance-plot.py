@@ -11,7 +11,6 @@ network utilization.  Therefore each node's bandwidth is modeled as a network
 # QoS files have 4 columns: time (s), BW(bps), latency (ms), Network Link (id #)
 import sys, os, csv, copy, glob
 
-from acceptancemathlib import *
 from utils import *
 
 class Options:
@@ -28,50 +27,45 @@ class Options:
     def parse_args(self,args):
         argind = 1
         while argind < len(args):
-            if args[argind] == "-P":
+            if args[argind] == "--period":
                 self.period = int(args[argind+1])
                 if self.period <= 0:
                     print "Error! You must specify a time period > 0"
                     return -1
                 argind += 2
-            elif args[argind] == "-n":
+            elif args[argind] == "--num_periods":
                 self.num_periods = int(args[argind+1])
                 if self.num_periods <= 0:
                     print "Error! You must specify a number of periods > 0"
                     return -1
                 argind += 2
-            elif args[argind] == "-p":
+            elif args[argind] == "--no_plot":
                 self.plot_profiles = False
                 argind += 1
-            elif args[argind] == "-nc_mode":
+            elif args[argind] == "--nc_mode":
                 self.nc_mode = True
                 argind += 1
-            elif args[argind] == "-nc_step_size":
+            elif args[argind] == "--nc_step_size":
                 self.nc_step_size = float(args[argind+1])
                 argind += 2
-            elif args[argind] == "-N":
+            elif args[argind] == "--node_name":
                 self.selected_node = args[argind+1]
                 argind += 2
-            elif args[argind] == "-?" or args[argind] == "-h":
-                print "Usage:\n\tpython ",args[0],"""
-                \t\t-N <node name>
-                \t\t-P <period (s)>
-                \t\t-n <number of periods to analyze>
-                \t\t-nc_mode (to run network calculus calcs)
-                \t\t-nc_step_size <step size for windows in NC>
-                \t\t-p (to not output any plots)\n"""
-                return -1
             else:
-                print """Usage:\n\t""",args[0],"""
-                \t\t-N <node name>
-                \t\t-P <period (s)>
-                \t\t-n <number of periods to analyze>
-                \t\t-nc_mode (to run network calculus calcs)
-                \t\t-nc_step_size <step size for windows in NC>
-                \t\t-p (to not output any plots)\n"""
+                self.print_usage(args[0])
                 return -1
         return 0
 
+    def print_usage(self,name):
+        print """Usage:
+{}
+\t--node_name      <node name>
+\t--period         <period (s)>
+\t--num_periods    <number of periods to analyze>
+\t--nc_mode        (to run network calculus calcs)
+\t--nc_step_size   <step size for windows in NC mode>
+\t--no_plot        (to not output any plots)
+""".format(name)
 
 class ProfileEntry:
     def __init__(self,start=0,end=0,slope=0,data=0,kind='none'):
@@ -356,47 +350,6 @@ class NodeProfile:
                 delay = [times[0], e.data, timeDiff]
         self.delay = delay
 
-    def plotData(self,line_width):
-        plt.figure(2)
-        plt.hold(True)
-        self.required.plotData([8,4,2,4,2,4],'r[t]: ',line_width)
-        self.provided.plotData([2,4],'p[t]: ',line_width)
-        self.link.plotData([6,12],'l[t]: ',line_width)
-
-        buffplotx = [self.buffer[0],self.buffer[0]]
-        buffploty = [self.buffer[1],self.buffer[1]+self.buffer[2]]
-        plt.plot(buffplotx,buffploty,'0.5',label=r"Buffer",linewidth=line_width)
-
-        delayplotx = [self.delay[0],self.delay[0]+self.delay[2]]
-        delayploty = [self.delay[1],self.delay[1]]
-        plt.plot(delayplotx,delayploty,'0.8',label=r"Delay",linewidth=line_width)
-    
-        plt.title("Network Traffic vs. Time over %d period(s)"%self.num_periods)
-        plt.ylabel("Data (bits)")
-        plt.xlabel("Time (s)")
-        plt.legend(loc='upper left')
-        #plt.grid(True)
-        frame1 = plt.gca()
-        frame1.axes.get_xaxis().set_ticks([])
-        frame1.axes.get_yaxis().set_ticks([])
-        plt.show()
-        return
-
-    def plotSlope(self,line_width):
-        plt.figure(1)
-        plt.hold(True)
-        self.required.plotSlope([4,8],'',line_width)
-        self.provided.plotSlope([2,4],'',line_width)
-        self.link.plotSlope([2,4],'',line_width)
-    
-        plt.title("Network Bandwidth vs. Time over %d period(s)"%self.num_periods)
-        plt.ylabel("Bandwidth (bps)")
-        plt.xlabel("Time (s)")
-        plt.legend(loc='lower left')
-        #plt.grid(True)
-        plt.show()
-        return
-
     def __repr__(self):
         return "NodeProfile()"
 
@@ -413,67 +366,12 @@ class NodeProfile:
             retStr += "{}\n".format(e)
         return retStr
 
-class NetworkProfile:
-    def __init__(self,_period,_num_periods):
-        self.nodeProfiles = {}
-        self.period = _period
-        self.num_periods = _num_periods
-
-    def addNodeProfile(self,node,profile):
-        self.nodeProfiles[node] = profile
-
-    def calcData(self):
-        for n,p in self.nodeProfiles.iteritems():
-            p.calcData()
-
-    def convolve(self,node):
-        self.nodeProfiles[node].convolve()
-        return self.nodeProfiles[node]
-
-    def makeNetworkCalculusCurves(self, node, step):
-        self.nodeProfiles[node].makeNetworkCalculusCurves(step)
-
-    def __repr__(self):
-        return "NetworkProfile()"
-
-    def __str__(self):
-        retStr = "NetworkProfile:\n"
-        retStr += "has period {} and node profiles:\n".format(self.period)
-        for n,p in self.nodeProfiles.iteritems():
-            retStr += "Node {} has profiles:\n{}\n".format(n,p)
-        return retStr
-
-def gen_network_profile(nodeProfiles,appProfiles,app_node_map,period,num_periods):
-    profiles = NetworkProfile(period,num_periods)
-    for node,apps in app_node_map.iteritems():
-        nodeProfile = NodeProfile(period,num_periods)
-        nodeProfile.addProvidedProfile(nodeProfiles[node])
-        for app in profiles:
-            nodeProfile.addRequiredProfile(profiles[app])
-        profiles.addNodeProfile(node,nodeProfile)
-
 def main():    
     args = sys.argv
     options = Options()
     if options.parse_args(args):
         return -1
 
-    nodes = get_nodeProfiles('scripts')
-    apps = get_appProfiles('profiles')
-    app_node_map = get_app_node_map(nodes,apps)
-    networkProfile = NetworkProfile(options.period,options.num_periods)
-    for node,profile in nodes.iteritems():
-        nodeProfile = NodeProfile(options.period,options.num_periods)
-        nodeProfile.addProvidedProfile(profile)
-        if node in app_node_map.keys():
-            for app in app_node_map[node]:
-                if "," in apps[app]:
-                    nodeProfile.addRequiredProfile(apps[app])
-        networkProfile.addNodeProfile(node,nodeProfile)
-    networkProfile.calcData()
-
-    if options.selected_node == '':
-        options.selected_node=nodes.keys()[0]
     if options.selected_node not in nodes:
         print 'ERROR: node {} not found in system!'.format(options.selected_node)
         return -1
