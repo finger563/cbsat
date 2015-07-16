@@ -119,9 +119,16 @@ def main():
     print "\n[Time location, buffersize]:",[maxBuffer[0], maxBuffer[2]]
     print "[Time location, delay]:",[maxDelay[0], maxDelay[2]]
 
-    #if max(column(req,1)) > max(column(util,1)):
-    #    print "\nWARNING: DATA HAS NOT BEEN SENT BY END OF THE ANALYZED PERIOD(s)"
-    #    print "\t APPLICATION MAY HAVE UNBOUNDED BUFFER GROWTH ON NETWORK\n"
+    if options.num_periods > 1:
+        reqDataP1 = getDataAtTimeFromProfile( required.entries, options.period )
+        reqDataP2 = getDataAtTimeFromProfile( required.entries, 2*options.period )
+        outDataP1 = getDataAtTimeFromProfile( output.entries, options.period )
+        outDataP2 = getDataAtTimeFromProfile( output.entries, 2*options.period )
+        buff1 = reqDataP1 - outDataP1
+        buff2 = reqDataP2 - outDataP2
+        if buff2 > buff1:
+            print "\nWARNING: BUFFER UTILIZATION NOT CONSISTENT THROUGH ANALYZED PERIODS"
+            print "\t APPLICATION MAY HAVE UNBOUNDED BUFFER GROWTH ON NETWORK\n"
 
     return
   
