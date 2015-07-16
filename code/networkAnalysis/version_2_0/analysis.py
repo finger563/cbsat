@@ -332,40 +332,6 @@ class NodeProfile:
         self.calcDelay()
         return 0
 
-    def calcDelay(self):
-        if len(self.required) == 0 or len(self.link) == 0:
-            return
-        delay = [0,0,0]
-        # match required points to link profile horizontally
-        for e in self.required:
-            times=getTimesAtDataFromProfile(self.link, e.data)
-            timeDiff = times[1] - e.end
-            if timeDiff > delay[2]:
-                delay = [e.end, e.data, timeDiff]
-        # match link points to required profile horizontally
-        for e in self.link:
-            times=getTimesAtDataFromProfile(self.requried, e.data)
-            timeDiff = e.end - times[0]
-            if timeDiff > delay[2]:
-                delay = [times[0], e.data, timeDiff]
-        self.delay = delay
-
-    def __repr__(self):
-        return "NodeProfile()"
-
-    def __str__(self):
-        retStr = 'Buffer: {}\nDelay: {}\n'.format(self.buffer,self.delay)
-        retStr += "Provided:\n"
-        for e in self.provided:
-            retStr += "{}\n".format(e)
-        retStr += "Required:\n"
-        for e in self.required:
-            retStr += "{}\n".format(e)
-        retStr += "Link:\n"
-        for e in self.link:
-            retStr += "{}\n".format(e)
-        return retStr
-
 def main():    
     args = sys.argv
     options = Options()

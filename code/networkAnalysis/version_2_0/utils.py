@@ -1,12 +1,10 @@
-import sys,os,copy,glob
-
 havePLT = False
 try:
     import matplotlib.pyplot as plt
     havePLT=True
 except ImportError:
     print "Package python-matplotlib not found, plotting disabled."
-    
+
 
 def getIndexContainingTime(p,t):
     i=0
@@ -32,47 +30,64 @@ def getTimesAtDataFromProfile(p,d):
         times.extend(p[i].GetTimesAtData(d))
     return [min(times), max(times)]
 
+def calcDelay(required,link):
+    delay = [0,0,0]
+    if len(required) == 0 or len(link) == 0:
+        return delay
+    # match required points to link profile horizontally
+    for e in required:
+        times=getTimesAtDataFromProfile(link, e.data)
+        timeDiff = times[1] - e.end
+        if timeDiff > delay[2]:
+            delay = [e.end, e.data, timeDiff]
+    # match link points to required profile horizontally
+    for e in self.link:
+        times=getTimesAtDataFromProfile(requried, e.data)
+        timeDiff = e.end - times[0]
+        if timeDiff > delay[2]:
+            delay = [times[0], e.data, timeDiff]
+    return delay
 
-    def plotData(self,line_width):
-        plt.figure(2)
-        plt.hold(True)
-        self.required.plotData([8,4,2,4,2,4],'r[t]: ',line_width)
-        self.provided.plotData([2,4],'p[t]: ',line_width)
-        self.link.plotData([6,12],'l[t]: ',line_width)
+def plotData(self,line_width):
+    plt.figure(2)
+    plt.hold(True)
+    self.required.plotData([8,4,2,4,2,4],'r[t]: ',line_width)
+    self.provided.plotData([2,4],'p[t]: ',line_width)
+    self.link.plotData([6,12],'l[t]: ',line_width)
 
-        buffplotx = [self.buffer[0],self.buffer[0]]
-        buffploty = [self.buffer[1],self.buffer[1]+self.buffer[2]]
-        plt.plot(buffplotx,buffploty,'0.5',label=r"Buffer",linewidth=line_width)
+    buffplotx = [self.buffer[0],self.buffer[0]]
+    buffploty = [self.buffer[1],self.buffer[1]+self.buffer[2]]
+    plt.plot(buffplotx,buffploty,'0.5',label=r"Buffer",linewidth=line_width)
 
-        delayplotx = [self.delay[0],self.delay[0]+self.delay[2]]
-        delayploty = [self.delay[1],self.delay[1]]
-        plt.plot(delayplotx,delayploty,'0.8',label=r"Delay",linewidth=line_width)
+    delayplotx = [self.delay[0],self.delay[0]+self.delay[2]]
+    delayploty = [self.delay[1],self.delay[1]]
+    plt.plot(delayplotx,delayploty,'0.8',label=r"Delay",linewidth=line_width)
+        
+    plt.title("Network Traffic vs. Time over %d period(s)"%self.num_periods)
+    plt.ylabel("Data (bits)")
+    plt.xlabel("Time (s)")
+    plt.legend(loc='upper left')
+    #plt.grid(True)
+    frame1 = plt.gca()
+    frame1.axes.get_xaxis().set_ticks([])
+    frame1.axes.get_yaxis().set_ticks([])
+    plt.show()
+    return
+
+def plotSlope(self,line_width):
+    plt.figure(1)
+    plt.hold(True)
+    self.required.plotSlope([4,8],'',line_width)
+    self.provided.plotSlope([2,4],'',line_width)
+    self.link.plotSlope([2,4],'',line_width)
     
-        plt.title("Network Traffic vs. Time over %d period(s)"%self.num_periods)
-        plt.ylabel("Data (bits)")
-        plt.xlabel("Time (s)")
-        plt.legend(loc='upper left')
-        #plt.grid(True)
-        frame1 = plt.gca()
-        frame1.axes.get_xaxis().set_ticks([])
-        frame1.axes.get_yaxis().set_ticks([])
-        plt.show()
-        return
-
-    def plotSlope(self,line_width):
-        plt.figure(1)
-        plt.hold(True)
-        self.required.plotSlope([4,8],'',line_width)
-        self.provided.plotSlope([2,4],'',line_width)
-        self.link.plotSlope([2,4],'',line_width)
-    
-        plt.title("Network Bandwidth vs. Time over %d period(s)"%self.num_periods)
-        plt.ylabel("Bandwidth (bps)")
-        plt.xlabel("Time (s)")
-        plt.legend(loc='lower left')
-        #plt.grid(True)
-        plt.show()
-        return
+    plt.title("Network Bandwidth vs. Time over %d period(s)"%self.num_periods)
+    plt.ylabel("Bandwidth (bps)")
+    plt.xlabel("Time (s)")
+    plt.legend(loc='lower left')
+    #plt.grid(True)
+    plt.show()
+    return
 
 def get_intersection(p11,p12,p21,p22):
     """
