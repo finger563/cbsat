@@ -9,6 +9,7 @@ class ProfileEntry:
     """
 
     """
+    .. method::__init__
     :param double start: start time of the entry
     :param double end: end time for the entry
     :param double slope: what is the slope of the entry
@@ -54,6 +55,8 @@ class ProfileEntry:
     This line should be a csv list of the form::
     
         <start time (s)>, <bandwidth (bps)>, <latency (s)>
+
+    :param string line: single csv line following the proper format
     """
     def FromLine(self,line):
         if line != None and len(line) != 0 and '%' not in line:
