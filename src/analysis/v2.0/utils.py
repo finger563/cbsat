@@ -1,10 +1,3 @@
-havePLT = False
-try:
-    import matplotlib.pyplot as plt
-    havePLT=True
-except ImportError:
-    print "Package python-matplotlib not found, plotting disabled."
-
 
 def getIndexContainingTime(p,t):
     i=0
@@ -52,47 +45,6 @@ def calcDelay(required,output):
             if timeDiff > delay[2]:
                 delay = [ rTimes[0], data, timeDiff ]
     return delay
-
-def plotData(r,p,o,b,d,num_periods,line_width):
-    plt.figure(2)
-    plt.hold(True)
-    r.PlotData([8,4,2,4,2,4],'r[t]: ',line_width)
-    p.PlotData([2,4],'p[t]: ',line_width)
-    o.PlotData([6,12],'o[t]: ',line_width)
-
-    buffplotx = [b[0],b[0]]
-    buffploty = [b[1],b[1]+b[2]]
-    plt.plot(buffplotx,buffploty,'0.5',label=r"Buffer",linewidth=line_width)
-
-    delayplotx = [d[0],d[0]+d[2]]
-    delayploty = [d[1],d[1]]
-    plt.plot(delayplotx,delayploty,'0.8',label=r"Delay",linewidth=line_width)
-        
-    plt.title("Network Traffic vs. Time over {} period(s)".format(num_periods))
-    plt.ylabel("Data (bits)")
-    plt.xlabel("Time (s)")
-    plt.legend(loc='upper left')
-    #plt.grid(True)
-    frame1 = plt.gca()
-    frame1.axes.get_xaxis().set_ticks([])
-    frame1.axes.get_yaxis().set_ticks([])
-    plt.show()
-    return
-
-def plotSlope(r,p,o,num_periods,line_width):
-    plt.figure(1)
-    plt.hold(True)
-    r.PlotSlope([4,8],'',line_width)
-    p.PlotSlope([2,4],'',line_width)
-    o.PlotSlope([2,4],'',line_width)
-    
-    plt.title("Network Bandwidth vs. Time over {} period(s)".format(num_periods))
-    plt.ylabel("Bandwidth (bps)")
-    plt.xlabel("Time (s)")
-    plt.legend(loc='lower left')
-    #plt.grid(True)
-    plt.show()
-    return
 
 def get_intersection(p11,p12,p21,p22):
     """

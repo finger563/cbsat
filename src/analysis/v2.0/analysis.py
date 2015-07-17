@@ -10,7 +10,7 @@ network utilization.  Therefore each node's bandwidth is modeled as a network
 
 # QoS files have 4 columns: time (s), BW(bps), latency (ms), Network Link (id #)
 import sys, os, csv, copy, glob
-
+from collections import OrderedDict
 from networkProfile import *
 
 class Options:
@@ -108,14 +108,67 @@ def main():
         required.ConvertToNC( options.nc_step_size, lambda l: max(l) )
 
     output, maxBuffer, maxDelay = required.Convolve(provided)
-    provided.SubtractProfile(output)
+    remaining = copy.deepcopy(provided)
+    remaining.SubtractProfile(output)
 
     if options.plot_profiles == True:
-        plotSlope(required, provided, output,
-                  options.num_periods, options.plot_line_width)
-        plotData(required, provided, output,
-                 maxBuffer, maxDelay,
-                 options.num_periods, options.plot_line_width)
+        plot1 = PlotOptions(
+            profileList = [
+                required.MakeGraphPointsSlope(),
+                provided.MakeGraphPointsSlope(),
+                output.MakeGraphPointsSlope(),
+                remaining.MakeGraphPointsSlope(),
+            ],
+            labelList = [
+                'required bandwidth',
+                'provided bandwidth',
+                'output bandwidth',
+                'remaining bandwidth',
+            ],
+            dashList = [
+                [ 8, 4, 2, 4, 2, 8 ],
+                [ 2, 4 ],
+                [ 6, 2 ],
+                [ 5, 3 ],
+            ],
+            line_width = options.plot_line_width,
+            title = "Network Bandwidth vs. Time over {} period(s)".format(options.num_periods),
+            ylabel = "Bandwidth (bps)",
+            xlabel = "Time (s)",
+            legend_loc = "lower left"
+        )
+        plot2 = PlotOptions(
+            profileList = [
+                required.MakeGraphPointsData(),
+                provided.MakeGraphPointsData(),
+                output.MakeGraphPointsData(),
+                remaining.MakeGraphPointsData(),
+                getGraphPointsDelay(maxDelay),
+                getGraphPointsBuffer(maxBuffer),
+            ],
+            labelList = [
+                'r[t]: required data',
+                'p[t]: provided data',
+                'o[t]: output data',
+                'a[t]: remaining data',
+                'Delay',
+                'Buffer',
+            ],
+            dashList = [
+                [ 8, 4, 2, 4, 2, 8 ],
+                [ 2, 4 ],
+                [ 6, 2 ],
+                [ 5, 3 ],
+                [],
+                [],
+            ],
+            line_width = options.plot_line_width,
+            title = "Network Traffic vs. Time over {} period(s)".format(options.num_periods),
+            ylabel = "Data (bits)",
+            xlabel = "Time (s)",
+            legend_loc = "upper left"
+        )
+        makeGraphs([plot1,plot2])
 
     print "\n[Time location, buffersize]:",[maxBuffer[0], maxBuffer[2]]
     print "[Time location, delay]:",[maxDelay[0], maxDelay[2]]

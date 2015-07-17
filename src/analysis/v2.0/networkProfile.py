@@ -1,5 +1,6 @@
 import copy,sys
 from utils import *
+from plotting import *
 
 class ProfileEntry:
     def __init__(self,start=0,end=0,slope=0,data=0,kind='none'):
@@ -217,18 +218,15 @@ class Profile:
             new_entries.append(entry)
         self.entries = new_entries
 
-    def PlotData(self,dashes,label,line_width):
+    def MakeGraphPointsData(self):
         xvals = [0]
         yvals = [0]
         for e in self.entries:
             xvals.append(e.end)
             yvals.append(e.data)
-        line, = plt.plot( xvals, yvals,
-                          label=r"{}{} {}".format(label,self.kind,"data"),
-                          linewidth = line_width)
-        line.set_dashes(dashes)
-        
-    def PlotSlope(self,dashes,label,line_width):
+        return [xvals,yvals]
+          
+    def MakeGraphPointsSlope(self):
         xvals = []
         yvals = []
         for e in self.entries:
@@ -236,11 +234,7 @@ class Profile:
             yvals.append(e.slope)
             xvals.append(e.end)
             yvals.append(e.slope)
-        line, = plt.plot( xvals,
-                          yvals,
-                          label=r"{}{} {}".format(label,self.kind,"slope"),
-                          linewidth = line_width)
-        line.set_dashes(dashes)
+        return [xvals, yvals]
 
     def Convolve(self, provided):
         output = Profile(kind='output')
