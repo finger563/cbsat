@@ -64,13 +64,19 @@ class ProfileEntry:
                 return 0
         return -1
 
-    """Returns the data at time t, based on the slope and the end data."""
+    """
+    Returns the data at time t, based on the slope and the end data.
+    :param double t: Time in the profile at which to query the data
+    """
     def GetDataAtTime(self,t):
         if t > self.end or t < self.start:
             return -1
         return (self.data - self.slope * (self.end - t))
 
-    """Returns a list of all possible times the entry has the data value d.""" 
+    """
+    Returns a list of all possible times the entry has the data value d.
+    :param double d: Data value for which you want to find all matching times
+    """ 
     def GetTimesAtData(self,d):
         if d > self.data or d < (self.data - self.slope * (self.end-self.start)):
             return []
@@ -83,6 +89,8 @@ class Profile:
     Profile contains the information about a single network profie.
     A network profile has a kind (e.g. 'provided'), a period (in seconds),
     and a list of entries of type :class:`ProfileEntry`.
+    :param string kind: what kind of profile is it?
+    :param double period: what is the periodicity (in seconds) of the profile
     """
     def __init__(self, kind = None, period = 0):
         self.entries = []

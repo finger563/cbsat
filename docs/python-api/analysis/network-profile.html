@@ -157,7 +157,9 @@
 <em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">Profile</code><span class="sig-paren">(</span><em>kind=None</em>, <em>period=0</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Profile contains the information about a single network profie.
 A network profile has a kind (e.g. &#8216;provided&#8217;), a period (in seconds),
-and a list of entries of type <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">ProfileEntry</span></code></a>.</p>
+and a list of entries of type <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">ProfileEntry</span></code></a>.
+:param string kind: what kind of profile is it?
+:param double period: what is the periodicity (in seconds) of the profile</p>
 <dl class="method">
 <dt id="networkProfile.Profile.AddEntry">
 <code class="descname">AddEntry</code><span class="sig-paren">(</span><em>entry</em>, <em>integrate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.AddEntry" title="Permalink to this definition">¶</a></dt>
@@ -292,58 +294,6 @@ network profile. These include such data as:</p>
 <dd><p>The start time of the entry</p>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="class">
-<dt>
-<em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">ProfileEntry</code><span class="sig-paren">(</span><em>start=0</em>, <em>end=0</em>, <em>slope=0</em>, <em>data=0</em>, <em>kind='none'</em><span class="sig-paren">)</span></dt>
-<dd><p>Profile Entry contains the information about a single entry in a
-network profile. These include such data as:</p>
-<ul class="simple">
-<li>start time</li>
-<li>end time</li>
-<li>slope</li>
-<li>amount of data at end time</li>
-<li>kind</li>
-</ul>
-<dl class="attribute">
-<dt>
-<code class="descname">data</code><em class="property"> = None</em></dt>
-<dd><p>The cumulative amount of data sent by the end of this entry (including previous entries)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="descname">end</code><em class="property"> = None</em></dt>
-<dd><p>The end time of the entry</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="descname">kind</code><em class="property"> = None</em></dt>
-<dd><p>The kind of the entry, e.g. &#8216;required&#8217;</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="descname">slope</code><em class="property"> = None</em></dt>
-<dd><p>The slope of this entry</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="descname">start</code><em class="property"> = None</em></dt>
-<dd><p>The start time of the entry</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt>
-<em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">Profile</code><span class="sig-paren">(</span><em>kind=None</em>, <em>period=0</em><span class="sig-paren">)</span></dt>
-<dd><p>Profile contains the information about a single network profie.
-A network profile has a kind (e.g. &#8216;provided&#8217;), a period (in seconds),
-and a list of entries of type <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">ProfileEntry</span></code></a>.</p>
 </dd></dl>
 
 </div>
