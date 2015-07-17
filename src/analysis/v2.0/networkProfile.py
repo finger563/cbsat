@@ -115,8 +115,45 @@ class Profile:
             prevData = e.data
 
     def AddProfile(self,profile):
-        for e in profile:
+        for e in profile.entries:
             self.AddEntry(copy.copy(e),False)
+
+    def SubtractProfile(self,profile):
+        for e in profile.entries:
+            self.SubtractEntry(e)
+
+    def SubtractEntry(self, entry, integrate = True):
+        if self.entries != [] and\
+           entry.start >= self.entries[0].start and\
+           entry.end <= self.entries[-1].end:
+            startInd = getIndexContainingTime(self.entries,entry.start)
+            # split start entry : shorten the existing entry and add a new entry
+            if entry.start > self.entries[startInd].start:
+                self.entries[startInd].end = entry.start
+                newEntry = ProfileEntry()
+                newEntry.start = entry.start
+                newEntry.end = self.entries[startInd].end
+                newEntry.slope = self.entries[startInd].slope
+                newEntry.kind = self.kind
+                startInd += 1
+                self.entries.insert(startInd, newEntry)
+            endInd = getIndexContainingTime(self.entries,entry.end)
+            originalSlope = self.entries[endInd].slope
+            # iterate through all entries between start and end to update with new bandwidth
+            for i in range(startInd,endInd+1):
+                self.entries[i].slope = max( 0, self.entries[i].slope - entry.slope)
+            # split end entry : shorten existing entry and add a new one
+            if entry.end < self.entries[endInd].end:
+                newEntry = ProfileEntry()
+                newEntry.start = entry.end
+                newEntry.end = self.entries[endInd].end
+                newEntry.slope = originalSlope
+                newEntry.kind = self.kind
+                self.entries[endInd].end = entry.end
+                self.entries.insert(endInd+1, newEntry)
+        if integrate:
+            self.Integrate()
+            
 
     def AddEntry(self, entry, integrate = True):
         if self.entries == [] or entry.start >= self.entries[-1].end:

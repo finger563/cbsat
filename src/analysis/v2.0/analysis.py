@@ -108,6 +108,7 @@ def main():
         required.ConvertToNC( options.nc_step_size, lambda l: max(l) )
 
     output, maxBuffer, maxDelay = required.Convolve(provided)
+    provided.SubtractProfile(output)
 
     if options.plot_profiles == True:
         plotSlope(required, provided, output,
