@@ -188,7 +188,7 @@ any possibly affected entries are properly updated.</p>
 <dt id="networkProfile.Profile.BuildProfile">
 <code class="descname">BuildProfile</code><span class="sig-paren">(</span><em>prof_str=None</em>, <em>prof_fName=None</em>, <em>num_periods=1</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.BuildProfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds the entries from either a string (line list of csv&#8217;s formatted as per
-<code class="xref py py-func docutils literal"><span class="pre">FromLine()</span></code>) or from a CSV file.  The profile can be made to repeat for some
+<a class="reference internal" href="#networkProfile.ProfileEntry.FromLine" title="networkProfile.ProfileEntry.FromLine"><code class="xref py py-func docutils literal"><span class="pre">ProfileEntry.FromLine()</span></code></a>) or from a CSV file.  The profile can be made to repeat for some
 number of periods.</p>
 </dd></dl>
 
@@ -204,7 +204,8 @@ curve, while passing <code class="xref py py-func docutils literal"><span class=
 <dl class="method">
 <dt id="networkProfile.Profile.Convolve">
 <code class="descname">Convolve</code><span class="sig-paren">(</span><em>provided</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Convolve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Use min-plus calculus to convolve this <em>required</em> profile with an input <em>provided</em> profile.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.Derive">
@@ -227,12 +228,14 @@ curve, while passing <code class="xref py py-func docutils literal"><span class=
 <dl class="method">
 <dt id="networkProfile.Profile.MakeGraphPointsData">
 <code class="descname">MakeGraphPointsData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.MakeGraphPointsData" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Turn the entries&#8217; data points into plottable x,y series.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.MakeGraphPointsSlope">
 <code class="descname">MakeGraphPointsSlope</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.MakeGraphPointsSlope" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Turn the entries&#8217; slopes into plottable x,y series.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.RepeatProfile">

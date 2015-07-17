@@ -106,7 +106,7 @@ class Profile:
     def BuildProfile(self, prof_str = None, prof_fName = None, num_periods = 1):
         """
         Builds the entries from either a string (line list of csv's formatted as per
-        :func:`FromLine`) or from a CSV file.  The profile can be made to repeat for some
+        :func:`ProfileEntry.FromLine`) or from a CSV file.  The profile can be made to repeat for some
         number of periods.
         """
         if prof_str == None and prof_fName != None:
@@ -290,8 +290,8 @@ class Profile:
             new_entries.append(entry)
         self.entries = new_entries
 
-    """Turn the entries' data points into plottable x,y series."""
     def MakeGraphPointsData(self):
+        """Turn the entries' data points into plottable x,y series."""
         xvals = [0]
         yvals = [0]
         for e in self.entries:
@@ -299,8 +299,8 @@ class Profile:
             yvals.append(e.data)
         return [xvals,yvals]
           
-    """Turn the entries' slopes into plottable x,y series."""
     def MakeGraphPointsSlope(self):
+        """Turn the entries' slopes into plottable x,y series."""
         xvals = []
         yvals = []
         for e in self.entries:
@@ -310,8 +310,8 @@ class Profile:
             yvals.append(e.slope)
         return [xvals, yvals]
 
-    """Use min-plus calculus to convolve this *required* profile with an input *provided* profile."""
     def Convolve(self, provided):
+        """Use min-plus calculus to convolve this *required* profile with an input *provided* profile."""
         output = Profile(kind='output')
         maxBuffer = [0,0,0] # [x, y, bufferSize]
         maxDelay  = [0,0,0] # [x, y, delayLength]
