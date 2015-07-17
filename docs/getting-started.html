@@ -1,0 +1,367 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Getting Started &mdash; kRPC 0.1.10 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="kRPC 0.1.10 documentation" href="index.html"/>
+        <link rel="next" title="Math" href="math.html"/>
+        <link rel="prev" title="CBSAT Documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> kRPC
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-server-plugin">The Server Plugin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#the-python-client">The Python Client</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#on-windows">On Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-linux">On Linux</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hello-world-script">&#8216;Hello World&#8217; Script</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="math.html">Math</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis-api.html">Analysis API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/network-profile.html">Network Profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/plotting.html">Plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/utils.html">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/analysis.html">Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/generate-tdma.html">Generate TDMA</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="middleware-api.html">Middleware API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/network-profile.html">Network Profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/network-buffer.html">Network Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/network-middleware.html">Network Middleware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/message.html">Message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/client.html">Client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/server.html">Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/connection-subsys.html">Connection Subsys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/csv-iterator.html">CSV Iterator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/tc-wrapper.html">TC Wrapper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="compiling.html">Compiling kRPC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="compiling.html#the-server-plugin">The Server Plugin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="compiling.html#using-the-makefile">Using the Makefile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compiling.html#using-an-ide">Using an IDE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="compiling.html#the-python-client-library">The Python Client Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="compiling.html#running-the-tests">Running the Tests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending kRPC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#the-krpc-architecture">The kRPC Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#service-api">Service API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="extending.html#attributes">Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="extending.html#service-api-identifiers">Identifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="extending.html#serializable-types">Serializable Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="extending.html#game-scenes">Game Scenes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#further-examples">Further Examples</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">kRPC</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Getting Started</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/getting-started.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="getting-started">
+<span id="id1"></span><h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="the-server-plugin">
+<h2>The Server Plugin<a class="headerlink" href="#the-server-plugin" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Download the kRPC server plugin from one of these locations:</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://kerbalstuff.com/mod/636">KerbalStuff</a></li>
+<li><a class="reference external" href="http://www.curse.com/project/220219">Curse</a></li>
+<li><a class="reference external" href="https://github.com/djungelorm/krpc/releases">Github</a></li>
+<li>Or the plugin can be obtained via <a class="reference external" href="http://forum.kerbalspaceprogram.com/threads/100067-The-Comprehensive-Kerbal-Archive-Network-%28CKAN%29-Package-Manager-v1-6-5-6-Mar-2015">CKAN</a></li>
+</ul>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><p class="first">Extract the GameData folder from the archive into your KSP directory.</p>
+</li>
+<li><p class="first">Start up KSP and load a save game.</p>
+</li>
+<li><p class="first">You should be greeted by the server window:</p>
+<img alt="images/getting-started/server-window-offline.png" src="images/getting-started/server-window-offline.png" />
+</li>
+<li><p class="first">Click &#8220;Start server&#8221; to, erm... start the server! If all goes well, the light
+should turn a happy green color:</p>
+<img alt="images/getting-started/server-window-online.png" src="images/getting-started/server-window-online.png" />
+</li>
+<li><p class="first">You can hide the window by clicking the close button in the top right, or
+show/hide the window by clicking on the kRPC icon in the application
+launcher:</p>
+<img alt="images/getting-started/applauncher.png" src="images/getting-started/applauncher.png" />
+<p>This icon will also turn green when the server is online.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>The server can be configured using the window displayed in-game. The
+configuration options are:</p>
+<ol class="arabic simple">
+<li><strong>Address</strong>: this is the IP address that the server will listen on. To only
+allow connections from the local machine, select &#8216;localhost&#8217; (the
+default). To allow connections over the network, either select the local IP
+address of your machine, or choose &#8216;Manual&#8217; and enter the local IP address
+manually.</li>
+<li><strong>RPC and Stream port numbers</strong>: These need to be set to port numbers that
+are available on your machine. In most cases, they can just be left as the
+default.</li>
+</ol>
+<p>There are also several advanced, which are hidden by default, but can be
+revealed by checking the &#8216;Advanced settings&#8217; box:</p>
+<ol class="arabic simple">
+<li><strong>Auto-start server</strong>: When enabled, the server will start automatically when
+the game loads.</li>
+<li><strong>Auto-accept new clients</strong>: When enabled, new client connections are
+automatically allowed. When disabled, a pop-up is displayed asking whether
+the new client connection should be allowed.</li>
+</ol>
+<p>The other advanced settings control the performance of the server. For details,
+<a class="reference internal" href="internals.html#server-performance-settings"><span>see here</span></a>.</p>
+</div>
+</div>
+<div class="section" id="the-python-client">
+<h2>The Python Client<a class="headerlink" href="#the-python-client" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">kRPC supports both Python 2.7 and Python 3.x.</p>
+</div>
+<div class="section" id="on-windows">
+<h3>On Windows<a class="headerlink" href="#on-windows" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>If you don&#8217;t already have python installed, download the python installer and
+run it: <a class="reference external" href="https://www.python.org/downloads/windows">https://www.python.org/downloads/windows</a> When running the installer,
+make sure that pip is installed as well.</li>
+<li>Install the kRPC python module, by opening command prompt and running the
+following command: <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">krpc</span></code></li>
+<li>Run Python IDLE (or your favorite editor) and start coding!</li>
+</ol>
+</div>
+<div class="section" id="on-linux">
+<h3>On Linux<a class="headerlink" href="#on-linux" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Your linux distribution likely already comes with python installed. If not,
+install python using your favorite package manager, or get it from here:
+<a class="reference external" href="https://www.python.org/downloads">https://www.python.org/downloads</a></li>
+<li>You also need to install pip, either using your package manager, or from
+here: <a class="reference external" href="https://pypi.python.org/pypi/pip">https://pypi.python.org/pypi/pip</a></li>
+<li>Install the kRPC python module by running the following from a terminal:
+<code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">krpc</span></code></li>
+<li>Start coding!</li>
+</ol>
+</div>
+</div>
+<div class="section" id="hello-world-script">
+<h2>&#8216;Hello World&#8217; Script<a class="headerlink" href="#hello-world-script" title="Permalink to this headline">¶</a></h2>
+<p>Run KSP and start the server with the default settings. Then execute the
+following python script:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">krpc</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Hello World&#39;</span><span class="p">)</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="k">print</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>This does the following: line 1 loads the kRPC python module, line 2 opens a new
+connection to the server, line 3 gets the active vessel and line 4 prints out
+the name of the vessel. You should see something like the following:</p>
+<img alt="images/getting-started/hello-world.png" src="images/getting-started/hello-world.png" />
+<p>Congratulations! You&#8217;ve written your first script that communicates with KSP.
+For some more interesting examples, check out the <code class="xref doc docutils literal"><span class="pre">tutorials</span></code>.</p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="math.html" class="btn btn-neutral float-right" title="Math" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="CBSAT Documentation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, djungelorm.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.10',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+  
+ 
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-61341323-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>

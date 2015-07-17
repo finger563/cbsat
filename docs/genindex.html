@@ -1,0 +1,1265 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Index &mdash; kRPC 0.1.10 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="kRPC 0.1.10 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> kRPC
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#the-server-plugin">The Server Plugin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="getting-started.html#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting-started.html#configuration">Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#the-python-client">The Python Client</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="getting-started.html#on-windows">On Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting-started.html#on-linux">On Linux</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#hello-world-script">&#8216;Hello World&#8217; Script</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="math.html">Math</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis-api.html">Analysis API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/network-profile.html">Network Profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/plotting.html">Plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/utils.html">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/analysis.html">Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/generate-tdma.html">Generate TDMA</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="middleware-api.html">Middleware API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/network-profile.html">Network Profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/network-buffer.html">Network Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/network-middleware.html">Network Middleware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/message.html">Message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/client.html">Client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/server.html">Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/connection-subsys.html">Connection Subsys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/csv-iterator.html">CSV Iterator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/tc-wrapper.html">TC Wrapper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="compiling.html">Compiling kRPC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="compiling.html#the-server-plugin">The Server Plugin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="compiling.html#using-the-makefile">Using the Makefile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="compiling.html#using-an-ide">Using an IDE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="compiling.html#the-python-client-library">The Python Client Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="compiling.html#running-the-tests">Running the Tests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending kRPC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#the-krpc-architecture">The kRPC Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#service-api">Service API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="extending.html#attributes">Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="extending.html#service-api-identifiers">Identifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="extending.html#serializable-types">Serializable Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="extending.html#game-scenes">Game Scenes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#further-examples">Further Examples</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">kRPC</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li></li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#K"><strong>K</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ | <a href="#Y"><strong>Y</strong></a>
+ 
+</div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-client.html#krpc.stream.Stream.__call__">__call__() (krpc.stream.Stream method)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/control.html#Control.abort">abort (Control attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.activate_next_stage">activate_next_stage() (Control method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.active_vessel">active_vessel (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.add_node">add_node() (Control method)</a>
+  </dt>
+
+      
+  <dt><a href="python-client.html#krpc.client.Client.add_stream">add_stream() (krpc.client.Client method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.aerodynamic_force">aerodynamic_force (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="extending.html#GameScene.All">All (GameScene attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.angle_of_attack">angle_of_attack (Flight attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.angular_velocity">angular_velocity() (CelestialBody method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="python-api/space-center/vessel.html#Vessel.angular_velocity">(Vessel method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.anti_normal">anti_normal (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.anti_radial">anti_radial (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.atmosphere_density">atmosphere_density (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.atmosphere_depth">atmosphere_depth (CelestialBody attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.auto_pilot">auto_pilot (Vessel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.available_thrust">available_thrust (Vessel attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.ballistic_coefficient">ballistic_coefficient (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.bedrock_altitude">bedrock_altitude (Flight attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.bodies">bodies (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.brakes">brakes (Control attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.can_rails_warp_at">can_rails_warp_at() (SpaceCenter method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody">CelestialBody (built-in class)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.center_of_mass">center_of_mass (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.clear_drawing">clear_drawing() (SpaceCenter method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.clear_target">clear_target() (SpaceCenter method)</a>
+  </dt>
+
+      
+  <dt><a href="python-client.html#krpc.client.Client">Client (class in krpc.client)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-client.html#krpc.client.Client.close">close() (krpc.client.Client method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.comms">comms (Vessel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-client.html#krpc.connect">connect() (in module krpc)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control">Control (built-in class)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.control">control (Vessel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.current_stage">current_stage (Control attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.direction">direction (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.direction">direction() (CelestialBody method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="python-api/space-center/vessel.html#Vessel.direction">(Vessel method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.drag">drag (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.drag_coefficient">drag_coefficient (Flight attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.draw_direction">draw_direction() (SpaceCenter method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.draw_line">draw_line() (SpaceCenter method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.dry_mass">dry_mass (Vessel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.dynamic_pressure">dynamic_pressure (Flight attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="extending.html#GameScene.Editor">Editor (GameScene attribute)</a>
+  </dt>
+
+      
+  <dt><a href="extending.html#GameScene.EditorSPH">EditorSPH (GameScene attribute)</a>
+  </dt>
+
+      
+  <dt><a href="extending.html#GameScene.EditorVAB">EditorVAB (GameScene attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.elevation">elevation (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.equatorial_radius">equatorial_radius (CelestialBody attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.equivalent_air_speed">equivalent_air_speed (Flight attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.far_available">far_available (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.far_status">far_status (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight">Flight (built-in class)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="extending.html#GameScene.Flight">(GameScene attribute)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.flight">flight() (Vessel method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.forward">forward (Control attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.g">g (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.g_force">g_force (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="extending.html#GameScene">GameScene (built-in class)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.gear">gear (Control attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/control.html#Control.get_action_group">get_action_group() (Control method)</a>
+  </dt>
+
+      
+  <dt><a href="python-client.html#krpc.client.KRPC.get_status">get_status() (krpc.client.KRPC method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.gravitational_parameter">gravitational_parameter (CelestialBody attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.has_atmosphere">has_atmosphere (CelestialBody attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.has_atmospheric_oxygen">has_atmospheric_oxygen (CelestialBody attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.heading">heading (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.horizontal_speed">horizontal_speed (Flight attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.kerbin_sea_level_specific_impulse">kerbin_sea_level_specific_impulse (Vessel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-client.html#krpc.client.KRPC">KRPC (class in krpc.client)</a>
+  </dt>
+
+      
+  <dt><a href="python-client.html#krpc.client.Client.krpc">krpc (krpc.client.Client attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="python-client.html#module-krpc">(module)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="python-client.html#module-krpc.client">krpc.client (module)</a>
+  </dt>
+
+      
+  <dt><a href="python-client.html#module-krpc.stream">krpc.stream (module)</a>
+  </dt>
+
+      
+  <dt><a href="extending.html#KRPCClass">KRPCClass (built-in class)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="extending.html#KRPCEnum">KRPCEnum (built-in class)</a>
+  </dt>
+
+      
+  <dt><a href="extending.html#KRPCMethod">KRPCMethod (built-in class)</a>
+  </dt>
+
+      
+  <dt><a href="extending.html#KRPCProcedure">KRPCProcedure (built-in class)</a>
+  </dt>
+
+      
+  <dt><a href="extending.html#KRPCProperty">KRPCProperty (built-in class)</a>
+  </dt>
+
+      
+  <dt><a href="extending.html#KRPCService">KRPCService (built-in class)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.latitude">latitude (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.lift">lift (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.lift_coefficient">lift_coefficient (Flight attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/control.html#Control.lights">lights (Control attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.longitude">longitude (Flight attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.mach">mach (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.mass">mass (CelestialBody attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="python-api/space-center/vessel.html#Vessel.mass">(Vessel attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.max_thrust">max_thrust (Vessel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.max_vacuum_thrust">max_vacuum_thrust (Vessel attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.maximum_rails_warp_factor">maximum_rails_warp_factor (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.mean_altitude">mean_altitude (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.met">met (Vessel attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.name">name (CelestialBody attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="python-api/space-center/vessel.html#Vessel.name">(Vessel attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="python-api/space-center/control.html#Control.nodes">nodes (Control attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.non_rotating_reference_frame">non_rotating_reference_frame (CelestialBody attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.normal">normal (Flight attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.orbit">orbit (CelestialBody attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="python-api/space-center/vessel.html#Vessel.orbit">(Vessel attribute)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.orbital_reference_frame">orbital_reference_frame (CelestialBody attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="python-api/space-center/vessel.html#Vessel.orbital_reference_frame">(Vessel attribute)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.parts">parts (Vessel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.physics_warp_factor">physics_warp_factor (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.pitch">pitch (Control attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="python-api/space-center/flight.html#Flight.pitch">(Flight attribute)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.pitching_moment_coefficient">pitching_moment_coefficient (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.position">position() (CelestialBody method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="python-api/space-center/vessel.html#Vessel.position">(Vessel method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.prograde">prograde (Flight attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.radial">radial (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.rails_warp_factor">rails_warp_factor (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.rcs">rcs (Control attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.reference_frame">reference_frame (CelestialBody attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="python-api/space-center/vessel.html#Vessel.reference_frame">(Vessel attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.remote_tech_available">remote_tech_available (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-client.html#krpc.stream.Stream.remove">remove() (krpc.stream.Stream method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.remove_nodes">remove_nodes() (Control method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.resources">resources (Vessel attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.resources_in_decouple_stage">resources_in_decouple_stage() (Vessel method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.retrograde">retrograde (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.right">right (Control attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.roll">roll (Control attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="python-api/space-center/flight.html#Flight.roll">(Flight attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.rotation">rotation (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.rotation">rotation() (CelestialBody method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="python-api/space-center/vessel.html#Vessel.rotation">(Vessel method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.rotational_period">rotational_period (CelestialBody attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.rotational_speed">rotational_speed (CelestialBody attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/control.html#Control.sas">sas (Control attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.satellites">satellites (CelestialBody attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.set_action_group">set_action_group() (Control method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.sideslip_angle">sideslip_angle (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.situation">situation (Vessel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter">SpaceCenter (built-in class)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="extending.html#GameScene.SpaceCenter">(GameScene attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.specific_impulse">specific_impulse (Vessel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.speed">speed (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.speed_of_sound">speed_of_sound (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.sphere_of_influence">sphere_of_influence (CelestialBody attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.stall_fraction">stall_fraction (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.static_air_temperature">static_air_temperature (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.static_pressure">static_pressure (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-client.html#krpc.stream.Stream">Stream (class in krpc.stream)</a>
+  </dt>
+
+      
+  <dt><a href="python-client.html#krpc.client.Client.stream">stream() (krpc.client.Client method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.surface_altitude">surface_altitude (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.surface_gravity">surface_gravity (CelestialBody attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.surface_reference_frame">surface_reference_frame (Vessel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.surface_velocity_reference_frame">surface_velocity_reference_frame (Vessel attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.target">target (Vessel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.target_body">target_body (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.target_docking_port">target_docking_port (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.target_vessel">target_vessel (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.terminal_velocity">terminal_velocity (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.throttle">throttle (Control attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.thrust">thrust (Vessel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.thrust_specific_fuel_consumption">thrust_specific_fuel_consumption (Flight attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/control.html#Control.toggle_action_group">toggle_action_group() (Control method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.total_air_temperature">total_air_temperature (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="extending.html#GameScene.TrackingStation">TrackingStation (GameScene attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.transform_direction">transform_direction() (SpaceCenter method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.transform_position">transform_position() (SpaceCenter method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.transform_rotation">transform_rotation() (SpaceCenter method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.transform_velocity">transform_velocity() (SpaceCenter method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.type">type (Vessel attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/control.html#Control.up">up (Control attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.ut">ut (SpaceCenter attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel.vacuum_specific_impulse">vacuum_specific_impulse (Vessel attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.velocity">velocity (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/celestial-body.html#CelestialBody.velocity">velocity() (CelestialBody method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="python-api/space-center/vessel.html#Vessel.velocity">(Vessel method)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="python-api/space-center/flight.html#Flight.vertical_speed">vertical_speed (Flight attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#Vessel">Vessel (built-in class)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.vessels">vessels (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselSituation">VesselSituation (built-in class)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselSituation.docked">VesselSituation.docked (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselSituation.escaping">VesselSituation.escaping (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselSituation.flying">VesselSituation.flying (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselSituation.landed">VesselSituation.landed (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselSituation.orbiting">VesselSituation.orbiting (built-in variable)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselSituation.pre_launch">VesselSituation.pre_launch (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselSituation.splashed">VesselSituation.splashed (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselSituation.sub_orbital">VesselSituation.sub_orbital (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselType">VesselType (built-in class)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselType.base">VesselType.base (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselType.debris">VesselType.debris (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselType.lander">VesselType.lander (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselType.probe">VesselType.probe (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselType.rover">VesselType.rover (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselType.ship">VesselType.ship (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/vessel.html#VesselType.station">VesselType.station (built-in variable)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.warp_factor">warp_factor (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.warp_mode">warp_mode (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.warp_rate">warp_rate (SpaceCenter attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#SpaceCenter.warp_to">warp_to() (SpaceCenter method)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#WarpMode">WarpMode (built-in class)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/space-center.html#WarpMode.none">WarpMode.none (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#WarpMode.physics">WarpMode.physics (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/space-center.html#WarpMode.rails">WarpMode.rails (built-in variable)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.wheel_steering">wheel_steering (Control attribute)</a>
+  </dt>
+
+      
+  <dt><a href="python-api/space-center/control.html#Control.wheel_throttle">wheel_throttle (Control attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="Y">Y</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="python-api/space-center/control.html#Control.yaw">yaw (Control attribute)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, djungelorm.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.10',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+  
+ 
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-61341323-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>

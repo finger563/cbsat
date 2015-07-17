@@ -18,7 +18,7 @@ INKSCAPE_FLAGS = -C -d=90 --export-background-opacity=\#00
 
 all: build
 
-build: spelling html
+build: html
 
 clean: clean-images
 	rm -rf $(BUILD_DIR) $(PYTHON_API_DIR) $(GH_PAGES_DIR)
