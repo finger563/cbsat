@@ -150,8 +150,62 @@
 </div>
           <div role="main" class="document">
             
-  <div class="section" id="plotting">
-<h1>Plotting<a class="headerlink" href="#plotting" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-plotting">
+<span id="plotting"></span><h1>Plotting<a class="headerlink" href="#module-plotting" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="plotting.PlotOptions">
+<em class="property">class </em><code class="descclassname">plotting.</code><code class="descname">PlotOptions</code><span class="sig-paren">(</span><em>profileList</em>, <em>labelList</em>, <em>dashList</em>, <em>line_width</em>, <em>title</em>, <em>xlabel</em>, <em>ylabel</em>, <em>legend_loc</em><span class="sig-paren">)</span><a class="headerlink" href="#plotting.PlotOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Options for setting up a plot in a figure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>profileList</strong> (<em>list</em>) &#8211; A list of [x,y] data series (profiles) to be plotted together</li>
+<li><strong>labelList</strong> (<em>list</em>) &#8211; A list of strings which label the profiles</li>
+<li><strong>dashList</strong> (<em>list</em>) &#8211; A list of integer lists which specify the dash properties for each profile</li>
+<li><strong>line_width</strong> (<em>int</em>) &#8211; The thickness of the lines on the plot</li>
+<li><strong>title</strong> (<em>string</em>) &#8211; The title to be given to the figure</li>
+<li><strong>xlabel</strong> (<em>string</em>) &#8211; The label for the x-axis</li>
+<li><strong>ylabel</strong> (<em>string</em>) &#8211; The label for the y-axis</li>
+<li><strong>legend_loc</strong> (<em>string</em>) &#8211; A string specifying the location of the legend, e.g. &#8220;upper left&#8221;</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="plotting.disablePlotTicks">
+<code class="descclassname">plotting.</code><code class="descname">disablePlotTicks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotting.disablePlotTicks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable the numbers on the x and y axes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plotting.makeGraphs">
+<code class="descclassname">plotting.</code><code class="descname">makeGraphs</code><span class="sig-paren">(</span><em>pOptionsList</em><span class="sig-paren">)</span><a class="headerlink" href="#plotting.makeGraphs" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function makes a figure for each PlotOptions object it receives in the list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pOptionsList</strong> (<em>list</em>) &#8211; A list of <a class="reference internal" href="#plotting.PlotOptions" title="plotting.PlotOptions"><code class="xref py py-class docutils literal"><span class="pre">PlotOptions</span></code></a> describing the figures to be drawn</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="plotting.setFigureOpts">
+<code class="descclassname">plotting.</code><code class="descname">setFigureOpts</code><span class="sig-paren">(</span><em>title</em>, <em>ylabel</em>, <em>xlabel</em>, <em>legend_loc</em><span class="sig-paren">)</span><a class="headerlink" href="#plotting.setFigureOpts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the figure&#8217;s options
+:param string title: The title to be given to the figure
+:param string xlabel: The label for the x-axis
+:param string ylabel: The label for the y-axis
+:param string legend_loc: A string specifying the location of the legend, e.g. &#8220;upper left&#8221;</p>
+</dd></dl>
+
 </div>
 
 

@@ -150,8 +150,34 @@
 </div>
           <div role="main" class="document">
             
-  <div class="section" id="analysis">
-<h1>Analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-analysis">
+<span id="analysis"></span><h1>Analysis<a class="headerlink" href="#module-analysis" title="Permalink to this headline">¶</a></h1>
+<p>This program is designed to do admissibilty tests for admission of an application
+or set of applications to the F6 satellite cluster.  Each application may be 
+split accross multiple nodes of the cluster.  Each node has its own network
+interface and as such, each node&#8217;s bandwidth is independent of the other nodes&#8217;
+network utilization.  Therefore each node&#8217;s bandwidth is modeled as a network
+&#8220;link&#8221; which connects from that node to all other nodes.</p>
+<dl class="class">
+<dt id="analysis.Options">
+<em class="property">class </em><code class="descclassname">analysis.</code><code class="descname">Options</code><a class="headerlink" href="#analysis.Options" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="analysis.Options.parse_args">
+<code class="descname">parse_args</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.Options.parse_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="analysis.Options.print_usage">
+<code class="descname">print_usage</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.Options.print_usage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="analysis.main">
+<code class="descclassname">analysis.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#analysis.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 
 
