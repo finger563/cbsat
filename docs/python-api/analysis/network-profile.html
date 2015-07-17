@@ -153,15 +153,25 @@
   <div class="section" id="module-networkProfile">
 <span id="network-profile"></span><h1>Network Profile<a class="headerlink" href="#module-networkProfile" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
+<dt id="networkProfile.Profile">
+<em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">Profile</code><span class="sig-paren">(</span><em>kind=None</em>, <em>period=0</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Profile contains the information about a single network profie.
+A network profile has a kind (e.g. &#8216;provided&#8217;), a period (in seconds),
+and a list of entries of type <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">ProfileEntry</span></code></a>.</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="networkProfile.ProfileEntry">
 <em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">ProfileEntry</code><span class="sig-paren">(</span><em>start=0</em>, <em>end=0</em>, <em>slope=0</em>, <em>data=0</em>, <em>kind='none'</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Profile Entry contains the information about a single entry in a
-network profile. These include such data as:
-* start time
-* end time
-* slope 
-* amount of data at end time
-* kind</p>
+network profile. These include such data as:</p>
+<ul class="simple">
+<li>start time</li>
+<li>end time</li>
+<li>slope</li>
+<li>amount of data at end time</li>
+<li>kind</li>
+</ul>
 <dl class="attribute">
 <dt id="networkProfile.ProfileEntry.data">
 <code class="descname">data</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.ProfileEntry.data" title="Permalink to this definition">¶</a></dt>

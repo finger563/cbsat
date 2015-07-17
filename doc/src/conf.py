@@ -30,6 +30,7 @@ source_suffix = '.rst'
 exclude_patterns = ['**/.#*']
 extensions = ['sphinx.ext.mathjax', 'sphinx.ext.autodoc', 'sphinxcontrib.spelling', 'sphinx.ext.todo']
 templates_path = ['_templates']
+autoclass_content = "both"
 
 pygments_style = 'sphinx'
 import sphinx_rtd_theme
