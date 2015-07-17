@@ -39,12 +39,12 @@ class ProfileEntry:
         return "{},{},{},{},{}".format(self.start,self.end,self.slope,self.data,self.kind)
 
     def UpdateSlope(self,startData):
-        """Recalculate the slope as (data - startData) / (end - start) """
+        """Recalculate the slope as :math:`(data - startData) / (end - start)` """
         if self.start != self.end:
             self.slope = (self.data - startData) / (self.end - self.start)
 
     def UpdateData(self,startData):
-        """Recalculate the end data as startData + slope*(end-start) """
+        """Recalculate the end data as :math:`startData + slope*(end-start)` """
         self.data = startData
         if self.start != self.end:
             self.data += self.slope * (self.end - self.start)
