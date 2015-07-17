@@ -158,25 +158,48 @@
 <dd><p>Profile contains the information about a single network profie.
 A network profile has a kind (e.g. &#8216;provided&#8217;), a period (in seconds),
 and a list of entries of type <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">ProfileEntry</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>kind</strong> (<em>string</em>) &#8211; what kind of profile is it?</li>
+<li><strong>period</strong> (<em>double</em>) &#8211; what is the periodicity (in seconds) of the profile</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="networkProfile.Profile.AddEntry">
 <code class="descname">AddEntry</code><span class="sig-paren">(</span><em>entry</em>, <em>integrate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.AddEntry" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Add a single entry (based on its bandwidth) to the profile.
+This entry may come from anywhere so we must take care to ensure that
+any possibly affected entries are properly updated.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.AddProfile">
 <code class="descname">AddProfile</code><span class="sig-paren">(</span><em>profile</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.AddProfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compose this profile with an input profile by adding their slopes together.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.BuildProfile">
 <code class="descname">BuildProfile</code><span class="sig-paren">(</span><em>prof_str=None</em>, <em>prof_fName=None</em>, <em>num_periods=1</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.BuildProfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Builds the entries from either a string (line list of csv&#8217;s formatted as per
+<code class="xref py py-func docutils literal"><span class="pre">FromLine()</span></code>) or from a CSV file.  The profile can be made to repeat for some
+number of periods.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.ConvertToNC">
 <code class="descname">ConvertToNC</code><span class="sig-paren">(</span><em>step</em>, <em>filterFunc</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ConvertToNC" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Perform time-window based integration to generate a Network Calculus curve
+from the profile.  The conversion is configurable based on time-window step-size
+and a filter function (e.g. min or max).  Passing <code class="xref py py-func docutils literal"><span class="pre">max()</span></code> will create an arrival
+curve, while passing <code class="xref py py-func docutils literal"><span class="pre">min()</span></code> will create a service curve.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.Convolve">
@@ -186,17 +209,20 @@ and a list of entries of type <a class="reference internal" href="#networkProfil
 <dl class="method">
 <dt id="networkProfile.Profile.Derive">
 <code class="descname">Derive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Derive" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Derive all the entries slopes from their data.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.Integrate">
 <code class="descname">Integrate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Integrate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Integrate all the entries&#8217; slopes cumulatively to calculate their new data.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.Kind">
 <code class="descname">Kind</code><span class="sig-paren">(</span><em>kind</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Kind" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Set the kind of the profile and all its entries.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.MakeGraphPointsData">
@@ -211,17 +237,22 @@ and a list of entries of type <a class="reference internal" href="#networkProfil
 <dl class="method">
 <dt id="networkProfile.Profile.RepeatProfile">
 <code class="descname">RepeatProfile</code><span class="sig-paren">(</span><em>num_periods</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.RepeatProfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Copy the current profile entries over some number of periods.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.SubtractEntry">
 <code class="descname">SubtractEntry</code><span class="sig-paren">(</span><em>entry</em>, <em>integrate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.SubtractEntry" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Subtract a single entry (based on its bandwidth) from the profile.
+This entry may come from anywhere, so we must take care to ensure that 
+any possibly affected entries are properly updated.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.SubtractProfile">
 <code class="descname">SubtractProfile</code><span class="sig-paren">(</span><em>profile</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.SubtractProfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Compose this profile with an input profile by subtracting the input profile&#8217;s slopes.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -230,30 +261,64 @@ and a list of entries of type <a class="reference internal" href="#networkProfil
 <em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">ProfileEntry</code><span class="sig-paren">(</span><em>start=0</em>, <em>end=0</em>, <em>slope=0</em>, <em>data=0</em>, <em>kind='none'</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Profile Entry contains the information about a single entry in a
 network profile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>start</strong> (<em>double</em>) &#8211; start time of the entry</li>
+<li><strong>end</strong> (<em>double</em>) &#8211; end time for the entry</li>
+<li><strong>slope</strong> (<em>double</em>) &#8211; what is the slope of the entry</li>
+<li><strong>data</strong> (<em>double</em>) &#8211; what is the end data for the entry</li>
+<li><strong>kind</strong> (<em>string</em>) &#8211; what kind of entry is it?</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="networkProfile.ProfileEntry.FromLine">
 <code class="descname">FromLine</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.FromLine" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Set entry attributes from a single line string.
+This line should be a csv list of the form:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;start time (s)&gt;, &lt;bandwidth (bps)&gt;, &lt;latency (s)&gt;
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>line</strong> (<em>string</em>) &#8211; single csv line following the proper format</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.ProfileEntry.GetDataAtTime">
 <code class="descname">GetDataAtTime</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.GetDataAtTime" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the data at time t, based on the slope and the end data.
+:param double t: Time in the profile at which to query the data</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.ProfileEntry.GetTimesAtData">
 <code class="descname">GetTimesAtData</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.GetTimesAtData" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns a list of all possible times the entry has the data value d.
+:param double d: Data value for which you want to find all matching times</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.ProfileEntry.UpdateData">
 <code class="descname">UpdateData</code><span class="sig-paren">(</span><em>startData</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.UpdateData" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Recalculate the end data as startData + slope*(end-start)</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.ProfileEntry.UpdateSlope">
 <code class="descname">UpdateSlope</code><span class="sig-paren">(</span><em>startData</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.UpdateSlope" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Recalculate the slope as (data - startData) / (end - start)</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="networkProfile.ProfileEntry.data">

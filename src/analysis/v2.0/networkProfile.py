@@ -8,15 +8,14 @@ class ProfileEntry:
     network profile.
     """
 
-    """
-    .. method::__init__
-    :param double start: start time of the entry
-    :param double end: end time for the entry
-    :param double slope: what is the slope of the entry
-    :param double data: what is the end data for the entry
-    :param string kind: what kind of entry is it?
-    """
     def __init__(self,start=0,end=0,slope=0,data=0,kind='none'):
+        """
+        :param double start: start time of the entry
+        :param double end: end time for the entry
+        :param double slope: what is the slope of the entry
+        :param double data: what is the end data for the entry
+        :param string kind: what kind of entry is it?
+        """
         #: The start time of the entry
         self.start = start
         #: The end time of the entry
@@ -28,8 +27,8 @@ class ProfileEntry:
         #: The kind of the entry, e.g. 'required'
         self.kind = kind
 
-    """Used for comparison and sorting with other entries."""
     def __lt__(self, other):
+        """Used for comparison and sorting with other entries."""
         return self.start < other.start
 
     def __repr__(self):
@@ -39,26 +38,26 @@ class ProfileEntry:
     def __str__(self):
         return "{},{},{},{},{}".format(self.start,self.end,self.slope,self.data,self.kind)
 
-    """Recalculate the slope as (data - startData) / (end - start) """
     def UpdateSlope(self,startData):
+        """Recalculate the slope as (data - startData) / (end - start) """
         if self.start != self.end:
             self.slope = (self.data - startData) / (self.end - self.start)
 
-    """Recalculate the end data as startData + slope*(end-start) """
     def UpdateData(self,startData):
+        """Recalculate the end data as startData + slope*(end-start) """
         self.data = startData
         if self.start != self.end:
             self.data += self.slope * (self.end - self.start)
 
-    """
-    Set entry attributes from a single line string.
-    This line should be a csv list of the form::
-    
-        <start time (s)>, <bandwidth (bps)>, <latency (s)>
-
-    :param string line: single csv line following the proper format
-    """
     def FromLine(self,line):
+        """
+        Set entry attributes from a single line string.
+        This line should be a csv list of the form::
+        
+            <start time (s)>, <bandwidth (bps)>, <latency (s)>
+        
+        :param string line: single csv line following the proper format
+        """
         if line != None and len(line) != 0 and '%' not in line:
             fields = line.split(',')
             if len(fields) != 0:
@@ -68,20 +67,20 @@ class ProfileEntry:
                 return 0
         return -1
 
-    """
-    Returns the data at time t, based on the slope and the end data.
-    :param double t: Time in the profile at which to query the data
-    """
     def GetDataAtTime(self,t):
+        """
+        Returns the data at time t, based on the slope and the end data.
+        :param double t: Time in the profile at which to query the data
+        """
         if t > self.end or t < self.start:
             return -1
         return (self.data - self.slope * (self.end - t))
 
-    """
-    Returns a list of all possible times the entry has the data value d.
-    :param double d: Data value for which you want to find all matching times
-    """ 
     def GetTimesAtData(self,d):
+        """
+        Returns a list of all possible times the entry has the data value d.
+        :param double d: Data value for which you want to find all matching times
+        """ 
         if d > self.data or d < (self.data - self.slope * (self.end-self.start)):
             return []
         if self.slope == 0:
@@ -95,21 +94,21 @@ class Profile:
     and a list of entries of type :class:`ProfileEntry`.
     """
     
-    """
-    :param string kind: what kind of profile is it?
-    :param double period: what is the periodicity (in seconds) of the profile
-    """
     def __init__(self, kind = None, period = 0):
+        """
+        :param string kind: what kind of profile is it?
+        :param double period: what is the periodicity (in seconds) of the profile
+        """
         self.entries = []
         self.kind = kind
         self.period = period
 
-    """
-    Builds the entries from either a string (line list of csv's formatted as per
-    :func:`FromLine`) or from a CSV file.  The profile can be made to repeat for some
-    number of periods.
-    """
     def BuildProfile(self, prof_str = None, prof_fName = None, num_periods = 1):
+        """
+        Builds the entries from either a string (line list of csv's formatted as per
+        :func:`FromLine`) or from a CSV file.  The profile can be made to repeat for some
+        number of periods.
+        """
         if prof_str == None and prof_fName != None:
             try:
                 with open(prof_fName, 'r+') as f:
@@ -138,8 +137,8 @@ class Profile:
                 self.entries.insert(0,entry)
             self.RepeatProfile(num_periods)
 
-    """Copy the current profile entries over some number of periods."""
     def RepeatProfile(self, num_periods):
+        """Copy the current profile entries over some number of periods."""
         originalProf = copy.deepcopy(self.entries)
         data = self.entries[-1].data
         for i in range(1,num_periods):
@@ -151,42 +150,42 @@ class Profile:
                 self.entries.append(e)
             data += data
 
-    """Set the kind of the profile and all its entries."""
     def Kind(self,kind):
+        """Set the kind of the profile and all its entries."""
         self.kind = kind;
         for e in self.entries:
             e.kind = kind
 
-    """Integrate all the entries' slopes cumulatively to calculate their new data."""
     def Integrate(self):
+        """Integrate all the entries' slopes cumulatively to calculate their new data."""
         prevData = 0
         for e in self.entries:
             e.UpdateData(prevData)
             prevData = e.data
 
-    """Derive all the entries slopes from their data."""
     def Derive(self):
+        """Derive all the entries slopes from their data."""
         prevData = 0
         for e in self.entries:
             e.UpdateSlope(prevData)
             prevData = e.data
 
-    """Compose this profile with an input profile by adding their slopes together."""
     def AddProfile(self,profile):
+        """Compose this profile with an input profile by adding their slopes together."""
         for e in profile.entries:
             self.AddEntry(copy.copy(e),False)
 
-    """Compose this profile with an input profile by subtracting the input profile's slopes."""
     def SubtractProfile(self,profile):
+        """Compose this profile with an input profile by subtracting the input profile's slopes."""
         for e in profile.entries:
             self.SubtractEntry(e)
 
-    """
-    Subtract a single entry (based on its bandwidth) from the profile.
-    This entry may come from anywhere, so we must take care to ensure that 
-    any possibly affected entries are properly updated.
-    """
     def SubtractEntry(self, entry, integrate = True):
+        """
+        Subtract a single entry (based on its bandwidth) from the profile.
+        This entry may come from anywhere, so we must take care to ensure that 
+        any possibly affected entries are properly updated.
+        """
         if self.entries != [] and\
            entry.start >= self.entries[0].start and\
            entry.end <= self.entries[-1].end:
@@ -218,12 +217,12 @@ class Profile:
         if integrate:
             self.Integrate()
             
-    """
-    Add a single entry (based on its bandwidth) to the profile.
-    This entry may come from anywhere so we must take care to ensure that
-    any possibly affected entries are properly updated.
-    """
     def AddEntry(self, entry, integrate = True):
+        """
+        Add a single entry (based on its bandwidth) to the profile.
+        This entry may come from anywhere so we must take care to ensure that
+        any possibly affected entries are properly updated.
+        """
         if self.entries == [] or entry.start >= self.entries[-1].end:
             self.entries.append(entry)
         elif entry.end <= self.entries[0].start:
@@ -256,13 +255,13 @@ class Profile:
         if integrate:
             self.Integrate()
 
-    """
-    Perform time-window based integration to generate a Network Calculus curve
-    from the profile.  The conversion is configurable based on time-window step-size
-    and a filter function (e.g. min or max).  Passing :func:`max` will create an arrival
-    curve, while passing :func:`min` will create a service curve.
-    """
     def ConvertToNC(self,step,filterFunc):
+        """
+        Perform time-window based integration to generate a Network Calculus curve
+        from the profile.  The conversion is configurable based on time-window step-size
+        and a filter function (e.g. min or max).  Passing :func:`max` will create an arrival
+        curve, while passing :func:`min` will create a service curve.
+        """
         time_list = []
         data_list = []
         for e in self.entries:
