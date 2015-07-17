@@ -158,6 +158,71 @@
 <dd><p>Profile contains the information about a single network profie.
 A network profile has a kind (e.g. &#8216;provided&#8217;), a period (in seconds),
 and a list of entries of type <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">ProfileEntry</span></code></a>.</p>
+<dl class="method">
+<dt id="networkProfile.Profile.AddEntry">
+<code class="descname">AddEntry</code><span class="sig-paren">(</span><em>entry</em>, <em>integrate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.AddEntry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.AddProfile">
+<code class="descname">AddProfile</code><span class="sig-paren">(</span><em>profile</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.AddProfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.BuildProfile">
+<code class="descname">BuildProfile</code><span class="sig-paren">(</span><em>prof_str=None</em>, <em>prof_fName=None</em>, <em>num_periods=1</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.BuildProfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.ConvertToNC">
+<code class="descname">ConvertToNC</code><span class="sig-paren">(</span><em>step</em>, <em>filterFunc</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ConvertToNC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.Convolve">
+<code class="descname">Convolve</code><span class="sig-paren">(</span><em>provided</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Convolve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.Derive">
+<code class="descname">Derive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Derive" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.Integrate">
+<code class="descname">Integrate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Integrate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.Kind">
+<code class="descname">Kind</code><span class="sig-paren">(</span><em>kind</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Kind" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.MakeGraphPointsData">
+<code class="descname">MakeGraphPointsData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.MakeGraphPointsData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.MakeGraphPointsSlope">
+<code class="descname">MakeGraphPointsSlope</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.MakeGraphPointsSlope" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.RepeatProfile">
+<code class="descname">RepeatProfile</code><span class="sig-paren">(</span><em>num_periods</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.RepeatProfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.SubtractEntry">
+<code class="descname">SubtractEntry</code><span class="sig-paren">(</span><em>entry</em>, <em>integrate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.SubtractEntry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.SubtractProfile">
+<code class="descname">SubtractProfile</code><span class="sig-paren">(</span><em>profile</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.SubtractProfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -172,6 +237,31 @@ network profile. These include such data as:</p>
 <li>amount of data at end time</li>
 <li>kind</li>
 </ul>
+<dl class="method">
+<dt id="networkProfile.ProfileEntry.FromLine">
+<code class="descname">FromLine</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.FromLine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.ProfileEntry.GetDataAtTime">
+<code class="descname">GetDataAtTime</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.GetDataAtTime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.ProfileEntry.GetTimesAtData">
+<code class="descname">GetTimesAtData</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.GetTimesAtData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.ProfileEntry.UpdateData">
+<code class="descname">UpdateData</code><span class="sig-paren">(</span><em>startData</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.UpdateData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.ProfileEntry.UpdateSlope">
+<code class="descname">UpdateSlope</code><span class="sig-paren">(</span><em>startData</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.UpdateSlope" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="networkProfile.ProfileEntry.data">
 <code class="descname">data</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.ProfileEntry.data" title="Permalink to this definition">¶</a></dt>
@@ -202,6 +292,58 @@ network profile. These include such data as:</p>
 <dd><p>The start time of the entry</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">ProfileEntry</code><span class="sig-paren">(</span><em>start=0</em>, <em>end=0</em>, <em>slope=0</em>, <em>data=0</em>, <em>kind='none'</em><span class="sig-paren">)</span></dt>
+<dd><p>Profile Entry contains the information about a single entry in a
+network profile. These include such data as:</p>
+<ul class="simple">
+<li>start time</li>
+<li>end time</li>
+<li>slope</li>
+<li>amount of data at end time</li>
+<li>kind</li>
+</ul>
+<dl class="attribute">
+<dt>
+<code class="descname">data</code><em class="property"> = None</em></dt>
+<dd><p>The cumulative amount of data sent by the end of this entry (including previous entries)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">end</code><em class="property"> = None</em></dt>
+<dd><p>The end time of the entry</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">kind</code><em class="property"> = None</em></dt>
+<dd><p>The kind of the entry, e.g. &#8216;required&#8217;</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">slope</code><em class="property"> = None</em></dt>
+<dd><p>The slope of this entry</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">start</code><em class="property"> = None</em></dt>
+<dd><p>The start time of the entry</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">Profile</code><span class="sig-paren">(</span><em>kind=None</em>, <em>period=0</em><span class="sig-paren">)</span></dt>
+<dd><p>Profile contains the information about a single network profie.
+A network profile has a kind (e.g. &#8216;provided&#8217;), a period (in seconds),
+and a list of entries of type <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">ProfileEntry</span></code></a>.</p>
 </dd></dl>
 
 </div>
