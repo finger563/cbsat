@@ -5,14 +5,15 @@ from plotting import *
 class ProfileEntry:
     """
     Profile Entry contains the information about a single entry in a
-    network profile. These include such data as:
-    
-    * start time
-    * end time
-    * slope 
-    * amount of data at end time
-    * kind
-    
+    network profile.
+    """
+
+    """
+    :param double start: start time of the entry
+    :param double end: end time for the entry
+    :param double slope: what is the slope of the entry
+    :param double data: what is the end data for the entry
+    :param string kind: what kind of entry is it?
     """
     def __init__(self,start=0,end=0,slope=0,data=0,kind='none'):
         #: The start time of the entry
@@ -89,6 +90,9 @@ class Profile:
     Profile contains the information about a single network profie.
     A network profile has a kind (e.g. 'provided'), a period (in seconds),
     and a list of entries of type :class:`ProfileEntry`.
+    """
+    
+    """
     :param string kind: what kind of profile is it?
     :param double period: what is the periodicity (in seconds) of the profile
     """
