@@ -3,11 +3,25 @@ from utils import *
 from plotting import *
 
 class ProfileEntry:
+    """
+    Profile Entry contains the information about a single entry in a
+    network profile. These include such data as:
+    * start time
+    * end time
+    * slope 
+    * amount of data at end time
+    * kind
+    """
     def __init__(self,start=0,end=0,slope=0,data=0,kind='none'):
+        #: The start time of the entry
         self.start = start
+        #: The end time of the entry
         self.end = end
+        #: The slope of this entry
         self.slope = slope
+        #: The cumulative amount of data sent by the end of this entry (including previous entries)
         self.data = data
+        #: The kind of the entry, e.g. 'required'
         self.kind = kind
 
     def __lt__(self, other):

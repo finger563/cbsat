@@ -3,10 +3,32 @@ version = '0.2'
 release = '0.2.0'
 copyright = '2015, finger563'
 
+import os,inspect,sys
+analysis = os.path.realpath(os.path.abspath
+                                    (os.path.join
+                                     (os.path.split
+                                      (inspect.getfile
+                                       (inspect.currentframe()
+                                    )
+                                   )[0], "../../src/analysis/v2.0/")
+                                 ))
+if analysis not in sys.path:
+    sys.path.insert(0, analysis)
+middleware = os.path.realpath(os.path.abspath
+                                    (os.path.join
+                                     (os.path.split
+                                      (inspect.getfile
+                                       (inspect.currentframe()
+                                    )
+                                   )[0], "../../src/middleware/v2.0/")
+                                 ))
+if middleware not in sys.path:
+    sys.path.insert(0, middleware)
+
 master_doc = 'index'
 source_suffix = '.rst'
 exclude_patterns = ['**/.#*']
-extensions = ['sphinx.ext.mathjax', 'sphinxcontrib.spelling', 'sphinx.ext.todo']
+extensions = ['sphinx.ext.mathjax', 'sphinx.ext.autodoc', 'sphinxcontrib.spelling', 'sphinx.ext.todo']
 templates_path = ['_templates']
 
 pygments_style = 'sphinx'
