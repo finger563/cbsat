@@ -110,58 +110,47 @@ def main():
     output, maxBuffer, maxDelay = required.Convolve(provided)
     remaining = copy.deepcopy(provided)
     remaining.SubtractProfile(output)
+    remaining.kind = 'available'
 
     if options.plot_profiles == True:
+        # SET UP THE BANDWIDTH VS TIME PLOT
+        profList = [required,provided,output,remaining]
+        profileList = []
+        labelList = []
+        dashList = []
+        dashBase = 4
+        for p in profList:
+            profileList.append(p.MakeGraphPointsSlope())
+            labelList.append('{} bandwidth'.format(p.kind))
+            dashList.append([dashBase,dashBase/2])
+            dashBase += 2
         plot1 = PlotOptions(
-            profileList = [
-                required.MakeGraphPointsSlope(),
-                provided.MakeGraphPointsSlope(),
-                output.MakeGraphPointsSlope(),
-                remaining.MakeGraphPointsSlope(),
-            ],
-            labelList = [
-                'required bandwidth',
-                'provided bandwidth',
-                'output bandwidth',
-                'remaining bandwidth',
-            ],
-            dashList = [
-                [ 8, 4, 2, 4, 2, 8 ],
-                [ 2, 4 ],
-                [ 6, 2 ],
-                [ 5, 3 ],
-            ],
+            profileList = profileList,
+            labelList = labelList,
+            dashList = dashList,
             line_width = options.plot_line_width,
             title = "Network Bandwidth vs. Time over {} period(s)".format(options.num_periods),
             ylabel = "Bandwidth (bps)",
             xlabel = "Time (s)",
             legend_loc = "lower left"
         )
+        # SET UP THE DATA VS TIME PLOT
+        profileList = []
+        labelList = []
+        dashList = []
+        dashBase = 4
+        for p in profList:
+            profileList.append(p.MakeGraphPointsData())
+            labelList.append('{}[t]: {} data'.format(p.kind[0], p.kind))
+            dashList.append([dashBase,dashBase/2])
+            dashBase += 2
+        profileList.extend( [getGraphPointsDelay(maxDelay), getGraphPointsBuffer(maxBuffer)] )
+        labelList.extend( ['Delay', 'Buffer'] )
+        dashList.extend( [ [], [] ] )
         plot2 = PlotOptions(
-            profileList = [
-                required.MakeGraphPointsData(),
-                provided.MakeGraphPointsData(),
-                output.MakeGraphPointsData(),
-                remaining.MakeGraphPointsData(),
-                getGraphPointsDelay(maxDelay),
-                getGraphPointsBuffer(maxBuffer),
-            ],
-            labelList = [
-                'r[t]: required data',
-                'p[t]: provided data',
-                'o[t]: output data',
-                'a[t]: remaining data',
-                'Delay',
-                'Buffer',
-            ],
-            dashList = [
-                [ 8, 4, 2, 4, 2, 8 ],
-                [ 2, 4 ],
-                [ 6, 2 ],
-                [ 5, 3 ],
-                [],
-                [],
-            ],
+            profileList = profileList,
+            labelList = labelList,
+            dashList = dashList,
             line_width = options.plot_line_width,
             title = "Network Traffic vs. Time over {} period(s)".format(options.num_periods),
             ylabel = "Data (bits)",
