@@ -31,6 +31,7 @@ exclude_patterns = ['**/.#*']
 extensions = ['sphinx.ext.mathjax', 'sphinx.ext.autodoc', 'sphinxcontrib.spelling', 'sphinx.ext.todo']
 templates_path = ['_templates']
 autoclass_content = "both"
+autodoc_member_order = "bysource"
 
 pygments_style = 'sphinx'
 import sphinx_rtd_theme

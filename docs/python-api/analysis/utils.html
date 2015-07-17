@@ -153,19 +153,52 @@
   <div class="section" id="module-utils">
 <span id="utils"></span><h1>Utils<a class="headerlink" href="#module-utils" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="utils.calcDelay">
-<code class="descclassname">utils.</code><code class="descname">calcDelay</code><span class="sig-paren">(</span><em>required</em>, <em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.calcDelay" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the maximum horizontal distance between two profiles.  Return it as a form:</p>
-<div class="highlight-python"><div class="highlight"><pre>[ &lt;time at the start of the delay&gt;, &lt;data value which experiences the delay&gt;, &lt;length of delay&gt; ]
+<dt id="utils.makeVLine">
+<code class="descclassname">utils.</code><code class="descname">makeVLine</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.makeVLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of [x,y] series for plotting a vertical line.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>v</strong> (<em>list</em>) &#8211; <p>A list of values of the form:</p>
+<div class="highlight-python"><div class="highlight"><pre>[ &lt;bottom x location&gt;, &lt;bottom y location&gt;, &lt;height&gt; ]
 </pre></div>
 </div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.makeHLine">
+<code class="descclassname">utils.</code><code class="descname">makeHLine</code><span class="sig-paren">(</span><em>h</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.makeHLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of [x,y] series for plotting a horizontal line.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>h</strong> (<em>list</em>) &#8211; <p>A list of values of the form:</p>
+<div class="highlight-python"><div class="highlight"><pre>[ &lt;left x location&gt;, &lt;left y location&gt;, &lt;length&gt; ]
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.getIndexContainingTime">
+<code class="descclassname">utils.</code><code class="descname">getIndexContainingTime</code><span class="sig-paren">(</span><em>p</em>, <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.getIndexContainingTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the index of a <a class="reference internal" href="network-profile.html#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code></a> which contains time <em>t</em></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>required</strong> (<em>list</em>) &#8211; a list of <a class="reference internal" href="network-profile.html#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code></a> objects describing the required profile</li>
-<li><strong>output</strong> (<em>list</em>) &#8211; a list of <a class="reference internal" href="network-profile.html#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code></a> objects describing the output profile</li>
+<li><strong>p</strong> (<em>list</em>) &#8211; a list of <a class="reference internal" href="network-profile.html#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code></a> objects describing the profile</li>
+<li><strong>t</strong> (<em>double</em>) &#8211; time value for indexing</li>
 </ul>
 </td>
 </tr>
@@ -192,24 +225,6 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="utils.getIndexContainingTime">
-<code class="descclassname">utils.</code><code class="descname">getIndexContainingTime</code><span class="sig-paren">(</span><em>p</em>, <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.getIndexContainingTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the index of a <a class="reference internal" href="network-profile.html#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code></a> which contains time <em>t</em></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>p</strong> (<em>list</em>) &#8211; a list of <a class="reference internal" href="network-profile.html#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code></a> objects describing the profile</li>
-<li><strong>t</strong> (<em>double</em>) &#8211; time value for indexing</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="utils.getTimesAtDataFromProfile">
 <code class="descclassname">utils.</code><code class="descname">getTimesAtDataFromProfile</code><span class="sig-paren">(</span><em>p</em>, <em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.getTimesAtDataFromProfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of times at which the profile described by <em>p</em> matches the data value <em>d</em></p>
@@ -220,6 +235,27 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>p</strong> (<em>list</em>) &#8211; a list of <a class="reference internal" href="network-profile.html#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code></a> objects describing the profile</li>
 <li><strong>d</strong> (<em>double</em>) &#8211; data value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.calcDelay">
+<code class="descclassname">utils.</code><code class="descname">calcDelay</code><span class="sig-paren">(</span><em>required</em>, <em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.calcDelay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the maximum horizontal distance between two profiles.  Return it as a form:</p>
+<div class="highlight-python"><div class="highlight"><pre>[ &lt;time at the start of the delay&gt;, &lt;data value which experiences the delay&gt;, &lt;length of delay&gt; ]
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>required</strong> (<em>list</em>) &#8211; a list of <a class="reference internal" href="network-profile.html#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code></a> objects describing the required profile</li>
+<li><strong>output</strong> (<em>list</em>) &#8211; a list of <a class="reference internal" href="network-profile.html#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code></a> objects describing the output profile</li>
 </ul>
 </td>
 </tr>
@@ -241,42 +277,6 @@
 <li><strong>p21</strong> (<em>double</em>) &#8211; x value of point p2</li>
 <li><strong>p22</strong> (<em>double</em>) &#8211; y value of point p2</li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="utils.makeHLine">
-<code class="descclassname">utils.</code><code class="descname">makeHLine</code><span class="sig-paren">(</span><em>h</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.makeHLine" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a list of [x,y] series for plotting a horizontal line.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>h</strong> (<em>list</em>) &#8211; <p>A list of values of the form:</p>
-<div class="highlight-python"><div class="highlight"><pre>[ &lt;left x location&gt;, &lt;left y location&gt;, &lt;length&gt; ]
-</pre></div>
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="utils.makeVLine">
-<code class="descclassname">utils.</code><code class="descname">makeVLine</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.makeVLine" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a list of [x,y] series for plotting a vertical line.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>v</strong> (<em>list</em>) &#8211; <p>A list of values of the form:</p>
-<div class="highlight-python"><div class="highlight"><pre>[ &lt;bottom x location&gt;, &lt;bottom y location&gt;, &lt;height&gt; ]
-</pre></div>
-</div>
 </td>
 </tr>
 </tbody>

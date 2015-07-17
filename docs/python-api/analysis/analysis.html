@@ -163,6 +163,30 @@ network utilization.  Therefore each node&#8217;s bandwidth is modeled as a netw
 <em class="property">class </em><code class="descclassname">analysis.</code><code class="descname">Options</code><a class="headerlink" href="#analysis.Options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Options structure for managing input to the analysis tool.</p>
 <dl class="attribute">
+<dt id="analysis.Options.period">
+<code class="descname">period</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.period" title="Permalink to this definition">¶</a></dt>
+<dd><p>orbital period in seconds</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="analysis.Options.plot_profiles">
+<code class="descname">plot_profiles</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.plot_profiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>plot the profiles?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="analysis.Options.num_periods">
+<code class="descname">num_periods</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.num_periods" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of periods to analyze</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="analysis.Options.plot_line_width">
+<code class="descname">plot_line_width</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.plot_line_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>line width for plots</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="analysis.Options.font_size">
 <code class="descname">font_size</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.font_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>font size for plots</p>
@@ -181,38 +205,10 @@ network utilization.  Therefore each node&#8217;s bandwidth is modeled as a netw
 </dd></dl>
 
 <dl class="attribute">
-<dt id="analysis.Options.num_periods">
-<code class="descname">num_periods</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.num_periods" title="Permalink to this definition">¶</a></dt>
-<dd><p>number of periods to analyze</p>
+<dt id="analysis.Options.required_fileName">
+<code class="descname">required_fileName</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.required_fileName" title="Permalink to this definition">¶</a></dt>
+<dd><p>what file to load as the required profile</p>
 </dd></dl>
-
-<dl class="method">
-<dt id="analysis.Options.parse_args">
-<code class="descname">parse_args</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.Options.parse_args" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="analysis.Options.period">
-<code class="descname">period</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.period" title="Permalink to this definition">¶</a></dt>
-<dd><p>orbital period in seconds</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="analysis.Options.plot_line_width">
-<code class="descname">plot_line_width</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.plot_line_width" title="Permalink to this definition">¶</a></dt>
-<dd><p>line width for plots</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="analysis.Options.plot_profiles">
-<code class="descname">plot_profiles</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.plot_profiles" title="Permalink to this definition">¶</a></dt>
-<dd><p>plot the profiles?</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="analysis.Options.print_usage">
-<code class="descname">print_usage</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.Options.print_usage" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="analysis.Options.provided_fileName">
@@ -220,11 +216,15 @@ network utilization.  Therefore each node&#8217;s bandwidth is modeled as a netw
 <dd><p>what file to load as the provided profile</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="analysis.Options.required_fileName">
-<code class="descname">required_fileName</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.required_fileName" title="Permalink to this definition">¶</a></dt>
-<dd><p>what file to load as the required profile</p>
-</dd></dl>
+<dl class="method">
+<dt id="analysis.Options.parse_args">
+<code class="descname">parse_args</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.Options.parse_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="analysis.Options.print_usage">
+<code class="descname">print_usage</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.Options.print_usage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
