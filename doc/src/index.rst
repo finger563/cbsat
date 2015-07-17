@@ -14,7 +14,5 @@ It has a library which allows it to be used with `ROSMOD
    math
    analysis-api
    middleware-api
-   compiling
-   extending
 
 :ref:`genindex`

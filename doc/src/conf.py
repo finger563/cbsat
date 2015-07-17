@@ -14,7 +14,7 @@ import sphinx_rtd_theme
 html_theme = 'sphinx_rtd_theme'
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 htmlhelp_basename = 'cbsat-doc'
-html_static_path = ['crafts','scripts','_static']
+html_static_path = ['_static']
 html_context = { 'css_files': ['./_static/custom.css'] }
 
 todo_include_todos = True
