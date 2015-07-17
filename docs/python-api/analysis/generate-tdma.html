@@ -175,12 +175,39 @@
 <dl class="class">
 <dt id="generateTDMA.TDMA">
 <em class="property">class </em><code class="descclassname">generateTDMA.</code><code class="descname">TDMA</code><span class="sig-paren">(</span><em>period</em>, <em>slots</em>, <em>selectedSlot</em><span class="sig-paren">)</span><a class="headerlink" href="#generateTDMA.TDMA" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>A TDMA period describes when nodes can transmit in which slots on the network during a given period.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>period</strong> (<em>double</em>) &#8211; the period of the TDMA profile</li>
+<li><strong>slots</strong> (<em>int</em>) &#8211; number of slots this TDMA profile has</li>
+<li><strong>selectedSlot</strong> (<em>int</em>) &#8211; which slot are we analyzing?</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="generateTDMA.generateNewProfile">
 <code class="descclassname">generateTDMA.</code><code class="descname">generateNewProfile</code><span class="sig-paren">(</span><em>oldProfile</em>, <em>tdma</em><span class="sig-paren">)</span><a class="headerlink" href="#generateTDMA.generateNewProfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Create a TDMA profile network Profile from a regular network Profile</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>oldProfile</strong> (<em>list</em>) &#8211; list of <a class="reference internal" href="network-profile.html#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code></a> describing the original profile</li>
+<li><strong>tdma</strong> (<em>class</em>) &#8211; a <a class="reference internal" href="#generateTDMA.TDMA" title="generateTDMA.TDMA"><code class="xref py py-class docutils literal"><span class="pre">generateTDMA.TDMA</span></code></a> object describing the TDMA scheme</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="generateTDMA.generateProfile">

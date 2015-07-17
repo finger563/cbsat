@@ -1,25 +1,57 @@
 
-def makeVLine(b):
-    y = [b[1],b[1]+b[2]]
-    x = [b[0],b[0]]
+def makeVLine(v):
+    """
+    Returns a list of [x,y] series for plotting a vertical line.
+
+    :param list v: A list of values of the form::
+
+        [ <bottom x location>, <bottom y location>, <height> ]
+    """
+    y = [v[1],v[1]+v[2]]
+    x = [v[0],v[0]]
     return [x,y]
 
-def makeHLine(d):
-    y = [d[1],d[1]]
-    x = [d[0],d[0]+d[2]]
+def makeHLine(h):
+    """
+    Returns a list of [x,y] series for plotting a horizontal line.
+
+    :param list h: A list of values of the form::
+
+        [ <left x location>, <left y location>, <length> ]
+    """
+    y = [h[1],h[1]]
+    x = [h[0],h[0]+h[2]]
     return [x,y]
 
 def getIndexContainingTime(p,t):
+    """
+    Get the index of a :class:`networkProfile.ProfileEntry` which contains time *t*
+
+    :param list p: a list of :class:`networkProfile.ProfileEntry` objects describing the profile
+    :param double t: time value for indexing
+    """
     i=0
     while i < len(p) and t > p[i].end:
         i += 1
     return i
     
 def getDataAtTimeFromProfile(p,t):
+    """
+    Get the data at the given time *t* from a list of :class:`networkProfile.ProfileEntry` 
+
+    :param list p: a list of :class:`networkProfile.ProfileEntry` objects describing the profile
+    :param double t: time value 
+    """
     i = getIndexContainingTime(p,t)
     return p[i].GetDataAtTime(t)
 
 def getTimesAtDataFromProfile(p,d):
+    """
+    Get a list of times at which the profile described by *p* matches the data value *d*
+
+    :param list p: a list of :class:`networkProfile.ProfileEntry` objects describing the profile
+    :param double d: data value
+    """
     times = []
     i=0
     while i < len(p) and d > p[i].data:
@@ -38,6 +70,14 @@ def getTimesAtDataFromProfile(p,d):
     return times
 
 def calcDelay(required,output):
+    """
+    Compute the maximum horizontal distance between two profiles.  Return it as a form::
+
+        [ <time at the start of the delay>, <data value which experiences the delay>, <length of delay> ]
+
+    :param list required: a list of :class:`networkProfile.ProfileEntry` objects describing the required profile
+    :param list output: a list of :class:`networkProfile.ProfileEntry` objects describing the output profile
+    """
     delay = [0,0,0]
     if len(required) == 0 or len(output) == 0:
         return delay
@@ -59,6 +99,11 @@ def calcDelay(required,output):
 def get_intersection(p11,p12,p21,p22):
     """
     Simple function to get a intersection of two lines defined by their endpoints
+
+    :param double p11: x value of point p1
+    :param double p12: y value of point p1
+    :param double p21: x value of point p2
+    :param double p22: y value of point p2
     """
     if not p11 or not p12 or not p21 or not p22:
         return []

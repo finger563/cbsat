@@ -62,6 +62,7 @@ def makeGraphs(pOptionsList):
 def setFigureOpts(title, ylabel, xlabel, legend_loc):
     """
     Configure the figure's options
+
     :param string title: The title to be given to the figure
     :param string xlabel: The label for the x-axis
     :param string ylabel: The label for the y-axis

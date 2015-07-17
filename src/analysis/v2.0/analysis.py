@@ -14,16 +14,19 @@ from collections import OrderedDict
 from networkProfile import *
 
 class Options:
+    """
+    Options structure for managing input to the analysis tool.
+    """
     def __init__(self):
-        self.period = (90*60)    # orbital period in seconds
-        self.plot_profiles = havePLT
-        self.num_periods = 1
-        self.plot_line_width = 4 # line width for plots
-        self.font_size = 25 # font size for plots
-        self.nc_mode = False
-        self.nc_step_size = 1
-        self.required_fileName = "required.csv"
-        self.provided_fileName = "provided.csv"
+        self.period = (90*60)          #: orbital period in seconds
+        self.plot_profiles = havePLT   #: plot the profiles?
+        self.num_periods = 1           #: number of periods to analyze
+        self.plot_line_width = 4       #: line width for plots
+        self.font_size = 25            #: font size for plots
+        self.nc_mode = False           #: analyze using network calculus techniques?
+        self.nc_step_size = 1          #: step size for network calculus analysis
+        self.required_fileName = "required.csv"  #: what file to load as the required profile
+        self.provided_fileName = "provided.csv"  #: what file to load as the provided profile
 
     def parse_args(self,args):
         argind = 1
