@@ -1,4 +1,14 @@
 
+def makeVLine(b):
+    y = [b[1],b[1]+b[2]]
+    x = [b[0],b[0]]
+    return [x,y]
+
+def makeHLine(d):
+    y = [d[1],d[1]]
+    x = [d[0],d[0]+d[2]]
+    return [x,y]
+
 def getIndexContainingTime(p,t):
     i=0
     while i < len(p) and t > p[i].end:

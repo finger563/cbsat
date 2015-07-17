@@ -144,7 +144,7 @@ def main():
             labelList.append('{}[t]: {} data'.format(p.kind[0], p.kind))
             dashList.append([dashBase,dashBase/2])
             dashBase += 2
-        profileList.extend( [getGraphPointsDelay(maxDelay), getGraphPointsBuffer(maxBuffer)] )
+        profileList.extend( [makeHLine(maxDelay), makeVLine(maxBuffer)] )
         labelList.extend( ['Delay', 'Buffer'] )
         dashList.extend( [ [], [] ] )
         plot2 = PlotOptions(

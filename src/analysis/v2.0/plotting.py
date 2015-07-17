@@ -40,16 +40,6 @@ def makeGraphs(pOptionsList):
                        legend_loc = pOpt.legend_loc )
         figNum += 1
     plt.show()
-
-def getGraphPointsBuffer(b):
-    y = [b[1],b[1]+b[2]]
-    x = [b[0],b[0]]
-    return [x,y]
-
-def getGraphPointsDelay(d):
-    y = [d[1],d[1]]
-    x = [d[0],d[0]+d[2]]
-    return [x,y]
     
 def setFigureOpts(title, ylabel, xlabel, legend_loc):
     plt.title(title)
