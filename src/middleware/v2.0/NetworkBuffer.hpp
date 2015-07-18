@@ -71,9 +71,6 @@ public:
   long Size() const {
     return size;
   }
-  void Size(long _size) {
-    size = _size;
-  }
 
   long Capacity() const {
     return capacity;

@@ -156,6 +156,102 @@
             
   <div class="section" id="network-buffer">
 <h1>Network Buffer<a class="headerlink" href="#network-buffer" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv213NetworkBuffer">
+<span id="NetworkBuffer"></span><em class="property">class </em><code class="descclassname"></code><code class="descname">NetworkBuffer</code><a class="headerlink" href="#_CPPv213NetworkBuffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A network profile contains a sorted list of time- and data-contiguous entries of type <a class="reference internal" href="network-profile.html#_CPPv213ResourceEntry" title="ResourceEntry"><code class="xref cpp cpp-class docutils literal"><span class="pre">ResourceEntry</span></code></a>.  The profiles are periodic with a specific epoch-centric start-time.</p>
+<dl class="method">
+<dt id="max_size">
+<code class="descname">max_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#max_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum size that the buffer has reached.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">long</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="size">
+<code class="descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current size of the buffer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">long</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="capacity">
+<code class="descname">capacity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#capacity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the capacity of the buffer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">long</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">capacity</code><span class="sig-paren">(</span><em>_capacity</em><span class="sig-paren">)</span></dt>
+<dd><p>Set the capacity of the buffer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>long __capacity</strong> (<em>in</em>) &#8211; new capacity for the buffer</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">void</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="push">
+<code class="descname">push</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#push" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add data to the buffer if <img class="math" src="../../_images/math/170d44b5e23b99105c34feef9e946da32049e65a.png" alt="data.size &lt; (capacity - size)"/>.  Return 0 on success, -1 on failure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message* data</strong> (<em>in</em>) &#8211; message to be added to the buffer</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pop">
+<code class="descname">pop</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 0 for successful data retrieval from the buffer, -1 otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message*&amp; data</strong> (<em>in-out</em>) &#8211; Message pointer to data retrieved</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

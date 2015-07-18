@@ -1,2 +1,46 @@
 Network Buffer
 ==============
+
+.. cpp:class:: NetworkBuffer
+
+   A network profile contains a sorted list of time- and data-contiguous entries of type :cpp:class:`ResourceEntry`.  The profiles are periodic with a specific epoch-centric start-time.
+
+   .. method:: max_size ()
+
+      Return the maximum size that the buffer has reached.
+
+      :rtype: long
+
+   .. method:: size ()
+
+      Return the current size of the buffer.
+
+      :rtype: long
+
+   .. method:: capacity ()
+
+      Return the capacity of the buffer.
+
+      :rtype: long
+
+   .. method:: capacity (_capacity)
+
+      Set the capacity of the buffer.
+
+      :param in long __capacity: new capacity for the buffer
+      :rtype: void
+
+   .. method:: push (data)
+
+      Add data to the buffer if :math:`data.size < (capacity - size)`.  Return 0 on success, -1 on failure.
+
+      :param in message* data: message to be added to the buffer
+      :rtype: int
+
+   .. method:: pop (data)
+
+      Returns 0 for successful data retrieval from the buffer, -1 otherwise.
+
+      :param in-out message*& data: Message pointer to data retrieved
+      :rtype: int
+
