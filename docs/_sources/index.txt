@@ -1,5 +1,5 @@
 CBSAT Documentation
-==================
+===================
 
 CBSAT contains the relevant code for design-time network performance analysis
 and run-time network traffic generation, measurement, detection, and management.

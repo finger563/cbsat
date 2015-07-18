@@ -4,7 +4,8 @@ Getting Started
 ===============
 
 .. _network-performance-analysis:
-Network Performance Analysis 
+
+Network Performance Analysis
 ----------------------------
 
 This work is based off of Network Calculus,
