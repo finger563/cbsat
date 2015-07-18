@@ -156,6 +156,239 @@
             
   <div class="section" id="network-profile">
 <h1>Network Profile<a class="headerlink" href="#network-profile" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="_CPPv213profileMemBuf">
+<span id="profileMemBuf"></span><em class="property">class </em><code class="descclassname"></code><code class="descname">profileMemBuf</code><a class="headerlink" href="#_CPPv213profileMemBuf" title="Permalink to this definition">¶</a></dt>
+<dd><p>This structuture creates a stream buffer for parsing csv profile files.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv213ResourceEntry">
+<span id="ResourceEntry"></span><em class="property">class </em><code class="descclassname"></code><code class="descname">ResourceEntry</code><a class="headerlink" href="#_CPPv213ResourceEntry" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="time">
+<code class="descname">time</code><a class="headerlink" href="#time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the start time for the resource entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bandwidth">
+<code class="descname">bandwidth</code><a class="headerlink" href="#bandwidth" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bandwidth (bps) which is constant from the start of the entry to its end.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">unsigned long long</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="data">
+<code class="descname">data</code><a class="headerlink" href="#data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The cumulative data (bits) which have been sent by the end of this resource entry. Includes all summation of all previous entries&#8217; data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">unsigned long long</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="latency">
+<code class="descname">latency</code><a class="headerlink" href="#latency" title="Permalink to this definition">¶</a></dt>
+<dd><p>The latency (ms) for network traffic during this entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">unsigned long long</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv214NetworkProfile">
+<span id="NetworkProfile"></span><em class="property">class </em><code class="descclassname"></code><code class="descname">NetworkProfile</code><a class="headerlink" href="#_CPPv214NetworkProfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>A network profile contains a sorted list of time- and data-contiguous entries of type <a class="reference internal" href="#_CPPv213ResourceEntry" title="ResourceEntry"><code class="xref cpp cpp-class docutils literal"><span class="pre">ResourceEntry</span></code></a>.  The profiles are periodic with a specific epoch-centric start-time.</p>
+<dl class="attribute">
+<dt id="resources">
+<code class="descname">resources</code><a class="headerlink" href="#resources" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">std::vector&lt;<code class="xref py py-class docutils literal"><span class="pre">ResourceEntry</span></code>&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="start__time">
+<code class="descname">start__time</code><a class="headerlink" href="#start__time" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">timespec</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="period">
+<code class="descname">period</code><a class="headerlink" href="#period" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">double</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="initialize_from_file">
+<code class="descname">initialize_from_file</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#initialize_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load in the profile specified by <em>fname</em>.  Return 0 on success, -1 on error.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>char* fname</strong> (<em>const</em>) &#8211; The filename containing a csv-delimited profile</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="initialize_from_string">
+<code class="descname">initialize_from_string</code><span class="sig-paren">(</span><em>buffer</em><span class="sig-paren">)</span><a class="headerlink" href="#initialize_from_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load in the profile contained in <em>buffer</em>.  Return 0 on success, -1 on error.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>buffer</strong> (<em>char*</em>) &#8211; A string buffer containing the csv-delimited profile</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="initialize_from_i_stream">
+<code class="descname">initialize_from_i_stream</code><span class="sig-paren">(</span><em>stream</em><span class="sig-paren">)</span><a class="headerlink" href="#initialize_from_i_stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load in the profile contained in <em>stream</em>.  Return 0 on success, -1 on error.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>stream</strong> (<em>std::istream&amp;</em>) &#8211; An istream containing the csv-delimited profile</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="get_offset">
+<code class="descname">get_offset</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#get_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the difference between <em>t</em> and the profile&#8217;s start time, modulo the profile&#8217;s period.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timespec&amp; t</strong> (<em>out</em>) &#8211; epoch-centric time value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">double</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="get_next_interval">
+<code class="descname">get_next_interval</code><span class="sig-paren">(</span><em>start</em>, <em>bandwidth</em>, <em>latency</em><span class="sig-paren">)</span><a class="headerlink" href="#get_next_interval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns as output parameters the next interval by comparing the current system epoch time to the profile&#8217;s start epoch time.  IF the profile has not been properly initialized, the call fails and returns -1, else it fills the output parameters and returns 0.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>timespec&amp; start</strong> (<em>out</em>) &#8211; epoch time when the next interval starts</li>
+<li><strong>unsigned long long&amp; bandwidth</strong> (<em>out</em>) &#8211; bandwidth during the next interval</li>
+<li><strong>unsigned long long&amp; latency</strong> (<em>out</em>) &#8211; latency value for the next interval</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="delay">
+<code class="descname">delay</code><span class="sig-paren">(</span><em>data_len</em>, <em>sent_time</em><span class="sig-paren">)</span><a class="headerlink" href="#delay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the amount of time the program has to wait before sending again.  This is calculated based using the input <em>data_lengh</em> that was last transmitted at <em>sent_time</em>, and takes into account the current system itme.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>unsigned long data_len</strong> (<em>in</em>) &#8211; size of the message that was last sent</li>
+<li><strong>timespec sent_time</strong> (<em>in</em>) &#8211; epoch time the message of length dataLen was sent</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">double</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="initialized">
+<code class="descname">initialized</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#initialized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the profile was properly initialized, false otherwise.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
