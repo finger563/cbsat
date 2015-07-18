@@ -52,18 +52,26 @@ class ProfileEntry:
     def FromLine(self,line):
         """
         Set entry attributes from a single line string.
-        This line should be a csv list of the form::
+        This line should be a csv list of one of these forms::
         
             <start time (s)>, <bandwidth (bps)>, <latency (s)>
-        
+
+            <start time (s)>, <mean bandwidth (bps)>, <max bandwidth (bps)>, <latency (s)>
+
         :param string line: single csv line following the proper format
         """
-        if line != None and len(line) != 0 and '%' not in line:
+        if line:
             fields = line.split(',')
-            if len(fields) != 0:
+            if len(fields) == 3:
                 self.start = float(fields[0])
                 self.slope = float(fields[1])
                 self.latency = float(fields[2])
+                return 0
+            elif len(fields) == 4:
+                self.start = float(fields[0])
+                self.slope = float(fields[1])
+                self.maxSlope = float(fields[2])
+                self.latency = float(fields[3])
                 return 0
         return -1
 
@@ -94,14 +102,44 @@ class Profile:
     and a list of entries of type :class:`ProfileEntry`.
     """
     
-    def __init__(self, kind = None, period = 0):
+    def __init__(self, kind = None, period = 0, source = 0, dest = 0):
         """
         :param string kind: what kind of profile is it?
         :param double period: what is the periodicity (in seconds) of the profile
+        :param int source: what is the node id from which the data on this profile will be sent
+        :param int dest: what is the node id to which the data on this profile will be sent
         """
         self.entries = []
         self.kind = kind
         self.period = period
+        self.src_id = source
+        self.dst_id = dest
+
+    def ParseHeader(self, header):
+        """
+        Parses information from the profile's header if it exists:
+          * period
+          * source node ID
+          * destination node ID
+          * profile kind
+
+        A profile header is at the top of the file and has the following syntax::
+
+            # <property> = <value>
+
+        """
+        if header:
+            for line in header.split('\n'):
+                line.strip('#')
+                prop, value = line.split('=')
+                if prop == "period":
+                    self.period = float(value)
+                elif prop == "source ID":
+                    self.src_id = int(value)
+                elif prop == "destination ID":
+                    self.dst_id = int(value)
+                elif prop == "kind":
+                    self.kind = value
 
     def BuildProfile(self, prof_str = None, prof_fName = None, num_periods = 1):
         """
@@ -118,7 +156,13 @@ class Profile:
                 return -1
         if prof_str == None:
             return -1
-        p = prof_str.split('\n')
+        lines = prof_str.split('\n')
+        header = [l for l in lines if '#' in l]
+        self.ParseHeader(header)
+        specials = ['%','#']
+        p = copy.copy(lines)
+        for s in specials:
+            p = [l for l in p if s not in l]
         for line in p:
             entry = ProfileEntry()
             if entry.FromLine(line) == 0:

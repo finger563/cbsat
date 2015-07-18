@@ -222,8 +222,10 @@ network profile.</p>
 <dt id="networkProfile.ProfileEntry.FromLine">
 <code class="descname">FromLine</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.FromLine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set entry attributes from a single line string.
-This line should be a csv list of the form:</p>
+This line should be a csv list of one of these forms:</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;start time (s)&gt;, &lt;bandwidth (bps)&gt;, &lt;latency (s)&gt;
+
+&lt;start time (s)&gt;, &lt;mean bandwidth (bps)&gt;, &lt;max bandwidth (bps)&gt;, &lt;latency (s)&gt;
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -254,7 +256,7 @@ This line should be a csv list of the form:</p>
 
 <dl class="class">
 <dt id="networkProfile.Profile">
-<em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">Profile</code><span class="sig-paren">(</span><em>kind=None</em>, <em>period=0</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">Profile</code><span class="sig-paren">(</span><em>kind=None</em>, <em>period=0</em>, <em>source=0</em>, <em>dest=0</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Profile contains the information about a single network profie.
 A network profile has a kind (e.g. &#8216;provided&#8217;), a period (in seconds),
 and a list of entries of type <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">ProfileEntry</span></code></a>.</p>
@@ -265,11 +267,32 @@ and a list of entries of type <a class="reference internal" href="#networkProfil
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>kind</strong> (<em>string</em>) &#8211; what kind of profile is it?</li>
 <li><strong>period</strong> (<em>double</em>) &#8211; what is the periodicity (in seconds) of the profile</li>
+<li><strong>source</strong> (<em>int</em>) &#8211; what is the node id from which the data on this profile will be sent</li>
+<li><strong>dest</strong> (<em>int</em>) &#8211; what is the node id to which the data on this profile will be sent</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="networkProfile.Profile.ParseHeader">
+<code class="descname">ParseHeader</code><span class="sig-paren">(</span><em>header</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ParseHeader" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Parses information from the profile&#8217;s header if it exists:</dt>
+<dd><ul class="first last simple">
+<li>period</li>
+<li>source node ID</li>
+<li>destination node ID</li>
+<li>profile kind</li>
+</ul>
+</dd>
+</dl>
+<p>A profile header is at the top of the file and has the following syntax:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># &lt;property&gt; = &lt;value&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="method">
 <dt id="networkProfile.Profile.BuildProfile">
 <code class="descname">BuildProfile</code><span class="sig-paren">(</span><em>prof_str=None</em>, <em>prof_fName=None</em>, <em>num_periods=1</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.BuildProfile" title="Permalink to this definition">¶</a></dt>
