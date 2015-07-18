@@ -15,7 +15,15 @@ from networkProfile import *
 
 class Options:
     """
-    Options structure for managing input to the analysis tool.
+    Options structure for managing input to the analysis tool. It parses the following options:
+    \t--help           (to show this help and exit)
+    \t--nc_mode        (to run network calculus calcs)
+    \t--no_plot        (to not output any plots)
+    \t--required       <fileName containing the required profile>
+    \t--provided       <fileName containing the provided profile>
+    \t--period         <period of the profiles in seconds>
+    \t--num_periods    <number of periods to analyze>
+    \t--nc_step_size   <step size for time-windows in NC mode>
     """
     def __init__(self):
         self.period = (90*60)          #: orbital period in seconds
