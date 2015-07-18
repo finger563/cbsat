@@ -165,9 +165,7 @@ network utilization.  Therefore each node&#8217;s bandwidth is modeled as a netw
 <dl class="class">
 <dt id="analysis.Options">
 <em class="property">class </em><code class="descclassname">analysis.</code><code class="descname">Options</code><a class="headerlink" href="#analysis.Options" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Options structure for managing input to the analysis tool. It parses the following options:</dt>
-<dd><table class="first last docutils option-list" frame="void" rules="none">
+<dd><table class="docutils option-list" frame="void" rules="none">
 <col class="option" />
 <col class="description" />
 <tbody valign="top">
@@ -186,6 +184,10 @@ network utilization.  Therefore each node&#8217;s bandwidth is modeled as a netw
 <tr><td class="option-group">
 <kbd><span class="option">--provided</span></kbd></td>
 <td>&lt;fileName containing the provided profile&gt;</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--profile_folder</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>&lt;path containing profiles to be loaded&gt;</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">--period</span></kbd></td>
 <td>&lt;period of the profiles in seconds&gt;</td></tr>
@@ -197,8 +199,6 @@ network utilization.  Therefore each node&#8217;s bandwidth is modeled as a netw
 <td>&lt;step size for time-windows in NC mode&gt;</td></tr>
 </tbody>
 </table>
-</dd>
-</dl>
 <dl class="attribute">
 <dt id="analysis.Options.period">
 <code class="descname">period</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.period" title="Permalink to this definition">¶</a></dt>
@@ -251,6 +251,12 @@ network utilization.  Therefore each node&#8217;s bandwidth is modeled as a netw
 <dt id="analysis.Options.provided_fileName">
 <code class="descname">provided_fileName</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.provided_fileName" title="Permalink to this definition">¶</a></dt>
 <dd><p>what file to load as the provided profile</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="analysis.Options.profile_folderName">
+<code class="descname">profile_folderName</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.profile_folderName" title="Permalink to this definition">¶</a></dt>
+<dd><p>path to a folder which contains all the profiles to be analyzed</p>
 </dd></dl>
 
 <dl class="method">

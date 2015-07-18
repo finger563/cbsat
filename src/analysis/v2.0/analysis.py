@@ -15,15 +15,15 @@ from networkProfile import *
 
 class Options:
     """
-    Options structure for managing input to the analysis tool. It parses the following options:
-    \t--help           (to show this help and exit)
-    \t--nc_mode        (to run network calculus calcs)
-    \t--no_plot        (to not output any plots)
-    \t--required       <fileName containing the required profile>
-    \t--provided       <fileName containing the provided profile>
-    \t--period         <period of the profiles in seconds>
-    \t--num_periods    <number of periods to analyze>
-    \t--nc_step_size   <step size for time-windows in NC mode>
+\t--help             (to show this help and exit)
+\t--nc_mode          (to run network calculus calcs)
+\t--no_plot          (to not output any plots)
+\t--required         <fileName containing the required profile>
+\t--provided         <fileName containing the provided profile>
+\t--profile_folder   <path containing profiles to be loaded>
+\t--period           <period of the profiles in seconds>
+\t--num_periods      <number of periods to analyze>
+\t--nc_step_size     <step size for time-windows in NC mode>
     """
     def __init__(self):
         self.period = (90*60)          #: orbital period in seconds
@@ -35,6 +35,7 @@ class Options:
         self.nc_step_size = 1          #: step size for network calculus analysis
         self.required_fileName = "required.csv"  #: what file to load as the required profile
         self.provided_fileName = "provided.csv"  #: what file to load as the provided profile
+        self.profile_folderName = ""  #: path to a folder which contains all the profiles to be analyzed
 
     def parse_args(self,args):
         argind = 1
@@ -64,6 +65,9 @@ class Options:
             elif args[argind] == "--provided":
                 self.provided_fileName = args[argind+1]
                 argind += 1
+            elif args[argind] == "--profile_folder":
+                self.profile_folderName = args[argind+1]
+                argind += 1
             elif args[argind] == "--help":
                 self.print_usage(args[0])
                 return -1
@@ -71,17 +75,7 @@ class Options:
         return 0
 
     def print_usage(self,name):
-        print """Usage:
-{}
-\t--help           (to show this help and exit)
-\t--nc_mode        (to run network calculus calcs)
-\t--no_plot        (to not output any plots)
-\t--required       <fileName containing the required profile>
-\t--provided       <fileName containing the provided profile>
-\t--period         <period of the profiles in seconds>
-\t--num_periods    <number of periods to analyze>
-\t--nc_step_size   <step size for time-windows in NC mode>
-""".format(name)
+        print """Usage:\n{}{}""".format(name,self.__doc__)
 
 def main():    
     args = sys.argv
