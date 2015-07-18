@@ -28,7 +28,7 @@ if middleware not in sys.path:
 master_doc = 'index'
 source_suffix = '.rst'
 exclude_patterns = ['**/.#*']
-extensions = ['sphinx.ext.mathjax', 'sphinx.ext.autodoc', 'sphinxcontrib.spelling', 'sphinx.ext.todo']
+extensions = ['sphinx.ext.pngmath', 'sphinx.ext.autodoc', 'sphinxcontrib.spelling', 'sphinx.ext.todo']
 templates_path = ['_templates']
 autoclass_content = "both"
 autodoc_member_order = "bysource"
