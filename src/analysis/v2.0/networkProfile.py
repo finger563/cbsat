@@ -1,3 +1,10 @@
+"""
+Network Profile implements the ProfileEntry and Profile classes.  
+These classes provide all the members and functions neccessary to 
+model, compose, and analyze network profiles for applications 
+and systems.  
+"""
+
 import copy,sys
 from utils import *
 from plotting import *

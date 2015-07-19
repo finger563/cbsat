@@ -6,6 +6,7 @@ Analysis API
    :maxdepth: 2
 
    python-api/analysis/network-profile
+   python-api/analysis/network-config
    python-api/analysis/plotting
    python-api/analysis/utils
    python-api/analysis/analysis

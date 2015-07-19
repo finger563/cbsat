@@ -12,6 +12,7 @@ network utilization.  Therefore each node's bandwidth is modeled as a network
 import sys, os, csv, copy, glob
 from collections import OrderedDict
 from networkProfile import *
+from networkConfig import *
 
 class Options:
     """
