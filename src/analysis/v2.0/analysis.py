@@ -21,6 +21,7 @@ class Options:
 \t--required         <fileName containing the required profile>
 \t--provided         <fileName containing the provided profile>
 \t--profile_folder   <path containing profiles to be loaded>
+\t--network_config   <file containing network configuration>
 \t--period           <period of the profiles in seconds>
 \t--num_periods      <number of periods to analyze>
 \t--nc_step_size     <step size for time-windows in NC mode>
@@ -36,6 +37,7 @@ class Options:
         self.required_fileName = "required.csv"  #: what file to load as the required profile
         self.provided_fileName = "provided.csv"  #: what file to load as the provided profile
         self.profile_folderName = ""  #: path to a folder which contains all the profiles to be analyzed
+        self.network_configName = ""  #: file which contains the topology and configuration of the network
 
     def parse_args(self,args):
         argind = 1
@@ -67,6 +69,9 @@ class Options:
                 argind += 1
             elif args[argind] == "--profile_folder":
                 self.profile_folderName = args[argind+1]
+                argind += 1
+            elif args[argind] == "--network_config":
+                self.network_config = args[argind+1]
                 argind += 1
             elif args[argind] == "--help":
                 self.print_usage(args[0])
