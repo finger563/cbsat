@@ -125,10 +125,11 @@ class Profile:
     def ParseHeader(self, header):
         """
         Parses information from the profile's header if it exists:
-          * period
-          * source node ID
-          * destination node ID
-          * profile kind
+
+        * period
+        * source node ID
+        * destination node ID
+        * profile kind
 
         A profile header is at the top of the file and has the following syntax::
 

@@ -34,7 +34,7 @@
   
     <link rel="top" title="CBSAT 0.2.0 documentation" href="../../index.html"/>
         <link rel="up" title="Analysis API" href="../../analysis-api.html"/>
-        <link rel="next" title="Plotting" href="plotting.html"/>
+        <link rel="next" title="Network Config" href="network-config.html"/>
         <link rel="prev" title="Analysis API" href="../../analysis-api.html"/> 
 
   
@@ -97,6 +97,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../analysis-api.html">Analysis API</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="">Network Profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network-config.html">Network Config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
 <li class="toctree-l2"><a class="reference internal" href="analysis.html">Analysis</a></li>
@@ -156,6 +157,10 @@
             
   <div class="section" id="module-networkProfile">
 <span id="network-profile"></span><h1>Network Profile<a class="headerlink" href="#module-networkProfile" title="Permalink to this headline">¶</a></h1>
+<p>Network Profile implements the ProfileEntry and Profile classes.  
+These classes provide all the members and functions neccessary to 
+model, compose, and analyze network profiles for applications 
+and systems.</p>
 <dl class="class">
 <dt id="networkProfile.ProfileEntry">
 <em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">ProfileEntry</code><span class="sig-paren">(</span><em>start=0</em>, <em>end=0</em>, <em>slope=0</em>, <em>data=0</em>, <em>kind='none'</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry" title="Permalink to this definition">¶</a></dt>
@@ -277,16 +282,13 @@ and a list of entries of type <a class="reference internal" href="#networkProfil
 <dl class="method">
 <dt id="networkProfile.Profile.ParseHeader">
 <code class="descname">ParseHeader</code><span class="sig-paren">(</span><em>header</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ParseHeader" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Parses information from the profile&#8217;s header if it exists:</dt>
-<dd><ul class="first last simple">
+<dd><p>Parses information from the profile&#8217;s header if it exists:</p>
+<ul class="simple">
 <li>period</li>
 <li>source node ID</li>
 <li>destination node ID</li>
 <li>profile kind</li>
 </ul>
-</dd>
-</dl>
 <p>A profile header is at the top of the file and has the following syntax:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># &lt;property&gt; = &lt;value&gt;</span>
 </pre></div>
@@ -390,7 +392,7 @@ curve, while passing <code class="xref py py-func docutils literal"><span class=
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="plotting.html" class="btn btn-neutral float-right" title="Plotting" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="network-config.html" class="btn btn-neutral float-right" title="Network Config" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../../analysis-api.html" class="btn btn-neutral" title="Analysis API" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
