@@ -15,7 +15,7 @@ class ProfileEntry:
     network profile.
     """
 
-    def __init__(self,start=0,end=0,slope=0,data=0,kind='none'):
+    def __init__(self,start=0,end=0,slope=0,maxSlope=0,data=0,kind='none'):
         """
         :param double start: start time of the entry
         :param double end: end time for the entry
@@ -29,6 +29,8 @@ class ProfileEntry:
         self.end = end
         #: The slope of this entry
         self.slope = slope
+        #: The maximum slope for this entry (for use with DDoS)
+        self.maxSlope = maxSlope
         #: The cumulative amount of data sent by the end of this entry (including previous entries)
         self.data = data
         #: The kind of the entry, e.g. 'required'
@@ -56,7 +58,7 @@ class ProfileEntry:
         if self.start != self.end:
             self.data += self.slope * (self.end - self.start)
 
-    def FromLine(self,line):
+    def ParseFromLine(self,line):
         """
         Set entry attributes from a single line string.
         This line should be a csv list of one of these forms::
@@ -140,13 +142,13 @@ class Profile:
             for line in header:
                 line.strip('#')
                 prop, value = line.split('=')
-                if prop == "period":
+                if "period" in prop:
                     self.period = float(value)
-                elif prop == "source ID":
+                elif "source ID" in prop:
                     self.src_id = int(value)
-                elif prop == "destination ID":
+                elif "destination ID" in prop:
                     self.dst_id = int(value)
-                elif prop == "kind":
+                elif "kind" in prop:
                     self.kind = value
 
     def ParseFromFile(self, prof_fName, num_periods = 1):
@@ -169,7 +171,7 @@ class Profile:
     def ParseFromString(self, prof_str, num_periods = 1):
         """
         Builds the entries from either a string (line list of csv's formatted as per
-        :func:`ProfileEntry.FromLine`) The profile can be made to repeat for some
+        :func:`ProfileEntry.ParseFromLine`) The profile can be made to repeat for some
         number of periods.
         """
         if not prof_str:
@@ -184,7 +186,7 @@ class Profile:
             p = [l for l in p if s not in l]
         for line in p:
             entry = ProfileEntry()
-            if entry.FromLine(line) == 0:
+            if entry.ParseFromLine(line) == 0:
                 entry.kind = self.kind
                 self.entries.append(entry)
         if len(self.entries) != 0:

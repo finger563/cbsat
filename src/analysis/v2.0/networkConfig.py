@@ -115,11 +115,11 @@ class Config:
             for line in header:
                 line.strip('#')
                 prop, value = line.split('=')
-                if prop == "nodes":
+                if "nodes" in prop:
                     self.nodes = int(value)
-                elif prop == "multicast":
+                elif "multicast" in prop:
                     self.multicast = bool(value)
-                elif prop == "retransmit":
+                elif "retransmit" in prop:
                     self.retransmit = bool(value)
 
     def ParseFromFile(self, fName):
@@ -136,7 +136,7 @@ class Config:
             return -1
         if conf_str == None:
             return -1
-        self.ParseFromString( conf_str )
+        return self.ParseFromString( conf_str )
 
     def ParseFromString(self, conf_str):
         """Handles parsing of the header, topology, and routes in a config file."""
@@ -157,12 +157,21 @@ class Config:
                     self.routes.append(route)
             elif Topology.header in line:
                 self.topology.ParseFromLine(line)
+        return 0
+
+    def __repr__(self):
+        retStr = "Config:"
+        retStr+= "\nnodes: {}".format(self.nodes)
+        retStr+= "\nmulticast: {}".format(self.multicast)
+        retStr+= "\nretransmit: {}".format(self.retransmit)
+        retStr+= "\nTopology:\n\t{}".format(self.topology)
+        retStr+= "\nRoutes:\n\t{}".format(self.routes)
+        return retStr
 
 def main(argv):
     config = Config()
     config.ParseFromFile("config.csv")
-    print config.topology
-    print config.routes
+    print "{}".format(config)
 
 if __name__ == '__main__':
     import sys

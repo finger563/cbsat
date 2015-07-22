@@ -163,7 +163,7 @@ model, compose, and analyze network profiles for applications
 and systems.</p>
 <dl class="class">
 <dt id="networkProfile.ProfileEntry">
-<em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">ProfileEntry</code><span class="sig-paren">(</span><em>start=0</em>, <em>end=0</em>, <em>slope=0</em>, <em>data=0</em>, <em>kind='none'</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">ProfileEntry</code><span class="sig-paren">(</span><em>start=0</em>, <em>end=0</em>, <em>slope=0</em>, <em>maxSlope=0</em>, <em>data=0</em>, <em>kind='none'</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Profile Entry contains the information about a single entry in a
 network profile.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -200,6 +200,12 @@ network profile.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="networkProfile.ProfileEntry.maxSlope">
+<code class="descname">maxSlope</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.ProfileEntry.maxSlope" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum slope for this entry (for use with DDoS)</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="networkProfile.ProfileEntry.data">
 <code class="descname">data</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.ProfileEntry.data" title="Permalink to this definition">¶</a></dt>
 <dd><p>The cumulative amount of data sent by the end of this entry (including previous entries)</p>
@@ -224,8 +230,8 @@ network profile.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="networkProfile.ProfileEntry.FromLine">
-<code class="descname">FromLine</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.FromLine" title="Permalink to this definition">¶</a></dt>
+<dt id="networkProfile.ProfileEntry.ParseFromLine">
+<code class="descname">ParseFromLine</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.ParseFromLine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set entry attributes from a single line string.
 This line should be a csv list of one of these forms:</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;start time (s)&gt;, &lt;bandwidth (bps)&gt;, &lt;latency (s)&gt;
@@ -307,7 +313,7 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 <dt id="networkProfile.Profile.ParseFromString">
 <code class="descname">ParseFromString</code><span class="sig-paren">(</span><em>prof_str</em>, <em>num_periods=1</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ParseFromString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds the entries from either a string (line list of csv&#8217;s formatted as per
-<a class="reference internal" href="#networkProfile.ProfileEntry.FromLine" title="networkProfile.ProfileEntry.FromLine"><code class="xref py py-func docutils literal"><span class="pre">ProfileEntry.FromLine()</span></code></a>) The profile can be made to repeat for some
+<a class="reference internal" href="#networkProfile.ProfileEntry.ParseFromLine" title="networkProfile.ProfileEntry.ParseFromLine"><code class="xref py py-func docutils literal"><span class="pre">ProfileEntry.ParseFromLine()</span></code></a>) The profile can be made to repeat for some
 number of periods.</p>
 </dd></dl>
 

@@ -38,7 +38,7 @@ class Options:
         self.required_fileName = "required.csv"  #: what file to load as the required profile
         self.provided_fileName = "provided.csv"  #: what file to load as the provided profile
         self.profile_folderName = ""  #: path to a folder which contains all the profiles to be analyzed
-        self.network_configName = ""  #: file which contains the topology and configuration of the network
+        self.network_configName = "config.csv"  #: file which contains the topology and configuration of the network
 
     def parse_args(self,args):
         argind = 1
@@ -91,8 +91,14 @@ def main():
 
     print "Analyzing required profile:\n\t{}\nagainst provided profile:\n\t{}".format(
         options.required_fileName, options.provided_fileName)
+    print "Using network configuration defined in {}.".format(
+        options.network_configName)
     print "Using period {} seconds over {} periods".format(
         options.period, options.num_periods)
+
+    config = Config()
+    if config.ParseFromFile( options.network_configName ) == -1:
+        return -1
 
     required = Profile(
         kind = 'required',
