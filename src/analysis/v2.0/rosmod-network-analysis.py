@@ -9,7 +9,7 @@ def AnalyzeHost(host, nodes, period, numPeriods, nc_mode = False, nc_step = 1):
     provided = Profile(
         kind = 'provided',
         period = period )
-    provided.BuildProfile(
+    provided.ParseFromFile(
         prof_str = host.properties['system_network_profile'],
         num_periods = numPeriods )
     required = Profile('required',period)
@@ -20,7 +20,7 @@ def AnalyzeHost(host, nodes, period, numPeriods, nc_mode = False, nc_step = 1):
                     tmpProfile = Profile(
                         kind = 'required',
                         period = period )
-                    tmpProfile.BuildProfile(
+                    tmpProfile.ParseFromFile(
                         prof_str = port.properties['port_network_profile'],
                         num_periods = numPeriods)
                     required.AddProfile(tmpProfile)

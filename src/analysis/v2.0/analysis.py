@@ -97,7 +97,7 @@ def main():
     required = Profile(
         kind = 'required',
         period = options.period)
-    if required.BuildProfile(
+    if required.ParseFromFile(
             num_periods = options.num_periods,
             prof_fName = options.required_fileName) == -1:
         return -1
@@ -105,7 +105,7 @@ def main():
     provided = Profile(
         kind = 'provided',
         period = options.period)
-    if provided.BuildProfile(
+    if provided.ParseFromFile(
             num_periods = options.num_periods,
             prof_fName = options.provided_fileName) == -1:
         return -1

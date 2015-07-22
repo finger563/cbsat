@@ -149,20 +149,31 @@ class Profile:
                 elif prop == "kind":
                     self.kind = value
 
-    def BuildProfile(self, prof_str = None, prof_fName = None, num_periods = 1):
+    def ParseFromFile(self, prof_fName, num_periods = 1):
+        """
+        Builds the entries from a properly formatted CSV file.  
+        The profile can be made to repeat for some number of periods.
+        Internally calls :func:`Profile.ParseFromString`.
+        """
+        prof_str = None
+        try:
+            with open(prof_fName, 'r+') as f:
+                prof_str = f.read()
+        except:
+            print >> sys.stderr, "ERROR: Couldn't find/open {}".format(prof_fName)
+            return -1
+        if prof_str == None:
+            return -1
+        self.ParseFromString( prof_str, num_periods )
+
+    def ParseFromString(self, prof_str, num_periods = 1):
         """
         Builds the entries from either a string (line list of csv's formatted as per
-        :func:`ProfileEntry.FromLine`) or from a CSV file.  The profile can be made to repeat for some
+        :func:`ProfileEntry.FromLine`) The profile can be made to repeat for some
         number of periods.
         """
-        if prof_str == None and prof_fName != None:
-            try:
-                with open(prof_fName, 'r+') as f:
-                    prof_str = f.read()
-            except:
-                print >> sys.stderr, "ERROR: Couldn't find/open {}".format(prof_fName)
-                return -1
-        if prof_str == None:
+        if not prof_str:
+            print >> sys.stderr, "ERROR: String contains no profile spec!"
             return -1
         lines = prof_str.split('\n')
         header = [l for l in lines if '#' in l]
