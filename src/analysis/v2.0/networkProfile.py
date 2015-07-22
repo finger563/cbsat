@@ -137,7 +137,7 @@ class Profile:
 
         """
         if header:
-            for line in header.split('\n'):
+            for line in header:
                 line.strip('#')
                 prop, value = line.split('=')
                 if prop == "period":

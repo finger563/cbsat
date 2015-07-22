@@ -1,0 +1,351 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Network Config &mdash; CBSAT 0.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../.././_static/custom.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="CBSAT 0.2.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Analysis API" href="../../analysis-api.html"/>
+        <link rel="next" title="Plotting" href="plotting.html"/>
+        <link rel="prev" title="Network Profile" href="network-profile.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="../../index.html" class="icon icon-home"> CBSAT
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started.html#network-performance-analysis">Network Performance Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../getting-started.html#background">Background</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started.html#the-analysis-tool">The Analysis Tool</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../getting-started.html#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting-started.html#the-middleware">The Middleware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../getting-started.html#compilation">Compilation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../math.html">Math</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../math.html#network-calculus-background">Network Calculus Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../math.html#formalism-for-better-precision-network-analysis">Formalism for Better Precision Network Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../analysis-api.html">Analysis API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="network-profile.html">Network Profile</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Network Config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.html">Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate-tdma.html">Generate TDMA</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../middleware-api.html">Middleware API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../middleware/network-profile.html">Network Profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../middleware/network-buffer.html">Network Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../middleware/network-middleware.html">Network Middleware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../middleware/message.html">Message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../middleware/client.html">Client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../middleware/server.html">Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../middleware/connection-subsys.html">Connection Subsys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../middleware/csv-iterator.html">CSV Iterator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../middleware/tc-wrapper.html">TC Wrapper</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">CBSAT</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../analysis-api.html">Analysis API</a> &raquo;</li>
+      
+    <li>Network Config</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/python-api/analysis/network-config.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="module-networkConfig">
+<span id="network-config"></span><h1>Network Config<a class="headerlink" href="#module-networkConfig" title="Permalink to this headline">¶</a></h1>
+<p>Network Config implements the</p>
+<dl class="class">
+<dt id="networkConfig.Node">
+<em class="property">class </em><code class="descclassname">networkConfig.</code><code class="descname">Node</code><span class="sig-paren">(</span><em>_id</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines all the required information for a node in the network.
+This includes:</p>
+<ul class="simple">
+<li>ID</li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="networkConfig.Route">
+<em class="property">class </em><code class="descclassname">networkConfig.</code><code class="descname">Route</code><span class="sig-paren">(</span><em>path=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Route" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes how a flow traverse the links of the system&#8217;s network.
+This is specified as a list of nodes, with the source node at the 
+front of the list and the destination node at the end of the list.</p>
+<dl class="attribute">
+<dt id="networkConfig.Route.header">
+<code class="descname">header</code><em class="property"> = 'route:'</em><a class="headerlink" href="#networkConfig.Route.header" title="Permalink to this definition">¶</a></dt>
+<dd><p>line header specifying a route in the config file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkConfig.Route.AddDest">
+<code class="descname">AddDest</code><span class="sig-paren">(</span><em>dest</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Route.AddDest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append a node onto the end of the route.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkConfig.Route.AddSource">
+<code class="descname">AddSource</code><span class="sig-paren">(</span><em>src</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Route.AddSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a node onto the beginning of a route.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkConfig.Route.InsertNode">
+<code class="descname">InsertNode</code><span class="sig-paren">(</span><em>node</em>, <em>pos</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Route.InsertNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a node into the route before the given position.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkConfig.Route.ParseFromLine">
+<code class="descname">ParseFromLine</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Route.ParseFromLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles parsing of a route path from a line in the config file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="networkConfig.Topology">
+<em class="property">class </em><code class="descclassname">networkConfig.</code><code class="descname">Topology</code><span class="sig-paren">(</span><em>links={}</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Topology" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes the active links between nodes on the system&#8217;s network.
+This is specified as a dictionary of node : list of nodes pairs.</p>
+<dl class="attribute">
+<dt id="networkConfig.Topology.header">
+<code class="descname">header</code><em class="property"> = 'topology:'</em><a class="headerlink" href="#networkConfig.Topology.header" title="Permalink to this definition">¶</a></dt>
+<dd><p>line header specifying a topology link in the config file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkConfig.Topology.ParseFromLine">
+<code class="descname">ParseFromLine</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Topology.ParseFromLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles parsing of a link from a line in the config file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="networkConfig.Config">
+<em class="property">class </em><code class="descclassname">networkConfig.</code><code class="descname">Config</code><span class="sig-paren">(</span><em>nodes=0</em>, <em>multicast=False</em>, <em>retransmit=False</em>, <em>routes=[]</em>, <em>topology={}</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the routing and topology information
+to fully describe the system&#8217;s network and provide
+a mapping between application data flows (logical)
+and the system&#8217;s network links.  It also provides
+interfaces for setting low-level communications 
+considerations such as retransmission, multiple-unicast,
+multicast, etc.</p>
+<dl class="method">
+<dt id="networkConfig.Config.ParseHeader">
+<code class="descname">ParseHeader</code><span class="sig-paren">(</span><em>header</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Config.ParseHeader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses information from the configuration&#8217;s header if it exists:</p>
+<ul class="simple">
+<li>number of nodes in the system</li>
+<li>multicast capability</li>
+<li>retransmission setting</li>
+</ul>
+<p>A profile header is at the top of the file and has the following syntax:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># &lt;property&gt; = &lt;value&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkConfig.Config.ParseFromFile">
+<code class="descname">ParseFromFile</code><span class="sig-paren">(</span><em>fName</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Config.ParseFromFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds the entries from a properly formatted CSV file.  
+Internally calls <a class="reference internal" href="#networkConfig.Config.ParseFromString" title="networkConfig.Config.ParseFromString"><code class="xref py py-func docutils literal"><span class="pre">Config.ParseFromString()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkConfig.Config.ParseFromString">
+<code class="descname">ParseFromString</code><span class="sig-paren">(</span><em>conf_str</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Config.ParseFromString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles parsing of the header, topology, and routes in a config file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="networkConfig.main">
+<code class="descclassname">networkConfig.</code><code class="descname">main</code><span class="sig-paren">(</span><em>argv</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="plotting.html" class="btn btn-neutral float-right" title="Plotting" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="network-profile.html" class="btn btn-neutral" title="Network Profile" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, finger563.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+  
+ 
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-61341323-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>

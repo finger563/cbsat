@@ -15,6 +15,10 @@ class Node:
     def __init__(self, _id):
         self.ID = _id
 
+    def __repr__(self):
+        retStr = "{}".format(self.ID)
+        return retStr
+
 class Route:
     """
     Describes how a flow traverse the links of the system's network.
@@ -22,7 +26,7 @@ class Route:
     front of the list and the destination node at the end of the list.
     """
 
-    header = "route:"
+    header = "route:" #: line header specifying a route in the config file
 
     def __init__(self, path = []):
         self.path = path
@@ -40,11 +44,17 @@ class Route:
         self.path.insert(pos,node)
 
     def ParseFromLine(self, line):
+        """Handles parsing of a route path from a line in the config file."""
         self.path = []
-        line = line.strip(Route.header)
-        node_id_list = int(line.split(','))
+        line = line.strip(self.header)
+        node_id_list = map(int,line.split(','))
         for node_id in node_id_list:
             self.AddDest( Node( node_id ) )
+        return 0
+
+    def __repr__(self):
+        retStr = "{}".format(self.path)
+        return retStr
 
 class Topology:
     """
@@ -52,17 +62,23 @@ class Topology:
     This is specified as a dictionary of node : list of nodes pairs.
     """
 
-    header = "topology:"
+    header = "topology:" #: line header specifying a topology link in the config file.
 
     def __init__(self, links = {}):
         self.links = links
 
     def ParseFromLine(self, line):
-        line = line.strip(Toplogy.header)
+        """Handles parsing of a link from a line in the config file."""
+        line = line.strip(self.header)
         node, node_list_str = line.split(':')
         node = Node( int(node) )
-        node_list = int(node_list_str.split(','))
+        node_list = map(int,node_list_str.split(','))
         self.links[node] = node_list
+        return 0
+
+    def __repr__(self):
+        retStr = "{}".format(self.links)
+        return retStr
 
 class Config:
     """
@@ -75,8 +91,12 @@ class Config:
     multicast, etc.
     """
 
-    def __init__(self, ):
-        pass
+    def __init__(self, nodes = 0, multicast = False, retransmit = False, routes = [], topology = Topology() ):
+        self.routes = routes
+        self.topology = topology
+        self.nodes = nodes
+        self.multicast = multicast
+        self.retransmit = retransmit
 
     def ParseHeader(self, header):
         """
@@ -92,15 +112,15 @@ class Config:
 
         """
         if header:
-            for line in header.split('\n'):
+            for line in header:
                 line.strip('#')
                 prop, value = line.split('=')
                 if prop == "nodes":
-                    self.period = int(value)
+                    self.nodes = int(value)
                 elif prop == "multicast":
-                    self.src_id = bool(value)
+                    self.multicast = bool(value)
                 elif prop == "retransmit":
-                    self.dst_id = bool(value)
+                    self.retransmit = bool(value)
 
     def ParseFromFile(self, fName):
         """
@@ -119,6 +139,7 @@ class Config:
         self.ParseFromString( conf_str )
 
     def ParseFromString(self, conf_str):
+        """Handles parsing of the header, topology, and routes in a config file."""
         if not conf_str:
             print >> sys.stderr, "ERROR: String contains no configuration spec!"
             return -1
@@ -129,3 +150,20 @@ class Config:
         c = copy.copy(lines)
         for s in specials:
             c = [l for l in c if s not in l]
+        for line in c:
+            if Route.header in line:
+                route = Route()
+                if route.ParseFromLine(line) == 0:
+                    self.routes.append(route)
+            elif Topology.header in line:
+                self.topology.ParseFromLine(line)
+
+def main(argv):
+    config = Config()
+    config.ParseFromFile("config.csv")
+    print config.topology
+    print config.routes
+
+if __name__ == '__main__':
+    import sys
+    main(sys.argv)
