@@ -1,3 +1,7 @@
+# period = 10
+# kind = provided
+# source ID = 1
+# destination ID = 2
 % time (s), %bandwidth (bps), %latency (ms),eth0
 0,800000,0,eth0
 1,880000,0,eth0
