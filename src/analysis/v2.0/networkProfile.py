@@ -218,7 +218,8 @@ class Profile:
     def Rotate(self, t):
         """
         Rotates the profile circularly (based on period, through start time) by a time *t*.
-        :note: *t* must be between 0 and the profile's period
+        
+        .. note:: *t* must be between 0 and the profile's period
 
         :rtype: int : 0 if success, -1 for error
         """

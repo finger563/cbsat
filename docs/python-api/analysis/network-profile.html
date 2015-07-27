@@ -354,6 +354,24 @@ number of periods.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="networkProfile.Profile.Rotate">
+<code class="descname">Rotate</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotates the profile circularly (based on period, through start time) by a time <em>t</em>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>t</em> must be between 0 and the profile&#8217;s period</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int : 0 if success, -1 for error</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="networkProfile.Profile.Kind">
 <code class="descname">Kind</code><span class="sig-paren">(</span><em>kind</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Kind" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the kind of the profile and all its entries.</p>
