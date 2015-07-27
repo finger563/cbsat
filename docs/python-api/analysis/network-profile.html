@@ -285,6 +285,36 @@ and a list of entries of type <a class="reference internal" href="#networkProfil
 </tr>
 </tbody>
 </table>
+<dl class="attribute">
+<dt id="networkProfile.Profile.entries">
+<code class="descname">entries</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.Profile.entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">ProfileEntry</span></code></a> which describe this profile</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="networkProfile.Profile.kind">
+<code class="descname">kind</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.Profile.kind" title="Permalink to this definition">¶</a></dt>
+<dd><p>The kind of this profile, e.g. &#8216;required&#8217;</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="networkProfile.Profile.period">
+<code class="descname">period</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.Profile.period" title="Permalink to this definition">¶</a></dt>
+<dd><p>The length of one period of this profile</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="networkProfile.Profile.src_id">
+<code class="descname">src_id</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.Profile.src_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The node ID which is the source of this profile</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="networkProfile.Profile.dst_id">
+<code class="descname">dst_id</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.Profile.dst_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The node ID which is the destination of this profile</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="networkProfile.Profile.ParseHeader">
 <code class="descname">ParseHeader</code><span class="sig-paren">(</span><em>header</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ParseHeader" title="Permalink to this definition">¶</a></dt>
@@ -394,6 +424,31 @@ curve, while passing <code class="xref py py-func docutils literal"><span class=
 <dt id="networkProfile.Profile.Convolve">
 <code class="descname">Convolve</code><span class="sig-paren">(</span><em>provided</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Convolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use min-plus calculus to convolve this <em>required</em> profile with an input <em>provided</em> profile.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-func docutils literal"><span class="pre">list()</span></code> [ output, maxBuffer, maxDelay ]</td>
+</tr>
+</tbody>
+</table>
+<p>Where the returned elements are defined as such:</p>
+<ul>
+<li><p class="first"><strong>output</strong>: output profile which is the result of this convolution.</p>
+</li>
+<li><p class="first"><strong>maxBuffer</strong>: a list describing the maximum buffer required for this convolution.
+it follows the form:</p>
+<div class="highlight-python"><div class="highlight"><pre>[ &lt;bottom x location&gt;, &lt;bottom y location&gt;, &lt;size of the buffer (bytes)&gt; ]
+</pre></div>
+</div>
+</li>
+<li><p class="first"><strong>maxDelay</strong>: a list describing the maximum delay experienced by data from this convolution.
+it follows the form:</p>
+<div class="highlight-python"><div class="highlight"><pre>[ &lt;left x location&gt;, &lt;left y location&gt;, &lt;length of the delay (seconds)&gt; ]
+</pre></div>
+</div>
+</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
