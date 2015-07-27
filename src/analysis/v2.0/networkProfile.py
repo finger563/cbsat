@@ -194,13 +194,13 @@ class Profile:
             for i in range(0,len(self.entries)-1):
                 self.entries[i].end = self.entries[i+1].start
             self.entries[-1].end = self.period
+            self.entries = [x for x in self.entries if x.start != x.end]
             if self.entries[0].start > 0:
                 entry = ProfileEntry()
                 entry.start = 0
                 entry.end = self.entries[0].start
                 entry.kind = self.kind
                 self.entries.insert(0,entry)
-            self.RepeatProfile(num_periods)
 
     def RepeatProfile(self, num_periods):
         """Copy the current profile entries over some number of periods."""
@@ -214,6 +214,35 @@ class Profile:
                 e.end += self.period*i
                 self.entries.append(e)
             data += data
+
+    def Rotate(self, t):
+        """
+        Rotates the profile circularly (based on period, through start time) by a time *t*.
+        :note: *t* must be between 0 and the profile's period
+
+        :rtype: int : 0 if success, -1 for error
+        """
+        if t < 0 or t > self.period:
+            print "ERROR: rotate time must be between 0 and this profile's period, {}".format(self.period)
+            return -1
+        if t > 0 and t < self.period:
+            newEntries = []
+            for e in self.entries:
+                e.start += t
+                e.end += t
+                if e.start > self.period:
+                    e.start = e.start - self.period
+                if e.end > self.period:
+                    e.end  = e.end - self.period
+                if e.start > e.end: # this entry is starts before the period and ends afterwards
+                    entry = copy.deepcopy(e)
+                    entry.start = 0
+                    e.end = self.period
+                    newEntries.append(entry)
+            self.entries.extend(newEntries)
+            self.entries = sorted(self.entries)
+            self.Integrate()
+        return 0
 
     def Kind(self,kind):
         """Set the kind of the profile and all its entries."""

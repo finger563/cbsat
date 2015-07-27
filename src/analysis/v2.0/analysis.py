@@ -131,7 +131,8 @@ def main(argv):
             elif 'required' in prof.kind:
                 prof.ConvertToNC( nc_step_size, lambda l: max(l) )
 
-
+    # NEED TO CALCULATE HYPERPERIOD?
+    # NEED TO REPEAT PROFILES FOR THE RIGHT NUMBER OF PERIODS
     # NEED TO AGGREGATE ALL PROFILES TOGETHER
     # BASED ON TYPE AND SOURCE (AND POSSIBLY DESTINATION?)
     required = [x for x in profiles if 'required' in x.kind][0]
