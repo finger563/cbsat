@@ -118,11 +118,11 @@ class Profile:
         :param int source: what is the node id from which the data on this profile will be sent
         :param int dest: what is the node id to which the data on this profile will be sent
         """
-        self.entries = []
-        self.kind = kind
-        self.period = period
-        self.src_id = source
-        self.dst_id = dest
+        self.entries = []    #: The list of :class:`ProfileEntry` which describe this profile
+        self.kind = kind     #: The kind of this profile, e.g. 'required'
+        self.period = period #: The length of one period of this profile
+        self.src_id = source #: The node ID which is the source of this profile
+        self.dst_id = dest   #: The node ID which is the destination of this profile
 
     def ParseHeader(self, header):
         """
@@ -149,7 +149,7 @@ class Profile:
                 elif "destination ID" in prop:
                     self.dst_id = int(value)
                 elif "kind" in prop:
-                    self.kind = value
+                    self.kind = value.strip(' ')
 
     def ParseFromFile(self, prof_fName, num_periods = 1):
         """
@@ -376,7 +376,20 @@ class Profile:
         return [xvals, yvals]
 
     def Convolve(self, provided):
-        """Use min-plus calculus to convolve this *required* profile with an input *provided* profile."""
+        """
+        Use min-plus calculus to convolve this *required* profile with an input *provided* profile.
+        Returns:
+          * output: output profile which is the result of this convolution.
+          * maxBuffer: a list describing the maximum buffer required for this convolution.
+            it follows the form::
+
+                [ <bottom x location>, <bottom y location>, <size of the buffer (bytes)> ]
+
+          * maxDelay: a list describing the maximum delay experienced by data from this convolution.
+            it follows the form::
+
+                [ <left x location>, <left y location>, <length of the delay (seconds)> ]
+        """
         output = Profile(kind='output')
         maxBuffer = [0,0,0] # [x, y, bufferSize]
         maxDelay  = [0,0,0] # [x, y, delayLength]

@@ -1,3 +1,4 @@
+from utils import *
 havePLT = False
 try:
     import matplotlib.pyplot as plt
@@ -36,6 +37,60 @@ class PlotOptions:
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.legend_loc = legend_loc
+
+def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_line_width ):
+    """
+    :param in profList: a list of :class:`networkProfile.Profile` to be plotted
+    :param in delay: a delay structure as generated from :func:`networkProfile.Profile.Convolve`
+    :param in buffer: a buffer structure as generated from :func:`networkProfile.Profile.Convolve`
+    :param in num_periods: how many periods the plot covers
+    :param in plot_line_width: how thick the lines for each plot should be
+    """
+    # SET UP THE BANDWIDTH VS TIME PLOT
+    profileList = []
+    labelList = []
+    dashList = []
+    dashBase = 4
+    for p in profList:
+        profileList.append(p.MakeGraphPointsSlope())
+        labelList.append('{} bandwidth'.format(p.kind))
+        dashList.append([dashBase,dashBase/2])
+        dashBase += 2
+    plot1 = PlotOptions(
+        profileList = profileList,
+        labelList = labelList,
+        dashList = dashList,
+        line_width = plot_line_width,
+        title = "Network Bandwidth vs. Time over {} period(s)".format(num_periods),
+        ylabel = "Bandwidth (bps)",
+        xlabel = "Time (s)",
+        legend_loc = "lower left"
+    )
+    # SET UP THE DATA VS TIME PLOT
+    profileList = []
+    labelList = []
+    dashList = []
+    dashBase = 4
+    for p in profList:
+        profileList.append(p.MakeGraphPointsData())
+        labelList.append('{}[t]: {} data'.format(p.kind[0], p.kind))
+        dashList.append([dashBase,dashBase/2])
+        dashBase += 2
+    profileList.extend( [makeHLine(delay), makeVLine(buffer)] )
+    labelList.extend( ['Delay', 'Buffer'] )
+    dashList.extend( [ [], [] ] )
+    plot2 = PlotOptions(
+        profileList = profileList,
+        labelList = labelList,
+        dashList = dashList,
+        line_width = plot_line_width,
+        title = "Network Traffic vs. Time over {} period(s)".format(num_periods),
+        ylabel = "Data (bits)",
+        xlabel = "Time (s)",
+        legend_loc = "upper left"
+    )
+    # Plot both of the graphs now they have been set up
+    makeGraphs([plot1,plot2])
 
 def makeGraphs(pOptionsList):
     """
