@@ -151,10 +151,9 @@ class Profile:
                 elif "kind" in prop:
                     self.kind = value.strip(' ')
 
-    def ParseFromFile(self, prof_fName, num_periods = 1):
+    def ParseFromFile(self, prof_fName):
         """
         Builds the entries from a properly formatted CSV file.  
-        The profile can be made to repeat for some number of periods.
         Internally calls :func:`Profile.ParseFromString`.
         """
         prof_str = None
@@ -166,13 +165,12 @@ class Profile:
             return -1
         if prof_str == None:
             return -1
-        self.ParseFromString( prof_str, num_periods )
+        self.ParseFromString( prof_str )
 
-    def ParseFromString(self, prof_str, num_periods = 1):
+    def ParseFromString(self, prof_str):
         """
         Builds the entries from either a string (line list of csv's formatted as per
-        :func:`ProfileEntry.ParseFromLine`) The profile can be made to repeat for some
-        number of periods.
+        :func:`ProfileEntry.ParseFromLine`).
         """
         if not prof_str:
             print >> sys.stderr, "ERROR: String contains no profile spec!"
@@ -202,11 +200,12 @@ class Profile:
                 entry.kind = self.kind
                 self.entries.insert(0,entry)
 
-    def RepeatProfile(self, num_periods):
-        """Copy the current profile entries over some number of periods."""
+    def Repeat(self, num_periods):
+        """Copy the current profile entries over some number of its periods."""
+        self.entries = sorted([x for x in self.entries if x.start != x.end])
         originalProf = copy.deepcopy(self.entries)
         data = self.entries[-1].data
-        for i in range(1,num_periods):
+        for i in range(1,int(num_periods)):
             tmpProf = copy.deepcopy(originalProf)
             for e in tmpProf:
                 e.data += data
@@ -214,6 +213,7 @@ class Profile:
                 e.end += self.period*i
                 self.entries.append(e)
             data += data
+        self.entries = sorted([x for x in self.entries if x.start != x.end])
 
     def Rotate(self, t):
         """
@@ -226,6 +226,7 @@ class Profile:
         if t < 0 or t > self.period:
             print "ERROR: rotate time must be between 0 and this profile's period, {}".format(self.period)
             return -1
+        self.entries = sorted([x for x in self.entries if x.start != x.end])
         if t > 0 and t < self.period:
             newEntries = []
             for e in self.entries:
@@ -356,6 +357,8 @@ class Profile:
         from the profile.  The conversion is configurable based on time-window step-size
         and a filter function (e.g. min or max).  Passing :func:`max` will create an arrival
         curve, while passing :func:`min` will create a service curve.
+
+        .. note:: Requires the profile to have been integrated
         """
         time_list = []
         data_list = []
@@ -422,6 +425,8 @@ class Profile:
           it follows the form::
 
                 [ <left x location>, <left y location>, <length of the delay (seconds)> ]
+
+        .. note:: Requires that both profiles have been integrated
         """
         output = Profile(kind='output')
         maxBuffer = [0,0,0] # [x, y, bufferSize]

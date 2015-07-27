@@ -163,6 +163,24 @@ split accross multiple nodes of the cluster.  Each node has its own network
 interface and as such, each node&#8217;s bandwidth is independent of the other nodes&#8217;
 network utilization.  Therefore each node&#8217;s bandwidth is modeled as a network
 &#8220;link&#8221; which connects from that node to all other nodes.</p>
+<dl class="function">
+<dt id="analysis.main">
+<code class="descclassname">analysis.</code><code class="descname">main</code><span class="sig-paren">(</span><em>argv</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the main analysis of the profiles using the following steps:</p>
+<ul class="simple">
+<li>Parses the command line options according to the <a class="reference internal" href="#analysis.Options" title="analysis.Options"><code class="xref py py-class docutils literal"><span class="pre">Options</span></code></a> specification.</li>
+<li>Loads the specified network configuration</li>
+<li>Gathers all the profile file names (folder or cmd line)</li>
+<li>Parses the files in to separate profiles</li>
+<li>Calculates the hyperperiod of all the profiles</li>
+<li>Repeats the profile for the specified number of hyperperiods</li>
+<li>Analyzes the requested profiles</li>
+<li>(Optionally converts the profiles into Network-Calculus formalism)</li>
+<li>(If more than one hyper-period has been specified it determines system stability)</li>
+<li>(Optionally plots the bandwidths and data for the profiles)</li>
+</ul>
+</dd></dl>
+
 <dl class="class">
 <dt id="analysis.Options">
 <em class="property">class </em><code class="descclassname">analysis.</code><code class="descname">Options</code><a class="headerlink" href="#analysis.Options" title="Permalink to this definition">¶</a></dt>
@@ -272,11 +290,6 @@ network utilization.  Therefore each node&#8217;s bandwidth is modeled as a netw
 <dd></dd></dl>
 
 </dd></dl>
-
-<dl class="function">
-<dt id="analysis.main">
-<code class="descclassname">analysis.</code><code class="descname">main</code><span class="sig-paren">(</span><em>argv</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.main" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </div>
 

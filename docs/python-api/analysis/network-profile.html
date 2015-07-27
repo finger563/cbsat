@@ -333,24 +333,22 @@ and a list of entries of type <a class="reference internal" href="#networkProfil
 
 <dl class="method">
 <dt id="networkProfile.Profile.ParseFromFile">
-<code class="descname">ParseFromFile</code><span class="sig-paren">(</span><em>prof_fName</em>, <em>num_periods=1</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ParseFromFile" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ParseFromFile</code><span class="sig-paren">(</span><em>prof_fName</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ParseFromFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds the entries from a properly formatted CSV file.  
-The profile can be made to repeat for some number of periods.
 Internally calls <a class="reference internal" href="#networkProfile.Profile.ParseFromString" title="networkProfile.Profile.ParseFromString"><code class="xref py py-func docutils literal"><span class="pre">Profile.ParseFromString()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.ParseFromString">
-<code class="descname">ParseFromString</code><span class="sig-paren">(</span><em>prof_str</em>, <em>num_periods=1</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ParseFromString" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ParseFromString</code><span class="sig-paren">(</span><em>prof_str</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ParseFromString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds the entries from either a string (line list of csv&#8217;s formatted as per
-<a class="reference internal" href="#networkProfile.ProfileEntry.ParseFromLine" title="networkProfile.ProfileEntry.ParseFromLine"><code class="xref py py-func docutils literal"><span class="pre">ProfileEntry.ParseFromLine()</span></code></a>) The profile can be made to repeat for some
-number of periods.</p>
+<a class="reference internal" href="#networkProfile.ProfileEntry.ParseFromLine" title="networkProfile.ProfileEntry.ParseFromLine"><code class="xref py py-func docutils literal"><span class="pre">ProfileEntry.ParseFromLine()</span></code></a>).</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="networkProfile.Profile.RepeatProfile">
-<code class="descname">RepeatProfile</code><span class="sig-paren">(</span><em>num_periods</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.RepeatProfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copy the current profile entries over some number of periods.</p>
+<dt id="networkProfile.Profile.Repeat">
+<code class="descname">Repeat</code><span class="sig-paren">(</span><em>num_periods</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Repeat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy the current profile entries over some number of its periods.</p>
 </dd></dl>
 
 <dl class="method">
@@ -424,6 +422,10 @@ any possibly affected entries are properly updated.</p>
 from the profile.  The conversion is configurable based on time-window step-size
 and a filter function (e.g. min or max).  Passing <code class="xref py py-func docutils literal"><span class="pre">max()</span></code> will create an arrival
 curve, while passing <code class="xref py py-func docutils literal"><span class="pre">min()</span></code> will create a service curve.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires the profile to have been integrated</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -467,6 +469,10 @@ it follows the form:</p>
 </div>
 </li>
 </ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires that both profiles have been integrated</p>
+</div>
 </dd></dl>
 
 </dd></dl>

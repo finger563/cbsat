@@ -15,6 +15,125 @@ from networkProfile import *
 from networkConfig import *
 from plotting import *
 
+def main(argv):
+    """
+    Performs the main analysis of the profiles using the following steps:
+
+    * Parses the command line options according to the :class:`Options` specification.
+    * Loads the specified network configuration
+    * Gathers all the profile file names (folder or cmd line)
+    * Parses the files in to separate profiles
+    * Calculates the hyperperiod of all the profiles
+    * Repeats the profile for the specified number of hyperperiods
+    * Analyzes the requested profiles
+    * (Optionally converts the profiles into Network-Calculus formalism)
+    * (If more than one hyper-period has been specified it determines system stability)
+    * (Optionally plots the bandwidths and data for the profiles)
+    """
+    options = Options()
+    if options.parse_args(argv):
+        return -1
+
+    confName = options.network_configName
+    profDir = options.profile_folderName
+    req_fName = options.required_fileName
+    prov_fName = options.provided_fileName
+    num_periods = options.num_periods
+
+    nc_mode = options.nc_mode
+    nc_step_size = options.nc_step_size
+
+    plot_profiles = options.plot_profiles
+    plot_line_width = options.plot_line_width
+
+    # LOAD THE NETWORK CONFIG
+    config = Config()
+    if config.ParseFromFile( confName ) == -1:
+        return -1
+    print "Using network configuration defined in {}.".format(
+        confName)
+
+    # GET ALL PROFILE FILE NAMES
+    profiles = []
+    fNames = []
+    if profDir:
+        if os.path.isdir(profDir):
+            print "Analyzing profiles in {}".format( profDir )
+            fNames = glob.glob(profDir + os.sep + "*.csv")
+        else:
+            print "ERROR: cannot find {}".format(profDir)
+    else:
+        print "Analyzing required profile:\n\t{}\nagainst provided profile:\n\t{}".format(
+            req_fName, prov_fName)
+        fNames = [req_fName, prov_fName]
+
+    # PARSE THE PROFILES FROM THE REQUESTED FILES
+    for fName in fNames:
+        profiles.append(Profile())
+        if profiles[-1].ParseFromFile(fName) == -1:
+            print "ERROR: could not parse {}".format(fName)
+            return -1
+        print "Profile {} has a period of {} seconds".format(fName, profiles[-1].period)
+
+    # NEED TO CALCULATE HYPERPERIOD
+    hyperPeriod = 1
+    periods = [x.period for x in profiles]
+    for p in periods:
+        hyperPeriod = lcm(p,hyperPeriod)
+    print "Calculated hyperperiod for profiles as {} seconds".format(hyperPeriod)
+
+    # NEED TO REPEAT PROFILES FOR THE RIGHT NUMBER OF HYPERPERIODS
+    for prof in profiles:
+        np = hyperPeriod / prof.period
+        prof.Repeat(np * num_periods)
+
+    # NEED TO INTEGRATE THE PROFILES FOR ANALYSIS
+    for prof in profiles:
+        prof.Integrate()
+
+    # CONVERT PROFILES TO NETWORK CALCULUS IF REQUESTED
+    if options.nc_mode:
+        print "Performing NC-based analysis"
+        for prof in profiles:
+            if 'provided' in prof.kind:
+                prof.ConvertToNC( nc_step_size, lambda l: min(l) )
+            elif 'required' in prof.kind:
+                prof.ConvertToNC( nc_step_size, lambda l: max(l) )        
+
+    # NEED TO AGGREGATE ALL PROFILES TOGETHER
+
+    # BASED ON TYPE AND SOURCE (AND POSSIBLY DESTINATION?)
+
+    required = [x for x in profiles if 'required' in x.kind][0]
+    provided = [x for x in profiles if 'provided' in x.kind][0]
+    provided.Integrate()
+    required.Integrate()
+    output, maxBuffer, maxDelay = required.Convolve(provided)
+    remaining = copy.deepcopy(provided)
+    remaining.SubtractProfile(output)
+    remaining.kind = 'available'
+
+    print "\n[Time location, buffersize]:",[maxBuffer[0], maxBuffer[2]]
+    print "[Time location, delay]:",[maxDelay[0], maxDelay[2]]
+
+    # DETERMINE SYSTEM STABILITY IF WE HAVE MORE THAN ONE HYPERPERIOD TO ANALYZE
+    if num_periods > 1:
+        reqDataP1 = getDataAtTimeFromProfile( required.entries, hyperPeriod )
+        reqDataP2 = getDataAtTimeFromProfile( required.entries, 2*hyperPeriod )
+        outDataP1 = getDataAtTimeFromProfile( output.entries, hyperPeriod )
+        outDataP2 = getDataAtTimeFromProfile( output.entries, 2*hyperPeriod )
+        buff1 = reqDataP1 - outDataP1
+        buff2 = reqDataP2 - outDataP2
+        if buff2 > buff1:
+            print "\nWARNING: BUFFER UTILIZATION NOT CONSISTENT THROUGH ANALYZED PERIODS"
+            print "\t APPLICATION MAY HAVE UNBOUNDED BUFFER GROWTH ON NETWORK\n"
+
+    if plot_profiles == True:
+        profList = [required,provided,output,remaining]
+        plot_bandwidth_and_data( profList, maxDelay, maxBuffer, num_periods, plot_line_width)
+
+    return
+  
 class Options:
     """
 \t--help             (to show this help and exit)
@@ -76,93 +195,6 @@ class Options:
     def print_usage(self,name):
         print """Usage:\n{}{}""".format(name,self.__doc__)
 
-def main(argv):    
-    options = Options()
-    if options.parse_args(argv):
-        return -1
-
-    confName = options.network_configName
-    profDir = options.profile_folderName
-    req_fName = options.required_fileName
-    prov_fName = options.provided_fileName
-    num_periods = options.num_periods
-
-    nc_mode = options.nc_mode
-    nc_step_size = options.nc_step_size
-
-    plot_profiles = options.plot_profiles
-    plot_line_width = options.plot_line_width
-
-    print "Using network configuration defined in {}.".format(
-        confName)
-
-    config = Config()
-    if config.ParseFromFile( confName ) == -1:
-        return -1
-
-    profiles = []
-    fNames = []
-    if profDir:
-        if os.path.isdir(profDir):
-            print "Analyzing profiles in {}".format( profDir )
-            fNames = glob.glob(profDir + os.sep + "*.csv")
-        else:
-            print "ERROR: cannot find {}".format(profDir)
-    else:
-        print "Analyzing required profile:\n\t{}\nagainst provided profile:\n\t{}".format(
-            req_fName, prov_fName)
-        fNames = [req_fName, prov_fName]
-
-    for fName in fNames:
-        profiles.append(Profile())
-        if profiles[-1].ParseFromFile(
-                num_periods = num_periods,
-                prof_fName = fName) == -1:
-            print "ERROR: could not parse {}".format(fName)
-            return -1
-        print "Profile {} has a period of {} seconds".format(fName, profiles[-1].period)
-        profiles[-1].Integrate()
-
-    if options.nc_mode:
-        print "Performing NC-based analysis"
-        for prof in profiles:
-            if 'provided' in prof.kind:
-                prof.ConvertToNC( nc_step_size, lambda l: min(l) )
-            elif 'required' in prof.kind:
-                prof.ConvertToNC( nc_step_size, lambda l: max(l) )
-
-    # NEED TO CALCULATE HYPERPERIOD?
-    # NEED TO REPEAT PROFILES FOR THE RIGHT NUMBER OF PERIODS
-    # NEED TO AGGREGATE ALL PROFILES TOGETHER
-    # BASED ON TYPE AND SOURCE (AND POSSIBLY DESTINATION?)
-    required = [x for x in profiles if 'required' in x.kind][0]
-    provided = [x for x in profiles if 'provided' in x.kind][0]
-    output, maxBuffer, maxDelay = required.Convolve(provided)
-    remaining = copy.deepcopy(provided)
-    remaining.SubtractProfile(output)
-    remaining.kind = 'available'
-
-    print "\n[Time location, buffersize]:",[maxBuffer[0], maxBuffer[2]]
-    print "[Time location, delay]:",[maxDelay[0], maxDelay[2]]
-
-    if num_periods > 1:
-        reqDataP1 = getDataAtTimeFromProfile( required.entries, required.period )
-        reqDataP2 = getDataAtTimeFromProfile( required.entries, 2*required.period )
-        outDataP1 = getDataAtTimeFromProfile( output.entries, output.period )
-        outDataP2 = getDataAtTimeFromProfile( output.entries, 2*output.period )
-        buff1 = reqDataP1 - outDataP1
-        buff2 = reqDataP2 - outDataP2
-        if buff2 > buff1:
-            print "\nWARNING: BUFFER UTILIZATION NOT CONSISTENT THROUGH ANALYZED PERIODS"
-            print "\t APPLICATION MAY HAVE UNBOUNDED BUFFER GROWTH ON NETWORK\n"
-
-    if plot_profiles == True:
-        # SET UP THE BANDWIDTH VS TIME PLOT
-        profList = [required,provided,output,remaining]
-        plot_bandwidth_and_data( profList, maxDelay, maxBuffer, num_periods, plot_line_width)
-
-    return
-  
 if __name__ == "__main__":
     import sys
     main(sys.argv)
