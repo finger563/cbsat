@@ -83,7 +83,7 @@ def main(argv):
     periods = [x.period for x in profiles]
     for p in periods:
         hyperPeriod = lcm(p,hyperPeriod)
-    print "Calculated hyperperiod for profiles as {} seconds".format(hyperPeriod)
+    print "\nCalculated hyperperiod for profiles as {} seconds".format(hyperPeriod)
 
     # REPEAT PROFILES FOR THE RIGHT NUMBER OF HYPERPERIODS
     for prof in profiles:
@@ -92,16 +92,33 @@ def main(argv):
 
     # AGGREGATE ALL PROFILES TOGETHER
     # BASED ON TYPE AND SOURCE (AND POSSIBLY DESTINATION?)
-    sources = set([x.src_id for x in profiles])
-    nodes = {}
-    for src_id in sources:
-        nodes[src_id] = Node(src_id)
     for prof in profiles:
-        nodes[prof.src_id].AddProfile(prof)
+        config.nodes[prof.src_id].AddProfile(prof)
+
+    # NEED TO GO THROUGH FLOWS TO FIGURE OUT WHICH NODES ROUTE THE FLOWS USING THE CONFIG
+    for prof in profiles:
+        src = prof.src_id
+        dst = prof.dst_id
+        # IF THE FLOW NEEDS TO BE ROUTED
+        if dst not in config.topology.links[src]:
+            route = [x for x in config.routes if x[0] == src and x[-1] == dst][0]
+            # FOR EACH NODE IN THE ROUTE: COPY THE FLOW AND UPDATE ITS SRC AND DST AND ADD IT
+            for index, node_id in enumerate(route):
+                if index != 0 and index < route.Length() - 1:
+                    newProf = copy.deepcopy(prof)
+                    newProf.src_id = node_id
+                    newProf.dst_id = route[index+1]
+                    config.nodes[node_id].AddProfile(newProf)
+    # NEED TO ANALYZE THE TRANSIENT/INITIALIZATION OF THE SYSTEM
+    # ROTATE PROFILES BY DELAY AND AGGREGATE THEM AS THEY ARE ROUTED THROUGH THE SYSTEM
+    # COPY THE ROTATED PROFILES AND ZERO THEM OUT UNTIL THE DELAY TO GET THE TRANSIENT PROFILES
+    # INSERT THE TRANSIENT PROFILES AT THE FRONT OF THE ROTATED PROFILES
 
     # ANALYZE THE SYSTEM
-    for key,node in nodes.iteritems():
-        print "Analyzing profiles on node {}".format(key)
+    for key,node in config.nodes.iteritems():
+        if not node.HasProfiles():
+            continue
+        print "\nAnalyzing profiles on node {}".format(key)
         node.AggregateProfiles()
         provided = node.provided[0]
         required = node.required[0]
@@ -124,8 +141,13 @@ def main(argv):
         remaining.SubtractProfile(output)
         remaining.Kind('available')
 
-        print "\n[Time location, buffersize]:",[maxBuffer[0], maxBuffer[2]]
-        print "[Time location, delay]:",[maxDelay[0], maxDelay[2]]
+        node.output = output
+        node.remaining = remaining
+        node.buffer = maxBuffer
+        node.delay = maxDelay
+
+        print "\tMax buffer (length, time):",[maxBuffer[0], maxBuffer[2]]
+        print "\tMax delay (duration, time):",[maxDelay[0], maxDelay[2]]
 
         # DETERMINE SYSTEM STABILITY IF WE HAVE MORE THAN ONE HYPERPERIOD TO ANALYZE
         if num_periods > 1:
@@ -136,7 +158,7 @@ def main(argv):
             buff1 = reqDataP1 - outDataP1
             buff2 = reqDataP2 - outDataP2
             if buff2 > buff1:
-                print "\nWARNING: BUFFER UTILIZATION NOT CONSISTENT THROUGH ANALYZED PERIODS"
+                print "WARNING: BUFFER UTILIZATION NOT CONSISTENT THROUGH ANALYZED PERIODS"
                 print "\t APPLICATION MAY HAVE UNBOUNDED BUFFER GROWTH ON NETWORK\n"
 
         if plot_profiles == True:

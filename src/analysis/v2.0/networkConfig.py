@@ -19,7 +19,15 @@ class Node:
         self.required = [] #: all 'required' profiles whose source ID is this node
         self.provided = [] #: all 'provided' profiles whose source ID is this node
         self.output = None
+        self.remaining = None
+        self.buffer = []
+        self.delay = []
 
+    def HasProfiles(self):
+        if not self.required or not self.provided:
+            return False
+        return True
+        
     def AddProfile(self, prof):
         if prof.IsRequired():
             self.required.append(prof)
@@ -36,6 +44,8 @@ class Node:
         """
         Take all the required profiles for this node and sum them
         and take all the provided profiles for this node and sum them
+
+        After this function, the profiles will be a list of [ <transient>, <steady-state> ]
         """
         tmpProfile = self.required[0]
         for i in range(1,len(self.required)):
@@ -52,7 +62,7 @@ class Node:
         self.required = []
 
     def __repr__(self):
-        retStr = "{}".format(self.ID)
+        retStr = "Node( id = {} )".format(self.ID)
         return retStr
 
 class Route:
@@ -85,8 +95,14 @@ class Route:
         line = line.strip(self.header)
         node_id_list = map(int,line.split(','))
         for node_id in node_id_list:
-            self.AddDest( Node( node_id ) )
+            self.AddDest( node_id )
         return 0
+
+    def Length(self):
+        return len(self.path)
+
+    def __getitem__(self, index):
+        return self.path[index]
 
     def __repr__(self):
         retStr = "{}".format(self.path)
@@ -107,7 +123,7 @@ class Topology:
         """Handles parsing of a link from a line in the config file."""
         line = line.strip(self.header)
         node, node_list_str = line.split(':')
-        node = Node( int(node) )
+        node = int(node)
         node_list = map(int,node_list_str.split(','))
         self.links[node] = node_list
         return 0
@@ -127,10 +143,11 @@ class Config:
     multicast, etc.
     """
 
-    def __init__(self, nodes = 0, multicast = False, retransmit = False, routes = [], topology = Topology() ):
+    def __init__(self, num_nodes = 0, nodes = {}, multicast = False, retransmit = False, routes = [], topology = Topology() ):
         self.routes = routes
         self.topology = topology
         self.nodes = nodes
+        self.num_nodes = num_nodes
         self.multicast = multicast
         self.retransmit = retransmit
 
@@ -151,8 +168,8 @@ class Config:
             for line in header:
                 line.strip('#')
                 prop, value = line.split('=')
-                if "nodes" in prop:
-                    self.nodes = int(value)
+                if "num_nodes" in prop:
+                    self.num_nodes = int(value)
                 elif "multicast" in prop:
                     self.multicast = bool(value)
                 elif "retransmit" in prop:
@@ -193,15 +210,18 @@ class Config:
                     self.routes.append(route)
             elif Topology.header in line:
                 self.topology.ParseFromLine(line)
+        for key in self.topology.links:
+            self.nodes[key] = Node( _id = key )
         return 0
 
     def __repr__(self):
-        retStr = "Config:"
-        retStr+= "\nnodes: {}".format(self.nodes)
-        retStr+= "\nmulticast: {}".format(self.multicast)
-        retStr+= "\nretransmit: {}".format(self.retransmit)
-        retStr+= "\nTopology:\n\t{}".format(self.topology)
-        retStr+= "\nRoutes:\n\t{}".format(self.routes)
+        retStr = "Config:\n"
+        retStr+= "\tnum_nodes: {}\n".format(self.num_nodes)
+        retStr+= "\tmulticast: {}\n".format(self.multicast)
+        retStr+= "\tretransmit: {}\n".format(self.retransmit)
+        retStr+= "\tnodes:\n\t\t{}\n".format(self.nodes)
+        retStr+= "\tTopology:\n\t\t{}\n".format(self.topology)
+        retStr+= "\tRoutes:\n\t\t{}\n".format(self.routes)
         return retStr
 
 def main(argv):

@@ -1,4 +1,4 @@
-# nodes = 3
+# num_nodes = 3
 # multicast = false
 # retransmit = false
 topology: 1 : 2

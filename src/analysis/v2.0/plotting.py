@@ -90,7 +90,7 @@ def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_line_wid
     labelList.extend( ['Delay', 'Buffer'] )
     dashList.extend( [ [], [] ] )
     annotationList.append( [ "Delay = {} s".format(delay[2]), delay[0], delay[1] ] )
-    annotationList.append( [ "Buffer = {} B".format(buffer[2]), buffer[0], buffer[1] ] )
+    annotationList.append( [ "Buffer = {} b".format(buffer[2]), buffer[0], buffer[1] ] )
     plot2 = PlotOptions(
         profileList = profileList,
         labelList = labelList,

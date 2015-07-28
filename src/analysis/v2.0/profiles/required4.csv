@@ -1,7 +1,7 @@
 # period = 20
 # kind = required
-# source ID = 1
-# destination ID = 3
+# source ID = 3
+# destination ID = 2
 0,800000,0
 1,850000,0
 2,1024000,0

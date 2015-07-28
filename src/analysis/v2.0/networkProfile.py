@@ -214,6 +214,41 @@ class Profile:
             data += data
         self.RemoveDegenerates()
 
+    def ZeroBefore(self, t):
+        """Zeroes the entries in the profile before *t*"""
+        if t < 0: return
+        self.entries = [x for x in self.entries if x.end > t]
+        e = self.entries[0]
+        if e.start < t:  # need to split the first entry
+            e.start = t
+        e = ProfileEntry(kind = self.kind, start = 0, end = t)
+        self.entries.insert(0,e)
+
+    def ZeroAfter(self, t):
+        """Zeroes the entries in the profile after *t*"""
+        if t > self.entries[-1].end: return
+        end = self.entries[-1].end
+        self.entries = [x for x in self.entries if x.start < t]
+        e = self.entries[-1]
+        if e.end > t:  # need to split the last entry
+            e.end = t
+        e = ProfileEntry(kind = self.kind, start = t, end = end)
+        self.entries.append(e)
+
+    def Shift(self, t):
+        """
+        Shift the profile by some time *t*
+
+        .. note:: *t* must be greater than 0
+        """
+        if t < 0:
+            print "ERROR: shift time must be greater than 0"
+            return -1
+        for e in self.entries:
+            e.start += t
+            e.end += t
+        return 0
+
     def Rotate(self, t):
         """
         Rotates the profile circularly (based on period, through start time) by a time *t*.
