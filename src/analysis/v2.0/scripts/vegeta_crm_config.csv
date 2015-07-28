@@ -1,6 +1,0 @@
-% time (s), %bandwidth (bps), %latency (ms),eth0
-0,10000,0,eth0
-60,30000,50,eth0
-300,10000,100,eth0
-1800,50000,50,eth0
-3400,75000,75,eth0

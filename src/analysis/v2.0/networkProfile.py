@@ -246,6 +246,21 @@ class Profile:
             self.Integrate()
         return 0
 
+    def IsRequired(self):
+        if 'required' in self.kind:
+            return True
+        return False
+
+    def IsProvided(self):
+        if 'provided' in self.kind:
+            return True
+        return False
+
+    def IsKind(self, kind):
+        if kind in self.kind:
+            return True
+        return False
+    
     def Kind(self,kind):
         """Set the kind of the profile and all its entries."""
         self.kind = kind;

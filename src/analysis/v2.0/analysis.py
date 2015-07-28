@@ -63,8 +63,6 @@ def main(argv):
         else:
             print "ERROR: cannot find {}".format(profDir)
     else:
-        print "Analyzing required profile:\n\t{}\nagainst provided profile:\n\t{}".format(
-            req_fName, prov_fName)
         fNames = [req_fName, prov_fName]
 
     # PARSE THE PROFILES FROM THE REQUESTED FILES
@@ -75,62 +73,70 @@ def main(argv):
             return -1
         print "Profile {} has a period of {} seconds".format(fName, profiles[-1].period)
 
-    # NEED TO CALCULATE HYPERPERIOD
+    # CALCULATE HYPERPERIOD
     hyperPeriod = 1
     periods = [x.period for x in profiles]
     for p in periods:
         hyperPeriod = lcm(p,hyperPeriod)
     print "Calculated hyperperiod for profiles as {} seconds".format(hyperPeriod)
 
-    # NEED TO REPEAT PROFILES FOR THE RIGHT NUMBER OF HYPERPERIODS
+    # REPEAT PROFILES FOR THE RIGHT NUMBER OF HYPERPERIODS
     for prof in profiles:
         np = hyperPeriod / prof.period
         prof.Repeat(np * num_periods)
 
-    # NEED TO INTEGRATE THE PROFILES FOR ANALYSIS
-    for prof in profiles:
-        prof.Integrate()
-
-    # CONVERT PROFILES TO NETWORK CALCULUS IF REQUESTED
-    if options.nc_mode:
-        print "Performing NC-based analysis"
-        for prof in profiles:
-            if 'provided' in prof.kind:
-                prof.ConvertToNC( nc_step_size, lambda l: min(l) )
-            elif 'required' in prof.kind:
-                prof.ConvertToNC( nc_step_size, lambda l: max(l) )        
-
-    # NEED TO AGGREGATE ALL PROFILES TOGETHER
-
+    # AGGREGATE ALL PROFILES TOGETHER
     # BASED ON TYPE AND SOURCE (AND POSSIBLY DESTINATION?)
+    sources = set([x.src_id for x in profiles])
+    nodes = {}
+    for src_id in sources:
+        nodes[src_id] = Node(src_id)
+    for prof in profiles:
+        nodes[prof.src_id].AddProfile(prof)
 
-    required = [x for x in profiles if 'required' in x.kind][0]
-    provided = [x for x in profiles if 'provided' in x.kind][0]
-    provided.Integrate()
-    required.Integrate()
-    output, maxBuffer, maxDelay = required.Convolve(provided)
-    remaining = copy.deepcopy(provided)
-    remaining.SubtractProfile(output)
-    remaining.kind = 'available'
+    # ANALYZE THE SYSTEM
+    for key,node in nodes.iteritems():
+        print "Analyzing profiles on node {}".format(key)
+        node.AggregateProfiles()
+        provided = node.provided[0]
+        required = node.required[0]
 
-    print "\n[Time location, buffersize]:",[maxBuffer[0], maxBuffer[2]]
-    print "[Time location, delay]:",[maxDelay[0], maxDelay[2]]
+        # INTEGRATE THE PROFILES FOR ANALYSIS
+        provided.Integrate()
+        required.Integrate()
 
-    # DETERMINE SYSTEM STABILITY IF WE HAVE MORE THAN ONE HYPERPERIOD TO ANALYZE
-    if num_periods > 1:
-        reqDataP1 = getDataAtTimeFromProfile( required.entries, hyperPeriod )
-        reqDataP2 = getDataAtTimeFromProfile( required.entries, 2*hyperPeriod )
-        outDataP1 = getDataAtTimeFromProfile( output.entries, hyperPeriod )
-        outDataP2 = getDataAtTimeFromProfile( output.entries, 2*hyperPeriod )
-        buff1 = reqDataP1 - outDataP1
-        buff2 = reqDataP2 - outDataP2
-        if buff2 > buff1:
-            print "\nWARNING: BUFFER UTILIZATION NOT CONSISTENT THROUGH ANALYZED PERIODS"
-            print "\t APPLICATION MAY HAVE UNBOUNDED BUFFER GROWTH ON NETWORK\n"
+        # CONVERT PROFILES TO NETWORK CALCULUS IF REQUESTED
+        if options.nc_mode:
+            print "Performing NC-based analysis"
+            for prof in profiles:
+                if 'provided' in prof.kind:
+                    prof.ConvertToNC( nc_step_size, lambda l: min(l) )
+                elif 'required' in prof.kind:
+                    prof.ConvertToNC( nc_step_size, lambda l: max(l) )
+    
+        output, maxBuffer, maxDelay = required.Convolve(provided)
+        remaining = copy.deepcopy(provided)
+        remaining.SubtractProfile(output)
+        remaining.kind = 'available'
 
-    if plot_profiles == True:
-        profList = [required,provided,output,remaining]
-        plot_bandwidth_and_data( profList, maxDelay, maxBuffer, num_periods, plot_line_width)
+        print "\n[Time location, buffersize]:",[maxBuffer[0], maxBuffer[2]]
+        print "[Time location, delay]:",[maxDelay[0], maxDelay[2]]
+
+        # DETERMINE SYSTEM STABILITY IF WE HAVE MORE THAN ONE HYPERPERIOD TO ANALYZE
+        if num_periods > 1:
+            reqDataP1 = getDataAtTimeFromProfile( required.entries, hyperPeriod )
+            reqDataP2 = getDataAtTimeFromProfile( required.entries, 2*hyperPeriod )
+            outDataP1 = getDataAtTimeFromProfile( output.entries, hyperPeriod )
+            outDataP2 = getDataAtTimeFromProfile( output.entries, 2*hyperPeriod )
+            buff1 = reqDataP1 - outDataP1
+            buff2 = reqDataP2 - outDataP2
+            if buff2 > buff1:
+                print "\nWARNING: BUFFER UTILIZATION NOT CONSISTENT THROUGH ANALYZED PERIODS"
+                print "\t APPLICATION MAY HAVE UNBOUNDED BUFFER GROWTH ON NETWORK\n"
+
+        if plot_profiles == True:
+            profList = [required,provided,output,remaining]
+            plot_bandwidth_and_data( profList, maxDelay, maxBuffer, num_periods, plot_line_width)
 
     return
   

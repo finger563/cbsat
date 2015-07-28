@@ -10,10 +10,42 @@ class Node:
     This includes:
     
     * ID
+    * required profiles, i.e. all profiles whose kind is 'required' and whose source ID is this node
+    * provided profiles, i.e. all profiles whose kind is 'provided' and whose source ID is this node
     """
 
     def __init__(self, _id):
-        self.ID = _id
+        self.ID = _id      #: the ID of this node
+        self.required = [] #: all 'required' profiles whose source ID is this node
+        self.provided = [] #: all 'provided' profiles whose source ID is this node
+        self.output = None
+
+    def AddProfile(self, prof):
+        if prof.IsRequired():
+            self.required.append(prof)
+        elif prof.IsProvided():
+            self.provided.append(prof)
+
+    def AddRequiredProfile(self, prof):
+        self.required.append(prof)
+
+    def AddRequiredProfile(self, prof):
+        self.provided.append(prof)
+
+    def AggregateProfiles(self):
+        tmpProfile = self.required[0]
+        for i in range(2,len(self.required)):
+            tmpProfile.AddProfile(self.required[i])
+        self.required = [tmpProfile]
+
+        tmpProfile = self.provided[0]
+        for i in range(2,len(self.provided)):
+            tmpProfile.AddProfile(self.provided[i])
+        self.provided = [tmpProfile]
+
+    def ClearProfiles(self):
+        self.provided = []
+        self.required = []
 
     def __repr__(self):
         retStr = "{}".format(self.ID)
@@ -29,7 +61,7 @@ class Route:
     header = "route:" #: line header specifying a route in the config file
 
     def __init__(self, path = []):
-        self.path = path
+        self.path = path #: list of node IDs with a source, intermediate nodes, and a destination
 
     def AddDest(self, dest):
         """Append a node onto the end of the route."""
