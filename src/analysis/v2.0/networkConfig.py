@@ -34,7 +34,7 @@ class Node:
 
     def AggregateProfiles(self):
         tmpProfile = self.required[0]
-        for i in range(2,len(self.required)):
+        for i in range(1,len(self.required)):
             tmpProfile.AddProfile(self.required[i])
         self.required = [tmpProfile]
 

@@ -192,7 +192,7 @@ class Profile:
             for i in range(0,len(self.entries)-1):
                 self.entries[i].end = self.entries[i+1].start
             self.entries[-1].end = self.period
-            self.entries = [x for x in self.entries if x.start != x.end]
+            self.RemoveDegenerates()
             if self.entries[0].start > 0:
                 entry = ProfileEntry()
                 entry.start = 0
@@ -213,7 +213,7 @@ class Profile:
                 e.end += self.period*i
                 self.entries.append(e)
             data += data
-        self.entries = sorted([x for x in self.entries if x.start != x.end])
+        self.RemoveDegenerates()
 
     def Rotate(self, t):
         """
@@ -226,7 +226,7 @@ class Profile:
         if t < 0 or t > self.period:
             print "ERROR: rotate time must be between 0 and this profile's period, {}".format(self.period)
             return -1
-        self.entries = sorted([x for x in self.entries if x.start != x.end])
+        self.RemoveDegenerates()
         if t > 0 and t < self.period:
             newEntries = []
             for e in self.entries:
@@ -242,7 +242,7 @@ class Profile:
                     e.end = self.period
                     newEntries.append(entry)
             self.entries.extend(newEntries)
-            self.entries = sorted(self.entries)
+            self.RemoveDegenerates()
             self.Integrate()
         return 0
 
@@ -281,15 +281,21 @@ class Profile:
             e.UpdateSlope(prevData)
             prevData = e.data
 
+    def RemoveDegenerates(self):
+        """Remove degenerate entries whose start = end"""
+        self.entries = sorted([x for x in self.entries if x.start != x.end])
+
     def AddProfile(self,profile):
         """Compose this profile with an input profile by adding their slopes together."""
         for e in profile.entries:
             self.AddEntry(copy.copy(e),False)
+        self.RemoveDegenerates()
 
     def SubtractProfile(self,profile):
         """Compose this profile with an input profile by subtracting the input profile's slopes."""
         for e in profile.entries:
             self.SubtractEntry(e)
+        self.RemoveDegenerates()
 
     def SubtractEntry(self, entry, integrate = True):
         """
@@ -402,6 +408,7 @@ class Profile:
             prev_data = entry.data
             new_entries.append(entry)
         self.entries = new_entries
+        self.RemoveDegenerates()
 
     def MakeGraphPointsData(self):
         """Turn the entries' data points into plottable x,y series."""
