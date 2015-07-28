@@ -158,7 +158,7 @@
   <div class="section" id="module-analysis">
 <span id="analysis"></span><h1>Analysis<a class="headerlink" href="#module-analysis" title="Permalink to this headline">¶</a></h1>
 <p>This program is designed to do admissibilty tests for admission of an application
-or set of applications to the F6 satellite cluster.  Each application may be 
+or set of applications to the system.  Each application may be 
 split accross multiple nodes of the cluster.  Each node has its own network
 interface and as such, each node&#8217;s bandwidth is independent of the other nodes&#8217;
 network utilization.  Therefore each node&#8217;s bandwidth is modeled as a network
@@ -174,7 +174,7 @@ network utilization.  Therefore each node&#8217;s bandwidth is modeled as a netw
 <li>Parses the files in to separate profiles</li>
 <li>Calculates the hyperperiod of all the profiles</li>
 <li>Repeats the profile for the specified number of hyperperiods</li>
-<li>Analyzes the requested profiles</li>
+<li>Analyzes the requested profiles (aggregating them if necessary)</li>
 <li>(Optionally converts the profiles into Network-Calculus formalism)</li>
 <li>(If more than one hyper-period has been specified it determines system stability)</li>
 <li>(Optionally plots the bandwidths and data for the profiles)</li>

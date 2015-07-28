@@ -159,7 +159,7 @@
 <span id="plotting"></span><h1>Plotting<a class="headerlink" href="#module-plotting" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="plotting.PlotOptions">
-<em class="property">class </em><code class="descclassname">plotting.</code><code class="descname">PlotOptions</code><span class="sig-paren">(</span><em>profileList</em>, <em>labelList</em>, <em>dashList</em>, <em>line_width</em>, <em>title</em>, <em>xlabel</em>, <em>ylabel</em>, <em>legend_loc</em><span class="sig-paren">)</span><a class="headerlink" href="#plotting.PlotOptions" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">plotting.</code><code class="descname">PlotOptions</code><span class="sig-paren">(</span><em>profileList</em>, <em>labelList</em>, <em>dashList</em>, <em>line_width</em>, <em>annotationList</em>, <em>title</em>, <em>xlabel</em>, <em>ylabel</em>, <em>legend_loc</em><span class="sig-paren">)</span><a class="headerlink" href="#plotting.PlotOptions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Options for setting up a plot in a figure.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -169,6 +169,7 @@
 <li><strong>profileList</strong> (<em>list</em>) &#8211; A list of [x,y] data series (profiles) to be plotted together</li>
 <li><strong>labelList</strong> (<em>list</em>) &#8211; A list of strings which label the profiles</li>
 <li><strong>dashList</strong> (<em>list</em>) &#8211; A list of integer lists which specify the dash properties for each profile</li>
+<li><strong>annotationList</strong> (<em>list</em>) &#8211; A list of annotations to be added to the plot</li>
 <li><strong>line_width</strong> (<em>int</em>) &#8211; The thickness of the lines on the plot</li>
 <li><strong>title</strong> (<em>string</em>) &#8211; The title to be given to the figure</li>
 <li><strong>xlabel</strong> (<em>string</em>) &#8211; The label for the x-axis</li>
@@ -210,6 +211,25 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pOptionsList</strong> (<em>list</em>) &#8211; A list of <a class="reference internal" href="#plotting.PlotOptions" title="plotting.PlotOptions"><code class="xref py py-class docutils literal"><span class="pre">PlotOptions</span></code></a> describing the figures to be drawn</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="plotting.clearAnnotations">
+<code class="descclassname">plotting.</code><code class="descname">clearAnnotations</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plotting.clearAnnotations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="plotting.addAnnotation">
+<code class="descclassname">plotting.</code><code class="descname">addAnnotation</code><span class="sig-paren">(</span><em>annotation</em><span class="sig-paren">)</span><a class="headerlink" href="#plotting.addAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an annotation to the currently active figure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>list annotation</strong> (<em>in</em>) &#8211; a <code class="xref py py-func docutils literal"><span class="pre">list()</span></code> of the form [ &lt;string&gt;, &lt;x position&gt;, &lt;y position&gt; ]</td>
 </tr>
 </tbody>
 </table>

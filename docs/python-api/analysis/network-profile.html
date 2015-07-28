@@ -403,6 +403,48 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 </dd></dl>
 
 <dl class="method">
+<dt id="networkProfile.Profile.GetIndexContainingTime">
+<code class="descname">GetIndexContainingTime</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.GetIndexContainingTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the index of a <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code></a> from entries which contains time <em>t</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<em>double</em>) &#8211; time value for indexing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.GetDataAtTime">
+<code class="descname">GetDataAtTime</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.GetDataAtTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the data at the given time <em>t</em> from the profile</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<em>double</em>) &#8211; time value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.GetTimesAtData">
+<code class="descname">GetTimesAtData</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.GetTimesAtData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of times at which the profile matches the data value <em>d</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>d</strong> (<em>double</em>) &#8211; data value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="networkProfile.Profile.RemoveDegenerates">
 <code class="descname">RemoveDegenerates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.RemoveDegenerates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove degenerate entries whose start = end</p>
@@ -422,7 +464,7 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 
 <dl class="method">
 <dt id="networkProfile.Profile.SubtractEntry">
-<code class="descname">SubtractEntry</code><span class="sig-paren">(</span><em>entry</em>, <em>integrate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.SubtractEntry" title="Permalink to this definition">¶</a></dt>
+<code class="descname">SubtractEntry</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.SubtractEntry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Subtract a single entry (based on its bandwidth) from the profile.
 This entry may come from anywhere, so we must take care to ensure that 
 any possibly affected entries are properly updated.</p>
@@ -430,7 +472,7 @@ any possibly affected entries are properly updated.</p>
 
 <dl class="method">
 <dt id="networkProfile.Profile.AddEntry">
-<code class="descname">AddEntry</code><span class="sig-paren">(</span><em>entry</em>, <em>integrate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.AddEntry" title="Permalink to this definition">¶</a></dt>
+<code class="descname">AddEntry</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.AddEntry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a single entry (based on its bandwidth) to the profile.
 This entry may come from anywhere so we must take care to ensure that
 any possibly affected entries are properly updated.</p>
@@ -459,6 +501,27 @@ curve, while passing <code class="xref py py-func docutils literal"><span class=
 <dt id="networkProfile.Profile.MakeGraphPointsSlope">
 <code class="descname">MakeGraphPointsSlope</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.MakeGraphPointsSlope" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turn the entries&#8217; slopes into plottable x,y series.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.CalcDelay">
+<code class="descname">CalcDelay</code><span class="sig-paren">(</span><em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.CalcDelay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the maximum horizontal distance between this profile and the input profile.  Return it as a form:</p>
+<div class="highlight-python"><div class="highlight"><pre>[ &lt;time at the start of the delay&gt;, &lt;data value which experiences the delay&gt;, &lt;length of delay&gt; ]
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> (<em>in</em>) &#8211; a <code class="xref py py-func docutils literal"><span class="pre">list()</span></code> of <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code></a> objects describing the output profile</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Requires that both profiles have been integrated</p>
+</div>
 </dd></dl>
 
 <dl class="method">
