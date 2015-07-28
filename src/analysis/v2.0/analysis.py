@@ -102,26 +102,30 @@ def main(argv):
         # IF THE FLOW NEEDS TO BE ROUTED
         if dst not in config.topology.links[src]:
             route = [x for x in config.routes if x[0] == src and x[-1] == dst][0]
+            # NEED TO ANALYZE THE TRANSIENT/INITIALIZATION OF THE SYSTEM
+
             # FOR EACH NODE IN THE ROUTE: COPY THE FLOW AND UPDATE ITS SRC AND DST AND ADD IT
+            # THIS SHOULD ACTUALLY BE THE OUTPUT PROFILE FROM THE PREVIOUS NODE IN THE ROUTE
+            # CONVOLVED WITH THE DELAY PROFILE OF THE LINK ITSELF
+            # THIS IS A HARDER PROBLEM THAN ORIGINALLY THOUGHT!
+
+            # ROTATE PROFILES BY DELAY AND AGGREGATE THEM AS THEY ARE ROUTED THROUGH THE SYSTEM
+            # COPY THE ROTATED PROFILES AND ZERO THEM UNTIL THE DELAY TO GET THE TRANSIENT PROFILES
+            # INSERT THE TRANSIENT PROFILES AT THE FRONT OF THE ROTATED PROFILES
             for index, node_id in enumerate(route):
                 if index != 0 and index < route.Length() - 1:
                     newProf = copy.deepcopy(prof)
                     newProf.src_id = node_id
                     newProf.dst_id = route[index+1]
                     config.nodes[node_id].AddProfile(newProf)
-    # NEED TO ANALYZE THE TRANSIENT/INITIALIZATION OF THE SYSTEM
-    # ROTATE PROFILES BY DELAY AND AGGREGATE THEM AS THEY ARE ROUTED THROUGH THE SYSTEM
-    # COPY THE ROTATED PROFILES AND ZERO THEM OUT UNTIL THE DELAY TO GET THE TRANSIENT PROFILES
-    # INSERT THE TRANSIENT PROFILES AT THE FRONT OF THE ROTATED PROFILES
 
     # ANALYZE THE SYSTEM
     for key,node in config.nodes.iteritems():
         if not node.HasProfiles():
             continue
         print "\nAnalyzing profiles on node {}".format(key)
-        node.AggregateProfiles()
-        provided = node.provided[0]
-        required = node.required[0]
+        provided = node.provided
+        required = node.required
 
         # INTEGRATE THE PROFILES FOR ANALYSIS
         provided.Integrate()

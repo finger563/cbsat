@@ -12,16 +12,20 @@ class Node:
     * ID
     * required profiles, i.e. all profiles whose kind is 'required' and whose source ID is this node
     * provided profiles, i.e. all profiles whose kind is 'provided' and whose source ID is this node
+    * the output profile for the node
+    * the remaining service profile for the node
+    * the required buffer space for this node
+    * the buffering delay experienced by traffic on this node
     """
 
     def __init__(self, _id):
-        self.ID = _id      #: the ID of this node
-        self.required = [] #: all 'required' profiles whose source ID is this node
-        self.provided = [] #: all 'provided' profiles whose source ID is this node
-        self.output = None
-        self.remaining = None
-        self.buffer = []
-        self.delay = []
+        self.ID = _id        #: the ID of this node
+        self.required = None #: aggregate of all 'required' profiles whose source ID is this node
+        self.provided = None #: aggregate of all 'provided' profiles whose source ID is this node
+        self.output = None   #: output profile from this node
+        self.remaining = None#: remaining service this node can provide
+        self.buffer = []     #: buffer required for the node
+        self.delay = []      #: delay incurred by traffic on this node
 
     def HasProfiles(self):
         if not self.required or not self.provided:
@@ -30,15 +34,21 @@ class Node:
         
     def AddProfile(self, prof):
         if prof.IsRequired():
-            self.required.append(prof)
+            self.AddRequiredProfile(prof)
         elif prof.IsProvided():
-            self.provided.append(prof)
+            self.AddProvidedProfile(prof)
+
+    def AddProvidedProfile(self, prof):
+        if not self.provided:
+            self.provided = prof
+        else:
+            self.provided.AddProfile(prof)
 
     def AddRequiredProfile(self, prof):
-        self.required.append(prof)
-
-    def AddRequiredProfile(self, prof):
-        self.provided.append(prof)
+        if not self.required:
+            self.required = prof
+        else:
+            self.required.AddProfile(prof)
 
     def AggregateProfiles(self):
         """
