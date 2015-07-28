@@ -298,7 +298,7 @@ class Profile:
         :param double t: time value 
         """
         i = self.GetIndexContainingTime(t)
-        return p[i].GetDataAtTime(t)
+        return self.entries[i].GetDataAtTime(t)
 
     def GetTimesAtData(self, d):
         """
