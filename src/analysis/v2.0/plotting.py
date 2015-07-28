@@ -1,7 +1,9 @@
-from utils import *
+from utils import makeHLine, makeVLine
+
 havePLT = False
 try:
     import matplotlib.pyplot as plt
+    from matplotlib.text import OffsetFrom
     havePLT=True
 except ImportError:
     print "Package python-matplotlib not found, plotting disabled."
@@ -15,6 +17,7 @@ class PlotOptions:
                  labelList,
                  dashList,
                  line_width,
+                 annotationList,
                  title,
                  xlabel,
                  ylabel,
@@ -23,6 +26,7 @@ class PlotOptions:
         :param list profileList: A list of [x,y] data series (profiles) to be plotted together
         :param list labelList: A list of strings which label the profiles
         :param list dashList: A list of integer lists which specify the dash properties for each profile
+        :param list annotationList: A list of annotations to be added to the plot
         :param int line_width: The thickness of the lines on the plot
         :param string title: The title to be given to the figure
         :param string xlabel: The label for the x-axis
@@ -31,8 +35,9 @@ class PlotOptions:
         """
         self.profileList = profileList
         self.labelList = labelList
-        self.line_width = line_width
         self.dashList = dashList
+        self.annotationList = annotationList
+        self.line_width = line_width
         self.title = title
         self.xlabel = xlabel
         self.ylabel = ylabel
@@ -50,17 +55,20 @@ def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_line_wid
     profileList = []
     labelList = []
     dashList = []
+    annotationList = []
     dashBase = 4
     for p in profList:
         profileList.append(p.MakeGraphPointsSlope())
         labelList.append('{} bandwidth'.format(p.kind))
         dashList.append([dashBase,dashBase/2])
+        annotationList.append([])
         dashBase += 2
     plot1 = PlotOptions(
         profileList = profileList,
         labelList = labelList,
         dashList = dashList,
         line_width = plot_line_width,
+        annotationList = annotationList,
         title = "Network Bandwidth vs. Time over {} period(s)".format(num_periods),
         ylabel = "Bandwidth (bps)",
         xlabel = "Time (s)",
@@ -70,20 +78,25 @@ def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_line_wid
     profileList = []
     labelList = []
     dashList = []
+    annotationList = []
     dashBase = 4
     for p in profList:
         profileList.append(p.MakeGraphPointsData())
         labelList.append('{}[t]: {} data'.format(p.kind[0], p.kind))
         dashList.append([dashBase,dashBase/2])
+        annotationList.append([])
         dashBase += 2
     profileList.extend( [makeHLine(delay), makeVLine(buffer)] )
     labelList.extend( ['Delay', 'Buffer'] )
     dashList.extend( [ [], [] ] )
+    annotationList.append( [ "Delay = {} s".format(delay[2]), delay[0], delay[1] ] )
+    annotationList.append( [ "Buffer = {} B".format(buffer[2]), buffer[0], buffer[1] ] )
     plot2 = PlotOptions(
         profileList = profileList,
         labelList = labelList,
         dashList = dashList,
         line_width = plot_line_width,
+        annotationList = annotationList,
         title = "Network Traffic vs. Time over {} period(s)".format(num_periods),
         ylabel = "Data (bits)",
         xlabel = "Time (s)",
@@ -100,6 +113,7 @@ def makeGraphs(pOptionsList):
     """
     figNum = 0
     for pOpt in pOptionsList:
+        clearAnnotations()
         plt.figure(figNum)
         plt.hold(True)
         for i in range(0,len(pOpt.profileList)):
@@ -107,12 +121,41 @@ def makeGraphs(pOptionsList):
                               label = r"{}".format(pOpt.labelList[i]),
                               linewidth = pOpt.line_width )
             line.set_dashes( pOpt.dashList[i] )
+            if pOpt.annotationList[i]: addAnnotation(pOpt.annotationList[i])
         setFigureOpts( title = pOpt.title,
                        ylabel = pOpt.ylabel,
                        xlabel = pOpt.xlabel,
                        legend_loc = pOpt.legend_loc )
         figNum += 1
     plt.show()
+
+annotations = []
+def clearAnnotations():
+    annotations = []
+
+def addAnnotation(annotation):
+    """
+    Adds an annotation to the currently active figure.
+
+    :param in list annotation: a :func:`list` of the form [ <string>, <x position>, <y position> ]
+    """
+    xy = (annotation[1],annotation[2])
+    xytext = (xy[0] + 1, xy[1] + 1)
+    frame1 = plt.gca()
+    offset_from = "data"
+    if annotations:
+        xytext = (0,-10)
+        offset_from = OffsetFrom(annotations[-1], (0.5, 0))
+    ann = frame1.annotate(annotation[0],
+                          xy=xy, xycoords='data',
+                          xytext=xytext, textcoords=offset_from,
+                          size=10, va="center", ha="center",
+                          bbox=dict(boxstyle="round4", fc="w"),
+                          arrowprops=dict(arrowstyle="-|>",
+                                          connectionstyle="arc3,rad=-0.2",
+                                          fc="w"), 
+                      )
+    annotations.append(ann)
     
 def setFigureOpts(title, ylabel, xlabel, legend_loc):
     """

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 """
 This program is designed to do admissibilty tests for admission of an application
-or set of applications to the F6 satellite cluster.  Each application may be 
+or set of applications to the system.  Each application may be 
 split accross multiple nodes of the cluster.  Each node has its own network
 interface and as such, each node's bandwidth is independent of the other nodes'
 network utilization.  Therefore each node's bandwidth is modeled as a network
@@ -11,9 +11,10 @@ network utilization.  Therefore each node's bandwidth is modeled as a network
 # QoS files have 4 columns: time (s), BW(bps), latency (ms), Network Link (id #)
 import copy, glob, os
 from collections import OrderedDict
-from networkProfile import *
-from networkConfig import *
-from plotting import *
+from networkProfile import Profile
+from networkConfig import Node, Config
+from plotting import plot_bandwidth_and_data, havePLT
+from utils import lcm
 
 def main(argv):
     """
@@ -25,7 +26,7 @@ def main(argv):
     * Parses the files in to separate profiles
     * Calculates the hyperperiod of all the profiles
     * Repeats the profile for the specified number of hyperperiods
-    * Analyzes the requested profiles
+    * Analyzes the requested profiles (aggregating them if necessary)
     * (Optionally converts the profiles into Network-Calculus formalism)
     * (If more than one hyper-period has been specified it determines system stability)
     * (Optionally plots the bandwidths and data for the profiles)
