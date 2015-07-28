@@ -34,8 +34,8 @@
   
     <link rel="top" title="CBSAT 0.2.0 documentation" href="../../index.html"/>
         <link rel="up" title="Analysis API" href="../../analysis-api.html"/>
-        <link rel="next" title="Generate TDMA" href="generate-tdma.html"/>
-        <link rel="prev" title="Utils" href="utils.html"/> 
+        <link rel="next" title="Network Profile" href="network-profile.html"/>
+        <link rel="prev" title="Analysis API" href="../../analysis-api.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -96,11 +96,11 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../analysis-api.html">Analysis API</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="network-profile.html">Network Profile</a></li>
 <li class="toctree-l2"><a class="reference internal" href="network-config.html">Network Config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils.html">Utils</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generate-tdma.html">Generate TDMA</a></li>
 </ul>
 </li>
@@ -157,12 +157,16 @@
             
   <div class="section" id="module-analysis">
 <span id="analysis"></span><h1>Analysis<a class="headerlink" href="#module-analysis" title="Permalink to this headline">¶</a></h1>
-<p>This program is designed to do admissibilty tests for admission of an application
-or set of applications to the system.  Each application may be 
-split accross multiple nodes of the cluster.  Each node has its own network
-interface and as such, each node&#8217;s bandwidth is independent of the other nodes&#8217;
-network utilization.  Therefore each node&#8217;s bandwidth is modeled as a network
-&#8220;link&#8221; which connects from that node to all other nodes.</p>
+<p>This program is designed to analyze network performance of distributed applications
+in a networked system.  Its analysis techniques are based on Network Calculus
+and provide deterministic analysis of networks and network applications.  By analyzing
+the Quality of Service (QoS) that the system network provides to the applications and users,
+we can determine the buffer space required for the applications to communicate losslessly
+as well as the buffering delay experienced by the network traffic.</p>
+<p>This program in particular implements these calculations and is able to load, parse, and
+analyze network profiles and configuration files describing the system, the network flows,
+and the time-dependent traffic generation or service profiles associated with the applications
+or the system, respectively.</p>
 <dl class="function">
 <dt id="analysis.main">
 <code class="descclassname">analysis.</code><code class="descname">main</code><span class="sig-paren">(</span><em>argv</em><span class="sig-paren">)</span><a class="headerlink" href="#analysis.main" title="Permalink to this definition">¶</a></dt>
@@ -299,10 +303,10 @@ network utilization.  Therefore each node&#8217;s bandwidth is modeled as a netw
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="generate-tdma.html" class="btn btn-neutral float-right" title="Generate TDMA" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="network-profile.html" class="btn btn-neutral float-right" title="Network Profile" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="utils.html" class="btn btn-neutral" title="Utils" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../../analysis-api.html" class="btn btn-neutral" title="Analysis API" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

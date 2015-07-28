@@ -1,14 +1,18 @@
 #!/usr/bin/python
 """
-This program is designed to do admissibilty tests for admission of an application
-or set of applications to the system.  Each application may be 
-split accross multiple nodes of the cluster.  Each node has its own network
-interface and as such, each node's bandwidth is independent of the other nodes'
-network utilization.  Therefore each node's bandwidth is modeled as a network
-"link" which connects from that node to all other nodes.  
+This program is designed to analyze network performance of distributed applications
+in a networked system.  Its analysis techniques are based on Network Calculus
+and provide deterministic analysis of networks and network applications.  By analyzing
+the Quality of Service (QoS) that the system network provides to the applications and users,
+we can determine the buffer space required for the applications to communicate losslessly
+as well as the buffering delay experienced by the network traffic.
+
+This program in particular implements these calculations and is able to load, parse, and
+analyze network profiles and configuration files describing the system, the network flows,
+and the time-dependent traffic generation or service profiles associated with the applications
+or the system, respectively.
 """ 
 
-# QoS files have 4 columns: time (s), BW(bps), latency (ms), Network Link (id #)
 import copy, glob, os
 from collections import OrderedDict
 from networkProfile import Profile
