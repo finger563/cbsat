@@ -114,15 +114,15 @@ def main(argv):
         if options.nc_mode:
             print "Performing NC-based analysis"
             for prof in profiles:
-                if 'provided' in prof.kind:
+                if prof.IsProvided():
                     prof.ConvertToNC( nc_step_size, lambda l: min(l) )
-                elif 'required' in prof.kind:
+                elif prof.IsRequired():
                     prof.ConvertToNC( nc_step_size, lambda l: max(l) )
     
         output, maxBuffer, maxDelay = required.Convolve(provided)
         remaining = copy.deepcopy(provided)
         remaining.SubtractProfile(output)
-        remaining.kind = 'available'
+        remaining.Kind('available')
 
         print "\n[Time location, buffersize]:",[maxBuffer[0], maxBuffer[2]]
         print "[Time location, delay]:",[maxDelay[0], maxDelay[2]]
