@@ -468,8 +468,8 @@ class Profile:
             extremeData = -filterFunc(data_list)
             t = tw
             while t <= self.entries[-1].end:
-                startData = getDataAtTimeFromProfile(self.entries,t-tw)
-                endData = getDataAtTimeFromProfile(self.entries,t)
+                startData = self.GetDataAtTime(t-tw)
+                endData = self.GetDataAtTime(t)
                 diff = endData - startData
                 extremeData = filterFunc([diff,extremeData])
                 t += step
