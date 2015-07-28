@@ -129,10 +129,10 @@ def main(argv):
 
         # DETERMINE SYSTEM STABILITY IF WE HAVE MORE THAN ONE HYPERPERIOD TO ANALYZE
         if num_periods > 1:
-            reqDataP1 = getDataAtTimeFromProfile( required.entries, hyperPeriod )
-            reqDataP2 = getDataAtTimeFromProfile( required.entries, 2*hyperPeriod )
-            outDataP1 = getDataAtTimeFromProfile( output.entries, hyperPeriod )
-            outDataP2 = getDataAtTimeFromProfile( output.entries, 2*hyperPeriod )
+            reqDataP1 = required.GetDataAtTime( hyperPeriod )
+            reqDataP2 = required.GetDataAtTime( 2*hyperPeriod )
+            outDataP1 = output.GetDataAtTime( hyperPeriod )
+            outDataP2 = output.GetDataAtTime( 2*hyperPeriod )
             buff1 = reqDataP1 - outDataP1
             buff2 = reqDataP2 - outDataP2
             if buff2 > buff1:
