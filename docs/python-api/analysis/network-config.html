@@ -187,6 +187,11 @@ This includes:</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="networkConfig.Node.HasProfiles">
+<code class="descname">HasProfiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node.HasProfiles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="networkConfig.Node.AddProfile">
 <code class="descname">AddProfile</code><span class="sig-paren">(</span><em>prof</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node.AddProfile" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -201,6 +206,7 @@ This includes:</p>
 <code class="descname">AggregateProfiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node.AggregateProfiles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take all the required profiles for this node and sum them
 and take all the provided profiles for this node and sum them</p>
+<p>After this function, the profiles will be a list of [ &lt;transient&gt;, &lt;steady-state&gt; ]</p>
 </dd></dl>
 
 <dl class="method">
@@ -252,6 +258,11 @@ front of the list and the destination node at the end of the list.</p>
 <dd><p>Handles parsing of a route path from a line in the config file.</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="networkConfig.Route.Length">
+<code class="descname">Length</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Route.Length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -275,7 +286,7 @@ This is specified as a dictionary of node : list of nodes pairs.</p>
 
 <dl class="class">
 <dt id="networkConfig.Config">
-<em class="property">class </em><code class="descclassname">networkConfig.</code><code class="descname">Config</code><span class="sig-paren">(</span><em>nodes=0</em>, <em>multicast=False</em>, <em>retransmit=False</em>, <em>routes=[]</em>, <em>topology={}</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Config" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">networkConfig.</code><code class="descname">Config</code><span class="sig-paren">(</span><em>num_nodes=0</em>, <em>nodes={}</em>, <em>multicast=False</em>, <em>retransmit=False</em>, <em>routes=[]</em>, <em>topology={}</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contains the routing and topology information
 to fully describe the system&#8217;s network and provide
 a mapping between application data flows (logical)

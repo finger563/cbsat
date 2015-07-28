@@ -18,7 +18,7 @@ from collections import OrderedDict
 from networkProfile import Profile
 from networkConfig import Node, Config
 from plotting import plot_bandwidth_and_data, havePLT
-from utils import lcm
+from utils import lcm, bcolors
 
 def main(argv):
     """
@@ -146,8 +146,10 @@ def main(argv):
         node.buffer = maxBuffer
         node.delay = maxDelay
 
-        print "\tMax buffer (length, time):",[maxBuffer[0], maxBuffer[2]]
-        print "\tMax delay (duration, time):",[maxDelay[0], maxDelay[2]]
+        print bcolors.OKBLUE +\
+            "\tMax buffer (length, time): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
+        print "\tMax delay (duration, time): [{}, {}]".format(maxDelay[0], maxDelay[2]) +\
+            bcolors.ENDC
 
         # DETERMINE SYSTEM STABILITY IF WE HAVE MORE THAN ONE HYPERPERIOD TO ANALYZE
         if num_periods > 1:
@@ -158,8 +160,10 @@ def main(argv):
             buff1 = reqDataP1 - outDataP1
             buff2 = reqDataP2 - outDataP2
             if buff2 > buff1:
-                print "WARNING: BUFFER UTILIZATION NOT CONSISTENT THROUGH ANALYZED PERIODS"
-                print "\t APPLICATION MAY HAVE UNBOUNDED BUFFER GROWTH ON NETWORK\n"
+                print bcolors.FAIL +\
+                    "WARNING: BUFFER UTILIZATION NOT CONSISTENT THROUGH ANALYZED PERIODS"
+                print "\t APPLICATION MAY HAVE UNBOUNDED BUFFER GROWTH ON NETWORK\n" +\
+                    bcolors.ENDC
 
         if plot_profiles == True:
             profList = [required,provided,output,remaining]
