@@ -33,6 +33,10 @@ class Node:
         self.provided.append(prof)
 
     def AggregateProfiles(self):
+        """
+        Take all the required profiles for this node and sum them
+        and take all the provided profiles for this node and sum them
+        """
         tmpProfile = self.required[0]
         for i in range(1,len(self.required)):
             tmpProfile.AddProfile(self.required[i])

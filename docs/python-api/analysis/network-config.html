@@ -165,7 +165,49 @@
 This includes:</p>
 <ul class="simple">
 <li>ID</li>
+<li>required profiles, i.e. all profiles whose kind is &#8216;required&#8217; and whose source ID is this node</li>
+<li>provided profiles, i.e. all profiles whose kind is &#8216;provided&#8217; and whose source ID is this node</li>
 </ul>
+<dl class="attribute">
+<dt id="networkConfig.Node.ID">
+<code class="descname">ID</code><em class="property"> = None</em><a class="headerlink" href="#networkConfig.Node.ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>the ID of this node</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="networkConfig.Node.required">
+<code class="descname">required</code><em class="property"> = None</em><a class="headerlink" href="#networkConfig.Node.required" title="Permalink to this definition">¶</a></dt>
+<dd><p>all &#8216;required&#8217; profiles whose source ID is this node</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="networkConfig.Node.provided">
+<code class="descname">provided</code><em class="property"> = None</em><a class="headerlink" href="#networkConfig.Node.provided" title="Permalink to this definition">¶</a></dt>
+<dd><p>all &#8216;provided&#8217; profiles whose source ID is this node</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkConfig.Node.AddProfile">
+<code class="descname">AddProfile</code><span class="sig-paren">(</span><em>prof</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node.AddProfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkConfig.Node.AddRequiredProfile">
+<code class="descname">AddRequiredProfile</code><span class="sig-paren">(</span><em>prof</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node.AddRequiredProfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkConfig.Node.AggregateProfiles">
+<code class="descname">AggregateProfiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node.AggregateProfiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take all the required profiles for this node and sum them
+and take all the provided profiles for this node and sum them</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkConfig.Node.ClearProfiles">
+<code class="descname">ClearProfiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node.ClearProfiles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -178,6 +220,12 @@ front of the list and the destination node at the end of the list.</p>
 <dt id="networkConfig.Route.header">
 <code class="descname">header</code><em class="property"> = 'route:'</em><a class="headerlink" href="#networkConfig.Route.header" title="Permalink to this definition">¶</a></dt>
 <dd><p>line header specifying a route in the config file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="networkConfig.Route.path">
+<code class="descname">path</code><em class="property"> = None</em><a class="headerlink" href="#networkConfig.Route.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of node IDs with a source, intermediate nodes, and a destination</p>
 </dd></dl>
 
 <dl class="method">
