@@ -38,10 +38,10 @@ def get_intersection(p11,p12,p21,p22):
     """
     Simple function to get a intersection of two lines defined by their endpoints
 
-    :param double p11: x value of point p1
-    :param double p12: y value of point p1
-    :param double p21: x value of point p2
-    :param double p22: y value of point p2
+    :param double p11: starting point of line 1
+    :param double p12: ending point of line 1
+    :param double p21: starting point of line 2
+    :param double p22: ending point of line 2
     """
     if not p11 or not p12 or not p21 or not p22:
         return []
