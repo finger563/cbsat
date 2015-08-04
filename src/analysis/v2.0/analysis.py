@@ -39,6 +39,7 @@ def main(argv):
     if options.parse_args(argv):
         return -1
 
+    # COPY THE COMMAND LINE OPTIONS LOCALLY
     confName = options.network_configName
     profDir = options.profile_folderName
     req_fName = options.required_fileName
@@ -57,6 +58,14 @@ def main(argv):
         return -1
     print "Using network configuration defined in {}.".format(
         confName)
+
+    # COPY THE CONFIG'S RELEVANT MEMBERS LOCALLY
+    nodes = config.nodes
+    topology = config.topology
+    routes = config.routes
+    mtu = config.mtu
+    multicast = config.multicast
+    retransmit = config.retransmit
 
     # GET ALL PROFILE FILE NAMES
     profiles = []
@@ -93,15 +102,15 @@ def main(argv):
     # AGGREGATE ALL PROFILES TOGETHER
     # BASED ON TYPE AND SOURCE (AND POSSIBLY DESTINATION?)
     for prof in profiles:
-        config.nodes[prof.src_id].AddProfile(prof)
+        nodes[prof.src_id].AddProfile(prof)
 
     # NEED TO GO THROUGH FLOWS TO FIGURE OUT WHICH NODES ROUTE THE FLOWS USING THE CONFIG
     for prof in profiles:
         src = prof.src_id
         dst = prof.dst_id
         # IF THE FLOW NEEDS TO BE ROUTED
-        if dst not in config.topology.links[src]:
-            route = [x for x in config.routes if x[0] == src and x[-1] == dst][0]
+        if dst not in topology.links[src]:
+            route = [x for x in routes if x[0] == src and x[-1] == dst][0]
             # NEED TO ANALYZE THE TRANSIENT/INITIALIZATION OF THE SYSTEM
 
             # FOR EACH NODE IN THE ROUTE: COPY THE FLOW AND UPDATE ITS SRC AND DST AND ADD IT
@@ -117,10 +126,10 @@ def main(argv):
                     newProf = copy.deepcopy(prof)
                     newProf.src_id = node_id
                     newProf.dst_id = route[index+1]
-                    config.nodes[node_id].AddProfile(newProf)
+                    nodes[node_id].AddProfile(newProf)
 
     # ANALYZE THE SYSTEM
-    for key,node in config.nodes.iteritems():
+    for key,node in nodes.iteritems():
         if not node.HasProfiles():
             continue
         print "\nAnalyzing profiles on node {}".format(key)
@@ -151,8 +160,8 @@ def main(argv):
         node.delay = maxDelay
 
         print bcolors.OKBLUE +\
-            "\tMax buffer (length, time): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
-        print "\tMax delay (duration, time): [{}, {}]".format(maxDelay[0], maxDelay[2]) +\
+            "\tMax buffer (size, time): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
+        print "\tMax delay (length, time): [{}, {}]".format(maxDelay[0], maxDelay[2]) +\
             bcolors.ENDC
 
         # DETERMINE SYSTEM STABILITY IF WE HAVE MORE THAN ONE HYPERPERIOD TO ANALYZE

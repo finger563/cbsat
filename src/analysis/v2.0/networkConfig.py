@@ -1,5 +1,8 @@
 """
-Network Config implements the 
+Network Config implements classes related to node-based 
+flow/profile aggregation, routing, link management, and
+management of system level concerns such as mtu size or
+multicast-capability.
 """
 
 import copy,sys
@@ -153,21 +156,21 @@ class Config:
     multicast, etc.
     """
 
-    def __init__(self, num_nodes = 0, nodes = {}, multicast = False, retransmit = False, routes = [], topology = Topology() ):
+    def __init__(self, nodes = {}, multicast = False, retransmit = False, routes = [], topology = Topology(), mtu = 1024 ):
+        self.mtu = mtu
+        self.multicast = multicast
+        self.retransmit = retransmit
         self.routes = routes
         self.topology = topology
         self.nodes = nodes
-        self.num_nodes = num_nodes
-        self.multicast = multicast
-        self.retransmit = retransmit
 
     def ParseHeader(self, header):
         """
         Parses information from the configuration's header if it exists:
 
-        * number of nodes in the system
         * multicast capability
         * retransmission setting
+        * mtu for the system's network
 
         A profile header is at the top of the file and has the following syntax::
 
@@ -178,12 +181,12 @@ class Config:
             for line in header:
                 line.strip('#')
                 prop, value = line.split('=')
-                if "num_nodes" in prop:
-                    self.num_nodes = int(value)
-                elif "multicast" in prop:
+                if "multicast" in prop:
                     self.multicast = bool(value)
                 elif "retransmit" in prop:
                     self.retransmit = bool(value)
+                elif "mtu" in prop:
+                    self.mtu = int(value)
 
     def ParseFromFile(self, fName):
         """
@@ -226,8 +229,8 @@ class Config:
 
     def __repr__(self):
         retStr = "Config:\n"
-        retStr+= "\tnum_nodes: {}\n".format(self.num_nodes)
-        retStr+= "\tmulticast: {}\n".format(self.multicast)
+        retStr+= "\tmtu:        {}\n".format(self.mtu)
+        retStr+= "\tmulticast:  {}\n".format(self.multicast)
         retStr+= "\tretransmit: {}\n".format(self.retransmit)
         retStr+= "\tnodes:\n\t\t{}\n".format(self.nodes)
         retStr+= "\tTopology:\n\t\t{}\n".format(self.topology)

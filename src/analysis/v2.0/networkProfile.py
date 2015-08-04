@@ -14,13 +14,14 @@ class ProfileEntry:
     network profile.
     """
 
-    def __init__(self,start=0,end=0,slope=0,maxSlope=0,data=0,kind='none'):
+    def __init__(self,start=0,end=0,slope=0,maxSlope=0,data=0,kind='none',latency=0):
         """
         :param double start: start time of the entry
         :param double end: end time for the entry
         :param double slope: what is the slope of the entry
         :param double data: what is the end data for the entry
         :param string kind: what kind of entry is it?
+        :param double latency: what is the latency for this entry
         """
         #: The start time of the entry
         self.start = start
@@ -34,6 +35,8 @@ class ProfileEntry:
         self.data = data
         #: The kind of the entry, e.g. 'required'
         self.kind = kind
+        #: How much latency this entry has; this is how much is allowed (req) or incurred (provided)
+        self.latency = latency
 
     def __lt__(self, other):
         """Used for comparison and sorting with other entries."""
@@ -335,6 +338,15 @@ class Profile:
         i = self.GetIndexContainingTime(t)
         return self.entries[i].GetDataAtTime(t)
 
+    def GetLatencyAtTime(self, t):
+        """
+        Get the latency at the given time *t* from the profile
+
+        :param double t: time value
+        """
+        i = self.GetIndexContainingTime(t)
+        return self.entries[i].latency
+
     def GetTimesAtData(self, d):
         """
         Get a list of times at which the profile matches the data value *d*
@@ -532,7 +544,35 @@ class Profile:
                 if timeDiff > delay[2]:
                     delay = [ rTimes[0], data, timeDiff ]
         return delay
-    
+
+    def Delay(self, delayProf, mtu):
+        """
+        Apply a delay profile to this profile; this may be used for determining the profile
+        received by a node for which this profile is the output profile on the sender side.
+        The delay profile describes the delay as a function of time for the link.
+
+        :param in delayProf: :class:`Profile` describing the delay
+        :param in mtu: and integer specifying the mtu for the transmission of the profile
+
+        .. note:: This profile needs to either have been generated from :func:`Profile.Convolve` or have been integrated.
+        """
+        prevDelay = 0
+        for e in delayProf.entries:
+            if e.latency > prevDelay:
+                # delay our profile some
+                index = self.GetIndexContainingTime(e.start)
+                dEntry = self.entries[index]
+                delayDiff = e.latency - prevDelay
+                newEntry = copy.deepcopy(dEntry)
+                if t == dEntry.start:
+                    # shift this entry and all succeeding down some
+                elif t == dEntry.end:
+                    # shift all succeeding entries down some
+                else:
+                    # split this entry and shift all succeeding entries down some
+                # shift all succeeding entries by 
+            prevDelay = e.latency
+
     def Convolve(self, provided):
         """
         Use min-plus calculus to convolve this *required* profile with an input *provided* profile.
