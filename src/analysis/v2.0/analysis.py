@@ -160,8 +160,8 @@ def main(argv):
         node.delay = maxDelay
 
         print bcolors.OKBLUE +\
-            "\tMax buffer (size, time): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
-        print "\tMax delay (length, time): [{}, {}]".format(maxDelay[0], maxDelay[2]) +\
+            "\tMax buffer (bits, time): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
+        print "\tMax delay (seconds, time): [{}, {}]".format(maxDelay[0], maxDelay[2]) +\
             bcolors.ENDC
 
         # DETERMINE SYSTEM STABILITY IF WE HAVE MORE THAN ONE HYPERPERIOD TO ANALYZE
