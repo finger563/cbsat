@@ -23,9 +23,7 @@ from plotting import plot_bandwidth_and_data, havePLT
 from utils import lcm, bcolors
 
 
-def analyze(required, node, config, options):
-    if not node.HasProfiles():
-        return
+def analyze(required, provided, config, options):
     num_periods = options.num_periods
     nc_mode = options.nc_mode
     nc_step_size = options.nc_step_size
@@ -37,9 +35,6 @@ def analyze(required, node, config, options):
     mtu = config.mtu
     multicast = config.multicast
     retransmit = config.retransmit
-    
-    print "\nAnalyzing {} against node {}".format(required, node)
-    provided = node.provided
     
     # CALCULATE HYPERPERIOD
     hyperPeriod = lcm( required.period, provided.period )
@@ -56,6 +51,7 @@ def analyze(required, node, config, options):
     output, maxBuffer, maxDelay = required.Convolve(provided)
     output.period = hyperPeriod
 
+
     # delay the output according to the latency of the node's link
     #output.Delay(provided, mtu)
 
@@ -63,7 +59,7 @@ def analyze(required, node, config, options):
     remaining = copy.deepcopy(provided)
     remaining.SubtractProfile(output)
 
-    node.provided = remaining
+    #node.provided = remaining
 
     print bcolors.OKBLUE +\
         "\tMax buffer (bits, time): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
@@ -88,8 +84,8 @@ def analyze(required, node, config, options):
         profList = [required,provided,output,remaining]
         plot_bandwidth_and_data( profList, maxDelay, maxBuffer, num_periods, plot_line_width)
 
-    output.Shrink(hyperPeriod)
-    node.provided.Shrink(hyperPeriod)
+    provided.Shrink(provided.period)
+    required.Shrink(required.period)
     return output, maxBuffer, maxDelay
 
 def main(argv):
@@ -165,24 +161,24 @@ def main(argv):
 
     # SORT PROFILES BY PRIORITY
     profiles = sorted(profiles.items(), key=operator.itemgetter(0))
-    print profiles
     newProfiles = OrderedDict()
     for priority, profile in profiles:
         newProfiles[priority] = profile
     profiles = newProfiles
 
     # ANALYZE THE SYSTEM BY PRIORITY AND ITERATIVE ANALYSIS
-    for priority, profile in profiles.iteritems():
+    for priority, required in profiles.iteritems():
         # for each node the profile traverses:
-        src = profile.src_id
-        dst = profile.dst_id
+        src = required.src_id
+        dst = required.dst_id
         route = [src, dst]
         if dst not in topology.links[src]:
             route = [x for x in routes if x[0] == src and x[-1] == dst][0].path
         route = route[:-1]
-        output = profile
+        output = required
         for node_id in route:
-            output, buf, delay = analyze( output, nodes[node_id], config, options )
+            print "\nAnalyzing {} against node {}".format(required, node_id)
+            output, buf, delay = analyze( required, nodes[node_id].provided, config, options )
 
     return
   

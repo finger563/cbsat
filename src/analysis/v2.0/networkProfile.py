@@ -230,7 +230,6 @@ class Profile:
         if lastEntry.end > t:
             lastEntry.end = t
         self.RemoveDegenerates()
-        self.Integrate()
 
     def ZeroBefore(self, t):
         """Zeroes the entries in the profile before *t*"""
@@ -295,7 +294,6 @@ class Profile:
                     newEntries.append(entry)
             self.entries.extend(newEntries)
             self.RemoveDegenerates()
-            self.Integrate()
         return 0
 
     def IsRequired(self):
