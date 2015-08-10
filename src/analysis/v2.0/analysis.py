@@ -14,11 +14,83 @@ or the system, respectively.
 """ 
 
 import copy, glob, os
+import operator
+
 from collections import OrderedDict
 from networkProfile import Profile
 from networkConfig import Node, Config
 from plotting import plot_bandwidth_and_data, havePLT
 from utils import lcm, bcolors
+
+
+def analyze(required, node, config, options):
+    if not node.HasProfiles():
+        return
+    num_periods = options.num_periods
+    nc_mode = options.nc_mode
+    nc_step_size = options.nc_step_size
+    plot_profiles = options.plot_profiles
+    plot_line_width = options.plot_line_width
+    
+    topology = config.topology
+    routes = config.routes
+    mtu = config.mtu
+    multicast = config.multicast
+    retransmit = config.retransmit
+    
+    print "\nAnalyzing {} against node {}".format(required, node)
+    provided = node.provided
+    
+    # CALCULATE HYPERPERIOD
+    hyperPeriod = lcm( required.period, provided.period )
+    print "\nCalculated hyperperiod for as {} seconds".format(hyperPeriod)
+
+    # REPEAT PROFILES FOR THE RIGHT NUMBER OF HYPERPERIODS
+    required.Repeat( (hyperPeriod / required.period) * num_periods )
+    provided.Repeat( (hyperPeriod / provided.period) * num_periods )
+
+    # INTEGRATE THE PROFILES FOR ANALYSIS
+    provided.Integrate()
+    required.Integrate()
+
+    output, maxBuffer, maxDelay = required.Convolve(provided)
+    output.period = hyperPeriod
+
+    # delay the output according to the latency of the node's link
+    #output.Delay(provided, mtu)
+
+    # calculate the remaining capacity of the node's link
+    remaining = copy.deepcopy(provided)
+    remaining.SubtractProfile(output)
+
+    node.provided = remaining
+
+    print bcolors.OKBLUE +\
+        "\tMax buffer (bits, time): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
+    print "\tMax delay (seconds, time): [{}, {}]".format(maxDelay[0], maxDelay[2]) +\
+        bcolors.ENDC
+    
+    # DETERMINE SYSTEM STABILITY IF WE HAVE MORE THAN ONE HYPERPERIOD TO ANALYZE
+    if num_periods > 1:
+        reqDataP1 = required.GetDataAtTime( hyperPeriod )
+        reqDataP2 = required.GetDataAtTime( 2*hyperPeriod )
+        outDataP1 = output.GetDataAtTime( hyperPeriod )
+        outDataP2 = output.GetDataAtTime( 2*hyperPeriod )
+        buff1 = reqDataP1 - outDataP1
+        buff2 = reqDataP2 - outDataP2
+        if buff2 > buff1:
+            print bcolors.FAIL +\
+                "WARNING: BUFFER UTILIZATION NOT CONSISTENT THROUGH ANALYZED PERIODS"
+            print "\t APPLICATION MAY HAVE UNBOUNDED BUFFER GROWTH ON NETWORK\n" +\
+                bcolors.ENDC
+
+    if plot_profiles == True:
+        profList = [required,provided,output,remaining]
+        plot_bandwidth_and_data( profList, maxDelay, maxBuffer, num_periods, plot_line_width)
+
+    output.Shrink(hyperPeriod)
+    node.provided.Shrink(hyperPeriod)
+    return output, maxBuffer, maxDelay
 
 def main(argv):
     """
@@ -68,7 +140,7 @@ def main(argv):
     retransmit = config.retransmit
 
     # GET ALL PROFILE FILE NAMES
-    profiles = []
+    profiles = {}
     fNames = []
     if profDir:
         if os.path.isdir(profDir):
@@ -81,107 +153,36 @@ def main(argv):
 
     # PARSE THE PROFILES FROM THE REQUESTED FILES
     for fName in fNames:
-        profiles.append(Profile())
-        if profiles[-1].ParseFromFile(fName) == -1:
+        newProf = Profile()
+        if newProf.ParseFromFile(fName) == -1:
             print "ERROR: could not parse {}".format(fName)
             return -1
-        print "Profile {} has a period of {} seconds".format(fName, profiles[-1].period)
+        print "Profile {} has a period of {} seconds".format(fName, newProf.period)
+        if newProf.IsRequired():
+            profiles[newProf.priority] = newProf
+        elif newProf.IsProvided():
+            nodes[newProf.src_id].AddProfile(newProf)
 
-    # CALCULATE HYPERPERIOD
-    hyperPeriod = 1
-    periods = [x.period for x in profiles]
-    for p in periods:
-        hyperPeriod = lcm(p,hyperPeriod)
-    print "\nCalculated hyperperiod for profiles as {} seconds".format(hyperPeriod)
+    # SORT PROFILES BY PRIORITY
+    profiles = sorted(profiles.items(), key=operator.itemgetter(0))
+    print profiles
+    newProfiles = OrderedDict()
+    for priority, profile in profiles:
+        newProfiles[priority] = profile
+    profiles = newProfiles
 
-    # REPEAT PROFILES FOR THE RIGHT NUMBER OF HYPERPERIODS
-    for prof in profiles:
-        np = hyperPeriod / prof.period
-        prof.Repeat(np * num_periods)
-
-    # AGGREGATE ALL PROFILES TOGETHER
-    # BASED ON TYPE AND SOURCE (AND POSSIBLY DESTINATION?)
-    for prof in profiles:
-        nodes[prof.src_id].AddProfile(prof)
-
-    # NEED TO GO THROUGH FLOWS TO FIGURE OUT WHICH NODES ROUTE THE FLOWS USING THE CONFIG
-    for prof in profiles:
-        src = prof.src_id
-        dst = prof.dst_id
-        # IF THE FLOW NEEDS TO BE ROUTED
+    # ANALYZE THE SYSTEM BY PRIORITY AND ITERATIVE ANALYSIS
+    for priority, profile in profiles.iteritems():
+        # for each node the profile traverses:
+        src = profile.src_id
+        dst = profile.dst_id
+        route = [src, dst]
         if dst not in topology.links[src]:
-            route = [x for x in routes if x[0] == src and x[-1] == dst][0]
-            # NEED TO ANALYZE THE TRANSIENT/INITIALIZATION OF THE SYSTEM
-
-            # FOR EACH NODE IN THE ROUTE: COPY THE FLOW AND UPDATE ITS SRC AND DST AND ADD IT
-            # THIS SHOULD ACTUALLY BE THE OUTPUT PROFILE FROM THE PREVIOUS NODE IN THE ROUTE
-            # CONVOLVED WITH THE DELAY PROFILE OF THE LINK ITSELF
-            # THIS IS A HARDER PROBLEM THAN ORIGINALLY THOUGHT!
-
-            # ROTATE PROFILES BY DELAY AND AGGREGATE THEM AS THEY ARE ROUTED THROUGH THE SYSTEM
-            # COPY THE ROTATED PROFILES AND ZERO THEM UNTIL THE DELAY TO GET THE TRANSIENT PROFILES
-            # INSERT THE TRANSIENT PROFILES AT THE FRONT OF THE ROTATED PROFILES
-            for index, node_id in enumerate(route):
-                if index != 0 and index < route.Length() - 1:
-                    newProf = copy.deepcopy(prof)
-                    newProf.src_id = node_id
-                    newProf.dst_id = route[index+1]
-                    nodes[node_id].AddProfile(newProf)
-
-    # ANALYZE THE SYSTEM
-    for key,node in nodes.iteritems():
-        if not node.HasProfiles():
-            continue
-        print "\nAnalyzing profiles on node {}".format(key)
-        provided = node.provided
-        required = node.required
-
-        # INTEGRATE THE PROFILES FOR ANALYSIS
-        provided.Integrate()
-        required.Integrate()
-
-        # CONVERT PROFILES TO NETWORK CALCULUS IF REQUESTED
-        if options.nc_mode:
-            print "Performing NC-based analysis"
-            for prof in profiles:
-                if prof.IsProvided():
-                    prof.ConvertToNC( nc_step_size, lambda l: min(l) )
-                elif prof.IsRequired():
-                    prof.ConvertToNC( nc_step_size, lambda l: max(l) )
-    
-        output, maxBuffer, maxDelay = required.Convolve(provided)
-        output.Delay(provided, mtu)
-        remaining = copy.deepcopy(provided)
-        remaining.SubtractProfile(output)
-        remaining.Kind('available')
-
-        node.output = output
-        node.remaining = remaining
-        node.buffer = maxBuffer
-        node.delay = maxDelay
-
-        print bcolors.OKBLUE +\
-            "\tMax buffer (bits, time): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
-        print "\tMax delay (seconds, time): [{}, {}]".format(maxDelay[0], maxDelay[2]) +\
-            bcolors.ENDC
-
-        # DETERMINE SYSTEM STABILITY IF WE HAVE MORE THAN ONE HYPERPERIOD TO ANALYZE
-        if num_periods > 1:
-            reqDataP1 = required.GetDataAtTime( hyperPeriod )
-            reqDataP2 = required.GetDataAtTime( 2*hyperPeriod )
-            outDataP1 = output.GetDataAtTime( hyperPeriod )
-            outDataP2 = output.GetDataAtTime( 2*hyperPeriod )
-            buff1 = reqDataP1 - outDataP1
-            buff2 = reqDataP2 - outDataP2
-            if buff2 > buff1:
-                print bcolors.FAIL +\
-                    "WARNING: BUFFER UTILIZATION NOT CONSISTENT THROUGH ANALYZED PERIODS"
-                print "\t APPLICATION MAY HAVE UNBOUNDED BUFFER GROWTH ON NETWORK\n" +\
-                    bcolors.ENDC
-
-        if plot_profiles == True:
-            profList = [required,provided,output,remaining]
-            plot_bandwidth_and_data( profList, maxDelay, maxBuffer, num_periods, plot_line_width)
+            route = [x for x in routes if x[0] == src and x[-1] == dst][0].path
+        route = route[:-1]
+        output = profile
+        for node_id in route:
+            output, buf, delay = analyze( output, nodes[node_id], config, options )
 
     return
   

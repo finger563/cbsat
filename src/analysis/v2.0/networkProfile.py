@@ -113,7 +113,7 @@ class Profile:
     and a list of entries of type :class:`ProfileEntry`.
     """
     
-    def __init__(self, kind = None, period = 0, source = 0, dest = 0):
+    def __init__(self, kind = None, period = 0, priority = 0, source = 0, dest = 0):
         """
         :param string kind: what kind of profile is it?
         :param double period: what is the periodicity (in seconds) of the profile
@@ -209,7 +209,7 @@ class Profile:
 
     def Repeat(self, num_periods):
         """Copy the current profile entries over some number of its periods."""
-        self.entries = sorted([x for x in self.entries if x.start != x.end])
+        self.RemoveDegenerates()
         originalProf = copy.deepcopy(self.entries)
         data = self.entries[-1].data
         for i in range(1,int(num_periods)):
@@ -221,6 +221,16 @@ class Profile:
                 self.entries.append(e)
             data += data
         self.RemoveDegenerates()
+
+    def Shrink(self, t):
+        """Remove all entries from the profile after *t*"""
+        if t < 0 or t > self.entries[-1].end: return
+        self.entries = [x for x in self.entries if x.start < t]
+        lastEntry = self.entries[-1]
+        if lastEntry.end > t:
+            lastEntry.end = t
+        self.RemoveDegenerates()
+        self.Integrate()
 
     def ZeroBefore(self, t):
         """Zeroes the entries in the profile before *t*"""
