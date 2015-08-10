@@ -238,18 +238,18 @@ class Profile:
         e = ProfileEntry(kind = self.kind, start = t, end = end)
         self.entries.append(e)
 
-    def Shift(self, t):
+    def Shift(self, t, index = 0):
         """
-        Shift the profile by some time *t*
+        Shift the profile by some time *t* after index 
 
         .. note:: *t* must be greater than 0
         """
         if t < 0:
             print "ERROR: shift time must be greater than 0"
             return -1
-        for e in self.entries:
-            e.start += t
-            e.end += t
+        for i in range(index,len(self.entries)):
+            self.entries[index].start += t
+            self.entries[index].end += t
         return 0
 
     def Rotate(self, t):
@@ -423,6 +423,18 @@ class Profile:
                 self.entries[endInd].end = entry.end
                 self.entries.insert(endInd+1, newEntry)
             
+    def InsertEntry(self, entry, index):
+        """
+        Insert a single entry into the profile.  Entry is inserted before 
+        the index, so that it will have that as its index.
+        """
+        front = self.entries[:index]
+        back = self.entries[index:]
+        self.entries = []
+        self.entries.extend(front)
+        self.entries.append(entry)
+        self.entries.extend(back)
+
     def AddEntry(self, entry):
         """
         Add a single entry (based on its bandwidth) to the profile.
@@ -564,13 +576,29 @@ class Profile:
                 dEntry = self.entries[index]
                 delayDiff = e.latency - prevDelay
                 newEntry = copy.deepcopy(dEntry)
-                if t == dEntry.start:
-                    # shift this entry and all succeeding down some
-                elif t == dEntry.end:
-                    # shift all succeeding entries down some
+                if e.start == dEntry.start or e.start == dEntry.end:
+                    # add an entry here which lasts from e.start to (e.start +  delayDiff)
+                    newEntry = ProfileEntry()
+                    newEntry.kind = self.kind
+                    newEntry.start = e.start
+                    newEntry.end = e.start + delayDiff
+                    newEntry.slope = 0
+                    if e.start == dEntry.start:
+                        newEntry.data = self.entries[index-1].data
+                        if (index - 1) < 0:
+                            newEntry.data = 0
+                        #self.InsertEntry(newEntry,index)
+                    else:
+                        newEntry.data = dEntry.data
+                        index += 1
+                        #self.InsertEntry(newEntry,index)
+                    print newEntry
+                    print self.entries
                 else:
-                    # split this entry and shift all succeeding entries down some
-                # shift all succeeding entries by 
+                    # split this entry and add an entry in the middle
+                    pass
+                index += 1
+                #self.Shift(e.latency,index)
             prevDelay = e.latency
 
     def Convolve(self, provided):

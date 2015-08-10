@@ -150,6 +150,7 @@ def main(argv):
                     prof.ConvertToNC( nc_step_size, lambda l: max(l) )
     
         output, maxBuffer, maxDelay = required.Convolve(provided)
+        output.Delay(provided, mtu)
         remaining = copy.deepcopy(provided)
         remaining.SubtractProfile(output)
         remaining.Kind('available')
