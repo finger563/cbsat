@@ -117,20 +117,23 @@ class Profile:
         """
         :param string kind: what kind of profile is it?
         :param double period: what is the periodicity (in seconds) of the profile
+        :param int priority: what is the priority of the flow in the system
         :param int source: what is the node id from which the data on this profile will be sent
         :param int dest: what is the node id to which the data on this profile will be sent
         """
-        self.entries = []    #: The list of :class:`ProfileEntry` which describe this profile
-        self.kind = kind     #: The kind of this profile, e.g. 'required'
-        self.period = period #: The length of one period of this profile
-        self.src_id = source #: The node ID which is the source of this profile
-        self.dst_id = dest   #: The node ID which is the destination of this profile
+        self.entries = []        #: The list of :class:`ProfileEntry` which describe this profile
+        self.kind = kind         #: The kind of this profile, e.g. 'required'
+        self.period = period     #: The length of one period of this profile
+        self.priority = priority #: The priority of the profile; relevant for 'required' profiles
+        self.src_id = source     #: The node ID which is the source of this profile
+        self.dst_id = dest       #: The node ID which is the destination of this profile
 
     def ParseHeader(self, header):
         """
         Parses information from the profile's header if it exists:
 
         * period
+        * priority
         * source node ID
         * destination node ID
         * profile kind
@@ -146,6 +149,8 @@ class Profile:
                 prop, value = line.split('=')
                 if "period" in prop:
                     self.period = float(value)
+                elif "priority" in prop:
+                    self.priority = int(value)
                 elif "source ID" in prop:
                     self.src_id = int(value)
                 elif "destination ID" in prop:

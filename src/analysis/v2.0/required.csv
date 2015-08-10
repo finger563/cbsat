@@ -1,4 +1,5 @@
 # period = 10
+# priority = 1
 # kind = required
 # source ID = 1
 # destination ID = 2
