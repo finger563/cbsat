@@ -157,7 +157,10 @@
             
   <div class="section" id="module-networkConfig">
 <span id="network-config"></span><h1>Network Config<a class="headerlink" href="#module-networkConfig" title="Permalink to this headline">¶</a></h1>
-<p>Network Config implements the</p>
+<p>Network Config implements classes related to node-based 
+flow/profile aggregation, routing, link management, and
+management of system level concerns such as mtu size or
+multicast-capability.</p>
 <dl class="class">
 <dt id="networkConfig.Node">
 <em class="property">class </em><code class="descclassname">networkConfig.</code><code class="descname">Node</code><span class="sig-paren">(</span><em>_id</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node" title="Permalink to this definition">¶</a></dt>
@@ -165,12 +168,7 @@
 This includes:</p>
 <ul class="simple">
 <li>ID</li>
-<li>required profiles, i.e. all profiles whose kind is &#8216;required&#8217; and whose source ID is this node</li>
 <li>provided profiles, i.e. all profiles whose kind is &#8216;provided&#8217; and whose source ID is this node</li>
-<li>the output profile for the node</li>
-<li>the remaining service profile for the node</li>
-<li>the required buffer space for this node</li>
-<li>the buffering delay experienced by traffic on this node</li>
 </ul>
 <dl class="attribute">
 <dt id="networkConfig.Node.ID">
@@ -179,39 +177,9 @@ This includes:</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="networkConfig.Node.required">
-<code class="descname">required</code><em class="property"> = None</em><a class="headerlink" href="#networkConfig.Node.required" title="Permalink to this definition">¶</a></dt>
-<dd><p>aggregate of all &#8216;required&#8217; profiles whose source ID is this node</p>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="networkConfig.Node.provided">
 <code class="descname">provided</code><em class="property"> = None</em><a class="headerlink" href="#networkConfig.Node.provided" title="Permalink to this definition">¶</a></dt>
 <dd><p>aggregate of all &#8216;provided&#8217; profiles whose source ID is this node</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="networkConfig.Node.output">
-<code class="descname">output</code><em class="property"> = None</em><a class="headerlink" href="#networkConfig.Node.output" title="Permalink to this definition">¶</a></dt>
-<dd><p>output profile from this node</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="networkConfig.Node.remaining">
-<code class="descname">remaining</code><em class="property"> = None</em><a class="headerlink" href="#networkConfig.Node.remaining" title="Permalink to this definition">¶</a></dt>
-<dd><p>remaining service this node can provide</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="networkConfig.Node.buffer">
-<code class="descname">buffer</code><em class="property"> = None</em><a class="headerlink" href="#networkConfig.Node.buffer" title="Permalink to this definition">¶</a></dt>
-<dd><p>buffer required for the node</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="networkConfig.Node.delay">
-<code class="descname">delay</code><em class="property"> = None</em><a class="headerlink" href="#networkConfig.Node.delay" title="Permalink to this definition">¶</a></dt>
-<dd><p>delay incurred by traffic on this node</p>
 </dd></dl>
 
 <dl class="method">
@@ -227,24 +195,6 @@ This includes:</p>
 <dl class="method">
 <dt id="networkConfig.Node.AddProvidedProfile">
 <code class="descname">AddProvidedProfile</code><span class="sig-paren">(</span><em>prof</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node.AddProvidedProfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="networkConfig.Node.AddRequiredProfile">
-<code class="descname">AddRequiredProfile</code><span class="sig-paren">(</span><em>prof</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node.AddRequiredProfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="networkConfig.Node.AggregateProfiles">
-<code class="descname">AggregateProfiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node.AggregateProfiles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Take all the required profiles for this node and sum them
-and take all the provided profiles for this node and sum them</p>
-<p>After this function, the profiles will be a list of [ &lt;transient&gt;, &lt;steady-state&gt; ]</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkConfig.Node.ClearProfiles">
-<code class="descname">ClearProfiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node.ClearProfiles" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -319,7 +269,7 @@ This is specified as a dictionary of node : list of nodes pairs.</p>
 
 <dl class="class">
 <dt id="networkConfig.Config">
-<em class="property">class </em><code class="descclassname">networkConfig.</code><code class="descname">Config</code><span class="sig-paren">(</span><em>num_nodes=0</em>, <em>nodes={}</em>, <em>multicast=False</em>, <em>retransmit=False</em>, <em>routes=[]</em>, <em>topology={}</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Config" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">networkConfig.</code><code class="descname">Config</code><span class="sig-paren">(</span><em>nodes={}</em>, <em>multicast=False</em>, <em>retransmit=False</em>, <em>routes=[]</em>, <em>topology={}</em>, <em>mtu=1024</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contains the routing and topology information
 to fully describe the system&#8217;s network and provide
 a mapping between application data flows (logical)
@@ -332,9 +282,9 @@ multicast, etc.</p>
 <code class="descname">ParseHeader</code><span class="sig-paren">(</span><em>header</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Config.ParseHeader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parses information from the configuration&#8217;s header if it exists:</p>
 <ul class="simple">
-<li>number of nodes in the system</li>
 <li>multicast capability</li>
 <li>retransmission setting</li>
+<li>mtu for the system&#8217;s network</li>
 </ul>
 <p>A profile header is at the top of the file and has the following syntax:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># &lt;property&gt; = &lt;value&gt;</span>

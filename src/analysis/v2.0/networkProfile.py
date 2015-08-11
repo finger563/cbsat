@@ -602,30 +602,34 @@ class Profile:
                 index = self.GetIndexContainingTime(e.start)
                 dEntry = self.entries[index]
                 delayDiff = e.latency - prevDelay
+                # add an entry which lasts from e.start to (e.start +  delayDiff)
                 newEntry = copy.deepcopy(dEntry)
+                newEntry.start = e.start
+                newEntry.end = e.start + delayDiff
+                newEntry.slope = 0
+                newEntry.data = 0
                 if e.start == dEntry.start or e.start == dEntry.end:
-                    # add an entry here which lasts from e.start to (e.start +  delayDiff)
-                    newEntry = ProfileEntry()
-                    newEntry.kind = self.kind
-                    newEntry.start = e.start
-                    newEntry.end = e.start + delayDiff
-                    newEntry.slope = 0
                     if e.start == dEntry.start:
-                        newEntry.data = self.entries[index-1].data
-                        if (index - 1) < 0:
-                            newEntry.data = 0
-                        #self.InsertEntry(newEntry,index)
+                        if (index - 1) >= 0:
+                            newEntry.data = self.entries[index-1].data
+                        self.InsertEntry(newEntry,index)
                     else:
                         newEntry.data = dEntry.data
                         index += 1
-                        #self.InsertEntry(newEntry,index)
-                    print newEntry
-                    print self.entries
+                        self.InsertEntry(newEntry,index)
                 else:
                     # split this entry and add an entry in the middle
-                    pass
+                    endEntry = copy.deepcopy(dEntry)
+                    endEntry.start = newEntry.end
+                    endEntry.end += delayDiff
+                    self.InsertEntry(endEntry, index)
+                    newEntry.data = dEntry.GetDataAtTime(e.start)
+                    dEntry.end = newEntry.start
+                    dEntry.data = newEntry.data
+                    self.InsertEntry(newEntry, index)
+                    index += 1
                 index += 1
-                #self.Shift(e.latency,index)
+                self.Shift(delayDiff,index)
             prevDelay = e.latency
 
     def Convolve(self, provided):
