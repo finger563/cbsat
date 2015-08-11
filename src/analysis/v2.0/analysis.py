@@ -38,7 +38,7 @@ def analyze(required, provided, config, options):
     
     # CALCULATE HYPERPERIOD
     hyperPeriod = lcm( required.period, provided.period )
-    print "\nCalculated hyperperiod for as {} seconds".format(hyperPeriod)
+    print "\nCalculated hyperperiod as {} seconds".format(hyperPeriod)
 
     # REPEAT PROFILES FOR THE RIGHT NUMBER OF HYPERPERIODS
     required.Repeat( (hyperPeriod / required.period) * num_periods )
@@ -51,15 +51,13 @@ def analyze(required, provided, config, options):
     output, maxBuffer, maxDelay = required.Convolve(provided)
     output.period = hyperPeriod
 
-
     # delay the output according to the latency of the node's link
     #output.Delay(provided, mtu)
 
     # calculate the remaining capacity of the node's link
     remaining = copy.deepcopy(provided)
+    remaining.period = hyperPeriod
     remaining.SubtractProfile(output)
-
-    #node.provided = remaining
 
     print bcolors.OKBLUE +\
         "\tMax buffer (bits, time): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
@@ -84,9 +82,10 @@ def analyze(required, provided, config, options):
         profList = [required,provided,output,remaining]
         plot_bandwidth_and_data( profList, maxDelay, maxBuffer, num_periods, plot_line_width)
 
+    remaining.Shrink(remaining.period)
     provided.Shrink(provided.period)
     required.Shrink(required.period)
-    return output, maxBuffer, maxDelay
+    return output, remaining, maxBuffer, maxDelay
 
 def main(argv):
     """
@@ -174,11 +173,16 @@ def main(argv):
         route = [src, dst]
         if dst not in topology.links[src]:
             route = [x for x in routes if x[0] == src and x[-1] == dst][0].path
+        print "\nAnalyzing {}\n".format(required)
+        print "along route: {}\n".format(route)
         route = route[:-1]
-        output = required
         for node_id in route:
-            print "\nAnalyzing {} against node {}".format(required, node_id)
-            output, buf, delay = analyze( required, nodes[node_id].provided, config, options )
+            output, remaining, buf, delay = analyze( required, nodes[node_id].provided, config, options )
+            nodes[node_id].provided = remaining
+            output.src_id = node_id
+            output.dst_id = required.dst_id
+            output.priority = required.priority
+            required = output
 
     return
   

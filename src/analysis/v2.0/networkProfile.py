@@ -128,6 +128,19 @@ class Profile:
         self.src_id = source     #: The node ID which is the source of this profile
         self.dst_id = dest       #: The node ID which is the destination of this profile
 
+    def __repr__(self):
+        return "Profile(kind = {}, period = {}, priority = {})\n".format(
+            self.kind, self.period, self.priority)
+    
+    def __str__(self):
+        retstr = "Profile:\n"
+        retstr += "\tkind = {}\n".format(self.kind)
+        retstr += "\tperiod = {}\n".format(self.period)
+        retstr += "\tpriority = {}\n".format(self.priority)
+        retstr += "\tsrc node = {}\n".format(self.src_id)
+        retstr += "\tdst node = {}".format(self.dst_id)
+        return retstr
+
     def ParseHeader(self, header):
         """
         Parses information from the profile's header if it exists:
@@ -407,10 +420,12 @@ class Profile:
         This entry may come from anywhere, so we must take care to ensure that 
         any possibly affected entries are properly updated.
         """
-        if self.entries != [] and\
+        if self.entries and\
            entry.start >= self.entries[0].start and\
            entry.end <= self.entries[-1].end:
             startInd = self.GetIndexContainingTime(entry.start)
+            endInd = self.GetIndexContainingTime(entry.end)
+            originalSlope = self.entries[endInd].slope
             # split start entry : shorten the existing entry and add a new entry
             if entry.start > self.entries[startInd].start:
                 self.entries[startInd].end = entry.start
@@ -420,9 +435,8 @@ class Profile:
                 newEntry.slope = self.entries[startInd].slope
                 newEntry.kind = self.kind
                 startInd += 1
+                endInd += 1
                 self.entries.insert(startInd, newEntry)
-            endInd = self.GetIndexContainingTime(entry.end)
-            originalSlope = self.entries[endInd].slope
             # iterate through all entries between start and end to update with new bandwidth
             for i in range(startInd,endInd+1):
                 self.entries[i].slope = max( 0, self.entries[i].slope - entry.slope)
