@@ -31,10 +31,10 @@ def analyze(required, provided, config, options):
     * (If more than one hyper-period has been specified it determines system stability)
     * (Optionally plots the bandwidths and data for the profiles)
 
-    :param required: :class:`networkProfile.Profile` describing the required profile
-    :param provided: :class:`networkProfile.Profile` describing the provided profile
-    :param config: :class:`networkConfig.Config` describing the configuration of the network
-    :param options: :class:`Options` describing the program options for drawing and analysis
+    :param in required: :class:`networkProfile.Profile` describing the required profile
+    :param in provided: :class:`networkProfile.Profile` describing the provided profile
+    :param in config: :class:`networkConfig.Config` describing the configuration of the network
+    :param in options: :class:`Options` describing the program options for drawing and analysis
 
     Returns a list of analysis results consisting of::
 
@@ -73,7 +73,7 @@ def analyze(required, provided, config, options):
     output.period = hyperPeriod
 
     # delay the output according to the latency of the node's link
-    #output.Delay(provided, mtu)
+    output.Delay(provided, mtu)
 
     # calculate the remaining capacity of the node's link
     remaining = copy.deepcopy(provided)

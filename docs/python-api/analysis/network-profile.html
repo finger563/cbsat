@@ -594,6 +594,15 @@ curve, while passing <code class="xref py py-func docutils literal"><span class=
 <dd><p>Apply a delay profile to this profile; this may be used for determining the profile
 received by a node for which this profile is the output profile on the sender side.
 The delay profile describes the delay as a function of time for the link.</p>
+<p>This function implements the function</p>
+<div class="math">
+<p><img src="../../_images/math/bcc9e0d2a8dedcb1dfb714bc3d25774656a07592.png" alt="o[t + \delta[t]] = l[t]"/></p>
+</div><p>Where</p>
+<ul class="simple">
+<li><img class="math" src="../../_images/math/2a0a2f67e07caa3e17e5f8f645b78f5cad3812dd.png" alt="\delta[t]"/> is the delay profile</li>
+<li><img class="math" src="../../_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/> is the profile transmitted into the link</li>
+<li><img class="math" src="../../_images/math/57fa5ec21338ef1baebf73a8df8758ab8d54e17f.png" alt="o[t]"/> is the output profile received at the other end of the link</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -606,6 +615,10 @@ The delay profile describes the delay as a function of time for the link.</p>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This function alters the periodicity of the profile!</p>
+</div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This profile needs to either have been generated from <a class="reference internal" href="#networkProfile.Profile.Convolve" title="networkProfile.Profile.Convolve"><code class="xref py py-func docutils literal"><span class="pre">Profile.Convolve()</span></code></a> or have been integrated.</p>

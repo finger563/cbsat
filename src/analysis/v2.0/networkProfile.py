@@ -590,47 +590,24 @@ class Profile:
         received by a node for which this profile is the output profile on the sender side.
         The delay profile describes the delay as a function of time for the link.
 
+        This function implements the function 
+
+        .. math::
+            o[t + \delta[t]] = l[t]
+
+        Where
+
+        * :math:`\delta[t]` is the delay profile
+        * :math:`l[t]` is the profile transmitted into the link
+        * :math:`o[t]` is the output profile received at the other end of the link
+
         :param in delayProf: :class:`Profile` describing the delay
         :param in mtu: and integer specifying the mtu for the transmission of the profile
 
+        .. note:: This function alters the periodicity of the profile!
         .. note:: This profile needs to either have been generated from :func:`Profile.Convolve` or have been integrated.
         """
-        prevDelay = 0
-        for e in delayProf.entries:
-            if e.latency > prevDelay:
-                # delay our profile some
-                index = self.GetIndexContainingTime(e.start)
-                dEntry = self.entries[index]
-                delayDiff = e.latency - prevDelay
-                # add an entry which lasts from e.start to (e.start +  delayDiff)
-                newEntry = copy.deepcopy(dEntry)
-                newEntry.start = e.start
-                newEntry.end = e.start + delayDiff
-                newEntry.slope = 0
-                newEntry.data = 0
-                if e.start == dEntry.start or e.start == dEntry.end:
-                    if e.start == dEntry.start:
-                        if (index - 1) >= 0:
-                            newEntry.data = self.entries[index-1].data
-                        self.InsertEntry(newEntry,index)
-                    else:
-                        newEntry.data = dEntry.data
-                        index += 1
-                        self.InsertEntry(newEntry,index)
-                else:
-                    # split this entry and add an entry in the middle
-                    endEntry = copy.deepcopy(dEntry)
-                    endEntry.start = newEntry.end
-                    endEntry.end += delayDiff
-                    self.InsertEntry(endEntry, index)
-                    newEntry.data = dEntry.GetDataAtTime(e.start)
-                    dEntry.end = newEntry.start
-                    dEntry.data = newEntry.data
-                    self.InsertEntry(newEntry, index)
-                    index += 1
-                index += 1
-                self.Shift(delayDiff,index)
-            prevDelay = e.latency
+        pass
 
     def Convolve(self, provided):
         """
