@@ -670,15 +670,12 @@ class Profile:
         self.Derive()
         remainder = self.ZeroAfter(self.period)
         if remainder:
-            print self.entries
             t = -remainder[0].start
             for e in remainder:
                 e.start += t
                 e.end += t
                 self.AddEntry(e)
-            print remainder
             self.Integrate()
-            print self.entries
 
     def Convolve(self, provided):
         """
