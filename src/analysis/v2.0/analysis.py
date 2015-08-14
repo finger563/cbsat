@@ -79,6 +79,7 @@ def analyze(required, provided, config, options):
 
     # calculate the remaining capacity of the node's link
     remaining = copy.deepcopy(provided)
+    remaining.Kind("remaining")
     remaining.period = hyperPeriod
 
     #newHyperPeriod = lcm ( remaining.period, output.period )
@@ -204,6 +205,7 @@ def main(argv):
         for node_id in route:
             output, remaining, buf, delay = analyze( required, nodes[node_id].provided, config, options )
             nodes[node_id].provided = remaining
+            nodes[node_id].provided.Kind("provided") # since the kind is now 'remaining'
             output.src_id = node_id
             output.dst_id = required.dst_id
             output.priority = required.priority
