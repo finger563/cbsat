@@ -366,12 +366,18 @@ class Profile:
 
     def GetLatencyAtTime(self, t):
         """
-        Get the latency at the given time *t* from the profile
+        Get the latency at the given time *t* from the profile.  Latency is a 
+        linear continuous function between entries' latency values.
 
         :param double t: time value
         """
         i = self.GetIndexContainingTime(t)
-        return self.entries[i].latency
+        i2 = (i+1) % len(self.entries)
+        e1 = self.entries[i]
+        e2 = self.entries[i2]
+        slope = (e2.latency - e1.latency) / (e2.start - e1.start)
+        latency = e1.latency + slope * ( t - e1.start )
+        return latency
 
     def GetTimesAtData(self, d):
         """
@@ -607,7 +613,51 @@ class Profile:
         .. note:: This function alters the periodicity of the profile!
         .. note:: This profile needs to either have been generated from :func:`Profile.Convolve` or have been integrated.
         """
-        pass
+        vals = []
+        profile = []
+        for e in self.entries:
+            newEntry = copy.copy(e)
+            newEntry.kind = "required"
+            profile.append(newEntry)
+        for e in delayProf.entries:
+            newEntry = copy.copy(e)
+            newEntry.kind = "delay"
+            profile.append(newEntry)
+        profile = sorted(profile)
+        rEntry = None
+        dEntry = None
+        for e in profile:
+            if e.kind == 'delay':
+                # need to figure out the data at this time and delay it by this delay
+                delay = e.latency
+                data = self.GetDataAtTime(e.start)
+                vals.append([ e.start + delay, data])
+            elif e.kind == 'required':
+                # need to figure out the delay at this time and delay this data by that amount
+                data = e.data
+                delay = delayProf.GetLatencyAtTime(e.end)
+                vals.append([ e.end + delay, data])
+        vals = sorted(vals)
+        newvals = []
+        for val in vals:
+            if val not in newvals:
+                newvals.append(val)
+        vals = newvals
+        newPeriod = vals[-1][0]
+        newEntries = []
+        start = 0
+        for x,y in vals:
+            newEntry = ProfileEntry()
+            newEntry.start = start
+            newEntry.end = x
+            newEntry.data = y
+            newEntry.kind = self.kind
+            newEntries.append(newEntry)
+            start = x
+        self.entries = newEntries
+        self.period = newPeriod
+        self.RemoveDegenerates()
+        self.Derive()
 
     def Convolve(self, provided):
         """
@@ -656,7 +706,7 @@ class Profile:
                 pEntry = e
             else:
                 rEntry = e
-            if pEntry != None and rEntry != None:
+            if pEntry and rEntry:
                 start = max(pEntry.start, rEntry.start)
                 end = min(pEntry.end, rEntry.end)
                 if start != end:

@@ -15,11 +15,19 @@ def lcm(a,b):
     """
     Returns the least-common-multiple (LCM) of *a* and *b* as
 
-.. math::
-    lcm = (a*b)/gcd(a,b)
+    .. math::
+      lcm = (a*b)/gcd(a,b)
 
     """
-    return (a*b)/gcd(a,b)
+    if int(a) != a:
+        r = a - int(a)
+        a = 1.0/r * a
+    if int(b) != b:
+        r = b - int(b)
+        b = 1.0/r * b
+    n = a*b
+    d = gcd(int(a),int(b))
+    return n/d
 
 def makeVLine(v):
     """

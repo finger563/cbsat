@@ -73,11 +73,19 @@ def analyze(required, provided, config, options):
     output.period = hyperPeriod
 
     # delay the output according to the latency of the node's link
-    output.Delay(provided, mtu)
+    received = copy.deepcopy(output)
+    received.Kind("received")
+    received.Delay(provided, mtu)
 
     # calculate the remaining capacity of the node's link
     remaining = copy.deepcopy(provided)
     remaining.period = hyperPeriod
+
+    #newHyperPeriod = lcm ( remaining.period, output.period )
+    #print 'New hyper period: {}'.format(newHyperPeriod)
+    #remaining.Repeat( (newHyperPeriod / remaining.period) * num_periods )
+    #output.Repeat( (newHyperPeriod / output.period) * num_periods )
+
     remaining.SubtractProfile(output)
 
     print bcolors.OKBLUE +\
@@ -100,7 +108,7 @@ def analyze(required, provided, config, options):
                 bcolors.ENDC
 
     if plot_profiles == True:
-        profList = [required,provided,output,remaining]
+        profList = [required,provided,output,remaining, received]
         plot_bandwidth_and_data( profList, maxDelay, maxBuffer, num_periods, plot_line_width)
 
     remaining.Shrink(remaining.period)
