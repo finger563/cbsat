@@ -245,7 +245,10 @@ class Profile:
         self.RemoveDegenerates()
 
     def ZeroBefore(self, t):
-        """Zeroes the entries in the profile before *t*"""
+        """
+        Zeroes the entries in the profile before *t*,
+        returns the entries that existed before *t*.
+        """
         if t < 0: return
         self.entries = [x for x in self.entries if x.end > t]
         e = self.entries[0]
@@ -255,29 +258,36 @@ class Profile:
         self.entries.insert(0,e)
 
     def ZeroAfter(self, t):
-        """Zeroes the entries in the profile after *t*"""
+        """
+        Zeroes the entries in the profile after *t*, 
+        returns the entries that existed after *t*.
+        """
         if t > self.entries[-1].end: return
         end = self.entries[-1].end
+        remainder = [x for x in self.entries if x.start >= t]
         self.entries = [x for x in self.entries if x.start < t]
         e = self.entries[-1]
         if e.end > t:  # need to split the last entry
+            first_end = end
+            if remainder:
+                first_end = remainder[0].start
+            newE = ProfileEntry(kind = self.kind,
+                                start = t,
+                                end = first_end,
+                                slope = e.slope,
+                                data = e.data,
+                                latency = e.latency)
+            remainder.insert(0,newE)
             e.end = t
         e = ProfileEntry(kind = self.kind, start = t, end = end)
         self.entries.append(e)
+        return remainder
 
     def Shift(self, t, index = 0):
-        """
-        Shift the profile by some time *t* after index 
-
-        .. note:: *t* must be greater than 0
-        """
-        if t < 0:
-            print "ERROR: shift time must be greater than 0"
-            return -1
+        """Shift the profile by some time *t* after index."""
         for i in range(index,len(self.entries)):
             self.entries[index].start += t
             self.entries[index].end += t
-        return 0
 
     def Rotate(self, t):
         """
@@ -643,7 +653,6 @@ class Profile:
             if val not in newvals:
                 newvals.append(val)
         vals = newvals
-        newPeriod = vals[-1][0]
         newEntries = []
         start = 0
         for x,y in vals:
@@ -655,9 +664,21 @@ class Profile:
             newEntries.append(newEntry)
             start = x
         self.entries = newEntries
-        self.period = newPeriod
         self.RemoveDegenerates()
+        # need to take whatever part of the profile exists after the period
+        # and add it to the beginning of the period
         self.Derive()
+        remainder = self.ZeroAfter(self.period)
+        if remainder:
+            print self.entries
+            t = -remainder[0].start
+            for e in remainder:
+                e.start += t
+                e.end += t
+                self.AddEntry(e)
+            print remainder
+            self.Integrate()
+            print self.entries
 
     def Convolve(self, provided):
         """
