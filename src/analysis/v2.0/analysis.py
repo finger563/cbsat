@@ -73,6 +73,7 @@ def analyze(required, provided, config, options):
     output.period = hyperPeriod
 
     # delay the output according to the latency of the node's link
+    # this determines the characteristics of the data at the receiver end
     received = copy.deepcopy(output)
     received.Kind("received")
     received.Delay(provided, mtu)
