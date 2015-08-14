@@ -414,7 +414,7 @@ class Profile:
 
     def RemoveDegenerates(self):
         """Remove degenerate entries whose start = end"""
-        self.entries = sorted([x for x in self.entries if x.start != x.end])
+        self.entries = sorted([x for x in self.entries if x.start < x.end])
 
     def AddProfile(self,profile):
         """Compose this profile with an input profile by adding their slopes together."""
@@ -625,6 +625,7 @@ class Profile:
         """
         vals = []
         profile = []
+        end = self.entries[-1].end
         for e in self.entries:
             newEntry = copy.copy(e)
             newEntry.kind = "required"
@@ -668,14 +669,16 @@ class Profile:
         # need to take whatever part of the profile exists after the period
         # and add it to the beginning of the period
         self.Derive()
-        remainder = self.ZeroAfter(self.period)
-        if remainder:
-            t = -remainder[0].start
-            for e in remainder:
-                e.start += t
-                e.end += t
-                self.AddEntry(e)
-            self.Integrate()
+        if self.entries[-1].end > end:
+            remainder = self.ZeroAfter(end)
+            if remainder:
+                t = -remainder[0].start
+                for e in remainder:
+                    e.start += t
+                    e.end += t
+                    self.AddEntry(e)
+                self.Integrate()
+        self.RemoveDegenerates()
 
     def Convolve(self, provided):
         """
@@ -769,5 +772,6 @@ class Profile:
                     if pEndData >= rEndData:
                         pOffset += pEndData - rEndData
         output.Derive()
+        output.RemoveDegenerates()
         maxDelay = self.CalcDelay(output)
         return output, maxBuffer, maxDelay

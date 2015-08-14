@@ -76,6 +76,7 @@ def analyze(required, provided, config, options):
     received = copy.deepcopy(output)
     received.Kind("received")
     received.Delay(provided, mtu)
+    received.period = hyperPeriod
 
     # calculate the remaining capacity of the node's link
     remaining = copy.deepcopy(provided)
@@ -112,6 +113,8 @@ def analyze(required, provided, config, options):
         profList = [required,provided,output,remaining, received]
         plot_bandwidth_and_data( profList, maxDelay, maxBuffer, num_periods, plot_line_width)
 
+    received.Shrink(received.period)
+    output.Shrink(output.period)
     remaining.Shrink(remaining.period)
     provided.Shrink(provided.period)
     required.Shrink(required.period)
