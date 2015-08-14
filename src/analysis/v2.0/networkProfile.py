@@ -665,6 +665,15 @@ class Profile:
 
         :rtype: :func:`list` [ output, maxBuffer, maxDelay ]
 
+        where output is :math:`y[t]` defined (:ref:`network_math_formalism`) as:
+
+        .. math::
+            y=l[t] &= (r \otimes p)[t] = min( r[t] , p[t] - (p[t-1] -l[t-1]) )
+
+            buffer= sup\{r[t] - l[t] : t \in \mathbb{N}\}
+
+            delay = sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}
+
         Where the returned elements are defined as such:
 
         * **output**: output profile which is the result of this convolution.

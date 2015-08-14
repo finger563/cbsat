@@ -638,7 +638,14 @@ The delay profile describes the delay as a function of time for the link.</p>
 </tr>
 </tbody>
 </table>
-<p>Where the returned elements are defined as such:</p>
+<p>where output is <img class="math" src="../../_images/math/73ce42fe938867093e502445fef3c33f78f3dfdf.png" alt="y[t]"/> defined (<a class="reference internal" href="../../math.html#network-math-formalism"><span>Formalism for Better Precision Network Analysis</span></a>) as:</p>
+<div class="math">
+<p><img src="../../_images/math/a3476b02918b72a282af601fe2381b9bd4a1d2de.png" alt="y=l[t] &amp;= (r \otimes p)[t] = min( r[t] , p[t] - (p[t-1] -l[t-1]) )
+
+buffer= sup\{r[t] - l[t] : t \in \mathbb{N}\}
+
+delay = sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}"/></p>
+</div><p>Where the returned elements are defined as such:</p>
 <ul>
 <li><p class="first"><strong>output</strong>: output profile which is the result of this convolution.</p>
 </li>

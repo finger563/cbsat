@@ -1,3 +1,5 @@
+.. _math:
+
 Math
 ====
 
@@ -6,10 +8,14 @@ behind the network analysis techniques used by this
 tool.  These techniques are based on Network Calculus
 and have been published in these papers.
 
+.. _network_calc_background:
+
 Network Calculus Background
 ---------------------------
 
 Network Calculus, on the other hand, focuses on abstracting the network traffic and the computing nodes as arrival curves and traffic shapers. The arrival curves and service curves model the amount of data generated or serviced in a given window of time and are bounded by maximum and minimum arrival and service curves.  These bounds provide the requisite information needed to make design-time guarantees about *worst-case* application performance on the network, given that both the application traffic profile and the system's network performance are deterministic. These deterministic constraints can be relaxed so that the arrival and service curves can be probabilistic, causing the bounds on the performance to be probabilistic as well.  Because Network Calculus deals with either deterministic worst-case application performance on a static network or stochastic application performance on a dynamic network, system designers and application designers under-utilize the network resources of systems which require strict design-time guarantees about application performance.  
+
+.. _network_math_formalism:
 
 Formalism for Better Precision Network Analysis
 -----------------------------------------------
