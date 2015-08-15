@@ -53,6 +53,51 @@ def makeHLine(h):
     x = [h[0],h[0]+h[2]]
     return [x,y]
 
+def remove_degenerates(values):
+    values = list(set(values))
+
+def sort(values):
+    values = sorted(values)
+
+def split(values, t):
+    """
+    Remove and return every entry from *values* whose time > *t*.
+    """
+    tVal = get_value_at_time(values, t)
+
+    remainder = [x for x in values if x[0] >= t]
+    remainder.insert(0,[t,tVal])
+    remainder = list(set(remainder))
+
+    values = [x for x in values if x[0] < t]
+    values.append([t,tVal])
+    values = list(set(values))
+
+    return remainder
+
+def shift(values, t):
+    for value in values:
+        value[0] += t
+
+def get_index_containing_time(values, t):
+    if t < values[0][0] or t > values[-1][0]:
+        return None
+    for index, value in enumerate(values):
+        if value[0] > t:
+            return index - 1
+    return len(values) - 1
+
+def get_value_at_time(values, t, interpolate = True):
+    i = get_index_containing_time(values, t)
+    if i == None:
+        return None
+    if not interpolate:
+        return values[i][1]
+    else:
+        slope = values[i+1][1] - values[i][1]
+        timeDiff = values[i+1][0] - values[i][0]
+        return values[i][1] + slope / timeDiff * (t - values[i][0])
+
 def get_intersection(p11,p12,p21,p22):
     """
     Simple function to get a intersection of two lines defined by their endpoints

@@ -8,110 +8,19 @@ and systems.
 import copy,sys
 from utils import get_intersection
 
-class ProfileEntry:
-    """
-    Profile Entry contains the information about a single entry in a
-    network profile.
-    """
-
-    def __init__(self,start=0,end=0,slope=0,maxSlope=0,data=0,kind='none',latency=0):
-        """
-        :param double start: start time of the entry
-        :param double end: end time for the entry
-        :param double slope: what is the slope of the entry
-        :param double data: what is the end data for the entry
-        :param string kind: what kind of entry is it?
-        :param double latency: what is the latency for this entry
-        """
-        #: The start time of the entry
-        self.start = start
-        #: The end time of the entry
-        self.end = end
-        #: The slope of this entry
-        self.slope = slope
-        #: The maximum slope for this entry (for use with DDoS)
-        self.maxSlope = maxSlope
-        #: The cumulative amount of data sent by the end of this entry (including previous entries)
-        self.data = data
-        #: The kind of the entry, e.g. 'required'
-        self.kind = kind
-        #: How much latency this entry has; this is how much is allowed (req) or incurred (provided)
-        self.latency = latency
-
-    def __lt__(self, other):
-        """Used for comparison and sorting with other entries."""
-        return self.start < other.start
-
-    def __repr__(self):
-        retstr = "{}\n".format(self)
-        return retstr #"ProfileEntry()"
-    
-    def __str__(self):
-        return "{},{},{},{},{}".format(self.start,self.end,self.slope,self.data,self.kind)
-
-    def UpdateSlope(self,startData):
-        """Recalculate the slope as :math:`(data - startData) / (end - start)` """
-        if self.start != self.end:
-            self.slope = (self.data - startData) / (self.end - self.start)
-
-    def UpdateData(self,startData):
-        """Recalculate the end data as :math:`startData + slope*(end-start)` """
-        self.data = startData
-        if self.start != self.end:
-            self.data += self.slope * (self.end - self.start)
-
-    def ParseFromLine(self,line):
-        """
-        Set entry attributes from a single line string.
-        This line should be a csv list of one of these forms::
-        
-            <start time (s)>, <bandwidth (bps)>, <latency (s)>
-
-            <start time (s)>, <mean bandwidth (bps)>, <max bandwidth (bps)>, <latency (s)>
-
-        :param string line: single csv line following the proper format
-        """
-        if line:
-            fields = line.split(',')
-            if len(fields) == 3:
-                self.start = float(fields[0])
-                self.slope = float(fields[1])
-                self.latency = float(fields[2])
-                return 0
-            elif len(fields) == 4:
-                self.start = float(fields[0])
-                self.slope = float(fields[1])
-                self.maxSlope = float(fields[2])
-                self.latency = float(fields[3])
-                return 0
-        return -1
-
-    def GetDataAtTime(self,t):
-        """
-        Returns the data at time t, based on the slope and the end data.
-        :param double t: Time in the profile at which to query the data
-        """
-        if t > self.end or t < self.start:
-            return -1
-        return (self.data - self.slope * (self.end - t))
-
-    def GetTimesAtData(self,d):
-        """
-        Returns a list of all possible times the entry has the data value d.
-        :param double d: Data value for which you want to find all matching times
-        """ 
-        if d > self.data or d < (self.data - self.slope * (self.end-self.start)):
-            return []
-        if self.slope == 0:
-            return [self.start,self.end]
-        return [self.end - (self.data - d)/self.slope]
-
 class Profile:
     """
     Profile contains the information about a single network profie.
     A network profile has a kind (e.g. 'provided'), a period (in seconds),
-    and a list of entries of type :class:`ProfileEntry`.
+    and a lists of relevant data vs time series (e.g. bandwidth, latency, data, etc.).
     """
+
+    #: What separates fields in a profile?
+    field_delimeter = ','
+    header_delimeter = '#'
+    comment_delimeter = '%'
+    line_delimeter = '\n'
+    special_delimeters = [header_delimeter, comment_delimeter]
     
     def __init__(self, kind = None, period = 0, priority = 0, source = 0, dest = 0):
         """
@@ -121,12 +30,12 @@ class Profile:
         :param int source: what is the node id from which the data on this profile will be sent
         :param int dest: what is the node id to which the data on this profile will be sent
         """
-        self.entries = []        #: The list of :class:`ProfileEntry` which describe this profile
         self.kind = kind         #: The kind of this profile, e.g. 'required'
         self.period = period     #: The length of one period of this profile
         self.priority = priority #: The priority of the profile; relevant for 'required' profiles
         self.src_id = source     #: The node ID which is the source of this profile
         self.dst_id = dest       #: The node ID which is the destination of this profile
+        self.entries = {}        #: Dictionary of 'type name' -> 'list of [x,y] points' k,v pairs 
 
     def __repr__(self):
         return "Profile(kind = {}, period = {}, priority = {})\n".format(
@@ -195,157 +104,81 @@ class Profile:
         if not prof_str:
             print >> sys.stderr, "ERROR: String contains no profile spec!"
             return -1
-        lines = prof_str.split('\n')
-        header = [l for l in lines if '#' in l]
+        lines = prof_str.split(self.line_delimeter)
+        header = [l for l in lines if self.header_delimeter in l]
         self.ParseHeader(header)
-        specials = ['%','#']
         p = copy.copy(lines)
-        for s in specials:
+        for s in self.special_delimeters:
             p = [l for l in p if s not in l]
         for line in p:
-            entry = ProfileEntry()
-            if entry.ParseFromLine(line) == 0:
-                entry.kind = self.kind
-                self.entries.append(entry)
-        if len(self.entries) != 0:
-            self.entries = sorted(self.entries)
-            for i in range(0,len(self.entries)-1):
-                self.entries[i].end = self.entries[i+1].start
-            self.entries[-1].end = self.period
-            self.RemoveDegenerates()
-            if self.entries[0].start > 0:
-                entry = ProfileEntry()
-                entry.start = 0
-                entry.end = self.entries[0].start
-                entry.kind = self.kind
-                self.entries.insert(0,entry)
+            self.ParseEntriesFromLine(line)
+        self.SortEntries()
+        self.EntriesStartFill()
+        self.EntriesRemoveDegenerates()
+
+    def ParseEntriesFromLine(self, line_str):
+        if line_str:
+            fields = line_str.split(self.field_delimeter)
+            if len(fields) == 4:
+                time = float(fields[0])
+                slope = float(fields[1])
+                maxSlope = float(fields[2])
+                latency = float(fields[3])
+                self.entries.setdefault('slope',[]).append([time, slope])
+                self.entries.setdefault('max slope',[]).append([time, maxSlope])
+                self.entries.setdefault('latency',[]).append([time, latency])
+            else:
+                print >> sys.stderr,"{} must be formatted: <time>, <slope>, <max slope>, <latency>".format(line_str)
+
+    def EntriesRemoveDegenerates(self):
+        """Remove duplicate entries by time stamp."""
+        for key, values in self.entries.iteritems():
+            utils.remove_degenerates(values)
+
+    def SortEntries(self):
+        """Sort entries by time stamp."""
+        for name, values in self.entries.iteritems():
+            utils.sort(values)
+
+    def EntriesStartFill(self):
+        """Make sure all entries have a start time of 0."""
+        for name, values in self.entries.iteritems():
+            if values[0][0] > 0:
+                values.insert(0,[0,0])
 
     def Repeat(self, num_periods):
         """Copy the current profile entries over some number of its periods."""
         self.RemoveDegenerates()
-        originalProf = copy.deepcopy(self.entries)
-        data = self.entries[-1].data
-        for i in range(1,int(num_periods)):
-            tmpProf = copy.deepcopy(originalProf)
-            for e in tmpProf:
-                e.data += data
-                e.start += self.period*i
-                e.end += self.period*i
-                self.entries.append(e)
-            data += data
-        self.RemoveDegenerates()
-
-    def Shrink(self, t):
-        """Remove all entries from the profile after *t*"""
-        if t < 0 or t > self.entries[-1].end: return
-        self.entries = [x for x in self.entries if x.start < t]
-        lastEntry = self.entries[-1]
-        if lastEntry.end > t:
-            lastEntry.end = t
-        self.RemoveDegenerates()
-
-    def ZeroBefore(self, t):
-        """
-        Zeroes the entries in the profile before *t*,
-        returns the entries that existed before *t*.
-        """
-        if t < 0: return
-        self.entries = [x for x in self.entries if x.end > t]
-        e = self.entries[0]
-        if e.start < t:  # need to split the first entry
-            e.start = t
-        e = ProfileEntry(kind = self.kind, start = 0, end = t)
-        self.entries.insert(0,e)
-
-    def ZeroAfter(self, t):
-        """
-        Zeroes the entries in the profile after *t*, 
-        returns the entries that existed after *t*.
-        """
-        if t > self.entries[-1].end: return
-        end = self.entries[-1].end
-        remainder = [x for x in self.entries if x.start >= t]
-        self.entries = [x for x in self.entries if x.start < t]
-        e = self.entries[-1]
-        if e.end > t:  # need to split the last entry
-            first_end = end
-            if remainder:
-                first_end = remainder[0].start
-            newE = ProfileEntry(kind = self.kind,
-                                start = t,
-                                end = first_end,
-                                slope = e.slope,
-                                data = e.data,
-                                latency = e.latency)
-            remainder.insert(0,newE)
-            e.end = t
-        e = ProfileEntry(kind = self.kind, start = t, end = end)
-        self.entries.append(e)
-        return remainder
-
-    def Shift(self, t, index = 0):
-        """Shift the profile by some time *t* after index."""
-        for i in range(index,len(self.entries)):
-            self.entries[index].start += t
-            self.entries[index].end += t
-
-    def Rotate(self, t):
-        """
-        Rotates the profile circularly (based on period, through start time) by a time *t*.
-        
-        .. note:: *t* must be between 0 and the profile's period
-
-        :rtype: int : 0 if success, -1 for error
-        """
-        if t < 0 or t > self.period:
-            print "ERROR: rotate time must be between 0 and this profile's period, {}".format(self.period)
-            return -1
-        self.RemoveDegenerates()
-        if t > 0 and t < self.period:
-            newEntries = []
-            for e in self.entries:
-                e.start += t
-                e.end += t
-                if e.start > self.period:
-                    e.start = e.start - self.period
-                if e.end > self.period:
-                    e.end  = e.end - self.period
-                if e.start > e.end: # this entry is starts before the period and ends afterwards
-                    entry = copy.deepcopy(e)
-                    entry.start = 0
-                    e.end = self.period
-                    newEntries.append(entry)
-            self.entries.extend(newEntries)
-            self.RemoveDegenerates()
-        return 0
+        for key, values in self.entries.iteritems():
+            original = copy.copy(values)
+            for i in range(1, int(num_periods)):
+                tmpValues = copy.copy(original)
+                utils.shift(tmpValues, self.period*i)
+                values.extend(tmpValues)
+        self.EntriesRemoveDegenerates()
+        self.Integrate()        
 
     def IsRequired(self):
-        if 'required' in self.kind:
-            return True
-        return False
+        return self.IsKind('required')
 
     def IsProvided(self):
-        if 'provided' in self.kind:
-            return True
-        return False
+        return self.IsKind('provided')
 
     def IsKind(self, kind):
-        if kind in self.kind:
-            return True
-        return False
+        return kind in self.kind
     
     def Kind(self,kind):
         """Set the kind of the profile and all its entries."""
-        self.kind = kind;
-        for e in self.entries:
-            e.kind = kind
+        self.kind = kind
 
     def Integrate(self):
         """Integrate all the entries' slopes cumulatively to calculate their new data."""
-        prevData = 0
-        for e in self.entries:
-            e.UpdateData(prevData)
-            prevData = e.data
+        slopes = self.entries['slope']
+        data = 0
+        dataVals = [[0,0]]
+        for x,y in slopes:
+            data += y * (x) # FIX THIS
+            dataVals.append([x, data])
 
     def Derive(self):
         """Derive all the entries slopes from their data."""
@@ -411,11 +244,7 @@ class Profile:
         if times != []:
             times = [min(times), max(times)]
         return times
-
-    def RemoveDegenerates(self):
-        """Remove degenerate entries whose start = end"""
-        self.entries = sorted([x for x in self.entries if x.start < x.end])
-
+                
     def AddProfile(self,profile):
         """Compose this profile with an input profile by adding their slopes together."""
         for e in profile.entries:
