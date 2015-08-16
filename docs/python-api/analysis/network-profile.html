@@ -162,122 +162,11 @@ These classes provide all the members and functions neccessary to
 model, compose, and analyze network profiles for applications 
 and systems.</p>
 <dl class="class">
-<dt id="networkProfile.ProfileEntry">
-<em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">ProfileEntry</code><span class="sig-paren">(</span><em>start=0</em>, <em>end=0</em>, <em>slope=0</em>, <em>maxSlope=0</em>, <em>data=0</em>, <em>kind='none'</em>, <em>latency=0</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Profile Entry contains the information about a single entry in a
-network profile.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>start</strong> (<em>double</em>) &#8211; start time of the entry</li>
-<li><strong>end</strong> (<em>double</em>) &#8211; end time for the entry</li>
-<li><strong>slope</strong> (<em>double</em>) &#8211; what is the slope of the entry</li>
-<li><strong>data</strong> (<em>double</em>) &#8211; what is the end data for the entry</li>
-<li><strong>kind</strong> (<em>string</em>) &#8211; what kind of entry is it?</li>
-<li><strong>latency</strong> (<em>double</em>) &#8211; what is the latency for this entry</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="attribute">
-<dt id="networkProfile.ProfileEntry.start">
-<code class="descname">start</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.ProfileEntry.start" title="Permalink to this definition">¶</a></dt>
-<dd><p>The start time of the entry</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="networkProfile.ProfileEntry.end">
-<code class="descname">end</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.ProfileEntry.end" title="Permalink to this definition">¶</a></dt>
-<dd><p>The end time of the entry</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="networkProfile.ProfileEntry.slope">
-<code class="descname">slope</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.ProfileEntry.slope" title="Permalink to this definition">¶</a></dt>
-<dd><p>The slope of this entry</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="networkProfile.ProfileEntry.maxSlope">
-<code class="descname">maxSlope</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.ProfileEntry.maxSlope" title="Permalink to this definition">¶</a></dt>
-<dd><p>The maximum slope for this entry (for use with DDoS)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="networkProfile.ProfileEntry.data">
-<code class="descname">data</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.ProfileEntry.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>The cumulative amount of data sent by the end of this entry (including previous entries)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="networkProfile.ProfileEntry.kind">
-<code class="descname">kind</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.ProfileEntry.kind" title="Permalink to this definition">¶</a></dt>
-<dd><p>The kind of the entry, e.g. &#8216;required&#8217;</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="networkProfile.ProfileEntry.latency">
-<code class="descname">latency</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.ProfileEntry.latency" title="Permalink to this definition">¶</a></dt>
-<dd><p>How much latency this entry has; this is how much is allowed (req) or incurred (provided)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.ProfileEntry.UpdateSlope">
-<code class="descname">UpdateSlope</code><span class="sig-paren">(</span><em>startData</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.UpdateSlope" title="Permalink to this definition">¶</a></dt>
-<dd><p>Recalculate the slope as <img class="math" src="../../_images/math/69d9089e775459bf36dc67f8ffd9d1cbe9139ee7.png" alt="(data - startData) / (end - start)"/></p>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.ProfileEntry.UpdateData">
-<code class="descname">UpdateData</code><span class="sig-paren">(</span><em>startData</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.UpdateData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Recalculate the end data as <img class="math" src="../../_images/math/18014bbc2fb114c6c3b7f75abf3280137d2e633b.png" alt="startData + slope*(end-start)"/></p>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.ProfileEntry.ParseFromLine">
-<code class="descname">ParseFromLine</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.ParseFromLine" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set entry attributes from a single line string.
-This line should be a csv list of one of these forms:</p>
-<div class="highlight-python"><div class="highlight"><pre>&lt;start time (s)&gt;, &lt;bandwidth (bps)&gt;, &lt;latency (s)&gt;
-
-&lt;start time (s)&gt;, &lt;mean bandwidth (bps)&gt;, &lt;max bandwidth (bps)&gt;, &lt;latency (s)&gt;
-</pre></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>line</strong> (<em>string</em>) &#8211; single csv line following the proper format</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.ProfileEntry.GetDataAtTime">
-<code class="descname">GetDataAtTime</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.GetDataAtTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the data at time t, based on the slope and the end data.
-:param double t: Time in the profile at which to query the data</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.ProfileEntry.GetTimesAtData">
-<code class="descname">GetTimesAtData</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.ProfileEntry.GetTimesAtData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a list of all possible times the entry has the data value d.
-:param double d: Data value for which you want to find all matching times</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="networkProfile.Profile">
 <em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">Profile</code><span class="sig-paren">(</span><em>kind=None</em>, <em>period=0</em>, <em>priority=0</em>, <em>source=0</em>, <em>dest=0</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Profile contains the information about a single network profie.
 A network profile has a kind (e.g. &#8216;provided&#8217;), a period (in seconds),
-and a list of entries of type <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">ProfileEntry</span></code></a>.</p>
+and a lists of relevant data vs time series (e.g. bandwidth, latency, data, etc.).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -294,10 +183,30 @@ and a list of entries of type <a class="reference internal" href="#networkProfil
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="networkProfile.Profile.entries">
-<code class="descname">entries</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.Profile.entries" title="Permalink to this definition">¶</a></dt>
-<dd><p>The list of <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">ProfileEntry</span></code></a> which describe this profile</p>
+<dt id="networkProfile.Profile.field_delimeter">
+<code class="descname">field_delimeter</code><em class="property"> = ','</em><a class="headerlink" href="#networkProfile.Profile.field_delimeter" title="Permalink to this definition">¶</a></dt>
+<dd><p>What separates fields in a profile?</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="networkProfile.Profile.header_delimeter">
+<code class="descname">header_delimeter</code><em class="property"> = '#'</em><a class="headerlink" href="#networkProfile.Profile.header_delimeter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="networkProfile.Profile.comment_delimeter">
+<code class="descname">comment_delimeter</code><em class="property"> = '%'</em><a class="headerlink" href="#networkProfile.Profile.comment_delimeter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="networkProfile.Profile.line_delimeter">
+<code class="descname">line_delimeter</code><em class="property"> = '\n'</em><a class="headerlink" href="#networkProfile.Profile.line_delimeter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="networkProfile.Profile.special_delimeters">
+<code class="descname">special_delimeters</code><em class="property"> = ['#', '%']</em><a class="headerlink" href="#networkProfile.Profile.special_delimeters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="networkProfile.Profile.kind">
@@ -329,6 +238,12 @@ and a list of entries of type <a class="reference internal" href="#networkProfil
 <dd><p>The node ID which is the destination of this profile</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="networkProfile.Profile.entries">
+<code class="descname">entries</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.Profile.entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of &#8216;type name&#8217; -&gt; &#8216;list of [x,y] points&#8217; k,v pairs</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="networkProfile.Profile.ParseHeader">
 <code class="descname">ParseHeader</code><span class="sig-paren">(</span><em>header</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ParseHeader" title="Permalink to this definition">¶</a></dt>
@@ -357,7 +272,40 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 <dt id="networkProfile.Profile.ParseFromString">
 <code class="descname">ParseFromString</code><span class="sig-paren">(</span><em>prof_str</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ParseFromString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds the entries from either a string (line list of csv&#8217;s formatted as per
-<a class="reference internal" href="#networkProfile.ProfileEntry.ParseFromLine" title="networkProfile.ProfileEntry.ParseFromLine"><code class="xref py py-func docutils literal"><span class="pre">ProfileEntry.ParseFromLine()</span></code></a>).</p>
+<a class="reference internal" href="#networkProfile.Profile.ParseEntriesFromLine" title="networkProfile.Profile.ParseEntriesFromLine"><code class="xref py py-func docutils literal"><span class="pre">ParseEntriesFromLine()</span></code></a>).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.ParseEntriesFromLine">
+<code class="descname">ParseEntriesFromLine</code><span class="sig-paren">(</span><em>line_str</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ParseEntriesFromLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds the [time, value] list for each type of value into entries:</p>
+<ul class="simple">
+<li>slope</li>
+<li>max slope</li>
+<li>latency</li>
+</ul>
+<dl class="docutils">
+<dt>These values are formatted in the csv as:</dt>
+<dd>&lt;time&gt;, &lt;slope&gt;, &lt;max slope&gt;, &lt;latency&gt;</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.EntriesRemoveDegenerates">
+<code class="descname">EntriesRemoveDegenerates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.EntriesRemoveDegenerates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove duplicate entries by time stamp.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.SortEntries">
+<code class="descname">SortEntries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.SortEntries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort entries by time stamp.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.EntriesStartFill">
+<code class="descname">EntriesStartFill</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.EntriesStartFill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make sure all entries have a start time of 0.</p>
 </dd></dl>
 
 <dl class="method">
@@ -367,145 +315,15 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 </dd></dl>
 
 <dl class="method">
-<dt id="networkProfile.Profile.Shrink">
-<code class="descname">Shrink</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Shrink" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove all entries from the profile after <em>t</em></p>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.ZeroBefore">
-<code class="descname">ZeroBefore</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ZeroBefore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Zeroes the entries in the profile before <em>t</em></p>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.ZeroAfter">
-<code class="descname">ZeroAfter</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ZeroAfter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Zeroes the entries in the profile after <em>t</em></p>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.Shift">
-<code class="descname">Shift</code><span class="sig-paren">(</span><em>t</em>, <em>index=0</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Shift" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shift the profile by some time <em>t</em> after index</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last"><em>t</em> must be greater than 0</p>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.Rotate">
-<code class="descname">Rotate</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Rotate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rotates the profile circularly (based on period, through start time) by a time <em>t</em>.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last"><em>t</em> must be between 0 and the profile&#8217;s period</p>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int : 0 if success, -1 for error</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.IsRequired">
-<code class="descname">IsRequired</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.IsRequired" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.IsProvided">
-<code class="descname">IsProvided</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.IsProvided" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="networkProfile.Profile.IsKind">
 <code class="descname">IsKind</code><span class="sig-paren">(</span><em>kind</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.IsKind" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns True if the profile is of type <em>kind</em>, False otherwise.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.Kind">
 <code class="descname">Kind</code><span class="sig-paren">(</span><em>kind</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Kind" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the kind of the profile and all its entries.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.Integrate">
-<code class="descname">Integrate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Integrate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Integrate all the entries&#8217; slopes cumulatively to calculate their new data.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.Derive">
-<code class="descname">Derive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Derive" title="Permalink to this definition">¶</a></dt>
-<dd><p>Derive all the entries slopes from their data.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.GetIndexContainingTime">
-<code class="descname">GetIndexContainingTime</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.GetIndexContainingTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the index of a <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code></a> from entries which contains time <em>t</em></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<em>double</em>) &#8211; time value for indexing</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.GetDataAtTime">
-<code class="descname">GetDataAtTime</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.GetDataAtTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the data at the given time <em>t</em> from the profile</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<em>double</em>) &#8211; time value</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.GetLatencyAtTime">
-<code class="descname">GetLatencyAtTime</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.GetLatencyAtTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the latency at the given time <em>t</em> from the profile.  Latency is a 
-linear continuous function between entries&#8217; latency values.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> (<em>double</em>) &#8211; time value</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.GetTimesAtData">
-<code class="descname">GetTimesAtData</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.GetTimesAtData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of times at which the profile matches the data value <em>d</em></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>d</strong> (<em>double</em>) &#8211; data value</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.RemoveDegenerates">
-<code class="descname">RemoveDegenerates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.RemoveDegenerates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove degenerate entries whose start = end</p>
+<dd><p>Set the kind of the profile.</p>
 </dd></dl>
 
 <dl class="method">
@@ -526,13 +344,6 @@ linear continuous function between entries&#8217; latency values.</p>
 <dd><p>Subtract a single entry (based on its bandwidth) from the profile.
 This entry may come from anywhere, so we must take care to ensure that 
 any possibly affected entries are properly updated.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.InsertEntry">
-<code class="descname">InsertEntry</code><span class="sig-paren">(</span><em>entry</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.InsertEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Insert a single entry into the profile.  Entry is inserted before 
-the index, so that it will have that as its index.</p>
 </dd></dl>
 
 <dl class="method">
@@ -557,18 +368,6 @@ curve, while passing <code class="xref py py-func docutils literal"><span class=
 </dd></dl>
 
 <dl class="method">
-<dt id="networkProfile.Profile.MakeGraphPointsData">
-<code class="descname">MakeGraphPointsData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.MakeGraphPointsData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Turn the entries&#8217; data points into plottable x,y series.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.MakeGraphPointsSlope">
-<code class="descname">MakeGraphPointsSlope</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.MakeGraphPointsSlope" title="Permalink to this definition">¶</a></dt>
-<dd><p>Turn the entries&#8217; slopes into plottable x,y series.</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="networkProfile.Profile.CalcDelay">
 <code class="descname">CalcDelay</code><span class="sig-paren">(</span><em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.CalcDelay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the maximum horizontal distance between this profile and the input profile.  Return it as a form:</p>
@@ -579,7 +378,7 @@ curve, while passing <code class="xref py py-func docutils literal"><span class=
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> (<em>in</em>) &#8211; a <code class="xref py py-func docutils literal"><span class="pre">list()</span></code> of <a class="reference internal" href="#networkProfile.ProfileEntry" title="networkProfile.ProfileEntry"><code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code></a> objects describing the output profile</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> (<em>in</em>) &#8211; a <code class="xref py py-func docutils literal"><span class="pre">list()</span></code> of <code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code> objects describing the output profile</td>
 </tr>
 </tbody>
 </table>

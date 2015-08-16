@@ -99,7 +99,7 @@ class Profile:
     def ParseFromString(self, prof_str):
         """
         Builds the entries from either a string (line list of csv's formatted as per
-        :func:`ProfileEntry.ParseFromLine`).
+        :func:`ParseEntriesFromLine`).
         """
         if not prof_str:
             print >> sys.stderr, "ERROR: String contains no profile spec!"
@@ -117,6 +117,16 @@ class Profile:
         self.EntriesRemoveDegenerates()
 
     def ParseEntriesFromLine(self, line_str):
+        """
+        Builds the [time, value] list for each type of value into entries:
+        
+        * slope
+        * max slope
+        * latency
+
+        These values are formatted in the csv as:
+            <time>, <slope>, <max slope>, <latency>
+        """
         if line_str:
             fields = line_str.split(self.field_delimeter)
             if len(fields) == 4:
@@ -138,7 +148,7 @@ class Profile:
     def SortEntries(self):
         """Sort entries by time stamp."""
         for name, values in self.entries.iteritems():
-            utils.sort(values)
+            values = sorted(values)
 
     def EntriesStartFill(self):
         """Make sure all entries have a start time of 0."""
@@ -158,104 +168,32 @@ class Profile:
         self.EntriesRemoveDegenerates()
         self.Integrate()        
 
-    def IsRequired(self):
-        return self.IsKind('required')
-
-    def IsProvided(self):
-        return self.IsKind('provided')
-
     def IsKind(self, kind):
+        """Returns True if the profile is of type *kind*, False otherwise."""
         return kind in self.kind
     
     def Kind(self,kind):
-        """Set the kind of the profile and all its entries."""
+        """Set the kind of the profile."""
         self.kind = kind
 
-    def Integrate(self):
-        """Integrate all the entries' slopes cumulatively to calculate their new data."""
-        slopes = self.entries['slope']
-        data = 0
-        dataVals = [[0,0]]
-        for x,y in slopes:
-            data += y * (x) # FIX THIS
-            dataVals.append([x, data])
-
-    def Derive(self):
-        """Derive all the entries slopes from their data."""
-        prevData = 0
-        for e in self.entries:
-            e.UpdateSlope(prevData)
-            prevData = e.data
-
-    def GetIndexContainingTime(self, t):
-        """
-        Get the index of a :class:`networkProfile.ProfileEntry` from entries which contains time *t*
-        
-        :param double t: time value for indexing
-        """
-        i=0
-        while i < len(self.entries) and t > self.entries[i].end:
-            i += 1
-        return i
-
-    def GetDataAtTime(self, t):
-        """
-        Get the data at the given time *t* from the profile
-        
-        :param double t: time value 
-        """
-        i = self.GetIndexContainingTime(t)
-        return self.entries[i].GetDataAtTime(t)
-
-    def GetLatencyAtTime(self, t):
-        """
-        Get the latency at the given time *t* from the profile.  Latency is a 
-        linear continuous function between entries' latency values.
-
-        :param double t: time value
-        """
-        i = self.GetIndexContainingTime(t)
-        i2 = (i+1) % len(self.entries)
-        e1 = self.entries[i]
-        e2 = self.entries[i2]
-        slope = (e2.latency - e1.latency) / (e2.start - e1.start)
-        latency = e1.latency + slope * ( t - e1.start )
-        return latency
-
-    def GetTimesAtData(self, d):
-        """
-        Get a list of times at which the profile matches the data value *d*
-        
-        :param double d: data value
-        """
-        times = []
-        i=0
-        while i < len(self.entries) and d > self.entries[i].data:
-            i +=1
-        startInd = i
-        while i < len(self.entries) and d == self.entries[i].data:
-            i += 1
-        endInd = i
-        if startInd < len(self.entries):
-            for i in range(startInd,endInd+1):
-                if i >= len(self.entries):
-                    break
-                times.extend(self.entries[i].GetTimesAtData(d))
-        if times != []:
-            times = [min(times), max(times)]
-        return times
-                
     def AddProfile(self,profile):
         """Compose this profile with an input profile by adding their slopes together."""
-        for e in profile.entries:
-            self.AddEntry(copy.copy(e))
+        new_slopes = utils.add_values(
+            self.entries['slope'],
+            profile.entries['slope'],
+            interpolate = False
+        )
+        self.entries['slope'] = new_slopes
         self.RemoveDegenerates()
         self.Integrate()
 
     def SubtractProfile(self,profile):
         """Compose this profile with an input profile by subtracting the input profile's slopes."""
-        for e in profile.entries:
-            self.SubtractEntry(e)
+        new_slopes = utils.subtract_values(
+            self.entries['slope'],
+            profile.entries['slope'],
+            interpolate = False
+        )
         self.RemoveDegenerates()
         self.Integrate()
 
@@ -295,18 +233,6 @@ class Profile:
                 self.entries[endInd].end = entry.end
                 self.entries.insert(endInd+1, newEntry)
             
-    def InsertEntry(self, entry, index):
-        """
-        Insert a single entry into the profile.  Entry is inserted before 
-        the index, so that it will have that as its index.
-        """
-        front = self.entries[:index]
-        back = self.entries[index:]
-        self.entries = []
-        self.entries.extend(front)
-        self.entries.append(entry)
-        self.entries.extend(back)
-
     def AddEntry(self, entry):
         """
         Add a single entry (based on its bandwidth) to the profile.
@@ -380,26 +306,6 @@ class Profile:
             new_entries.append(entry)
         self.entries = new_entries
         self.RemoveDegenerates()
-
-    def MakeGraphPointsData(self):
-        """Turn the entries' data points into plottable x,y series."""
-        xvals = [0]
-        yvals = [0]
-        for e in self.entries:
-            xvals.append(e.end)
-            yvals.append(e.data)
-        return [xvals,yvals]
-          
-    def MakeGraphPointsSlope(self):
-        """Turn the entries' slopes into plottable x,y series."""
-        xvals = []
-        yvals = []
-        for e in self.entries:
-            xvals.append(e.start)
-            yvals.append(e.slope)
-            xvals.append(e.end)
-            yvals.append(e.slope)
-        return [xvals, yvals]
 
     def CalcDelay(self, output):
         """
