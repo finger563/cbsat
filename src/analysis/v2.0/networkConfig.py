@@ -26,7 +26,7 @@ class Node:
         return True
         
     def AddProfile(self, prof):
-        if prof.IsProvided():
+        if prof.IsKind('provided'):
             self.AddProvidedProfile(prof)
 
     def AddProvidedProfile(self, prof):

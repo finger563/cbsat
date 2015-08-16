@@ -69,26 +69,22 @@ def analyze(required, provided, config, options):
     provided.Integrate()
     required.Integrate()
 
-    output, maxBuffer, maxDelay = required.Convolve(provided)
+    output = required.Convolve(provided)
+    output.Derive()
     output.period = hyperPeriod
+    maxBuffer = required.CalcBuffer(output)
+    maxDelay = required.CalcDelay(output)
 
     # delay the output according to the latency of the node's link
     # this determines the characteristics of the data at the receiver end
     received = copy.deepcopy(output)
     received.Kind("received")
-    received.Delay(provided, mtu)
-    received.period = hyperPeriod
+    received.Delay(provided)
+    received.Derive()
 
     # calculate the remaining capacity of the node's link
     remaining = copy.deepcopy(provided)
     remaining.Kind("remaining")
-    remaining.period = hyperPeriod
-
-    #newHyperPeriod = lcm ( remaining.period, output.period )
-    #print 'New hyper period: {}'.format(newHyperPeriod)
-    #remaining.Repeat( (newHyperPeriod / remaining.period) * num_periods )
-    #output.Repeat( (newHyperPeriod / output.period) * num_periods )
-
     remaining.SubtractProfile(output)
 
     print bcolors.OKBLUE +\
@@ -98,10 +94,10 @@ def analyze(required, provided, config, options):
     
     # DETERMINE SYSTEM STABILITY IF WE HAVE MORE THAN ONE HYPERPERIOD TO ANALYZE
     if num_periods > 1:
-        reqDataP1 = required.GetDataAtTime( hyperPeriod )
-        reqDataP2 = required.GetDataAtTime( 2*hyperPeriod )
-        outDataP1 = output.GetDataAtTime( hyperPeriod )
-        outDataP2 = output.GetDataAtTime( 2*hyperPeriod )
+        reqDataP1 = required.GetValueAtTime( 'data', hyperPeriod )
+        reqDataP2 = required.GetValueAtTime( 'data', 2*hyperPeriod )
+        outDataP1 = output.GetValueAtTime( 'data', hyperPeriod )
+        outDataP2 = output.GetValueAtTime( 'data', 2*hyperPeriod )
         buff1 = reqDataP1 - outDataP1
         buff2 = reqDataP2 - outDataP2
         if buff2 > buff1:
@@ -183,9 +179,9 @@ def main(argv):
             print "ERROR: could not parse {}".format(fName)
             return -1
         print "Profile {} has a period of {} seconds".format(fName, newProf.period)
-        if newProf.IsRequired():
+        if newProf.IsKind('required'):
             profiles[newProf.priority] = newProf
-        elif newProf.IsProvided():
+        elif newProf.IsKind('provided'):
             nodes[newProf.src_id].AddProfile(newProf)
 
     # SORT PROFILES BY PRIORITY

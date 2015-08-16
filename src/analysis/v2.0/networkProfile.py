@@ -6,7 +6,7 @@ and systems.
 """
 
 import copy,sys
-from utils import get_intersection
+import utils
 
 class Profile:
     """
@@ -22,7 +22,7 @@ class Profile:
     line_delimeter = '\n'
     special_delimeters = [header_delimeter, comment_delimeter]
     
-    def __init__(self, kind = None, period = 0, priority = 0, source = 0, dest = 0):
+    def __init__(self, kind = None, period = 0, priority = 0, source = 0, dest = 0, num_periods = 1):
         """
         :param string kind: what kind of profile is it?
         :param double period: what is the periodicity (in seconds) of the profile
@@ -36,6 +36,7 @@ class Profile:
         self.src_id = source     #: The node ID which is the source of this profile
         self.dst_id = dest       #: The node ID which is the destination of this profile
         self.entries = {}        #: Dictionary of 'type name' -> 'list of [x,y] points' k,v pairs 
+        self.num_periods = num_periods #: How many periods this profile runs for
 
     def __repr__(self):
         return "Profile(kind = {}, period = {}, priority = {})\n".format(
@@ -94,11 +95,11 @@ class Profile:
             return -1
         if prof_str == None:
             return -1
-        self.ParseFromString( prof_str )
+        return self.ParseFromString( prof_str )
 
     def ParseFromString(self, prof_str):
         """
-        Builds the entries from either a string (line list of csv's formatted as per
+        Builds the entries from a string (line list of csv's formatted as per
         :func:`ParseEntriesFromLine`).
         """
         if not prof_str:
@@ -111,10 +112,11 @@ class Profile:
         for s in self.special_delimeters:
             p = [l for l in p if s not in l]
         for line in p:
-            self.ParseEntriesFromLine(line)
-        self.SortEntries()
-        self.EntriesStartFill()
+            if self.ParseEntriesFromLine(line):
+                return -1
         self.EntriesRemoveDegenerates()
+        self.EntriesStartFill()
+        return 0
 
     def ParseEntriesFromLine(self, line_str):
         """
@@ -124,8 +126,10 @@ class Profile:
         * max slope
         * latency
 
-        These values are formatted in the csv as:
+        These values are formatted in the csv as::
+
             <time>, <slope>, <max slope>, <latency>
+
         """
         if line_str:
             fields = line_str.split(self.field_delimeter)
@@ -139,16 +143,13 @@ class Profile:
                 self.entries.setdefault('latency',[]).append([time, latency])
             else:
                 print >> sys.stderr,"{} must be formatted: <time>, <slope>, <max slope>, <latency>".format(line_str)
+                return -1
+        return 0
 
     def EntriesRemoveDegenerates(self):
         """Remove duplicate entries by time stamp."""
         for key, values in self.entries.iteritems():
-            utils.remove_degenerates(values)
-
-    def SortEntries(self):
-        """Sort entries by time stamp."""
-        for name, values in self.entries.iteritems():
-            values = sorted(values)
+            values = utils.remove_degenerates(values)
 
     def EntriesStartFill(self):
         """Make sure all entries have a start time of 0."""
@@ -158,15 +159,21 @@ class Profile:
 
     def Repeat(self, num_periods):
         """Copy the current profile entries over some number of its periods."""
-        self.RemoveDegenerates()
+        self.num_periods = num_periods
         for key, values in self.entries.iteritems():
-            original = copy.copy(values)
-            for i in range(1, int(num_periods)):
-                tmpValues = copy.copy(original)
-                utils.shift(tmpValues, self.period*i)
-                values.extend(tmpValues)
+            values = utils.repeat(values, self.period, self.num_periods)
         self.EntriesRemoveDegenerates()
-        self.Integrate()        
+
+    def Integrate(self):
+        """Integrates the slope entries to produce data entries up to *self.period*"""
+        self.entries['data'] = utils.integrate(
+            self.entries['slope'],
+            self.period * self.num_periods
+        )
+
+    def Derive(self):
+        """Derives the slope entries from the data entries"""
+        self.entries['slope'] = utils.derive( self.entries['data'] )
 
     def IsKind(self, kind):
         """Returns True if the profile is of type *kind*, False otherwise."""
@@ -176,136 +183,36 @@ class Profile:
         """Set the kind of the profile."""
         self.kind = kind
 
+    def Shrink(self, t):
+        """Shrink the profile to be <= *t*."""
+        self.entries['data'],r = utils.split(self.entries['data'], t)
+
     def AddProfile(self,profile):
         """Compose this profile with an input profile by adding their slopes together."""
-        new_slopes = utils.add_values(
+        self.entries['slope'] = utils.add_values(
             self.entries['slope'],
             profile.entries['slope'],
             interpolate = False
         )
-        self.entries['slope'] = new_slopes
-        self.RemoveDegenerates()
         self.Integrate()
 
     def SubtractProfile(self,profile):
         """Compose this profile with an input profile by subtracting the input profile's slopes."""
-        new_slopes = utils.subtract_values(
+        self.entries['slope'] = utils.subtract_values(
             self.entries['slope'],
             profile.entries['slope'],
             interpolate = False
         )
-        self.RemoveDegenerates()
         self.Integrate()
 
-    def SubtractEntry(self, entry):
-        """
-        Subtract a single entry (based on its bandwidth) from the profile.
-        This entry may come from anywhere, so we must take care to ensure that 
-        any possibly affected entries are properly updated.
-        """
-        if self.entries and\
-           entry.start >= self.entries[0].start and\
-           entry.end <= self.entries[-1].end:
-            startInd = self.GetIndexContainingTime(entry.start)
-            endInd = self.GetIndexContainingTime(entry.end)
-            originalSlope = self.entries[endInd].slope
-            # split start entry : shorten the existing entry and add a new entry
-            if entry.start > self.entries[startInd].start:
-                self.entries[startInd].end = entry.start
-                newEntry = ProfileEntry()
-                newEntry.start = entry.start
-                newEntry.end = self.entries[startInd].end
-                newEntry.slope = self.entries[startInd].slope
-                newEntry.kind = self.kind
-                startInd += 1
-                endInd += 1
-                self.entries.insert(startInd, newEntry)
-            # iterate through all entries between start and end to update with new bandwidth
-            for i in range(startInd,endInd+1):
-                self.entries[i].slope = max( 0, self.entries[i].slope - entry.slope)
-            # split end entry : shorten existing entry and add a new one
-            if entry.end < self.entries[endInd].end:
-                newEntry = ProfileEntry()
-                newEntry.start = entry.end
-                newEntry.end = self.entries[endInd].end
-                newEntry.slope = originalSlope
-                newEntry.kind = self.kind
-                self.entries[endInd].end = entry.end
-                self.entries.insert(endInd+1, newEntry)
-            
-    def AddEntry(self, entry):
-        """
-        Add a single entry (based on its bandwidth) to the profile.
-        This entry may come from anywhere so we must take care to ensure that
-        any possibly affected entries are properly updated.
-        """
-        if self.entries == [] or entry.start >= self.entries[-1].end:
-            self.entries.append(entry)
-        elif entry.end <= self.entries[0].start:
-            self.entries.insert(0,entry)
-        else:
-            startInd = self.GetIndexContainingTime(entry.start)
-            # split start entry : shorten the existing entry and add a new entry
-            if entry.start > self.entries[startInd].start:
-                self.entries[startInd].end = entry.start
-                newEntry = ProfileEntry()
-                newEntry.start = entry.start
-                newEntry.end = self.entries[startInd].end
-                newEntry.slope = self.entries[startInd].slope
-                newEntry.kind = self.kind
-                startInd += 1
-                self.entries.insert(startInd, newEntry)
-            endInd = self.GetIndexContainingTime(entry.end)
-            # iterate through all entries between start and end to update with new bandwidth
-            for i in range(startInd,endInd+1):
-                self.entries[i].slope += entry.slope
-            # split end entry : shorten existing entry and add a new one
-            if entry.end < self.entries[endInd].end:
-                newEntry = ProfileEntry()
-                newEntry.start = entry.end
-                newEntry.end = self.entries[endInd].end
-                newEntry.slope = self.entries[endInd].slope - entry.slope
-                newEntry.kind = self.kind
-                self.entries[endInd].end = entry.end
-                self.entries.insert(endInd+1, newEntry)
+    def MakeGraphPointsSlope(self):
+        return utils.convert_values_to_graph(self.entries['slope'], interpolate = False)
 
-    def ConvertToNC(self,step,filterFunc):
-        """
-        Perform time-window based integration to generate a Network Calculus curve
-        from the profile.  The conversion is configurable based on time-window step-size
-        and a filter function (e.g. min or max).  Passing :func:`max` will create an arrival
-        curve, while passing :func:`min` will create a service curve.
+    def MakeGraphPointsData(self):
+        return utils.convert_values_to_graph(self.entries['data'], interpolate = True)
 
-        .. note:: Requires the profile to have been integrated
-        """
-        time_list = []
-        data_list = []
-        for e in self.entries:
-            time_list.append(e.end)
-            data_list.append(-e.data)
-        start_time = 0
-        prev_data = 0
-        new_entries = []
-        for tw in time_list:
-            extremeData = -filterFunc(data_list)
-            t = tw
-            while t <= self.entries[-1].end:
-                startData = self.GetDataAtTime(t-tw)
-                endData = self.GetDataAtTime(t)
-                diff = endData - startData
-                extremeData = filterFunc([diff,extremeData])
-                t += step
-            entry = ProfileEntry()
-            entry.data = extremeData
-            entry.start = start_time
-            start_time = tw
-            entry.end = start_time
-            entry.kind = self.kind
-            entry.slope = (entry.data-prev_data) / (entry.end - entry.start)
-            prev_data = entry.data
-            new_entries.append(entry)
-        self.entries = new_entries
-        self.RemoveDegenerates()
+    def GetValueAtTime(self, key, t, interpolate = True):
+        return utils.get_value_at_time(self.entries[key], t, interpolate)
 
     def CalcDelay(self, output):
         """
@@ -313,35 +220,41 @@ class Profile:
         
             [ <time at the start of the delay>, <data value which experiences the delay>, <length of delay> ]
         
-        :param in output: a :func:`list` of :class:`networkProfile.ProfileEntry` objects describing the output profile
+        :param in output: a :class:`Profile` describing the output profile
 
-        .. note:: Requires that both profiles have been integrated
+        The delay is calculated as (see :ref:`network_math_formalism`):
+
+        .. math::
+            delay = sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}
         """
-        delay = [0,0,0]
-        if len(self.entries) == 0 or len(output.entries) == 0:
-            return delay
-        dataList = []
-        for e in self.entries:
-            dataList.append(e.data)
-        for e in output.entries:
-            dataList.append(e.data)
-        dataList = set(sorted(dataList))
-        for data in dataList:
-            rTimes = self.GetTimesAtData(data)
-            oTimes = output.GetTimesAtData(data)
-            if rTimes != [] and oTimes != []:
-                timeDiff = oTimes[0] - rTimes[0]
-                if timeDiff > delay[2]:
-                    delay = [ rTimes[0], data, timeDiff ]
-        return delay
+        r = self.entries['data']
+        o = output.entries['data']
+        return utils.max_horizontal_difference(r, o, True)
 
-    def Delay(self, delayProf, mtu):
+    def CalcBuffer(self, output):
+        """
+        Compute the maximum vertical distance between this profile and the input profile.  Return it as a form::
+        
+            [ <time>, <y value at bottom of buffer>, <size of the buffer> ]
+        
+        :param in output: a :class:`Profile` describing the output profile
+
+        The buffer is calulated as (see :ref:`network_math_formalism`):
+
+        .. math::
+            buffer= sup\{r[t] - l[t] : t \in \mathbb{N}\}
+        """
+        r = self.entries['data']
+        o = output.entries['data']
+        return utils.max_vertical_difference(r, o, True)
+
+    def Delay(self, delayProf):
         """
         Apply a delay profile to this profile; this may be used for determining the profile
         received by a node for which this profile is the output profile on the sender side.
         The delay profile describes the delay as a function of time for the link.
 
-        This function implements the function 
+        This function implements the operation: 
 
         .. math::
             o[t + \delta[t]] = l[t]
@@ -353,160 +266,74 @@ class Profile:
         * :math:`o[t]` is the output profile received at the other end of the link
 
         :param in delayProf: :class:`Profile` describing the delay
-        :param in mtu: and integer specifying the mtu for the transmission of the profile
-
-        .. note:: This function alters the periodicity of the profile!
-        .. note:: This profile needs to either have been generated from :func:`Profile.Convolve` or have been integrated.
         """
-        vals = []
-        profile = []
-        end = self.entries[-1].end
-        for e in self.entries:
-            newEntry = copy.copy(e)
-            newEntry.kind = "required"
-            profile.append(newEntry)
-        for e in delayProf.entries:
-            newEntry = copy.copy(e)
-            newEntry.kind = "delay"
-            profile.append(newEntry)
-        profile = sorted(profile)
-        rEntry = None
-        dEntry = None
-        for e in profile:
-            if e.kind == 'delay':
-                # need to figure out the data at this time and delay it by this delay
-                delay = e.latency
-                data = self.GetDataAtTime(e.start)
-                vals.append([ e.start + delay, data])
-            elif e.kind == 'required':
-                # need to figure out the delay at this time and delay this data by that amount
-                data = e.data
-                delay = delayProf.GetLatencyAtTime(e.end)
-                vals.append([ e.end + delay, data])
-        vals = sorted(vals)
-        newvals = []
-        for val in vals:
-            if val not in newvals:
-                newvals.append(val)
-        vals = newvals
-        newEntries = []
-        start = 0
-        for x,y in vals:
-            newEntry = ProfileEntry()
-            newEntry.start = start
-            newEntry.end = x
-            newEntry.data = y
-            newEntry.kind = self.kind
-            newEntries.append(newEntry)
-            start = x
-        self.entries = newEntries
-        self.RemoveDegenerates()
-        # need to take whatever part of the profile exists after the period
-        # and add it to the beginning of the period
-        self.Derive()
-        if self.entries[-1].end > end:
-            remainder = self.ZeroAfter(end)
-            if remainder:
-                t = -remainder[0].start
-                for e in remainder:
-                    e.start += t
-                    e.end += t
-                    self.AddEntry(e)
-                self.Integrate()
-        self.RemoveDegenerates()
-
+        delays = delayProf.entries['latency']
+        datas = self.entries['data']
+        endTime = datas[-1][0]
+        times = [ x[0] for x in delays ]
+        times.extend( [ x[0] for x in datas ] )
+        times = sorted(list(set(times)))
+        newDatas = []
+        for t in times:
+            d = utils.get_value_at_time(datas, t)
+            delay = utils.get_value_at_time(delays, t, interpolate = True)
+            newDatas.append([ t + delay, d ])
+        newDatas = utils.remove_degenerates(newDatas)
+        newDatas, remainder = utils.split(newDatas, endTime)
+        if remainder:
+            t = -remainder[0][0]
+            utils.shift(remainder, t)
+            r_slopes = utils.derive(remainder)
+            d_slopes = utils.derive(newDatas)
+            d_slopes = utils.add_values(d_slopes,r_slopes)
+            newDatas = utils.integrate(d_slopes, endTime)
+        self.entries['data'] = newDatas
+        
     def Convolve(self, provided):
         """
         Use min-plus calculus to convolve this *required* profile with an input *provided* profile.
 
-        :rtype: :func:`list` [ output, maxBuffer, maxDelay ]
+        :rtype: :class:`Profile`, :math:`l[t]`
 
-        where output is :math:`y[t]` defined (:ref:`network_math_formalism`) as:
+        where :math:`l[t]` is defined as (see :ref:`network_math_formalism`):
 
         .. math::
             y=l[t] &= (r \otimes p)[t] = min( r[t] , p[t] - (p[t-1] -l[t-1]) )
-
-            buffer= sup\{r[t] - l[t] : t \in \mathbb{N}\}
-
-            delay = sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}
-
-        Where the returned elements are defined as such:
-
-        * **output**: output profile which is the result of this convolution.
-        * **maxBuffer**: a list describing the maximum buffer required for this convolution.
-          it follows the form::
-
-                [ <bottom x location>, <bottom y location>, <size of the buffer (bytes)> ]
-        * **maxDelay**: a list describing the maximum delay experienced by data from this convolution.
-          it follows the form::
-
-                [ <left x location>, <left y location>, <length of the delay (seconds)> ]
-
-        .. note:: Requires that both profiles have been integrated
         """
+        r = self.entries['data']
+        p = provided.entries['data']
+        o = []
+
+        times = [ x[0] for x in p ]
+        times.extend( [ x[0] for x in r ] )
+        times = sorted(list(set(times)))
+        offset = 0
+        prevDiff = 0
+        prevTime = None
+        r_prev = None
+        p_prev = None
+        for t in times:
+            r_data = utils.get_value_at_time(r, t, interpolate = True)
+            p_data = utils.get_value_at_time(p, t, interpolate = True)
+            diff = (p_data - offset) - r_data
+            if diff > 0:
+                offset += diff
+            if cmp(diff,0) != cmp(prevDiff,0):
+                # THERE HAS BEEN AN INTERSECTION
+                intersection = utils.get_intersection(
+                    [ prevTime, r_prev ],
+                    [ t, r_data ],
+                    [ prevTime, p_prev ],
+                    [ t, p_data ]
+                )
+                o.append(intersection)
+            o.append([t, p_data - offset])
+            prevDiff = diff
+            prevTime = t
+            r_prev = r_data
+            p_prev = p_data - offset
+        o = utils.remove_degenerates(o)
+
         output = Profile(kind='output')
-        maxBuffer = [0,0,0] # [x, y, bufferSize]
-        maxDelay  = [0,0,0] # [x, y, delayLength]
-        if len(provided.entries) == 0 or len(self.entries) == 0:
-            print >> sys.stderr, "ERROR: Cannot convolve these two profiles."
-            return output, maxBuffer, maxDelay
-        profile = []
-        for e in provided.entries:
-            newEntry = copy.copy(e)
-            newEntry.kind = "provided"
-            profile.append(newEntry)
-        for e in self.entries:
-            newEntry = copy.copy(e)
-            newEntry.kind = "required"
-            profile.append(newEntry)
-        profile = sorted(profile)
-        pEntry = None
-        rEntry = None
-        buffSize = 0
-        pOffset = 0  # amount of data that wasn't utilized 
-        pEndData = 0 # amount of data at the END time in the provided profile
-        rEndData = 0 # amount of data at the END time in the required profile
-        for e in profile:
-            if e.kind == 'provided':
-                pEntry = e
-            else:
-                rEntry = e
-            if pEntry and rEntry:
-                start = max(pEntry.start, rEntry.start)
-                end = min(pEntry.end, rEntry.end)
-                if start != end:
-                    pEndData = pEntry.GetDataAtTime(end) - pOffset
-                    rEndData = rEntry.GetDataAtTime(end)
-                    entry = ProfileEntry()
-                    entry.kind = 'output'
-                    entry.start = start
-                    entry.end = end
-                    entry.data = min(pEndData,rEndData)
-                    if pEndData <= rEndData:
-                        buffSize = rEndData - pEndData
-                        if buffSize > maxBuffer[2]:
-                            maxBuffer = [entry.end, entry.data, buffSize]
-                    else:
-                        if len(output.entries) == 0 or output.entries[-1].data < rEndData:
-                            rStartData = rEntry.GetDataAtTime(rEntry.start)
-                            pStartData = pEntry.GetDataAtTime(pEntry.start) - pOffset
-                            point = get_intersection([pEntry.start, pStartData],
-                                                     [pEntry.end, pEntry.data - pOffset],
-                                                     [rEntry.start, rStartData],
-                                                     [rEntry.end, rEntry.data])
-                            if point[0] != -1 and start != point[0]:
-                                xEntry = ProfileEntry()
-                                xEntry.kind = 'output'
-                                xEntry.start = start
-                                xEntry.end = point[0]
-                                xEntry.data = point[1]
-                                output.AddEntry(xEntry)
-                                entry.start = xEntry.end
-                    if entry.start != entry.end:
-                        output.AddEntry(entry)
-                    if pEndData >= rEndData:
-                        pOffset += pEndData - rEndData
-        output.Derive()
-        output.RemoveDegenerates()
-        maxDelay = self.CalcDelay(output)
-        return output, maxBuffer, maxDelay
+        output.entries['data'] = o
+        return output

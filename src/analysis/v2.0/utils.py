@@ -1,4 +1,5 @@
 from fractions import gcd
+import copy
 
 class bcolors:
     """Extended characters used for coloring output text."""
@@ -55,36 +56,50 @@ def makeHLine(h):
 
 def remove_degenerates(values):
     """Make sure all value pairs are unique and sorted by time."""
+    
     tup = [ tuple(x) for x in values ]
     tmp = list(set(tup))
     retVals = []
     for t in tmp:
-        retVals.append(list(t))
+        times = [x[0] for x in retVals]
+        if t[0] not in times:
+            retVals.append(list(t))
     return sorted(retVals)
 
-def integrate(values):
+def repeat(values, period, num_periods):
+    """Repeat values periodically for some number of periods."""
+    original = copy.deepcopy(values)
+    for i in range(1, int(num_periods)):
+        tmpValues = copy.deepcopy(original)
+        shift(tmpValues, period * i)
+        values.extend(tmpValues)
+    return values
+
+def integrate(values, t):
     """Integrate all the entries' slopes cumulatively to calculate their new data."""
     intVals = []
     integrator = 0
     pVal = 0
     pTime = 0
     for x,y in values:
-        integrator += pVal * (x - pTime)
+        integrator += pVal * float(x - pTime)
         intVals.append([x, integrator])
         pTime = x
         pVal = y
-    return intVals
+    intVals.append([t, integrator + pVal * float(t-pTime)])
+    return remove_degenerates(intVals)
 
 def derive(values):
     """Derive all the entries slopes from their data."""
-    dVals = [[0,0]]
+    dVals = []
     pTime = values[0][0]
     pVal = values[0][1]
     for x,y in values[1:]:
-        d = (y - pVal) / (x - pTime)
-        dVals.append([x, d])
+        d = float(y - pVal) / float(x - pTime)
+        dVals.append([pTime, d])
+        pTime = x
         pVal = y
-    return dVals
+    return remove_degenerates(dVals)
 
 def split(values, t):
     """
@@ -92,15 +107,15 @@ def split(values, t):
     """
     tVal = get_value_at_time(values, t)
 
-    remainder = [x for x in values if x[0] >= t]
+    remainder = [x for x in values if x[0] > t]
     remainder.insert(0,[t,tVal])
-    remainder = list(set(remainder))
+    remainder = remove_degenerates(remainder)
 
     values = [x for x in values if x[0] < t]
     values.append([t,tVal])
-    values = list(set(values))
+    values = remove_degenerates(values)
 
-    return remainder
+    return values, remainder
 
 def shift(values, t):
     """Add *t* to every value in *values*."""
@@ -114,8 +129,6 @@ def get_index_containing_time(values, t):
     :param list values: a :func:`list` of [x,y] values
     :param double t: time value for indexing
     """
-    if t < values[0][0] or t > values[-1][0]:
-        return None
     for index, value in enumerate(values):
         if value[0] > t:
             return index - 1
@@ -130,13 +143,12 @@ def get_value_at_time(values, t, interpolate = True):
     :param bool interpolate: is the value interpolated or constant between values
     """
     i = get_index_containing_time(values, t)
-    if i == None:
-        return None
-    if not interpolate or i == len(values) - 1:
+    if not interpolate:
         return values[i][1]
     else:
-        slope = values[i+1][1] - values[i][1]
-        timeDiff = values[i+1][0] - values[i][0]
+        nextInd = (i+1) % len(values)
+        slope = values[nextInd][1] - values[i][1]
+        timeDiff = values[nextInd][0] - values[i][0]
         return values[i][1] + slope / timeDiff * (t - values[i][0])
 
 def get_times_at_value(values, value, interpolate = True):
@@ -165,6 +177,8 @@ def get_times_at_value(values, value, interpolate = True):
 
 def subtract_values(values1, values2, interpolate = True):
     """
+    Subtract *values2* from *values1*, using either interpolated
+    values or constant values.
     """
     newVals = []
     allVals = []
@@ -189,6 +203,8 @@ def subtract_values(values1, values2, interpolate = True):
 
 def add_values(values1, values2, interpolate = True):
     """
+    Add *values2* to *values1*, using either interpolated
+    values or constant values.
     """
     newVals = []
     allVals = []
@@ -198,16 +214,48 @@ def add_values(values1, values2, interpolate = True):
         allVals.append([val2,'2'])
     allVals = sorted(allVals)
     for val in allVals:
-        if val[1] == '1':
-            t = val[0][0]
+        t = val[0][0]
+        if t < values2[0][0] or t < values1[0][0] or\
+           t > values2[0][0] or t > values1[0][0]:
+            newVals.append(val[0])
+        elif val[1] == '1':
             y = get_value_at_time(values2, t, interpolate)
             newVals.append([t, y + val[0][1]])
-        else:
-            t = val[0][0]
+        elif val[1] == '2':
             y = get_value_at_time(values1, t, interpolate)
             newVals.append([t, y + val[0][1]])
     newVals = remove_degenerates(newVals)
     return newVals
+
+def max_vertical_difference(values1, values2, interpolate = True):
+    """Get maximum vertical difference of values2 - values1."""
+    max_diff = [0, 0, 0]
+    times = [ x[0] for x in values1 ]
+    times.extend( [ x[0] for x in values2 ] )
+    times = sorted(list(set(times)))
+    for t in times:
+        d1 = get_value_at_time(values1, t, interpolate)
+        d2 = get_value_at_time(values2, t, interpolate)
+        if d1 and d2:
+            diff = abs(d2 - d1)
+            if diff > max_diff[2]:
+                max_diff = [t, min(d1,d2), diff]
+    return max_diff
+
+def max_horizontal_difference(values1, values2, interpolate = True):
+    """Get maximum horizontal difference of values2 - values1."""
+    max_diff = [0, 0, 0]
+    datas = [ x[1] for x in values1 ]
+    datas.extend( [ x[1] for x in values2 ] )
+    datas = sorted(list(set(datas)))
+    for d in datas:
+        t_1 = get_times_at_value(values1, d, interpolate)
+        t_2 = get_times_at_value(values2, d, interpolate)
+        if t_1 and t_2:
+            diff = abs(t_2[0] - t_1[0])
+            if diff > max_diff[2]:
+                max_diff = [ min(t_1[0], t_2[0]), d, diff ]
+    return max_diff
 
 def convert_values_to_graph(values, interpolate = True):
     """Make the values plottable by separating the x,y values into separate lists."""
@@ -274,7 +322,27 @@ def get_intersection(p11,p12,p21,p22):
 if __name__ == "__main__":
     v1 = [[0,0],[10,10],[35,15]]
     v2 = [[0,0],[5,10],[35,50]]
-    print v1
-    print v2
-    print add_values(v1,v2)
-    print subtract_values(v2,v1)
+    print 'v1 & v2'
+    print '\t',v1
+    print '\t',v2
+    print 'Interpolated:'
+    print '\t',add_values(v1,v2)
+    print '\t',subtract_values(v2,v1)
+    print 'Non Interpolated:'
+    print '\t',add_values(v1,v2, False)
+    print '\t',subtract_values(v2,v1, False)
+    print 'Remainder:'
+    print '\t',split(v1,20)
+    print '\t',split(v2,20)
+    print 'Vertical:'
+    print '\t',max_vertical_difference(v1,v2, True)
+    print 'Horizontal:'
+    print '\t',max_horizontal_difference(v1,v2, True)
+    print 'Derive:'
+    print '\t',derive(v1)
+    print '\t',derive(v2)
+    print 'Integrate:'
+    print '\t',integrate(derive(v1), 35)
+    print '\t',integrate(derive(v2), 35)
+    
+    
