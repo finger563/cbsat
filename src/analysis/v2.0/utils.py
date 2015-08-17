@@ -69,11 +69,12 @@ def remove_degenerates(values):
 def repeat(values, period, num_periods):
     """Repeat values periodically for some number of periods."""
     original = copy.deepcopy(values)
-    for i in range(1, int(num_periods)):
+    values = []
+    for i in range(0, int(num_periods)):
         tmpValues = copy.deepcopy(original)
         shift(tmpValues, period * i)
         values.extend(tmpValues)
-    return values
+    return remove_degenerates(values)
 
 def integrate(values, t):
     """Integrate all the entries' slopes cumulatively to calculate their new data."""
@@ -86,7 +87,8 @@ def integrate(values, t):
         intVals.append([x, integrator])
         pTime = x
         pVal = y
-    intVals.append([t, integrator + pVal * float(t-pTime)])
+    if intVals[-1][0] < t:
+        intVals.append([t, integrator + pVal * float(t-pTime)])
     return remove_degenerates(intVals)
 
 def derive(values):

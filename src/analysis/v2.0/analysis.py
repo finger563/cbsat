@@ -62,15 +62,25 @@ def analyze(required, provided, config, options):
     #print "\nCalculated hyperperiod as {} seconds".format(hyperPeriod)
 
     # REPEAT PROFILES FOR THE RIGHT NUMBER OF HYPERPERIODS
-    required.Repeat( (hyperPeriod / required.period) * num_periods )
-    provided.Repeat( (hyperPeriod / provided.period) * num_periods )
+    required.Repeat( 'slope', (hyperPeriod / required.period) * num_periods )
+    provided.Repeat( 'slope', (hyperPeriod / provided.period) * num_periods )
 
     # INTEGRATE THE PROFILES FOR ANALYSIS
     provided.Integrate()
     required.Integrate()
 
+    '''
+    print 'provided slope'
+    print provided.ValueSeriesToString('slope')
+    print 'required slope'
+    print required.ValueSeriesToString('slope')
+    print 'provided data'
+    print provided.ValueSeriesToString('data')
+    print 'required data'
+    print required.ValueSeriesToString('data')
+    '''
+    
     output = required.Convolve(provided)
-    output.Derive()
     output.period = hyperPeriod
     maxBuffer = required.CalcBuffer(output)
     maxDelay = required.CalcDelay(output)
@@ -80,12 +90,13 @@ def analyze(required, provided, config, options):
     received = copy.deepcopy(output)
     received.Kind("received")
     received.Delay(provided)
-    received.Derive()
+    received.period = hyperPeriod
 
     # calculate the remaining capacity of the node's link
     remaining = copy.deepcopy(provided)
     remaining.Kind("remaining")
     remaining.SubtractProfile(output)
+    remaining.period = hyperPeriod
 
     print bcolors.OKBLUE +\
         "\tMax buffer (bits, time): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
@@ -203,13 +214,15 @@ def main(argv):
         print "along route: {}".format(route)
         route = route[:-1]
         for node_id in route:
+            print "Against provided {}".format(nodes[node_id].provided)
             output, remaining, buf, delay = analyze( required, nodes[node_id].provided, config, options )
             nodes[node_id].provided = remaining
-            nodes[node_id].provided.Kind("provided") # since the kind is now 'remaining'
+            nodes[node_id].provided.Kind('provided') # since the kind is now 'remaining'
             output.src_id = node_id
             output.dst_id = required.dst_id
             output.priority = required.priority
             required = output
+            required.Kind('required')
 
     return
   

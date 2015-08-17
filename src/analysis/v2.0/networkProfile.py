@@ -157,12 +157,10 @@ class Profile:
             if values[0][0] > 0:
                 values.insert(0,[0,0])
 
-    def Repeat(self, num_periods):
+    def Repeat(self, key, num_periods):
         """Copy the current profile entries over some number of its periods."""
         self.num_periods = num_periods
-        for key, values in self.entries.iteritems():
-            values = utils.repeat(values, self.period, self.num_periods)
-        self.EntriesRemoveDegenerates()
+        self.entries[key] = utils.repeat(self.entries[key], self.period, self.num_periods)
 
     def Integrate(self):
         """Integrates the slope entries to produce data entries up to *self.period*"""
@@ -185,7 +183,8 @@ class Profile:
 
     def Shrink(self, t):
         """Shrink the profile to be <= *t*."""
-        self.entries['data'],r = utils.split(self.entries['data'], t)
+        for key, values in self.entries.iteritems():
+            values, r = utils.split(values, t)
 
     def AddProfile(self,profile):
         """Compose this profile with an input profile by adding their slopes together."""
@@ -213,6 +212,12 @@ class Profile:
 
     def GetValueAtTime(self, key, t, interpolate = True):
         return utils.get_value_at_time(self.entries[key], t, interpolate)
+
+    def ValueSeriesToString(self, key):
+        retstr = ''
+        for val in self.entries[key]:
+            retstr += '{}\n'.format(val)
+        return retstr
 
     def CalcDelay(self, output):
         """
@@ -268,6 +273,11 @@ class Profile:
         :param in delayProf: :class:`Profile` describing the delay
         """
         delays = delayProf.entries['latency']
+        all0 = True
+        for time, delay in delays:
+            if delay != 0:
+                all0 = False
+        if all0: return
         datas = self.entries['data']
         endTime = datas[-1][0]
         times = [ x[0] for x in delays ]
@@ -288,7 +298,8 @@ class Profile:
             d_slopes = utils.add_values(d_slopes,r_slopes)
             newDatas = utils.integrate(d_slopes, endTime)
         self.entries['data'] = newDatas
-        
+        self.Derive()
+
     def Convolve(self, provided):
         """
         Use min-plus calculus to convolve this *required* profile with an input *provided* profile.
@@ -318,8 +329,7 @@ class Profile:
             diff = (p_data - offset) - r_data
             if diff > 0:
                 offset += diff
-            if cmp(diff,0) != cmp(prevDiff,0):
-                # THERE HAS BEEN AN INTERSECTION
+            if cmp(diff,0) != cmp(prevDiff,0) and diff != 0 and prevDiff != 0:
                 intersection = utils.get_intersection(
                     [ prevTime, r_prev ],
                     [ t, r_data ],
@@ -336,4 +346,5 @@ class Profile:
 
         output = Profile(kind='output')
         output.entries['data'] = o
+        output.Derive()
         return output
