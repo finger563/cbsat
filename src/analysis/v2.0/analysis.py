@@ -69,17 +69,6 @@ def analyze(required, provided, config, options):
     provided.Integrate()
     required.Integrate()
 
-    '''
-    print 'provided slope'
-    print provided.ValueSeriesToString('slope')
-    print 'required slope'
-    print required.ValueSeriesToString('slope')
-    print 'provided data'
-    print provided.ValueSeriesToString('data')
-    print 'required data'
-    print required.ValueSeriesToString('data')
-    '''
-    
     output = required.Convolve(provided)
     output.period = hyperPeriod
     maxBuffer = required.CalcBuffer(output)
@@ -99,8 +88,8 @@ def analyze(required, provided, config, options):
     remaining.period = hyperPeriod
 
     print bcolors.OKBLUE +\
-        "\tMax buffer (bits, time): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
-    print "\tMax delay (seconds, time): [{}, {}]".format(maxDelay[0], maxDelay[2]) +\
+        "\tMax buffer (time, bits): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
+    print "\tMax delay (time, seconds): [{}, {}]".format(maxDelay[0], maxDelay[2]) +\
         bcolors.ENDC
     
     # DETERMINE SYSTEM STABILITY IF WE HAVE MORE THAN ONE HYPERPERIOD TO ANALYZE

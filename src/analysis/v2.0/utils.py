@@ -175,7 +175,7 @@ def get_times_at_value(values, value, interpolate = True):
                 times.append(t)
         prevX = x
         prevY = y
-    return times
+    return [min(times), max(times)]
 
 def subtract_values(values1, values2, interpolate = True):
     """
@@ -229,7 +229,7 @@ def add_values(values1, values2, interpolate = True):
     newVals = remove_degenerates(newVals)
     return newVals
 
-def max_vertical_difference(values1, values2, interpolate = True):
+def max_vertical_difference(values1, values2, interpolate = True, epsilon = 0.1):
     """Get maximum vertical difference of values2 - values1."""
     max_diff = [0, 0, 0]
     times = [ x[0] for x in values1 ]
@@ -240,11 +240,11 @@ def max_vertical_difference(values1, values2, interpolate = True):
         d2 = get_value_at_time(values2, t, interpolate)
         if d1 and d2:
             diff = abs(d2 - d1)
-            if diff > max_diff[2]:
+            if diff > max_diff[2] and diff > epsilon:
                 max_diff = [t, min(d1,d2), diff]
     return max_diff
 
-def max_horizontal_difference(values1, values2, interpolate = True):
+def max_horizontal_difference(values1, values2, interpolate = True, epsilon = 0.000001):
     """Get maximum horizontal difference of values2 - values1."""
     max_diff = [0, 0, 0]
     datas = [ x[1] for x in values1 ]
@@ -255,7 +255,7 @@ def max_horizontal_difference(values1, values2, interpolate = True):
         t_2 = get_times_at_value(values2, d, interpolate)
         if t_1 and t_2:
             diff = abs(t_2[0] - t_1[0])
-            if diff > max_diff[2]:
+            if diff > max_diff[2] and diff > epsilon:
                 max_diff = [ min(t_1[0], t_2[0]), d, diff ]
     return max_diff
 

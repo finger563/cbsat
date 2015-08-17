@@ -250,18 +250,18 @@
 <dl class="function">
 <dt id="utils.remove_degenerates">
 <code class="descclassname">utils.</code><code class="descname">remove_degenerates</code><span class="sig-paren">(</span><em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.remove_degenerates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make sure all value pairs are unique.</p>
+<dd><p>Make sure all value pairs are unique and sorted by time.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="utils.sort">
-<code class="descclassname">utils.</code><code class="descname">sort</code><span class="sig-paren">(</span><em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.sort" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sort values by time.</p>
+<dt id="utils.repeat">
+<code class="descclassname">utils.</code><code class="descname">repeat</code><span class="sig-paren">(</span><em>values</em>, <em>period</em>, <em>num_periods</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.repeat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repeat values periodically for some number of periods.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="utils.integrate">
-<code class="descclassname">utils.</code><code class="descname">integrate</code><span class="sig-paren">(</span><em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.integrate" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">utils.</code><code class="descname">integrate</code><span class="sig-paren">(</span><em>values</em>, <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.integrate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Integrate all the entries&#8217; slopes cumulatively to calculate their new data.</p>
 </dd></dl>
 
@@ -342,12 +342,28 @@
 <dl class="function">
 <dt id="utils.subtract_values">
 <code class="descclassname">utils.</code><code class="descname">subtract_values</code><span class="sig-paren">(</span><em>values1</em>, <em>values2</em>, <em>interpolate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.subtract_values" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Subtract <em>values2</em> from <em>values1</em>, using either interpolated
+values or constant values.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="utils.add_values">
 <code class="descclassname">utils.</code><code class="descname">add_values</code><span class="sig-paren">(</span><em>values1</em>, <em>values2</em>, <em>interpolate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.add_values" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Add <em>values2</em> to <em>values1</em>, using either interpolated
+values or constant values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.max_vertical_difference">
+<code class="descclassname">utils.</code><code class="descname">max_vertical_difference</code><span class="sig-paren">(</span><em>values1</em>, <em>values2</em>, <em>interpolate=True</em>, <em>epsilon=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.max_vertical_difference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get maximum vertical difference of values2 - values1.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.max_horizontal_difference">
+<code class="descclassname">utils.</code><code class="descname">max_horizontal_difference</code><span class="sig-paren">(</span><em>values1</em>, <em>values2</em>, <em>interpolate=True</em>, <em>epsilon=1e-06</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.max_horizontal_difference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get maximum horizontal difference of values2 - values1.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="utils.convert_values_to_graph">

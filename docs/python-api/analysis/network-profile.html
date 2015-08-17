@@ -163,7 +163,7 @@ model, compose, and analyze network profiles for applications
 and systems.</p>
 <dl class="class">
 <dt id="networkProfile.Profile">
-<em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">Profile</code><span class="sig-paren">(</span><em>kind=None</em>, <em>period=0</em>, <em>priority=0</em>, <em>source=0</em>, <em>dest=0</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">networkProfile.</code><code class="descname">Profile</code><span class="sig-paren">(</span><em>kind=None</em>, <em>period=0</em>, <em>priority=0</em>, <em>source=0</em>, <em>dest=0</em>, <em>num_periods=1</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Profile contains the information about a single network profie.
 A network profile has a kind (e.g. &#8216;provided&#8217;), a period (in seconds),
 and a lists of relevant data vs time series (e.g. bandwidth, latency, data, etc.).</p>
@@ -244,6 +244,12 @@ and a lists of relevant data vs time series (e.g. bandwidth, latency, data, etc.
 <dd><p>Dictionary of &#8216;type name&#8217; -&gt; &#8216;list of [x,y] points&#8217; k,v pairs</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="networkProfile.Profile.num_periods">
+<code class="descname">num_periods</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.Profile.num_periods" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many periods this profile runs for</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="networkProfile.Profile.ParseHeader">
 <code class="descname">ParseHeader</code><span class="sig-paren">(</span><em>header</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ParseHeader" title="Permalink to this definition">¶</a></dt>
@@ -271,7 +277,7 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 <dl class="method">
 <dt id="networkProfile.Profile.ParseFromString">
 <code class="descname">ParseFromString</code><span class="sig-paren">(</span><em>prof_str</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ParseFromString" title="Permalink to this definition">¶</a></dt>
-<dd><p>Builds the entries from either a string (line list of csv&#8217;s formatted as per
+<dd><p>Builds the entries from a string (line list of csv&#8217;s formatted as per
 <a class="reference internal" href="#networkProfile.Profile.ParseEntriesFromLine" title="networkProfile.Profile.ParseEntriesFromLine"><code class="xref py py-func docutils literal"><span class="pre">ParseEntriesFromLine()</span></code></a>).</p>
 </dd></dl>
 
@@ -284,22 +290,16 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 <li>max slope</li>
 <li>latency</li>
 </ul>
-<dl class="docutils">
-<dt>These values are formatted in the csv as:</dt>
-<dd>&lt;time&gt;, &lt;slope&gt;, &lt;max slope&gt;, &lt;latency&gt;</dd>
-</dl>
+<p>These values are formatted in the csv as:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;time&gt;, &lt;slope&gt;, &lt;max slope&gt;, &lt;latency&gt;
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.EntriesRemoveDegenerates">
 <code class="descname">EntriesRemoveDegenerates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.EntriesRemoveDegenerates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove duplicate entries by time stamp.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="networkProfile.Profile.SortEntries">
-<code class="descname">SortEntries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.SortEntries" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sort entries by time stamp.</p>
 </dd></dl>
 
 <dl class="method">
@@ -310,8 +310,20 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 
 <dl class="method">
 <dt id="networkProfile.Profile.Repeat">
-<code class="descname">Repeat</code><span class="sig-paren">(</span><em>num_periods</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Repeat" title="Permalink to this definition">¶</a></dt>
+<code class="descname">Repeat</code><span class="sig-paren">(</span><em>key</em>, <em>num_periods</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Repeat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copy the current profile entries over some number of its periods.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.Integrate">
+<code class="descname">Integrate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Integrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integrates the slope entries to produce data entries up to <em>self.period</em></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.Derive">
+<code class="descname">Derive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Derive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Derives the slope entries from the data entries</p>
 </dd></dl>
 
 <dl class="method">
@@ -327,6 +339,12 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 </dd></dl>
 
 <dl class="method">
+<dt id="networkProfile.Profile.Shrink">
+<code class="descname">Shrink</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Shrink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shrink the profile to be &lt;= <em>t</em>.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="networkProfile.Profile.AddProfile">
 <code class="descname">AddProfile</code><span class="sig-paren">(</span><em>profile</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.AddProfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compose this profile with an input profile by adding their slopes together.</p>
@@ -339,62 +357,74 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 </dd></dl>
 
 <dl class="method">
-<dt id="networkProfile.Profile.SubtractEntry">
-<code class="descname">SubtractEntry</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.SubtractEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Subtract a single entry (based on its bandwidth) from the profile.
-This entry may come from anywhere, so we must take care to ensure that 
-any possibly affected entries are properly updated.</p>
-</dd></dl>
+<dt id="networkProfile.Profile.MakeGraphPointsSlope">
+<code class="descname">MakeGraphPointsSlope</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.MakeGraphPointsSlope" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
-<dt id="networkProfile.Profile.AddEntry">
-<code class="descname">AddEntry</code><span class="sig-paren">(</span><em>entry</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.AddEntry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a single entry (based on its bandwidth) to the profile.
-This entry may come from anywhere so we must take care to ensure that
-any possibly affected entries are properly updated.</p>
-</dd></dl>
+<dt id="networkProfile.Profile.MakeGraphPointsData">
+<code class="descname">MakeGraphPointsData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.MakeGraphPointsData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
-<dt id="networkProfile.Profile.ConvertToNC">
-<code class="descname">ConvertToNC</code><span class="sig-paren">(</span><em>step</em>, <em>filterFunc</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ConvertToNC" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform time-window based integration to generate a Network Calculus curve
-from the profile.  The conversion is configurable based on time-window step-size
-and a filter function (e.g. min or max).  Passing <code class="xref py py-func docutils literal"><span class="pre">max()</span></code> will create an arrival
-curve, while passing <code class="xref py py-func docutils literal"><span class="pre">min()</span></code> will create a service curve.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Requires the profile to have been integrated</p>
-</div>
-</dd></dl>
+<dt id="networkProfile.Profile.GetValueAtTime">
+<code class="descname">GetValueAtTime</code><span class="sig-paren">(</span><em>key</em>, <em>t</em>, <em>interpolate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.GetValueAtTime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.ValueSeriesToString">
+<code class="descname">ValueSeriesToString</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ValueSeriesToString" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.CalcDelay">
 <code class="descname">CalcDelay</code><span class="sig-paren">(</span><em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.CalcDelay" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the maximum horizontal distance between this profile and the input profile.  Return it as a form:</p>
-<div class="highlight-python"><div class="highlight"><pre>[ &lt;time at the start of the delay&gt;, &lt;data value which experiences the delay&gt;, &lt;length of delay&gt; ]
+<dd><p>Compute the maximum horizontal distance between this profile and the input profile.  
+Return it as a form:</p>
+<div class="highlight-python"><div class="highlight"><pre>[ &lt;time&gt;, &lt;data&gt;, &lt;length of delay&gt; ]
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> (<em>in</em>) &#8211; a <code class="xref py py-func docutils literal"><span class="pre">list()</span></code> of <code class="xref py py-class docutils literal"><span class="pre">networkProfile.ProfileEntry</span></code> objects describing the output profile</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> (<em>in</em>) &#8211; a <a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a> describing the output profile</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Requires that both profiles have been integrated</p>
+<p>The delay is calculated as (see <a class="reference internal" href="../../math.html#network-math-formalism"><span>Formalism for Better Precision Network Analysis</span></a>):</p>
+<div class="math">
+<p><img src="../../_images/math/8c3c32da0cc38ee53b7dfa64782f583d0b49e02a.png" alt="delay = sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}"/></p>
+</div></dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.CalcBuffer">
+<code class="descname">CalcBuffer</code><span class="sig-paren">(</span><em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.CalcBuffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the maximum vertical distance between this profile and the input profile.  
+Return it as a form:</p>
+<div class="highlight-python"><div class="highlight"><pre>[ &lt;time&gt;, &lt;data&gt;, &lt;size of the buffer&gt; ]
+</pre></div>
 </div>
-</dd></dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> (<em>in</em>) &#8211; a <a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a> describing the output profile</td>
+</tr>
+</tbody>
+</table>
+<p>The buffer is calulated as (see <a class="reference internal" href="../../math.html#network-math-formalism"><span>Formalism for Better Precision Network Analysis</span></a>):</p>
+<div class="math">
+<p><img src="../../_images/math/82147f0fe43b54dd3d53a7b599ce485a30cf9d83.png" alt="buffer= sup\{r[t] - l[t] : t \in \mathbb{N}\}"/></p>
+</div></dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.Delay">
-<code class="descname">Delay</code><span class="sig-paren">(</span><em>delayProf</em>, <em>mtu</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Delay" title="Permalink to this definition">¶</a></dt>
+<code class="descname">Delay</code><span class="sig-paren">(</span><em>delayProf</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Delay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply a delay profile to this profile; this may be used for determining the profile
 received by a node for which this profile is the output profile on the sender side.
 The delay profile describes the delay as a function of time for the link.</p>
-<p>This function implements the function</p>
+<p>This function implements the operation:</p>
 <div class="math">
 <p><img src="../../_images/math/bcc9e0d2a8dedcb1dfb714bc3d25774656a07592.png" alt="o[t + \delta[t]] = l[t]"/></p>
 </div><p>Where</p>
@@ -407,22 +437,10 @@ The delay profile describes the delay as a function of time for the link.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>delayProf</strong> (<em>in</em>) &#8211; <a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a> describing the delay</li>
-<li><strong>mtu</strong> (<em>in</em>) &#8211; and integer specifying the mtu for the transmission of the profile</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>delayProf</strong> (<em>in</em>) &#8211; <a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a> describing the delay</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This function alters the periodicity of the profile!</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This profile needs to either have been generated from <a class="reference internal" href="#networkProfile.Profile.Convolve" title="networkProfile.Profile.Convolve"><code class="xref py py-func docutils literal"><span class="pre">Profile.Convolve()</span></code></a> or have been integrated.</p>
-</div>
 </dd></dl>
 
 <dl class="method">
@@ -433,39 +451,14 @@ The delay profile describes the delay as a function of time for the link.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-func docutils literal"><span class="pre">list()</span></code> [ output, maxBuffer, maxDelay ]</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a>, <img class="math" src="../../_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/></td>
 </tr>
 </tbody>
 </table>
-<p>where output is <img class="math" src="../../_images/math/73ce42fe938867093e502445fef3c33f78f3dfdf.png" alt="y[t]"/> defined (<a class="reference internal" href="../../math.html#network-math-formalism"><span>Formalism for Better Precision Network Analysis</span></a>) as:</p>
+<p>where <img class="math" src="../../_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/> is defined as (see <a class="reference internal" href="../../math.html#network-math-formalism"><span>Formalism for Better Precision Network Analysis</span></a>):</p>
 <div class="math">
-<p><img src="../../_images/math/a3476b02918b72a282af601fe2381b9bd4a1d2de.png" alt="y=l[t] &amp;= (r \otimes p)[t] = min( r[t] , p[t] - (p[t-1] -l[t-1]) )
-
-buffer= sup\{r[t] - l[t] : t \in \mathbb{N}\}
-
-delay = sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}"/></p>
-</div><p>Where the returned elements are defined as such:</p>
-<ul>
-<li><p class="first"><strong>output</strong>: output profile which is the result of this convolution.</p>
-</li>
-<li><p class="first"><strong>maxBuffer</strong>: a list describing the maximum buffer required for this convolution.
-it follows the form:</p>
-<div class="highlight-python"><div class="highlight"><pre>[ &lt;bottom x location&gt;, &lt;bottom y location&gt;, &lt;size of the buffer (bytes)&gt; ]
-</pre></div>
-</div>
-</li>
-<li><p class="first"><strong>maxDelay</strong>: a list describing the maximum delay experienced by data from this convolution.
-it follows the form:</p>
-<div class="highlight-python"><div class="highlight"><pre>[ &lt;left x location&gt;, &lt;left y location&gt;, &lt;length of the delay (seconds)&gt; ]
-</pre></div>
-</div>
-</li>
-</ul>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Requires that both profiles have been integrated</p>
-</div>
-</dd></dl>
+<p><img src="../../_images/math/acb2c054a5d2a3aa05005441b784a01540201cbc.png" alt="y=l[t] &amp;= (r \otimes p)[t] = min( r[t] , p[t] - (p[t-1] -l[t-1]) )"/></p>
+</div></dd></dl>
 
 </dd></dl>
 

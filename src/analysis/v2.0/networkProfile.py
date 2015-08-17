@@ -142,7 +142,8 @@ class Profile:
                 self.entries.setdefault('max slope',[]).append([time, maxSlope])
                 self.entries.setdefault('latency',[]).append([time, latency])
             else:
-                print >> sys.stderr,"{} must be formatted: <time>, <slope>, <max slope>, <latency>".format(line_str)
+                print >> sys.stderr,"{} must be formatted:".format(line_str)
+                print >> sys.stderr,"\t<time>, <slope>, <max slope>, <latency>"
                 return -1
         return 0
 
@@ -221,9 +222,10 @@ class Profile:
 
     def CalcDelay(self, output):
         """
-        Compute the maximum horizontal distance between this profile and the input profile.  Return it as a form::
+        Compute the maximum horizontal distance between this profile and the input profile.  
+        Return it as a form::
         
-            [ <time at the start of the delay>, <data value which experiences the delay>, <length of delay> ]
+            [ <time>, <data>, <length of delay> ]
         
         :param in output: a :class:`Profile` describing the output profile
 
@@ -238,9 +240,10 @@ class Profile:
 
     def CalcBuffer(self, output):
         """
-        Compute the maximum vertical distance between this profile and the input profile.  Return it as a form::
+        Compute the maximum vertical distance between this profile and the input profile.  
+        Return it as a form::
         
-            [ <time>, <y value at bottom of buffer>, <size of the buffer> ]
+            [ <time>, <data>, <size of the buffer> ]
         
         :param in output: a :class:`Profile` describing the output profile
 
