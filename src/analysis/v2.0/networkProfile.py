@@ -7,6 +7,7 @@ and systems.
 
 import copy,sys
 import utils
+from collections import OrderedDict
 from decimal import *
 
 class Profile:
@@ -40,7 +41,7 @@ class Profile:
         self.priority = priority #: The priority of the profile; relevant for 'required' profiles
         self.src_id = source     #: The node ID which is the source of this profile
         self.dst_id = dest       #: The node ID which is the destination of this profile
-        self.entries = {}        #: Dictionary of 'type name' -> 'list of [x,y] points' k,v pairs 
+        self.entries = OrderedDict()  #: Dictionary of 'type name' -> 'list of [x,y] points' k,v pairs 
 
     def __repr__(self):
         return "Profile(kind = {}, period = {}, priority = {})\n".format(
@@ -228,34 +229,16 @@ class Profile:
     def ToString(self):
         """Returns a string version of the profile, with all values properly tabulated."""
         retstr = ''
-        for key,values in self.entries.iteritems():
-            newstr = self.ValueSeriesToString(key)
-            if retstr:
-                lines = newstr.split('\n')
-                s = ''
-                for index,line in enumerate(retstr.split('\n')):
-                    if index < len(lines):
-                        line += ' ' + lines[index]
-                    s += line + '\n'
-                retstr = s
-            else:
-                retstr = newstr
-        return retstr
-
-    def ValueSeriesToString(self, key):
-        """Return a stringified version of the x & y series specified by *key*."""
-        retstr = ''
         try:
             from tabulate import tabulate
-            retstr += tabulate(self.entries[key],
-                               headers=['time(s)', key],
-                               numalign="right",
-                               floatfmt=".4f")
+            newDict = OrderedDict()
+            for key,values in self.entries.iteritems():
+                newDict[key] = []
+                for val in values:
+                    newDict[key].append([float(val[0]),float(val[1])])
+            retstr = tabulate(newDict, headers='keys', floatfmt='.1f')
         except ImportError:
-            print >> sys.stderr, "Tabulate module not installed, using basic fallback."
-            retstr += 'time(s)\t\t{}\n'.format(key)
-            for x,y in self.entries[key]:
-                retstr += '{0:.5f}\t{1:.5f}\n'.format(float(x),float(y))
+            print >> sys.stderr, "Tabulate module should be installed for printing profiles."
         return retstr
 
     def CalcDelay(self, output):
