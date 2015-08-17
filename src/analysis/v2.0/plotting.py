@@ -1,4 +1,5 @@
 from utils import makeHLine, makeVLine
+from decimal import *
 
 havePLT = False
 try:

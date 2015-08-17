@@ -1,3 +1,4 @@
+from decimal import *
 from fractions import gcd
 import copy
 
@@ -56,7 +57,6 @@ def makeHLine(h):
 
 def remove_degenerates(values):
     """Make sure all value pairs are unique and sorted by time."""
-    
     tup = [ tuple(x) for x in values ]
     tmp = list(set(tup))
     retVals = []
@@ -83,12 +83,12 @@ def integrate(values, t):
     pVal = 0
     pTime = 0
     for x,y in values:
-        integrator += pVal * float(x - pTime)
+        integrator += pVal * Decimal(x - pTime)
         intVals.append([x, integrator])
         pTime = x
         pVal = y
     if intVals[-1][0] < t:
-        intVals.append([t, integrator + pVal * float(t-pTime)])
+        intVals.append([t, integrator + pVal * Decimal(t-pTime)])
     return remove_degenerates(intVals)
 
 def derive(values):
@@ -97,7 +97,7 @@ def derive(values):
     pTime = values[0][0]
     pVal = values[0][1]
     for x,y in values[1:]:
-        d = float(y - pVal) / float(x - pTime)
+        d = Decimal(y - pVal) / Decimal(x - pTime)
         dVals.append([pTime, d])
         pTime = x
         pVal = y
@@ -175,7 +175,9 @@ def get_times_at_value(values, value, interpolate = True):
                 times.append(t)
         prevX = x
         prevY = y
-    return [min(times), max(times)]
+    if times:
+        times = [min(times), max(times)]
+    return times
 
 def subtract_values(values1, values2, interpolate = True):
     """
@@ -266,10 +268,10 @@ def convert_values_to_graph(values, interpolate = True):
     prevY = 0
     for x,y in values:
         if not interpolate:
-            xvals.append(x)
-            yvals.append(prevY)
-        xvals.append(x)
-        yvals.append(y)
+            xvals.append(float(x))
+            yvals.append(float(prevY))
+        xvals.append(float(x))
+        yvals.append(float(y))
         prevY = y
     return [xvals, yvals]
 
@@ -277,10 +279,10 @@ def get_intersection(p11,p12,p21,p22):
     """
     Simple function to get a intersection of two lines defined by their endpoints
 
-    :param double p11: starting point of line 1
-    :param double p12: ending point of line 1
-    :param double p21: starting point of line 2
-    :param double p22: ending point of line 2
+    :param p11: :func:`list` [x,y] starting point of line 1
+    :param p12: :func:`list` [x,y] ending point of line 1
+    :param p21: :func:`list` [x,y] starting point of line 2
+    :param p22: :func:`list` [x,y] ending point of line 2
     """
     if not p11 or not p12 or not p21 or not p22:
         return []
@@ -297,27 +299,23 @@ def get_intersection(p11,p12,p21,p22):
     point = []
     if m1 != 0.0 and m2 != 0.0 and m1 != m2:
         x = ((y3-y1)+(m1*x1-m2*x3))/(m1-m2)
-        y = ((x3-x1)+(y1/m1-y3/m2))/(1.0/m1-1.0/m2)
+        y = ((x3-x1)+(y1/m1-y3/m2))/(Decimal(1.0)/m1-Decimal(1.0)/m2)
     else:
-        if m1 == 0.0:
-            if y4 >= y1 and y3 <= y1:
-                y = y1
-                x = (1/m2)*(y-y3) + x3
-        elif m2 == 0.0:
-            if y2 >= y3 and y1 <= y3:
-                y = y3
-                x = (1/m1)*(y-y1) + x1
-        else: # same slope
-            y = (x3-x1)*(y2-y1)/(x2-x1) + y1
-            if y == y3:
-                x = x3
-            else:
-                x = -1
-    if x >= x1 and x <= x2 and x >= x3 and x <= x4 and y >= y1 and y <= y2 and y >= y3 and y <= y4:
+        if m1 == 0.0 and m2 != 0.0:
+            y = y1
+            x = (1/m2)*(y-y3) + x3
+        elif m2 == 0.0 and m1 != 0.0:
+            y = y3
+            x = (1/m1)*(y-y1) + x1
+        else: # both slopes are 0
+            y = y1
+            if x1 >= x3 and x1 <= x4:
+                x = x1
+            elif x2 >= x3 and x2 <= x4:
+                x = x2
+    if x >= x1 and x <= x2 and x >= x3 and x <= x4 and\
+       y >= y1 and y <= y2 and y >= y3 and y <= y4:
         point = [x,y]
-    else:
-        point = [-1,-1]
-
     return point
 
 

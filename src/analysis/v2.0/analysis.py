@@ -15,8 +15,8 @@ or the system, respectively.
 
 import copy, glob, os
 import operator
-
 from collections import OrderedDict
+
 from networkProfile import Profile
 from networkConfig import Node, Config
 from plotting import plot_bandwidth_and_data, havePLT
@@ -66,8 +66,8 @@ def analyze(required, provided, config, options):
     provided.Repeat( 'slope', (hyperPeriod / provided.period) * num_periods )
 
     # INTEGRATE THE PROFILES FOR ANALYSIS
-    provided.Integrate()
-    required.Integrate()
+    provided.Integrate(hyperPeriod)
+    required.Integrate(hyperPeriod)
 
     output = required.Convolve(provided)
     output.period = hyperPeriod
@@ -78,14 +78,15 @@ def analyze(required, provided, config, options):
     # this determines the characteristics of the data at the receiver end
     received = copy.deepcopy(output)
     received.Kind("received")
-    received.Delay(provided)
     received.period = hyperPeriod
+    received.Delay(provided)
 
     # calculate the remaining capacity of the node's link
     remaining = copy.deepcopy(provided)
     remaining.Kind("remaining")
-    remaining.SubtractProfile(output)
     remaining.period = hyperPeriod
+    remaining.SubtractProfile(output)
+    remaining.Integrate(hyperPeriod)
 
     print bcolors.OKBLUE +\
         "\tMax buffer (time, bits): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
@@ -115,7 +116,7 @@ def analyze(required, provided, config, options):
     remaining.Shrink(remaining.period)
     provided.Shrink(provided.period)
     required.Shrink(required.period)
-    return output, remaining, maxBuffer, maxDelay
+    return output, remaining, received, maxBuffer, maxDelay
 
 def main(argv):
     """
@@ -204,13 +205,18 @@ def main(argv):
         route = route[:-1]
         for node_id in route:
             print "Against provided {}".format(nodes[node_id].provided)
-            output, remaining, buf, delay = analyze( required, nodes[node_id].provided, config, options )
+            output, remaining, received, buf, delay = analyze(
+                required,
+                nodes[node_id].provided,
+                config,
+                options
+            )
             nodes[node_id].provided = remaining
             nodes[node_id].provided.Kind('provided') # since the kind is now 'remaining'
             output.src_id = node_id
             output.dst_id = required.dst_id
             output.priority = required.priority
-            required = output
+            required = received
             required.Kind('required')
 
     return

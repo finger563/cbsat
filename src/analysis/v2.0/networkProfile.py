@@ -7,6 +7,7 @@ and systems.
 
 import copy,sys
 import utils
+from decimal import *
 
 class Profile:
     """
@@ -36,7 +37,6 @@ class Profile:
         self.src_id = source     #: The node ID which is the source of this profile
         self.dst_id = dest       #: The node ID which is the destination of this profile
         self.entries = {}        #: Dictionary of 'type name' -> 'list of [x,y] points' k,v pairs 
-        self.num_periods = num_periods #: How many periods this profile runs for
 
     def __repr__(self):
         return "Profile(kind = {}, period = {}, priority = {})\n".format(
@@ -71,7 +71,7 @@ class Profile:
                 line.strip('#')
                 prop, value = line.split('=')
                 if "period" in prop:
-                    self.period = float(value)
+                    self.period = Decimal(value)
                 elif "priority" in prop:
                     self.priority = int(value)
                 elif "source ID" in prop:
@@ -134,10 +134,10 @@ class Profile:
         if line_str:
             fields = line_str.split(self.field_delimeter)
             if len(fields) == 4:
-                time = float(fields[0])
-                slope = float(fields[1])
-                maxSlope = float(fields[2])
-                latency = float(fields[3])
+                time = Decimal(fields[0])
+                slope = Decimal(fields[1])
+                maxSlope = Decimal(fields[2])
+                latency = Decimal(fields[3])
                 self.entries.setdefault('slope',[]).append([time, slope])
                 self.entries.setdefault('max slope',[]).append([time, maxSlope])
                 self.entries.setdefault('latency',[]).append([time, latency])
@@ -160,14 +160,13 @@ class Profile:
 
     def Repeat(self, key, num_periods):
         """Copy the current profile entries over some number of its periods."""
-        self.num_periods = num_periods
-        self.entries[key] = utils.repeat(self.entries[key], self.period, self.num_periods)
+        self.entries[key] = utils.repeat(self.entries[key], self.period, num_periods)
 
-    def Integrate(self):
-        """Integrates the slope entries to produce data entries up to *self.period*"""
+    def Integrate(self, time):
+        """Integrates the slope entries to produce data entries up to *time*"""
         self.entries['data'] = utils.integrate(
             self.entries['slope'],
-            self.period * self.num_periods
+            time
         )
 
     def Derive(self):
@@ -194,7 +193,6 @@ class Profile:
             profile.entries['slope'],
             interpolate = False
         )
-        self.Integrate()
 
     def SubtractProfile(self,profile):
         """Compose this profile with an input profile by subtracting the input profile's slopes."""
@@ -203,7 +201,6 @@ class Profile:
             profile.entries['slope'],
             interpolate = False
         )
-        self.Integrate()
 
     def MakeGraphPointsSlope(self):
         return utils.convert_values_to_graph(self.entries['slope'], interpolate = False)
@@ -328,23 +325,26 @@ class Profile:
         p_prev = None
         for t in times:
             r_data = utils.get_value_at_time(r, t, interpolate = True)
-            p_data = utils.get_value_at_time(p, t, interpolate = True)
-            diff = (p_data - offset) - r_data
+            p_data = utils.get_value_at_time(p, t, interpolate = True) - offset
+            diff = p_data - r_data
             if diff > 0:
                 offset += diff
-            if cmp(diff,0) != cmp(prevDiff,0) and diff != 0 and prevDiff != 0:
-                intersection = utils.get_intersection(
-                    [ prevTime, r_prev ],
-                    [ t, r_data ],
-                    [ prevTime, p_prev ],
-                    [ t, p_data ]
-                )
-                o.append(intersection)
-            o.append([t, p_data - offset])
+                if cmp(diff,0) != cmp(prevDiff,0):
+                    intersection = utils.get_intersection(
+                        [ prevTime, r_prev ],
+                        [ t, r_data ],
+                        [ prevTime, p_prev ],
+                        [ t, p_data ]
+                    )
+                    if intersection:
+                        if abs(intersection[0] - t) > 0.000001:
+                            o.append(intersection)
+            newPoint = [t, p_data - max(0,diff)]
+            o.append(newPoint)
             prevDiff = diff
             prevTime = t
             r_prev = r_data
-            p_prev = p_data - offset
+            p_prev = p_data
         o = utils.remove_degenerates(o)
 
         output = Profile(kind='output')
