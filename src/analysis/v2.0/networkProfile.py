@@ -199,20 +199,34 @@ class Profile:
         del self.entries['slope'][-1]
 
     def AddProfile(self,profile):
-        """Compose this profile with an input profile by adding their slopes together."""
-        self.entries['slope'] = utils.add_values(
+        """
+        Compose this profile with an input profile by adding their slopes together.
+
+        :rtype: :class:`Profile`
+        """
+        new_slopes = utils.add_values(
             self.entries['slope'],
             profile.entries['slope'],
             interpolate = False
         )
+        retProf = copy.deepcopy(self)
+        retProf.entries['slope'] = new_slopes
+        return retProf
 
     def SubtractProfile(self,profile):
-        """Compose this profile with an input profile by subtracting the input profile's slopes."""
-        self.entries['slope'] = utils.subtract_values(
+        """
+        Compose this profile with an input profile by subtracting the input profile's slopes.
+
+        :rtype: :class:`Profile`
+        """
+        new_slopes = utils.subtract_values(
             self.entries['slope'],
             profile.entries['slope'],
             interpolate = False
         )
+        retProf = copy.deepcopy(self)
+        retProf.entries['slope'] = new_slopes
+        return retProf
 
     def MakeGraphPointsSlope(self):
         """Return matplotlib plottable x and y series for the slope of the profile."""
@@ -304,8 +318,8 @@ class Profile:
 
     def Delay(self, delayProf):
         """
-        Apply a delay profile to this profile; this may be used for determining the profile
-        received by a node for which this profile is the output profile on the sender side.
+        Compute the delayed profile composed of *self* profile and *delayProf*,
+        received by a node for which this *self* profile is the output profile on the sender side.
         The delay profile describes the delay as a function of time for the link.
 
         This function implements the operation: 
@@ -319,6 +333,8 @@ class Profile:
         * :math:`l[t]` is the profile transmitted into the link (*self*)
         * :math:`o[t]` is the output profile received at the other end of the link
 
+        :rtype: :class:`Profile`, :math:`o[t]`
+
         :param in delayProf: :class:`Profile` describing the delay
         """
         delays = delayProf.entries['latency']
@@ -326,7 +342,7 @@ class Profile:
         for time, delay in delays:
             if delay != 0:
                 all0 = False
-        if all0: return
+        if all0: return copy.deepcopy(self)
         datas = self.entries['data']
         endTime = datas[-1][0]
         times = [ x[0] for x in delays ]
@@ -346,8 +362,11 @@ class Profile:
             d_slopes = utils.derive(newDatas)
             d_slopes = utils.add_values(d_slopes,r_slopes)
             newDatas = utils.integrate(d_slopes, endTime)
-        self.entries['data'] = newDatas
-        self.Derive()
+
+        retProf = Profile()
+        retProf.entries['data'] = newDatas
+        retProf.Derive()
+        return retProf
 
     def Convolve(self, provided):
         """

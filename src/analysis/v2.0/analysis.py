@@ -78,16 +78,14 @@ def analyze(required, provided, config, options):
 
     # delay the output according to the latency of the node's link
     # this determines the characteristics of the data at the receiver end
-    received = copy.deepcopy(output)
+    received = output.Delay(provided)
     received.Kind("received")
     received.period = hyperPeriod
-    received.Delay(provided)
 
     # calculate the remaining capacity of the node's link
-    remaining = copy.deepcopy(provided)
+    remaining = provided.SubtractProfile(output)
     remaining.Kind("remaining")
     remaining.period = hyperPeriod
-    remaining.SubtractProfile(output)
     remaining.Integrate(hyperPeriod * num_periods)
 
     # Print out analysis info

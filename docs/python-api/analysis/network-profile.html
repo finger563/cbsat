@@ -352,12 +352,28 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 <dt id="networkProfile.Profile.AddProfile">
 <code class="descname">AddProfile</code><span class="sig-paren">(</span><em>profile</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.AddProfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compose this profile with an input profile by adding their slopes together.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.SubtractProfile">
 <code class="descname">SubtractProfile</code><span class="sig-paren">(</span><em>profile</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.SubtractProfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compose this profile with an input profile by subtracting the input profile&#8217;s slopes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -443,8 +459,8 @@ e.g. a function mapping required data to time</li>
 <dl class="method">
 <dt id="networkProfile.Profile.Delay">
 <code class="descname">Delay</code><span class="sig-paren">(</span><em>delayProf</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Delay" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply a delay profile to this profile; this may be used for determining the profile
-received by a node for which this profile is the output profile on the sender side.
+<dd><p>Compute the delayed profile composed of <em>self</em> profile and <em>delayProf</em>,
+received by a node for which this <em>self</em> profile is the output profile on the sender side.
 The delay profile describes the delay as a function of time for the link.</p>
 <p>This function implements the operation:</p>
 <div class="math">
@@ -459,7 +475,9 @@ The delay profile describes the delay as a function of time for the link.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>delayProf</strong> (<em>in</em>) &#8211; <a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a> describing the delay</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a>, <img class="math" src="../../_images/math/57fa5ec21338ef1baebf73a8df8758ab8d54e17f.png" alt="o[t]"/></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>delayProf</strong> (<em>in</em>) &#8211; <a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a> describing the delay</td>
 </tr>
 </tbody>
 </table>

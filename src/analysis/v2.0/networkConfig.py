@@ -33,7 +33,7 @@ class Node:
         if not self.provided:
             self.provided = prof
         else:
-            self.provided.AddProfile(prof)
+            self.provided = self.provided.AddProfile(prof)
 
     def __repr__(self):
         retStr = "Node( id = {} )".format(self.ID)
