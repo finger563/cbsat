@@ -165,9 +165,10 @@ class Profile:
 
     def Repeat(self, num_periods):
         """Copy the current profile entries over some number of its periods."""
-        self.entries['slope'] = utils.repeat(self.entries['slope'], self.period, num_periods)
-        self.entries['max slope'] = utils.repeat(self.entries['max slope'], self.period, num_periods)
-        self.entries['latency'] = utils.repeat(self.entries['latency'], self.period, num_periods)
+        keys = ['slope', 'max slope', 'latency']
+        for key in keys:
+            if key in self.entries:
+                self.entries[key] = utils.repeat(self.entries[key], self.period, num_periods)
 
     def Integrate(self, time):
         """Integrates the slope entries to produce data entries up to *time*"""
