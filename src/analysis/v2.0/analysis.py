@@ -83,7 +83,7 @@ def analyze(required, provided, config, options):
     received.period = hyperPeriod
     received.Delay(provided)
 
-    #print received.ToString()
+    print provided.ToString()
 
     # calculate the remaining capacity of the node's link
     remaining = copy.deepcopy(provided)
@@ -92,6 +92,7 @@ def analyze(required, provided, config, options):
     remaining.SubtractProfile(output)
     remaining.Integrate(hyperPeriod * num_periods)
 
+    # Print out analysis info
     print bcolors.OKBLUE +\
         "\tMax buffer (time, bits): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
     print "\tMax delay (time, seconds): [{}, {}]".format(maxDelay[0], maxDelay[2]) +\
@@ -105,6 +106,7 @@ def analyze(required, provided, config, options):
         outDataP2 = output.GetValueAtTime( 'data', 2*hyperPeriod )
         buff1 = reqDataP1 - outDataP1
         buff2 = reqDataP2 - outDataP2
+        # If the buffer size increases between periods, the system is not stable.
         if buff2 > buff1:
             print bcolors.FAIL +\
                 "WARNING: BUFFER UTILIZATION NOT CONSISTENT THROUGH ANALYZED PERIODS"

@@ -1,6 +1,6 @@
 """
-Network Profile implements the ProfileEntry and Profile classes.  
-These classes provide all the members and functions neccessary to 
+Network Profile implements the Profile class.  
+This class provides all the members and functions neccessary to 
 model, compose, and analyze network profiles for applications 
 and systems.  
 """
@@ -8,7 +8,6 @@ and systems.
 import copy,sys
 import utils
 from decimal import *
-from tabulate import tabulate
 
 class Profile:
     """
@@ -17,11 +16,15 @@ class Profile:
     and a lists of relevant data vs time series (e.g. bandwidth, latency, data, etc.).
     """
 
-    #: What separates fields in a profile?
+    #: Sepearates fileds in a line in a profile file
     field_delimeter = ','
+    #: Denotes headers (profile properties) in a profile file
     header_delimeter = '#'
+    #: Denotes commends in the profile file
     comment_delimeter = '%'
+    #: Splits lines in a profile file
     line_delimeter = '\n'
+    #: Strip lines starting with these delimeters to get just profile data
     special_delimeters = [header_delimeter, comment_delimeter]
     
     def __init__(self, kind = None, period = 0, priority = 0, source = 0, dest = 0, num_periods = 1):
@@ -223,10 +226,10 @@ class Profile:
         return utils.get_value_at_time(self.entries[key], t, interpolate)
 
     def ToString(self):
+        """Returns a string version of the profile, with all values properly tabulated."""
         retstr = ''
         for key,values in self.entries.iteritems():
-            newstr = tabulate(values, headers = ['time(s)', key],
-                              numalign="right",floatfmt=".4f")
+            newstr = self.ValueSeriesToString(key)
             if retstr:
                 lines = newstr.split('\n')
                 s = ''
@@ -236,29 +239,46 @@ class Profile:
                     s += line + '\n'
                 retstr = s
             else:
-                retstr = newstr    
+                retstr = newstr
         return retstr
 
     def ValueSeriesToString(self, key):
         """Return a stringified version of the x & y series specified by *key*."""
-        return tabulate(self.entries[key],
-                        headers=['time(s)', key],
-                        numalign="right",
-                        floatfmt=".4f")
+        retstr = ''
+        try:
+            from tabulate import tabulate
+            retstr += tabulate(self.entries[key],
+                               headers=['time(s)', key],
+                               numalign="right",
+                               floatfmt=".4f")
+        except ImportError:
+            print >> sys.stderr, "Tabulate module not installed, using basic fallback."
+            retstr += 'time(s)\t\t{}\n'.format(key)
+            for x,y in self.entries[key]:
+                retstr += '{0:.5f}\t{1:.5f}\n'.format(float(x),float(y))
+        return retstr
 
     def CalcDelay(self, output):
         """
         Compute the maximum horizontal distance between this profile and the input profile.  
-        Return it as a form::
+
+        This function implements the operation (see :ref:`network_math_formalism`):
+
+        .. math::
+            delay = sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}
+
+        Where
+
+        * :math:`l^{-1}[y]` is the inverse map of the ouptut profile, 
+          e.g. a function mapping output data to time
+        * :math:`r^{-1}[y]` is the inverse map of the required profile, 
+          e.g. a function mapping required data to time
+
+        :rtype: :func:`list` of the form::
         
             [ <time>, <data>, <length of delay> ]
         
         :param in output: a :class:`Profile` describing the output profile
-
-        The delay is calculated as (see :ref:`network_math_formalism`):
-
-        .. math::
-            delay = sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}
         """
         r = self.entries['data']
         o = output.entries['data']
@@ -267,16 +287,22 @@ class Profile:
     def CalcBuffer(self, output):
         """
         Compute the maximum vertical distance between this profile and the input profile.  
-        Return it as a form::
-        
-            [ <time>, <data>, <size of the buffer> ]
-        
-        :param in output: a :class:`Profile` describing the output profile
 
-        The buffer is calulated as (see :ref:`network_math_formalism`):
+        This function implements the operation (see :ref:`network_math_formalism`): 
 
         .. math::
             buffer= sup\{r[t] - l[t] : t \in \mathbb{N}\}
+
+        Where
+
+        * :math:`l[t]` is the output profile (see :func:`Profile.Convolve`)
+        * :math:`r[t]` is the required profile (*self*)
+
+        :rtype: :func:`list` of the form::
+
+            [ <time>, <data>, <size of the buffer> ]
+        
+        :param in output: a :class:`Profile` describing the output profile
         """
         r = self.entries['data']
         o = output.entries['data']
