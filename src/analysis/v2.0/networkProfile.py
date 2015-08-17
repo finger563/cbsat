@@ -233,10 +233,9 @@ class Profile:
             from tabulate import tabulate
             newDict = OrderedDict()
             for key,values in self.entries.iteritems():
-                newDict[key] = []
                 for val in values:
-                    newDict[key].append([float(val[0]),float(val[1])])
-            retstr = tabulate(newDict, headers='keys', floatfmt='.1f')
+                    newDict.setdefault(key,[]).append(float(val[1]))
+            retstr = tabulate(newDict, headers='keys',floatfmt='.1f')
         except ImportError:
             print >> sys.stderr, "Tabulate module should be installed for printing profiles."
         return retstr
