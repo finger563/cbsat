@@ -62,15 +62,17 @@ def analyze(required, provided, config, options):
     #print "\nCalculated hyperperiod as {} seconds".format(hyperPeriod)
 
     # REPEAT PROFILES FOR THE RIGHT NUMBER OF HYPERPERIODS
-    required.Repeat( 'slope', (hyperPeriod / required.period) * num_periods )
-    provided.Repeat( 'slope', (hyperPeriod / provided.period) * num_periods )
+    required.Repeat( (hyperPeriod / required.period) * num_periods )
+    provided.Repeat( (hyperPeriod / provided.period) * num_periods )
 
     # INTEGRATE THE PROFILES FOR ANALYSIS
     provided.Integrate(hyperPeriod * num_periods)
     required.Integrate(hyperPeriod * num_periods)
 
+    # CONVOLVE REQUIRED WITH PROVIDED TO PRODUCE OUTPUT
     output = required.Convolve(provided)
     output.period = hyperPeriod
+    # CALCULATE SENDER-SIDE BUFFER AND DELAY FROM OUTPUT AND REQUIRED
     maxBuffer = required.CalcBuffer(output)
     maxDelay = required.CalcDelay(output)
 
@@ -113,11 +115,13 @@ def analyze(required, provided, config, options):
         profList = [required,provided,output,remaining, received]
         plot_bandwidth_and_data( profList, maxDelay, maxBuffer, num_periods, plot_line_width)
 
+    # Shrink the profiles back down so that they can be composed with other profiles
     received.Shrink(received.period)
     output.Shrink(output.period)
     remaining.Shrink(remaining.period)
     provided.Shrink(provided.period)
     required.Shrink(required.period)
+
     return output, remaining, received, maxBuffer, maxDelay
 
 def main(argv):

@@ -163,9 +163,11 @@ class Profile:
             if values[0][0] > 0:
                 values.insert(0,[0,0])
 
-    def Repeat(self, key, num_periods):
+    def Repeat(self, num_periods):
         """Copy the current profile entries over some number of its periods."""
-        self.entries[key] = utils.repeat(self.entries[key], self.period, num_periods)
+        self.entries['slope'] = utils.repeat(self.entries['slope'], self.period, num_periods)
+        self.entries['max slope'] = utils.repeat(self.entries['max slope'], self.period, num_periods)
+        self.entries['latency'] = utils.repeat(self.entries['latency'], self.period, num_periods)
 
     def Integrate(self, time):
         """Integrates the slope entries to produce data entries up to *time*"""
@@ -188,7 +190,8 @@ class Profile:
     def Shrink(self, t):
         """Shrink the profile to be <= *t*."""
         for key, values in self.entries.iteritems():
-            values, r = utils.split(values, t)
+            self.entries[key], r = utils.split(values, t)
+        del self.entries['slope'][-1]
 
     def AddProfile(self,profile):
         """Compose this profile with an input profile by adding their slopes together."""
@@ -227,8 +230,9 @@ class Profile:
                 lines = newstr.split('\n')
                 s = ''
                 for index,line in enumerate(retstr.split('\n')):
-                    line += ' ' + lines[index] + '\n'
-                    s += line
+                    if index < len(lines):
+                        line += ' ' + lines[index]
+                    s += line + '\n'
                 retstr = s
             else:
                 retstr = newstr    
