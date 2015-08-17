@@ -157,8 +157,8 @@
             
   <div class="section" id="module-networkProfile">
 <span id="network-profile"></span><h1>Network Profile<a class="headerlink" href="#module-networkProfile" title="Permalink to this headline">¶</a></h1>
-<p>Network Profile implements the ProfileEntry and Profile classes.  
-These classes provide all the members and functions neccessary to 
+<p>Network Profile implements the Profile class.  
+This class provides all the members and functions neccessary to 
 model, compose, and analyze network profiles for applications 
 and systems.</p>
 <dl class="class">
@@ -185,28 +185,32 @@ and a lists of relevant data vs time series (e.g. bandwidth, latency, data, etc.
 <dl class="attribute">
 <dt id="networkProfile.Profile.field_delimeter">
 <code class="descname">field_delimeter</code><em class="property"> = ','</em><a class="headerlink" href="#networkProfile.Profile.field_delimeter" title="Permalink to this definition">¶</a></dt>
-<dd><p>What separates fields in a profile?</p>
+<dd><p>Sepearates fileds in a line in a profile file</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="networkProfile.Profile.header_delimeter">
 <code class="descname">header_delimeter</code><em class="property"> = '#'</em><a class="headerlink" href="#networkProfile.Profile.header_delimeter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Denotes headers (profile properties) in a profile file</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="networkProfile.Profile.comment_delimeter">
 <code class="descname">comment_delimeter</code><em class="property"> = '%'</em><a class="headerlink" href="#networkProfile.Profile.comment_delimeter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Denotes commends in the profile file</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="networkProfile.Profile.line_delimeter">
 <code class="descname">line_delimeter</code><em class="property"> = '\n'</em><a class="headerlink" href="#networkProfile.Profile.line_delimeter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Splits lines in a profile file</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="networkProfile.Profile.special_delimeters">
 <code class="descname">special_delimeters</code><em class="property"> = ['#', '%']</em><a class="headerlink" href="#networkProfile.Profile.special_delimeters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Strip lines starting with these delimeters to get just profile data</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="networkProfile.Profile.kind">
@@ -377,7 +381,8 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 <dl class="method">
 <dt id="networkProfile.Profile.ToString">
 <code class="descname">ToString</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ToString" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns a string version of the profile, with all values properly tabulated.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.ValueSeriesToString">
@@ -388,44 +393,58 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 <dl class="method">
 <dt id="networkProfile.Profile.CalcDelay">
 <code class="descname">CalcDelay</code><span class="sig-paren">(</span><em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.CalcDelay" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the maximum horizontal distance between this profile and the input profile.  
-Return it as a form:</p>
-<div class="highlight-python"><div class="highlight"><pre>[ &lt;time&gt;, &lt;data&gt;, &lt;length of delay&gt; ]
-</pre></div>
-</div>
+<dd><p>Compute the maximum horizontal distance between this profile and the input profile.</p>
+<p>This function implements the operation (see <a class="reference internal" href="../../math.html#network-math-formalism"><span>Formalism for Better Precision Network Analysis</span></a>):</p>
+<div class="math">
+<p><img src="../../_images/math/8c3c32da0cc38ee53b7dfa64782f583d0b49e02a.png" alt="delay = sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}"/></p>
+</div><p>Where</p>
+<ul class="simple">
+<li><img class="math" src="../../_images/math/93bba4f68cb938e69362c8482839a4739446e97a.png" alt="l^{-1}[y]"/> is the inverse map of the ouptut profile, 
+e.g. a function mapping output data to time</li>
+<li><img class="math" src="../../_images/math/9c1052be858c4ab950d0fef6ff911dc93ab2d7ff.png" alt="r^{-1}[y]"/> is the inverse map of the required profile, 
+e.g. a function mapping required data to time</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> (<em>in</em>) &#8211; a <a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a> describing the output profile</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-func docutils literal"><span class="pre">list()</span></code> of the form:<div class="highlight-python"><div class="highlight"><pre>[ &lt;time&gt;, &lt;data&gt;, &lt;length of delay&gt; ]
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> (<em>in</em>) &#8211; a <a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a> describing the output profile</td>
 </tr>
 </tbody>
 </table>
-<p>The delay is calculated as (see <a class="reference internal" href="../../math.html#network-math-formalism"><span>Formalism for Better Precision Network Analysis</span></a>):</p>
-<div class="math">
-<p><img src="../../_images/math/8c3c32da0cc38ee53b7dfa64782f583d0b49e02a.png" alt="delay = sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}"/></p>
-</div></dd></dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.CalcBuffer">
 <code class="descname">CalcBuffer</code><span class="sig-paren">(</span><em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.CalcBuffer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the maximum vertical distance between this profile and the input profile.  
-Return it as a form:</p>
-<div class="highlight-python"><div class="highlight"><pre>[ &lt;time&gt;, &lt;data&gt;, &lt;size of the buffer&gt; ]
-</pre></div>
-</div>
+<dd><p>Compute the maximum vertical distance between this profile and the input profile.</p>
+<p>This function implements the operation (see <a class="reference internal" href="../../math.html#network-math-formalism"><span>Formalism for Better Precision Network Analysis</span></a>):</p>
+<div class="math">
+<p><img src="../../_images/math/82147f0fe43b54dd3d53a7b599ce485a30cf9d83.png" alt="buffer= sup\{r[t] - l[t] : t \in \mathbb{N}\}"/></p>
+</div><p>Where</p>
+<ul class="simple">
+<li><img class="math" src="../../_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/> is the output profile (see <a class="reference internal" href="#networkProfile.Profile.Convolve" title="networkProfile.Profile.Convolve"><code class="xref py py-func docutils literal"><span class="pre">Profile.Convolve()</span></code></a>)</li>
+<li><img class="math" src="../../_images/math/8d85052c33844b2074fa63b28dcb671b60af6411.png" alt="r[t]"/> is the required profile (<em>self</em>)</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> (<em>in</em>) &#8211; a <a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a> describing the output profile</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-func docutils literal"><span class="pre">list()</span></code> of the form:<div class="highlight-python"><div class="highlight"><pre>[ &lt;time&gt;, &lt;data&gt;, &lt;size of the buffer&gt; ]
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> (<em>in</em>) &#8211; a <a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a> describing the output profile</td>
 </tr>
 </tbody>
 </table>
-<p>The buffer is calulated as (see <a class="reference internal" href="../../math.html#network-math-formalism"><span>Formalism for Better Precision Network Analysis</span></a>):</p>
-<div class="math">
-<p><img src="../../_images/math/82147f0fe43b54dd3d53a7b599ce485a30cf9d83.png" alt="buffer= sup\{r[t] - l[t] : t \in \mathbb{N}\}"/></p>
-</div></dd></dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.Delay">
