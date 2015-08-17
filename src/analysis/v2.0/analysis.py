@@ -66,8 +66,8 @@ def analyze(required, provided, config, options):
     provided.Repeat( 'slope', (hyperPeriod / provided.period) * num_periods )
 
     # INTEGRATE THE PROFILES FOR ANALYSIS
-    provided.Integrate(hyperPeriod)
-    required.Integrate(hyperPeriod)
+    provided.Integrate(hyperPeriod * num_periods)
+    required.Integrate(hyperPeriod * num_periods)
 
     output = required.Convolve(provided)
     output.period = hyperPeriod
@@ -88,7 +88,7 @@ def analyze(required, provided, config, options):
     remaining.Kind("remaining")
     remaining.period = hyperPeriod
     remaining.SubtractProfile(output)
-    remaining.Integrate(hyperPeriod)
+    remaining.Integrate(hyperPeriod * num_periods)
 
     print bcolors.OKBLUE +\
         "\tMax buffer (time, bits): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
