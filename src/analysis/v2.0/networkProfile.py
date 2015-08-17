@@ -366,8 +366,7 @@ class Profile:
                         [ t, p_data ]
                     )
                     if intersection:
-                        if abs(intersection[0] - t) > 0.000001:
-                            o.append(intersection)
+                        o.append(intersection)
             newPoint = [t, p_data - max(0,diff)]
             o.append(newPoint)
             prevDiff = diff
