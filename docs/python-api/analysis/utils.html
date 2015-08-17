@@ -260,9 +260,15 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="utils.aggregate">
+<code class="descclassname">utils.</code><code class="descname">aggregate</code><span class="sig-paren">(</span><em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.aggregate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove any sequential entries with the same value.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="utils.integrate">
 <code class="descclassname">utils.</code><code class="descname">integrate</code><span class="sig-paren">(</span><em>values</em>, <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.integrate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Integrate all the entries&#8217; slopes cumulatively to calculate their new data.</p>
+<dd><p>Integrate all the values cumulatively and return the integrated values.</p>
 </dd></dl>
 
 <dl class="function">
@@ -323,7 +329,7 @@
 <dl class="function">
 <dt id="utils.get_times_at_value">
 <code class="descclassname">utils.</code><code class="descname">get_times_at_value</code><span class="sig-paren">(</span><em>values</em>, <em>value</em>, <em>interpolate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.get_times_at_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of times at which the <em>values</em> match <em>value</em>.</p>
+<dd><p>Get a list of times at which <em>values</em> match <em>value</em>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -356,19 +362,19 @@ values or constant values.</p>
 <dl class="function">
 <dt id="utils.max_vertical_difference">
 <code class="descclassname">utils.</code><code class="descname">max_vertical_difference</code><span class="sig-paren">(</span><em>values1</em>, <em>values2</em>, <em>interpolate=True</em>, <em>epsilon=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.max_vertical_difference" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get maximum vertical difference of values2 - values1.</p>
+<dd><p>Get maximum vertical difference of <em>values2</em> - <em>values1</em>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="utils.max_horizontal_difference">
 <code class="descclassname">utils.</code><code class="descname">max_horizontal_difference</code><span class="sig-paren">(</span><em>values1</em>, <em>values2</em>, <em>interpolate=True</em>, <em>epsilon=1e-06</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.max_horizontal_difference" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get maximum horizontal difference of values2 - values1.</p>
+<dd><p>Get maximum horizontal difference of <em>values2</em> - <em>values1</em>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="utils.convert_values_to_graph">
 <code class="descclassname">utils.</code><code class="descname">convert_values_to_graph</code><span class="sig-paren">(</span><em>values</em>, <em>interpolate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.convert_values_to_graph" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make the values plottable by separating the x,y values into separate lists.</p>
+<dd><p>Make the <em>values</em> plottable by separating the x,y values into separate lists.</p>
 </dd></dl>
 
 <dl class="function">
@@ -380,10 +386,10 @@ values or constant values.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>p11</strong> (<em>double</em>) &#8211; starting point of line 1</li>
-<li><strong>p12</strong> (<em>double</em>) &#8211; ending point of line 1</li>
-<li><strong>p21</strong> (<em>double</em>) &#8211; starting point of line 2</li>
-<li><strong>p22</strong> (<em>double</em>) &#8211; ending point of line 2</li>
+<li><strong>p11</strong> &#8211; <code class="xref py py-func docutils literal"><span class="pre">list()</span></code> [x,y] starting point of line 1</li>
+<li><strong>p12</strong> &#8211; <code class="xref py py-func docutils literal"><span class="pre">list()</span></code> [x,y] ending point of line 1</li>
+<li><strong>p21</strong> &#8211; <code class="xref py py-func docutils literal"><span class="pre">list()</span></code> [x,y] starting point of line 2</li>
+<li><strong>p22</strong> &#8211; <code class="xref py py-func docutils literal"><span class="pre">list()</span></code> [x,y] ending point of line 2</li>
 </ul>
 </td>
 </tr>

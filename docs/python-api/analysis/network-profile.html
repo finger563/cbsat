@@ -244,12 +244,6 @@ and a lists of relevant data vs time series (e.g. bandwidth, latency, data, etc.
 <dd><p>Dictionary of &#8216;type name&#8217; -&gt; &#8216;list of [x,y] points&#8217; k,v pairs</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="networkProfile.Profile.num_periods">
-<code class="descname">num_periods</code><em class="property"> = None</em><a class="headerlink" href="#networkProfile.Profile.num_periods" title="Permalink to this definition">¶</a></dt>
-<dd><p>How many periods this profile runs for</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="networkProfile.Profile.ParseHeader">
 <code class="descname">ParseHeader</code><span class="sig-paren">(</span><em>header</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ParseHeader" title="Permalink to this definition">¶</a></dt>
@@ -303,6 +297,12 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 </dd></dl>
 
 <dl class="method">
+<dt id="networkProfile.Profile.AggregateSlopes">
+<code class="descname">AggregateSlopes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.AggregateSlopes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove sequential entries which have the same slope.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="networkProfile.Profile.EntriesStartFill">
 <code class="descname">EntriesStartFill</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.EntriesStartFill" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make sure all entries have a start time of 0.</p>
@@ -316,8 +316,8 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 
 <dl class="method">
 <dt id="networkProfile.Profile.Integrate">
-<code class="descname">Integrate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Integrate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Integrates the slope entries to produce data entries up to <em>self.period</em></p>
+<code class="descname">Integrate</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Integrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integrates the slope entries to produce data entries up to <em>time</em></p>
 </dd></dl>
 
 <dl class="method">
@@ -359,22 +359,31 @@ Internally calls <a class="reference internal" href="#networkProfile.Profile.Par
 <dl class="method">
 <dt id="networkProfile.Profile.MakeGraphPointsSlope">
 <code class="descname">MakeGraphPointsSlope</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.MakeGraphPointsSlope" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return matplotlib plottable x and y series for the slope of the profile.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.MakeGraphPointsData">
 <code class="descname">MakeGraphPointsData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.MakeGraphPointsData" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return matplotlib plottable x and y series for the data of the profile.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.GetValueAtTime">
 <code class="descname">GetValueAtTime</code><span class="sig-paren">(</span><em>key</em>, <em>t</em>, <em>interpolate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.GetValueAtTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value at time <em>t</em> from series <em>key</em>, optionally interpolating between.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="networkProfile.Profile.ToString">
+<code class="descname">ToString</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ToString" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.ValueSeriesToString">
 <code class="descname">ValueSeriesToString</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.ValueSeriesToString" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return a stringified version of the x &amp; y series specified by <em>key</em>.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="networkProfile.Profile.CalcDelay">

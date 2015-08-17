@@ -81,6 +81,8 @@ def analyze(required, provided, config, options):
     received.period = hyperPeriod
     received.Delay(provided)
 
+    #print received.ToString()
+
     # calculate the remaining capacity of the node's link
     remaining = copy.deepcopy(provided)
     remaining.Kind("remaining")

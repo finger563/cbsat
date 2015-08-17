@@ -76,8 +76,18 @@ def repeat(values, period, num_periods):
         values.extend(tmpValues)
     return remove_degenerates(values)
 
+def aggregate(values):
+    """Remove any sequential entries with the same value."""
+    prevVal = None
+    vals = []
+    for val in values:
+        if val[1] != prevVal:
+            vals.append(val)
+            prevVal = val
+    return vals
+
 def integrate(values, t):
-    """Integrate all the entries' slopes cumulatively to calculate their new data."""
+    """Integrate all the values cumulatively and return the integrated values."""
     intVals = []
     integrator = 0
     pVal = 0
@@ -155,7 +165,7 @@ def get_value_at_time(values, t, interpolate = True):
 
 def get_times_at_value(values, value, interpolate = True):
     """
-    Get a list of times at which the *values* match *value*.
+    Get a list of times at which *values* match *value*.
 
     :param list values: a :func:`list` of [x,y] values
     :param double value: value to test against
@@ -232,7 +242,7 @@ def add_values(values1, values2, interpolate = True):
     return newVals
 
 def max_vertical_difference(values1, values2, interpolate = True, epsilon = 0.1):
-    """Get maximum vertical difference of values2 - values1."""
+    """Get maximum vertical difference of *values2* - *values1*."""
     max_diff = [0, 0, 0]
     times = [ x[0] for x in values1 ]
     times.extend( [ x[0] for x in values2 ] )
@@ -248,7 +258,7 @@ def max_vertical_difference(values1, values2, interpolate = True, epsilon = 0.1)
     return max_diff
 
 def max_horizontal_difference(values1, values2, interpolate = True, epsilon = 0.000001):
-    """Get maximum horizontal difference of values2 - values1."""
+    """Get maximum horizontal difference of *values2* - *values1*."""
     max_diff = [0, 0, 0]
     datas = [ x[1] for x in values1 ]
     datas.extend( [ x[1] for x in values2 ] )
@@ -264,7 +274,7 @@ def max_horizontal_difference(values1, values2, interpolate = True, epsilon = 0.
     return max_diff
 
 def convert_values_to_graph(values, interpolate = True):
-    """Make the values plottable by separating the x,y values into separate lists."""
+    """Make the *values* plottable by separating the x,y values into separate lists."""
     xvals = []
     yvals = []
     prevY = 0

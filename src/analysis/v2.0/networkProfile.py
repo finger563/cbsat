@@ -8,6 +8,7 @@ and systems.
 import copy,sys
 import utils
 from decimal import *
+from tabulate import tabulate
 
 class Profile:
     """
@@ -151,6 +152,10 @@ class Profile:
         """Remove duplicate entries by time stamp."""
         for key, values in self.entries.iteritems():
             values = utils.remove_degenerates(values)
+        
+    def AggregateSlopes(self):
+        """Remove sequential entries which have the same slope."""
+        self.entries['slope'] = utils.aggregate(self.entries['slope'])
 
     def EntriesStartFill(self):
         """Make sure all entries have a start time of 0."""
@@ -164,14 +169,13 @@ class Profile:
 
     def Integrate(self, time):
         """Integrates the slope entries to produce data entries up to *time*"""
-        self.entries['data'] = utils.integrate(
-            self.entries['slope'],
-            time
-        )
+        self.AggregateSlopes()
+        self.entries['data'] = utils.integrate(self.entries['slope'], time)
 
     def Derive(self):
         """Derives the slope entries from the data entries"""
         self.entries['slope'] = utils.derive( self.entries['data'] )
+        self.AggregateSlopes()
 
     def IsKind(self, kind):
         """Returns True if the profile is of type *kind*, False otherwise."""
@@ -203,19 +207,39 @@ class Profile:
         )
 
     def MakeGraphPointsSlope(self):
+        """Return matplotlib plottable x and y series for the slope of the profile."""
         return utils.convert_values_to_graph(self.entries['slope'], interpolate = False)
 
     def MakeGraphPointsData(self):
+        """Return matplotlib plottable x and y series for the data of the profile."""
         return utils.convert_values_to_graph(self.entries['data'], interpolate = True)
 
     def GetValueAtTime(self, key, t, interpolate = True):
+        """Return the value at time *t* from series *key*, optionally interpolating between."""
         return utils.get_value_at_time(self.entries[key], t, interpolate)
 
-    def ValueSeriesToString(self, key):
+    def ToString(self):
         retstr = ''
-        for val in self.entries[key]:
-            retstr += '{}\n'.format(val)
+        for key,values in self.entries.iteritems():
+            newstr = tabulate(values, headers = ['time(s)', key],
+                              numalign="right",floatfmt=".4f")
+            if retstr:
+                lines = newstr.split('\n')
+                s = ''
+                for index,line in enumerate(retstr.split('\n')):
+                    line += ' ' + lines[index] + '\n'
+                    s += line
+                retstr = s
+            else:
+                retstr = newstr    
         return retstr
+
+    def ValueSeriesToString(self, key):
+        """Return a stringified version of the x & y series specified by *key*."""
+        return tabulate(self.entries[key],
+                        headers=['time(s)', key],
+                        numalign="right",
+                        floatfmt=".4f")
 
     def CalcDelay(self, output):
         """
