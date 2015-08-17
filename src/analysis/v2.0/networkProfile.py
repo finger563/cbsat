@@ -316,7 +316,7 @@ class Profile:
         Where
 
         * :math:`\delta[t]` is the delay profile
-        * :math:`l[t]` is the profile transmitted into the link
+        * :math:`l[t]` is the profile transmitted into the link (*self*)
         * :math:`o[t]` is the output profile received at the other end of the link
 
         :param in delayProf: :class:`Profile` describing the delay
@@ -353,12 +353,20 @@ class Profile:
         """
         Use min-plus calculus to convolve this *required* profile with an input *provided* profile.
 
-        :rtype: :class:`Profile`, :math:`l[t]`
-
-        where :math:`l[t]` is defined as (see :ref:`network_math_formalism`):
+        This function implements the operation (see :ref:`network_math_formalism`):
 
         .. math::
             y=l[t] &= (r \otimes p)[t] = min( r[t] , p[t] - (p[t-1] -l[t-1]) )
+
+        Where
+
+        * :math:`r[t]` is the data profile required by the application (*self*)
+        * :math:`p[t]` is the data profile provided by the node's link
+        * :math:`l[t]` is the data profile transmitted onto the link
+
+        :rtype: :class:`Profile`, :math:`l[t]`
+
+        :param in provided: a :class:`Profile` describing the node's provided link profile
         """
         r = self.entries['data']
         p = provided.entries['data']

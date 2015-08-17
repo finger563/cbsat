@@ -452,7 +452,7 @@ The delay profile describes the delay as a function of time for the link.</p>
 </div><p>Where</p>
 <ul class="simple">
 <li><img class="math" src="../../_images/math/2a0a2f67e07caa3e17e5f8f645b78f5cad3812dd.png" alt="\delta[t]"/> is the delay profile</li>
-<li><img class="math" src="../../_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/> is the profile transmitted into the link</li>
+<li><img class="math" src="../../_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/> is the profile transmitted into the link (<em>self</em>)</li>
 <li><img class="math" src="../../_images/math/57fa5ec21338ef1baebf73a8df8758ab8d54e17f.png" alt="o[t]"/> is the output profile received at the other end of the link</li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
@@ -469,18 +469,26 @@ The delay profile describes the delay as a function of time for the link.</p>
 <dt id="networkProfile.Profile.Convolve">
 <code class="descname">Convolve</code><span class="sig-paren">(</span><em>provided</em><span class="sig-paren">)</span><a class="headerlink" href="#networkProfile.Profile.Convolve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use min-plus calculus to convolve this <em>required</em> profile with an input <em>provided</em> profile.</p>
+<p>This function implements the operation (see <a class="reference internal" href="../../math.html#network-math-formalism"><span>Formalism for Better Precision Network Analysis</span></a>):</p>
+<div class="math">
+<p><img src="../../_images/math/acb2c054a5d2a3aa05005441b784a01540201cbc.png" alt="y=l[t] &amp;= (r \otimes p)[t] = min( r[t] , p[t] - (p[t-1] -l[t-1]) )"/></p>
+</div><p>Where</p>
+<ul class="simple">
+<li><img class="math" src="../../_images/math/8d85052c33844b2074fa63b28dcb671b60af6411.png" alt="r[t]"/> is the data profile required by the application (<em>self</em>)</li>
+<li><img class="math" src="../../_images/math/0dbbb6284c52a5c09f5b48ad92262621f105e135.png" alt="p[t]"/> is the data profile provided by the node&#8217;s link</li>
+<li><img class="math" src="../../_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/> is the data profile transmitted onto the link</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a>, <img class="math" src="../../_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/></td>
 </tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>provided</strong> (<em>in</em>) &#8211; a <a class="reference internal" href="#networkProfile.Profile" title="networkProfile.Profile"><code class="xref py py-class docutils literal"><span class="pre">Profile</span></code></a> describing the node&#8217;s provided link profile</td>
+</tr>
 </tbody>
 </table>
-<p>where <img class="math" src="../../_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/> is defined as (see <a class="reference internal" href="../../math.html#network-math-formalism"><span>Formalism for Better Precision Network Analysis</span></a>):</p>
-<div class="math">
-<p><img src="../../_images/math/acb2c054a5d2a3aa05005441b784a01540201cbc.png" alt="y=l[t] &amp;= (r \otimes p)[t] = min( r[t] , p[t] - (p[t-1] -l[t-1]) )"/></p>
-</div></dd></dl>
+</dd></dl>
 
 </dd></dl>
 
