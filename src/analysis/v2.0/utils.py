@@ -244,6 +244,7 @@ def max_vertical_difference(values1, values2, interpolate = True, epsilon = 0.1)
             diff = abs(d2 - d1)
             if diff > max_diff[2] and diff > epsilon:
                 max_diff = [t, min(d1,d2), diff]
+    max_diff = [float(max_diff[0]), float(max_diff[1]), float(max_diff[2])]
     return max_diff
 
 def max_horizontal_difference(values1, values2, interpolate = True, epsilon = 0.000001):
@@ -259,6 +260,7 @@ def max_horizontal_difference(values1, values2, interpolate = True, epsilon = 0.
             diff = abs(t_2[0] - t_1[0])
             if diff > max_diff[2] and diff > epsilon:
                 max_diff = [ min(t_1[0], t_2[0]), d, diff ]
+    max_diff = [float(max_diff[0]), float(max_diff[1]), float(max_diff[2])]
     return max_diff
 
 def convert_values_to_graph(values, interpolate = True):
@@ -272,7 +274,7 @@ def convert_values_to_graph(values, interpolate = True):
             yvals.append(float(prevY))
         xvals.append(float(x))
         yvals.append(float(y))
-        prevY = y
+        prevY = float(y)
     return [xvals, yvals]
 
 def get_intersection(p11,p12,p21,p22):
