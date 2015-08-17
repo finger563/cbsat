@@ -232,9 +232,21 @@ class Profile:
         try:
             from tabulate import tabulate
             newDict = OrderedDict()
+            times = []
             for key,values in self.entries.iteritems():
                 for val in values:
-                    newDict.setdefault(key,[]).append(float(val[1]))
+                    if val[0] not in times:
+                        times.append(val[0])
+            newDict['time(s)'] = sorted(times)
+            for key,values in self.entries.iteritems():
+                for t in times:
+                    newDict.setdefault(key,[]).append(
+                        float(utils.get_value_at_time(
+                            values,
+                            t,
+                            interpolate= key in ['latency','data']
+                        ))
+                    )
             retstr = tabulate(newDict, headers='keys',floatfmt='.1f')
         except ImportError:
             print >> sys.stderr, "Tabulate module should be installed for printing profiles."
