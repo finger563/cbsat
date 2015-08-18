@@ -48,6 +48,7 @@ def analyze(required, provided, config, options):
     num_periods = options.num_periods
     nc_mode = options.nc_mode
     nc_step_size = options.nc_step_size
+    print_profiles = options.print_profiles
     plot_profiles = options.plot_profiles
     plot_line_width = options.plot_line_width
     
@@ -147,6 +148,7 @@ def main(argv):
     nc_mode = options.nc_mode
     nc_step_size = options.nc_step_size
 
+    print_profiles = options.print_profiles
     plot_profiles = options.plot_profiles
     plot_line_width = options.plot_line_width
 
@@ -205,10 +207,14 @@ def main(argv):
         if dst not in topology.links[src]:
             route = [x for x in routes if x[0] == src and x[-1] == dst][0].path
         print "\nAnalyzing {}".format(required)
+        if print_profiles:
+            print required.ToString('\t')
         print "along route: {}".format(route)
         route = route[:-1]
         for node_id in route:
             print "Against provided {}".format(nodes[node_id].provided)
+            if print_profiles:
+                print nodes[node_id].provided.ToString('\t')
             output, remaining, received, buf, delay = analyze(
                 required,
                 nodes[node_id].provided,
@@ -230,6 +236,7 @@ class Options:
 \t--help             (to show this help and exit)
 \t--nc_mode          (to run network calculus calcs)
 \t--no_plot          (to not output any plots)
+\t--print            (to print the profiles as they are analyzed)
 \t--required         <fileName containing the required profile>
 \t--provided         <fileName containing the provided profile>
 \t--profile_folder   <path containing profiles to be loaded>
@@ -239,6 +246,7 @@ class Options:
     """
     def __init__(self):
         self.plot_profiles = havePLT   #: plot the profiles?
+        self.print_profiles = False    #: print the profiles?
         self.num_periods = 1           #: number of periods to analyze
         self.plot_line_width = 4       #: line width for plots
         self.font_size = 25            #: font size for plots
@@ -260,6 +268,8 @@ class Options:
                 argind += 1
             elif args[argind] == "--no_plot":
                 self.plot_profiles = False
+            elif args[argind] == '--print':
+                self.print_profiles = True
             elif args[argind] == "--nc_mode":
                 self.nc_mode = True
             elif args[argind] == "--nc_step_size":

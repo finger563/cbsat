@@ -240,8 +240,14 @@ class Profile:
         """Return the value at time *t* from series *key*, optionally interpolating between."""
         return utils.get_value_at_time(self.entries[key], t, interpolate)
 
-    def ToString(self):
-        """Returns a string version of the profile, with all values properly tabulated."""
+    def ToString(self, prefix = ''):
+        """
+        Returns a string version of the profile, with all values properly tabulated.
+
+        :rtype: :func:`string`
+
+        :param in prefix: string to be prepended to every line of the returned string.
+        """
         retstr = ''
         try:
             from tabulate import tabulate
@@ -262,6 +268,10 @@ class Profile:
                         ))
                     )
             retstr = tabulate(newDict, headers='keys',floatfmt='.1f')
+            r = retstr
+            retstr = ''
+            for line in r.split('\n'):
+                retstr += '{}{}\n'.format(prefix,line)
         except ImportError:
             print >> sys.stderr, "Tabulate module should be installed for printing profiles."
         return retstr
