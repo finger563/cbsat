@@ -88,7 +88,7 @@ namespace Network
 	new boost::thread( boost::bind(&sender::oob_recv_threadfunc, this) );
     }
 
-    int init(std::string profileName)
+    int init(int argc, char **argv, std::string profileName)
     {
       profile.initializeFromFile(profileName.c_str());
       uuid = profile.uuid;
@@ -97,6 +97,7 @@ namespace Network
 
     void set_duration(double dur) { endTime = ros::Time::now() + ros::Duration(dur); }
     void set_output_filename(std::string filename) { output_filename = filename; }
+    void set_uuid( uint64_t u ) { uuid = u; }
 
     uint64_t get_uuid() const { return uuid; }
     ros::Time get_end_time() const { return ros::Time(endTime); }
