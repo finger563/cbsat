@@ -250,10 +250,9 @@ def max_vertical_difference(values1, values2, interpolate = True, epsilon = 0.1)
     for t in times:
         d1 = get_value_at_time(values1, t, interpolate)
         d2 = get_value_at_time(values2, t, interpolate)
-        if d1 and d2:
-            diff = abs(d2 - d1)
-            if diff > max_diff[2] and diff > epsilon:
-                max_diff = [t, min(d1,d2), diff]
+        diff = abs(d2 - d1)
+        if diff > max_diff[2] and diff > epsilon:
+            max_diff = [t, min(d1,d2), diff]
     max_diff = [float(max_diff[0]), float(max_diff[1]), float(max_diff[2])]
     return max_diff
 
@@ -267,7 +266,10 @@ def max_horizontal_difference(values1, values2, interpolate = True, epsilon = 0.
         t_1 = get_times_at_value(values1, d, interpolate)
         t_2 = get_times_at_value(values2, d, interpolate)
         if t_1 and t_2:
-            diff = abs(t_2[0] - t_1[0])
+            if d > 0:
+                diff = abs(t_2[0] - t_1[0])
+            else: # if d is 0, we want to know the full max distance
+                diff = abs(t_2[1] - t_1[0])
             if diff > max_diff[2] and diff > epsilon:
                 max_diff = [ min(t_1[0], t_2[0]), d, diff ]
     max_diff = [float(max_diff[0]), float(max_diff[1]), float(max_diff[2])]
