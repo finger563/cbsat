@@ -209,6 +209,8 @@ where a flow is defined by:
 We can then run the following algorithm to iteratively analyze the flows and the system:
 
 .. figure:: /images/results/algorithm.svg
+	    :height: 600px
+	    :width: 600px
 
 In this algorithm, the remaining capacity of the node is provided to each profile
 with a lower priority iteratively.	    
