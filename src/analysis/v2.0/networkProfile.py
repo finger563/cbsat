@@ -27,6 +27,8 @@ class Profile:
     line_delimeter = '\n'
     #: Strip lines starting with these delimeters to get just profile data
     special_delimeters = [header_delimeter, comment_delimeter]
+    #: Which profiles are interpolated between points
+    interpolated_profiles = ['data','latency']
     
     def __init__(self, kind = None, period = 0, priority = 0, source = 0, dest = 0, num_periods = 1):
         """
@@ -207,7 +209,7 @@ class Profile:
         new_slopes = utils.add_values(
             self.entries['slope'],
             profile.entries['slope'],
-            interpolate = False
+            interpolate = 'slope' in self.interpolated_profiles
         )
         retProf = copy.deepcopy(self)
         retProf.entries['slope'] = new_slopes
@@ -222,7 +224,7 @@ class Profile:
         new_slopes = utils.subtract_values(
             self.entries['slope'],
             profile.entries['slope'],
-            interpolate = False
+            interpolate = 'slope' in self.interpolated_profiles
         )
         retProf = copy.deepcopy(self)
         retProf.entries['slope'] = new_slopes
@@ -230,11 +232,11 @@ class Profile:
 
     def MakeGraphPointsSlope(self):
         """Return matplotlib plottable x and y series for the slope of the profile."""
-        return utils.convert_values_to_graph(self.entries['slope'], interpolate = False)
+        return utils.convert_values_to_graph(self.entries['slope'], interpolate = 'slope' in self.interpolated_profiles)
 
     def MakeGraphPointsData(self):
         """Return matplotlib plottable x and y series for the data of the profile."""
-        return utils.convert_values_to_graph(self.entries['data'], interpolate = True)
+        return utils.convert_values_to_graph(self.entries['data'], interpolate = 'data' in self.interpolated_profiles)
 
     def GetValueAtTime(self, key, t, interpolate = True):
         """Return the value at time *t* from series *key*, optionally interpolating between."""
@@ -264,7 +266,7 @@ class Profile:
                         float(utils.get_value_at_time(
                             values,
                             t,
-                            interpolate= key in ['latency','data']
+                            interpolate= key in self.interpolated_profiles
                         ))
                     )
             retstr = tabulate(newDict, headers='keys',floatfmt='.1f')
@@ -361,7 +363,7 @@ class Profile:
         newDatas = []
         for t in times:
             d = utils.get_value_at_time(datas, t)
-            delay = utils.get_value_at_time(delays, t, interpolate = True)
+            delay = utils.get_value_at_time(delays, t, interpolate = 'latency' in self.interpolated_profiles)
             newDatas.append([ t + delay, d ])
         newDatas = utils.remove_degenerates(newDatas)
         newDatas, remainder = utils.split(newDatas, endTime)
@@ -410,8 +412,8 @@ class Profile:
         r_prev = None
         p_prev = None
         for t in times:
-            r_data = utils.get_value_at_time(r, t, interpolate = True)
-            p_data = utils.get_value_at_time(p, t, interpolate = True) - offset
+            r_data = utils.get_value_at_time(r, t, interpolate = 'data' in self.interpolated_profiles)
+            p_data = utils.get_value_at_time(p, t, interpolate = 'data' in self.interpolated_profiles) - offset
             diff = p_data - r_data
             if diff > 0:
                 offset += diff
