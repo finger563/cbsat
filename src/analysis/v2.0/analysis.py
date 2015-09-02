@@ -102,6 +102,12 @@ def analyze(required, provided, config, options):
         "\tMax buffer (time, bits): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
     print "\tMax delay (time, seconds): [{}, {}]".format(maxDelay[0], maxDelay[2]) +\
         bcolors.ENDC
+
+    if nc_mode:
+        print bcolors.OKBLUE +\
+            "\tMax buffer NC (time, bits): [{}, {}]".format(maxBuffer_nc[0], maxBuffer_nc[2])
+        print "\tMax delay NC (time, seconds): [{}, {}]".format(maxDelay_nc[0], maxDelay_nc[2]) +\
+            bcolors.ENDC
     
     # DETERMINE SYSTEM STABILITY IF WE HAVE MORE THAN ONE HYPERPERIOD TO ANALYZE
     if num_periods > 1:

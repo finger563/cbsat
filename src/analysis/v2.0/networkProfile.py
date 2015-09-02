@@ -456,8 +456,6 @@ class Profile:
         for t,d in self.entries['data']:
             time_list.append(t)
             data_list.append(-d)
-        start_time = 0
-        prev_data = 0
         new_datas = []
         if step <= 0: step = min( [x for x in time_list if x > 0] )
         for tw in time_list:
@@ -473,9 +471,7 @@ class Profile:
                 diff = end_data - start_data
                 extreme_data = filterFunc([diff,extreme_data])
                 t += step
-            start_time = tw
-            prev_data = extreme_data
-            new_datas.append([start_time, extreme_data])
+            new_datas.append([tw, extreme_data])
             
         new_datas = utils.remove_degenerates(new_datas)
         retProf = Profile(kind = self.kind)
