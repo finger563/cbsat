@@ -340,7 +340,8 @@ taking as input:</p>
 </ul>
 <p>We can then run the following algorithm to iteratively analyze the flows and the system:</p>
 <div class="figure">
-<img src="_images/algorithm.svg" /></div>
+<a class="reference internal image-reference" href="_images/algorithm.svg"><img height="600px" src="_images/algorithm.svg" width="600px" /></a>
+</div>
 <p>In this algorithm, the remaining capacity of the node is provided to each profile
 with a lower priority iteratively.</p>
 </div>
@@ -359,6 +360,9 @@ with a lower priority iteratively.</p>
 <li>Detection of anomalous sending on receiver side</li>
 <li>Push back to sender middleware through out-of-band channel for anomaly detection on server side</li>
 </ul>
+<p>Have shown experimentally that, for example, a server side buffer size of 400000 bits, which would normally
+grow to 459424 bits because of excessive data pumps on the sender side, is kept to 393792 by utilizing this
+out-of-band channel and secure middleware.</p>
 </div>
 </div>
 </div>
