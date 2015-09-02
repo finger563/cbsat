@@ -438,3 +438,47 @@ class Profile:
         output.entries['data'] = o
         output.Derive()
         return output
+
+    def ConvertToNC(self,filterFunc, step = 0):
+        """
+        Perform time-window based integration to generate a Network Calculus curve
+        from the profile.  The conversion is configurable based on time-window step-size
+        and a filter function (e.g. min or max).  Passing :func:`max` will create an arrival
+        curve, while passing :func:`min` will create a service curve.
+
+        :rtype: :class:`Profile`, the network-calculus version of the *self* profile
+
+        .. note:: Requires the profile to have been integrated
+
+        """
+        time_list = []
+        data_list = []
+        for t,d in self.entries['data']:
+            time_list.append(t)
+            data_list.append(-d)
+        start_time = 0
+        prev_data = 0
+        new_datas = []
+        if step <= 0: step = min( [x for x in time_list if x > 0] )
+        for tw in time_list:
+            extreme_data = -filterFunc(data_list)
+            t = tw
+            while t <= time_list[-1]:
+                start_data = utils.get_value_at_time(self.entries['data'],
+                                                     t - tw,
+                                                     interpolate = 'data' in self.interpolated_profiles)
+                end_data = utils.get_value_at_time(self.entries['data'],
+                                                   t,
+                                                   interpolate = 'data' in self.interpolated_profiles)
+                diff = end_data - start_data
+                extreme_data = filterFunc([diff,extreme_data])
+                t += step
+            start_time = tw
+            prev_data = extreme_data
+            new_datas.append([start_time, extreme_data])
+            
+        new_datas = utils.remove_degenerates(new_datas)
+        retProf = Profile(kind = self.kind)
+        retProf.entries['data'] = new_datas
+        retProf.Derive()
+        return retProf

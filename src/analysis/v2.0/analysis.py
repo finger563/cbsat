@@ -89,6 +89,14 @@ def analyze(required, provided, config, options):
     remaining.period = hyperPeriod
     remaining.Integrate(hyperPeriod * num_periods)
 
+    # optionally analyze this using NC:
+    if nc_mode:
+        provided_nc = provided.ConvertToNC(min, nc_step_size)
+        required_nc = required.ConvertToNC(max, nc_step_size)
+        output_nc = required_nc.Convolve(provided_nc)
+        maxBuffer_nc = required_nc.CalcBuffer(output_nc)
+        maxDelay_nc = required_nc.CalcDelay(output_nc)
+
     # Print out analysis info
     print bcolors.OKBLUE +\
         "\tMax buffer (time, bits): [{}, {}]".format(maxBuffer[0], maxBuffer[2])
@@ -110,9 +118,14 @@ def analyze(required, provided, config, options):
             print "\t APPLICATION MAY HAVE UNBOUNDED BUFFER GROWTH ON NETWORK\n" +\
                 bcolors.ENDC
 
-    if plot_profiles == True:
+    if plot_profiles:
         profList = [required,provided,output,remaining, received]
-        plot_bandwidth_and_data( profList, maxDelay, maxBuffer, num_periods, plot_line_width)
+        plot_bandwidth_and_data( profList, maxDelay, maxBuffer,
+                                 num_periods, plot_line_width)
+        if nc_mode:
+            profList = [required_nc, provided_nc, output_nc]
+            plot_bandwidth_and_data( profList, maxDelay_nc, maxBuffer_nc,
+                                     num_periods, plot_line_width)
 
     # Shrink the profiles back down so that they can be composed with other profiles
     received.Shrink(received.period)
