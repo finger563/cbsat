@@ -171,7 +171,15 @@
   <div class="section" id="results">
 <span id="id1"></span><h1>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h1>
 <p>This page covers the results of my research as it applies to analysis
-of networked CPS.</p>
+of networked CPS.  I will cover the research contributions in two
+aspects:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#design-time"><span>Design Time Results</span></a> : Details design-time network analysis
+contributions and improvements to network performance prediction</li>
+<li><a class="reference internal" href="#run-time"><span>Run Time Results</span></a> : Details the run-time network monitoring and
+management contributions which have been based of the design-time
+work</li>
+</ul>
 <div class="section" id="design-time-results">
 <span id="design-time"></span><h2>Design Time Results<a class="headerlink" href="#design-time-results" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="precise-analysis-for-deterministic-queuing-systems">
@@ -221,17 +229,15 @@ header overhead as well.  The buffer and delay equations
 <a href="#equation-convolution">(1)</a> use the output of the convolution with the input
 profile to predict the minimum required buffer size for lossless
 tranmission and the maximum delay experienced by the transmitted data,
-respectively.</p>
+respectively.  A representative convolution example is shown below for
+reference.</p>
 <div class="math" id="equation-convolution">
 <p><span class="eqno">(1)</span><img src="_images/math/b2221bb7df3b63389ecfd179231dfc542c08b17c.png" alt="y=l[t] &amp;= (r \otimes p)[t] \\
 &amp;= min( r[t] , p[t] - (p[t-1] - l[t-1]) )\\
 \text{buffer}&amp;= sup\{r[t] - l[t] : t \in \mathbb{N}\}\\
 \text{delay} &amp;= sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}"/></p>
-</div><div class="figure align-center" id="id2">
+</div><div class="figure align-center">
 <img alt="_images/convolution1.png" src="_images/convolution1.png" />
-<p class="caption"><span class="caption-text">Representative example for network profile conovlution between the
-<em>required</em> profile <img class="math" src="_images/math/8d85052c33844b2074fa63b28dcb671b60af6411.png" alt="r[t]"/> and the <em>provided</em> profile
-<img class="math" src="_images/math/0dbbb6284c52a5c09f5b48ad92262621f105e135.png" alt="p[t]"/> to produce the <em>link</em> output profile <img class="math" src="_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/>.</span></p>
 </div>
 <p>Given that the required data profile and system data service profile
 are periodic, we must determine the periodicity of the output
@@ -417,11 +423,13 @@ to the measurements from the actual system.</p>
 <p>Taking the results from our published work, where our methods
 predicted a buffer size of 64000 bits / 8000 bytes, we show that
 Network Calculus predicts a required buffer size of 3155000 bits.</p>
-<div class="figure align-center">
+<div class="figure align-center" id="id2">
 <img alt="_images/maren_namek_data.png" src="_images/maren_namek_data.png" />
+<p class="caption"><span class="caption-text">Analysis of the system with our tools.</span></p>
 </div>
-<div class="figure align-center">
+<div class="figure align-center" id="id3">
 <img alt="_images/nc_namek_data.png" src="_images/nc_namek_data.png" />
+<p class="caption"><span class="caption-text">Network-Calculus based analysis of the system.</span></p>
 </div>
 <p>We developed software which produces data according to a supplied
 input profile and configured the system&#8217;s network to provide the
@@ -584,15 +592,14 @@ profile, the periodicity of the profile is unchanged.</p>
 <p>We determine the condition for which <img class="math" src="_images/math/b1021500b5fe6128b7c4c8eb175cb1585710e999.png" alt="(t_{end}) - (t_{start}) =
 T_p"/>:</p>
 <div class="math">
-<p><img src="_images/math/0de0768086cdef2ab5d807033aac259fc1d48c36.png" alt="(T_p + t + \delta[T_p + t]) - (t + \delta[t]) = T_p \\
-T_p + \delta[T_p + t] - \delta[t] = T_p \\
-\delta[T_p + t] - \delta[t] = T_p \\
-\delta[T_p + t] = \delta[t]"/></p>
+<p><img src="_images/math/46245c7be404e773c109d1748baac82a5d546fcd.png" alt="(T_p + t + \delta[T_p + t]) - (t + \delta[t]) &amp;= T_p \\
+T_p + \delta[T_p + t] - \delta[t] &amp;= T_p \\
+\delta[T_p + t] - \delta[t] &amp;= 0\\
+\delta[T_p + t] &amp;= \delta[t]"/></p>
 </div><p>From this we determine that the periodicitiy of the profile is
 unchanged <em>iff</em> the profile is period-continuous, i.e. if the latency
 at the end of the profile is the same as the latency at the beginning
-of the profile.  This is not a restrictive requirement since this just
-requires that the latency profile be periodic.</p>
+of the profile.</p>
 </div>
 <div class="section" id="routing-analysis">
 <h3>Routing Analysis<a class="headerlink" href="#routing-analysis" title="Permalink to this headline">¶</a></h3>

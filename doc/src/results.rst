@@ -4,7 +4,14 @@ Results
 =======
 
 This page covers the results of my research as it applies to analysis
-of networked CPS.
+of networked CPS.  I will cover the research contributions in two
+aspects:
+
+* :ref:`design_time` : Details design-time network analysis
+  contributions and improvements to network performance prediction
+* :ref:`run_time` : Details the run-time network monitoring and
+  management contributions which have been based of the design-time
+  work
 
 .. _design_time:
 
@@ -61,7 +68,8 @@ header overhead as well.  The buffer and delay equations
 :eq:`convolution` use the output of the convolution with the input
 profile to predict the minimum required buffer size for lossless
 tranmission and the maximum delay experienced by the transmitted data,
-respectively.
+respectively.  A representative convolution example is shown below for
+reference.
 
 .. math::
    y=l[t] &= (r \otimes p)[t] \\
@@ -72,11 +80,6 @@ respectively.
 
 .. figure:: /images/results/convolution.png
    :align: center
-
-   Representative example for network profile conovlution between the
-   *required* profile :math:`r[t]` and the *provided* profile
-   :math:`p[t]` to produce the *link* output profile :math:`l[t]`.
-
 
 Given that the required data profile and system data service profile
 are periodic, we must determine the periodicity of the output
@@ -234,9 +237,12 @@ Network Calculus predicts a required buffer size of 3155000 bits.
 .. figure:: /images/results/maren_namek_data.png
    :align: center
 
+   Analysis of the system with our tools.
 	
 .. figure:: /images/results/nc_namek_data.png
    :align: center
+
+   Network-Calculus based analysis of the system.
 
 We developed software which produces data according to a supplied
 input profile and configured the system's network to provide the
@@ -399,16 +405,15 @@ We determine the condition for which :math:`(t_{end}) - (t_{start}) =
 T_p`:
 
 .. math::
-   (T_p + t + \delta[T_p + t]) - (t + \delta[t]) = T_p \\
-   T_p + \delta[T_p + t] - \delta[t] = T_p \\
-   \delta[T_p + t] - \delta[t] = T_p \\
-   \delta[T_p + t] = \delta[t]
+   (T_p + t + \delta[T_p + t]) - (t + \delta[t]) &= T_p \\
+   T_p + \delta[T_p + t] - \delta[t] &= T_p \\
+   \delta[T_p + t] - \delta[t] &= 0\\
+   \delta[T_p + t] &= \delta[t]
 
 From this we determine that the periodicitiy of the profile is
 unchanged *iff* the profile is period-continuous, i.e. if the latency
 at the end of the profile is the same as the latency at the beginning
-of the profile.  This is not a restrictive requirement since this just
-requires that the latency profile be periodic.
+of the profile.
 
 Routing Analysis
 ~~~~~~~~~~~~~~~~
