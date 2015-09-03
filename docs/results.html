@@ -538,6 +538,14 @@ and maximum extra buffer space.</p>
 </div>
 <div class="section" id="compositional-analysis">
 <h3>Compositional Analysis<a class="headerlink" href="#compositional-analysis" title="Permalink to this headline">¶</a></h3>
+<p>Now that we have precise network performance analysis for aggregate
+flows or singular flows on individual nodes of the network, we must
+determine how best to compose these flows and nodes together to
+analyze the overal system.  The aim of this work is to allow the flows
+from each application to be analyzed separately from the other flows
+in the network, so that application developers and system integrators
+can derive meaningful perfomance predictions for specific
+applications.</p>
 <p>We have implemented min-plus calculus based compositional operations
 for the network profiles which allow us to compose and decompose
 systems based on functional components.  For network flows, this means
@@ -620,9 +628,9 @@ nodes handle the flow&#8217;s data.</p>
 analysis by taking as input:</p>
 <ul class="simple">
 <li>the flows in the network</li>
-<li>the provided service of each link in the network</li>
+<li>the provided service of each node in the network</li>
 <li>the network configuration specifying the nodes in the network and
-the routes</li>
+the routes in the network</li>
 </ul>
 <p>where a flow is defined by:</p>
 <ul class="simple">
@@ -631,6 +639,10 @@ the routes</li>
 <li>Priority of the flow</li>
 <li>flow profile, i.e. bandwidth vs time</li>
 </ul>
+<p>and a route is specified as a list of node IDs starting with the
+source node ID and ending with the destination node ID.  Any flows
+which have the respective source and destination IDs must travel along
+the path specified by the respective route.</p>
 <p>We can then run the following algorithm to iteratively analyze the
 flows and the system:</p>
 <div class="figure">
@@ -638,13 +650,22 @@ flows and the system:</p>
 </div>
 <p>In this algorithm, the remaining capacity of the node is provided to
 each profile with a lower priority iteratively.</p>
+<p>We have implmented these functions for statically routed network
+analysis into our tool, which automatically parses the flow profiles,
+the network configuration and uses the algorithm and the implemented
+mathematics to iteratively analyze the network.  Analytical results
+for example systems will be provided when the experimental results can
+be used as a comparison.</p>
+<p>We are finishing the design and development of code which will allow
+us to run experiments to validate our routing analysis results.  They
+will be complete in the next two weeks.</p>
 </div>
 </div>
 <div class="section" id="run-time-results">
 <span id="run-time"></span><h2>Run Time Results<a class="headerlink" href="#run-time-results" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="middleware-integrated-measurement-detection-and-enforcement">
 <h3>Middleware-integrated Measurement, Detection, and Enforcement<a class="headerlink" href="#middleware-integrated-measurement-detection-and-enforcement" title="Permalink to this headline">¶</a></h3>
-<p>We have implemented these features based on our design-time results</p>
+<p>We have implemented these features based on our design-time results:</p>
 <ul class="simple">
 <li>Traffic generators according to profile generated into sender code</li>
 <li>Receiver service according to profile generated into receiver code</li>
@@ -656,7 +677,8 @@ server side generated into code</li>
 <li>Push back to sender middleware through out-of-band channel for
 anomaly detection on server side</li>
 </ul>
-<p>Have shown experimentally that, for example, a server side buffer size
+<p>We have implemented our</p>
+<p>We shown experimentally that, for example, a server side buffer size
 of 400000 bits, which would normally grow to 459424 bits because of
 excessive data pumps on the sender side, is kept to 393792 by
 utilizing this out-of-band channel and secure middleware.</p>

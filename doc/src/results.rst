@@ -345,6 +345,15 @@ and maximum extra buffer space.
 Compositional Analysis
 ~~~~~~~~~~~~~~~~~~~~~~
 
+Now that we have precise network performance analysis for aggregate
+flows or singular flows on individual nodes of the network, we must
+determine how best to compose these flows and nodes together to
+analyze the overal system.  The aim of this work is to allow the flows
+from each application to be analyzed separately from the other flows
+in the network, so that application developers and system integrators
+can derive meaningful perfomance predictions for specific
+applications.  
+
 We have implemented min-plus calculus based compositional operations
 for the network profiles which allow us to compose and decompose
 systems based on functional components.  For network flows, this means
@@ -440,9 +449,9 @@ We have extended our network analysis tool to support such system
 analysis by taking as input:
 
 * the flows in the network
-* the provided service of each link in the network
+* the provided service of each node in the network
 * the network configuration specifying the nodes in the network and
-  the routes
+  the routes in the network
 
 where a flow is defined by:
 
@@ -450,6 +459,11 @@ where a flow is defined by:
 * ID of the destination node
 * Priority of the flow
 * flow profile, i.e. bandwidth vs time
+
+and a route is specified as a list of node IDs starting with the
+source node ID and ending with the destination node ID.  Any flows
+which have the respective source and destination IDs must travel along
+the path specified by the respective route.
 
 We can then run the following algorithm to iteratively analyze the
 flows and the system:
@@ -461,6 +475,17 @@ flows and the system:
 In this algorithm, the remaining capacity of the node is provided to
 each profile with a lower priority iteratively.
 
+We have implmented these functions for statically routed network
+analysis into our tool, which automatically parses the flow profiles,
+the network configuration and uses the algorithm and the implemented
+mathematics to iteratively analyze the network.  Analytical results
+for example systems will be provided when the experimental results can
+be used as a comparison.  
+
+We are finishing the design and development of code which will allow
+us to run experiments to validate our routing analysis results.  They
+will be complete in the next two weeks.
+
 .. _run_time:
 
 Run Time Results
@@ -469,7 +494,7 @@ Run Time Results
 Middleware-integrated Measurement, Detection, and Enforcement
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We have implemented these features based on our design-time results
+We have implemented these features based on our design-time results:
 
 * Traffic generators according to profile generated into sender code
 * Receiver service according to profile generated into receiver code
@@ -481,7 +506,9 @@ We have implemented these features based on our design-time results
 * Push back to sender middleware through out-of-band channel for
   anomaly detection on server side
 
-Have shown experimentally that, for example, a server side buffer size
+We have implemented our 
+
+We shown experimentally that, for example, a server side buffer size
 of 400000 bits, which would normally grow to 459424 bits because of
 excessive data pumps on the sender side, is kept to 393792 by
 utilizing this out-of-band channel and secure middleware.
