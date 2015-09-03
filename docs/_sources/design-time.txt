@@ -70,7 +70,10 @@ header overhead as well.  The buffer and delay equations
 profile to predict the minimum required buffer size for lossless
 tranmission and the maximum delay experienced by the transmitted data,
 respectively.  A representative convolution example is shown below for
-reference.
+reference.  These functions are implemented as:
+:func:`networkProfile.Profile.Convolve`,
+:func:`networkProfile.Profile.CalcBuffer`,
+and :func:`networkProfile.Profile.CalcDelay`.  
 
 .. math::
    y=l[t] &= (r \otimes p)[t] \\
@@ -114,9 +117,10 @@ still the same as it was when analyzing the system over one period.
 Furthermore, by running the analysis over even larger number of
 periods, we can determine (not plotted here for space and
 readability), that the predicted buffer size does not change no matter
-how many periods we analyze for this system.  Let us look at a system
-where this is not the case before we begin the analysis of such system
-characteristics.
+how many periods we analyze for this system.
+
+Let us look at a system where this is not the case before we begin the
+analysis of such system characteristics.
 
 +-----------------------------------------------------+-------------------------------------------------------+
 | System *(2)* Bandwidth for 1 Period                 | System *(2)* Data for 1 Period                        |
@@ -133,9 +137,9 @@ characteristics.
 +-----------------------------------------------------+-------------------------------------------------------+
 
 Notice in system *(2)*, the first period analysis predicted the same
-buffer size as system *(1)*, but when analyzing two periods the
-predicted buffer size changed.  Clearly the behavior of the system is
-changing between these two periods.  If we continue to analyze more
+buffer size and delay as system *(1)*, but when analyzing two periods
+the predicted buffer size changed.  Clearly the behavior of the system
+is changing between these two periods.  If we continue to analyze more
 periods of system *(2)*, as we did with system *(1)*, we'll find the
 unfortunate conclusion that the predicted buffer size increases with
 every period we add to the analysis.
@@ -162,10 +166,10 @@ Proving the required minimum
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Let us now formally prove the assertion about system periodicity and
-stability which have been stated above.  We will show that our
-analysis results provide quantitative measures about the behavior of
-the system and we will determine for how long we must analyze a system
-to glean such behaviors. 
+stability which has been stated above.  We will show that our analysis
+results provide quantitative measures about the behavior of the system
+and we will determine for how long we must analyze a system to glean
+such behaviors.
 
 Consider a deterministic queuing system providing a data service
 function :math:`S` to input data flow :math:`I` to produce output data
@@ -188,7 +192,7 @@ of :math:`I`, :math:`\forall t,n : I[t] = I[t + n*T_I]`.  Similarly,
 given the period :math:`T_S` of :math:`S`, :math:`\forall t,n : S[t] =
 S[t + n*T_S]`.
 
-We can determine the hyperperiod of the system as the lcm of input
+We can determine the hyperperiod of the system as the :func:`utils.lcm` of input
 flow period and the service function period, :math:`T_p =
 lcm(T_S,T_I)`.
 
@@ -228,9 +232,10 @@ If we are only concerned with system stability, we do not need to
 calculate :math:`R`, and can instead infer system stability by
 comparing the values of the buffer at any two period-offset times
 during the steady-state operation of the system (:math:`t >= T_p`).
-This means that system stability check can resolve to :math:`B[2*T_p] ==
-B[T_p]`.  This comparison abides by the conditions above, with
-:math:`m=2` and :math:`n=1`
+This means that system stability check can resolve to :math:`B[2*T_p]
+== B[T_p]`.  This comparison abides by the conditions above, with
+:math:`m=2` and :math:`n=1`.  Checking for system stability occurs in
+:func:`analysis.analyze`.
 
 .. _nc_comparison:
       
@@ -242,7 +247,9 @@ methods, we developed our tools to allow us to analyze the input
 system using Network Calculus/Real-Time Calculus techniques as well as
 our own.  Using these capabilities, we can directly compare the
 analysis results to each other, and then finally compare both results
-to the measurements from the actual system.
+to the measurements from the actual system.  The convenience function
+to generate a NC-based profile from our profile model is implemented
+in :func:`networkProfile.Profile.ConvertToNC`.
 
 Taking the results from our published work, where our methods
 predicted a buffer size of 64000 bits / 8000 bytes, we show that
@@ -370,7 +377,10 @@ for the network profiles which allow us to compose and decompose
 systems based on functional components.  For network flows, this means
 we can analyze flows individually to determine per-flow performance
 metrics or we can aggregate flows together to determine aggregate
-performance.
+performance.  Profile addition and subtraciton are implemented
+in :func:`networkProfile.Profile.AddProfile` and
+:func:`networkProfile.Profile.SubtractProfile`.  Using these functions
+we can aggregate or separate flow profiles and service profiles.
 
 The composition is priority based, with each flow receiving a unique
 priority.  This priority determines the oder in which the flows are
@@ -382,6 +392,10 @@ The basis for this priority-based interaction is the QoS management
 provided by many different types of networking infrastructure.
 DiffServ's DSCP provides one mechanism to implement this
 priority-based transmission and routing.
+
+We are finalizing the design and code for tests which utilize the DSCP
+bit(s) setting on packet flows to show that such priority-based
+analysis techniques are correct for these types of systems.
 
 .. _delay_analysis:
 
@@ -441,6 +455,9 @@ unchanged *iff* the profile is period-continuous, i.e. if the latency
 at the end of the profile is the same as the latency at the beginning
 of the profile.
 
+The profile delay operation is implemented in
+:func:`networkProfile.Profile.Delay`.
+
 .. _routing_analysis:
 
 Routing Analysis
@@ -467,17 +484,22 @@ analysis by taking as input:
 * the network configuration specifying the nodes in the network and
   the routes in the network
 
-where a flow is defined by:
+where a flow is defined by (see
+:func:`networkProfile.Profile.ParseHeader`):
 
 * ID of the source node
 * ID of the destination node
 * Priority of the flow
-* flow profile, i.e. bandwidth vs time
+* flow properties vs time profile, see
+  :func:`networkProfile.Profile.ParseEntriesFromLine`
 
 and a route is specified as a list of node IDs starting with the
 source node ID and ending with the destination node ID.  Any flows
 which have the respective source and destination IDs must travel along
-the path specified by the respective route.
+the path specified by the respective route.  The route and the toplogy
+are implemented in :class:`networkConfig.Route` and
+:class:`networkConfig.Topology`, and the network configuration
+specification is found in :class:`networkConfig.Config`.
 
 We can then run the following algorithm to iteratively analyze the
 flows and the system:
@@ -494,7 +516,8 @@ analysis into our tool, which automatically parses the flow profiles,
 the network configuration and uses the algorithm and the implemented
 mathematics to iteratively analyze the network.  Analytical results
 for example systems will be provided when the experimental results can
-be used as a comparison.  
+be used as a comparison.  The analysis algorithm is implemented by
+:func:`analysis.main`.
 
 We are finishing the design and development of code which will allow
 us to run experiments to validate our routing analysis results.  They

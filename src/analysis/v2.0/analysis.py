@@ -28,8 +28,8 @@ def analyze(required, provided, config, options):
     * Calculates the hyperperiod of the profiles
     * Repeats the profiles for the specified number of hyperperiods in *options*
     * Analyzes the requested profiles
-    * (If more than one hyper-period has been specified it determines system stability)
-    * (Optionally plots the bandwidths and data for the profiles)
+    * If more than one hyper-period has been specified it determines system stability
+    * Optionally plots the bandwidths and data for the profiles
 
     :param in required: :class:`networkProfile.Profile` describing the required profile
     :param in provided: :class:`networkProfile.Profile` describing the provided profile

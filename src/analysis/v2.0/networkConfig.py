@@ -64,7 +64,12 @@ class Route:
         self.path.insert(pos,node)
 
     def ParseFromLine(self, line):
-        """Handles parsing of a route path from a line in the config file."""
+        """
+        Handles parsing of a route path from a line in the config file. 
+        A route is defined as::
+        
+            route: src_node_id, hop_node_1, ... , hope_node_n, dst_node_id
+        """
         self.path = []
         line = line.strip(self.header)
         node_id_list = map(int,line.split(','))
@@ -94,7 +99,12 @@ class Topology:
         self.links = links
 
     def ParseFromLine(self, line):
-        """Handles parsing of a link from a line in the config file."""
+        """
+        Handles parsing of a link from a line in the config file.
+        A topology is defined as::
+
+            topology: src_node_id : direct_node_1, ... , direct_node_n
+        """
         line = line.strip(self.header)
         node, node_list_str = line.split(':')
         node = int(node)

@@ -257,7 +257,11 @@ front of the list and the destination node at the end of the list.</p>
 <dl class="method">
 <dt id="networkConfig.Route.ParseFromLine">
 <code class="descname">ParseFromLine</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Route.ParseFromLine" title="Permalink to this definition">¶</a></dt>
-<dd><p>Handles parsing of a route path from a line in the config file.</p>
+<dd><p>Handles parsing of a route path from a line in the config file. 
+A route is defined as:</p>
+<div class="highlight-python"><div class="highlight"><pre>route: src_node_id, hop_node_1, ... , hope_node_n, dst_node_id
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -281,7 +285,11 @@ This is specified as a dictionary of node : list of nodes pairs.</p>
 <dl class="method">
 <dt id="networkConfig.Topology.ParseFromLine">
 <code class="descname">ParseFromLine</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Topology.ParseFromLine" title="Permalink to this definition">¶</a></dt>
-<dd><p>Handles parsing of a link from a line in the config file.</p>
+<dd><p>Handles parsing of a link from a line in the config file.
+A topology is defined as:</p>
+<div class="highlight-python"><div class="highlight"><pre>topology: src_node_id : direct_node_1, ... , direct_node_n
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
