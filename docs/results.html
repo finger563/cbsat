@@ -208,24 +208,27 @@ a sliding-window and instead takes the transformed minimum of the
 profiles. For a given application data generation profile,
 <img class="math" src="_images/math/8d85052c33844b2074fa63b28dcb671b60af6411.png" alt="r[t]"/>, and a given system link capacity profile <img class="math" src="_images/math/0dbbb6284c52a5c09f5b48ad92262621f105e135.png" alt="p[t]"/>,
 where <img class="math" src="_images/math/dabb2a80e171850efb7893179444bbcf3d9befa8.png" alt="t\in\mathbb{N}"/>, the link transmitted data profile
-<img class="math" src="_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/> is given by the convolution
-Equation~ref{eq:convolution}. The difference <img class="math" src="_images/math/ab2856c10f97a2e8d103d9347e210a3d882053a9.png" alt="(p[t-1] -
-l[t-1])"/> represents the difference between the amount of data that has
-been transmitted on the link <img class="math" src="_images/math/134395d31a37b43835aaa38482a8b40111cf297b.png" alt="(l[t-1])"/> and the data that the
-link could have transmitted at full utilization <img class="math" src="_images/math/9c3f19d8351f954b7742f329357f44e13a73aded.png" alt="(p[t-1])"/>. As
-demonstrated by the convolution equation, <img class="math" src="_images/math/01ca5984aa668b064145b77b11810c1c91f2ad5a.png" alt="\forall t : l[t] \le
-r[t]"/>, which is the relation that, without lower-layer reliable
-transport, the link cannot transmit more application data for the
-application than the application requests as there will be
-packetization and communication header overhead as well.</p>
-<div class="math">
-<p><img src="_images/math/bdd5ee6bc6aa2e2fba6141bf50483816e7380779.png" alt="y=l[t] &amp;= (r \otimes p)[t] \\
-&amp;= min( r[t] , p[t] - (p[t-1] - l[t-1]) )
-
-&amp;\text{buffer}= sup\{r[t] - l[t] : t \in \mathbb{N}\}\\
-&amp;\text{delay} = sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}"/></p>
+<img class="math" src="_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/> is given by the convolution equation
+<a href="#equation-convolution">(1)</a>. The difference <img class="math" src="_images/math/9465858efbe52662754f887345be2050bbba2c0d.png" alt="(p[t-1] - l[t-1])"/> represents
+the difference between the amount of data that has been transmitted on
+the link <img class="math" src="_images/math/134395d31a37b43835aaa38482a8b40111cf297b.png" alt="(l[t-1])"/> and the data that the link could have
+transmitted at full utilization <img class="math" src="_images/math/9c3f19d8351f954b7742f329357f44e13a73aded.png" alt="(p[t-1])"/>. As demonstrated by
+the convolution equation, <img class="math" src="_images/math/10089afa2b64cbf0fa8f9c9d7c42e44f3dcb0e40.png" alt="\forall t : l[t] \le r[t]"/>, which is
+the relation that, without lower-layer reliable transport, the link
+cannot transmit more application data for the application than the
+application requests as there will be packetization and communication
+header overhead as well.  The buffer and delay equations
+<a href="#equation-convolution">(1)</a> use the output of the convolution with the input
+profile to predict the minimum required buffer size for lossless
+tranmission and the maximum delay experienced by the transmitted data,
+respectively.</p>
+<div class="math" id="equation-convolution">
+<p><span class="eqno">(1)</span><img src="_images/math/b2221bb7df3b63389ecfd179231dfc542c08b17c.png" alt="y=l[t] &amp;= (r \otimes p)[t] \\
+&amp;= min( r[t] , p[t] - (p[t-1] - l[t-1]) )\\
+\text{buffer}&amp;= sup\{r[t] - l[t] : t \in \mathbb{N}\}\\
+\text{delay} &amp;= sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}"/></p>
 </div><div class="figure align-center" id="id2">
-<img alt="_images/convolution.png" src="_images/convolution.png" />
+<img alt="_images/convolution1.png" src="_images/convolution1.png" />
 <p class="caption"><span class="caption-text">Representative example for network profile conovlution between the
 <em>required</em> profile <img class="math" src="_images/math/8d85052c33844b2074fa63b28dcb671b60af6411.png" alt="r[t]"/> and the <em>provided</em> profile
 <img class="math" src="_images/math/0dbbb6284c52a5c09f5b48ad92262621f105e135.png" alt="p[t]"/> to produce the <em>link</em> output profile <img class="math" src="_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/>.</span></p>
@@ -236,20 +239,44 @@ profile.  If we can show that the output profile is similarly
 periodic, then we can show that the system is stable.  First, let us
 look at the profile behavior over the course of its first two periods
 of activity.</p>
-<div class="figure">
-<img alt="_images/1-period-system-bw.png" src="_images/1-period-system-bw.png" />
-</div>
-<div class="figure" id="id3">
-<img alt="_images/1-period-system-data.png" src="_images/1-period-system-data.png" />
-<p class="caption"><span class="caption-text">An example system <em>(1)</em> analyzed over one period.</span></p>
-</div>
-<div class="figure">
-<img alt="_images/2-period-system-bw.png" src="_images/2-period-system-bw.png" />
-</div>
-<div class="figure" id="id4">
-<img alt="_images/2-period-system-data.png" src="_images/2-period-system-data.png" />
-<p class="caption"><span class="caption-text">The same example system <em>(1)</em> analyzed over two periods.</span></p>
-</div>
+<p>We will examine two systems, <em>system (1)</em> and <em>system (2)</em>.  Firstly,
+examine <em>(1)</em>, shown below:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">System <em>(1)</em> Bandwidth for 1 Period</th>
+<th class="head">System <em>(1)</em> Data for 1 Period</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><img alt="_images/1-period-system-bw.png" class="first last" src="_images/1-period-system-bw.png" />
+</td>
+<td><img alt="_images/1-period-system-data.png" class="first last" src="_images/1-period-system-data.png" />
+</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">System <em>(1)</em> Bandwidth for 2 Periods</th>
+<th class="head">System <em>(1)</em> Data for 2 Periods</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><img alt="_images/2-period-system-bw.png" class="first last" src="_images/2-period-system-bw.png" />
+</td>
+<td><img alt="_images/2-period-system-data.png" class="first last" src="_images/2-period-system-data.png" />
+</td>
+</tr>
+</tbody>
+</table>
 <p>We notice that for this example system, the second period output
 profile is not an exact copy of the first (most easily seen by
 examining the bandwidth plots), and yet the required buffer size is
@@ -260,44 +287,64 @@ readability), that the predicted buffer size does not change no matter
 how many periods we analyze for this system.  Let us look at a system
 where this is not the case before we begin the analysis of such system
 characteristics.</p>
-<div class="figure">
-<img alt="_images/1-period-unstable-bw.png" src="_images/1-period-unstable-bw.png" />
-</div>
-<div class="figure" id="id5">
-<img alt="_images/1-period-unstable-data.png" src="_images/1-period-unstable-data.png" />
-<p class="caption"><span class="caption-text">A different example system <em>(2)</em> analyzed over one period.</span></p>
-</div>
-<div class="figure">
-<img alt="_images/2-period-unstable-bw.png" src="_images/2-period-unstable-bw.png" />
-</div>
-<div class="figure" id="id6">
-<img alt="_images/2-period-unstable-data.png" src="_images/2-period-unstable-data.png" />
-<p class="caption"><span class="caption-text">The same example system <em>(2)</em> analyzed over two periods.  Note the
-change in the required buffer size between this analysis and the
-previous analysis over one period.</span></p>
-</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">System <em>(2)</em> Bandwidth for 1 Period</th>
+<th class="head">System <em>(2)</em> Data for 1 Period</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><img alt="_images/1-period-unstable-bw.png" class="first last" src="_images/1-period-unstable-bw.png" />
+</td>
+<td><img alt="_images/1-period-unstable-data.png" class="first last" src="_images/1-period-unstable-data.png" />
+</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">System <em>(2)</em> Bandwidth for 2 Periods</th>
+<th class="head">System <em>(2)</em> Data for 2 Periods</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><img alt="_images/2-period-unstable-bw.png" class="first last" src="_images/2-period-unstable-bw.png" />
+</td>
+<td><img alt="_images/2-period-unstable-data.png" class="first last" src="_images/2-period-unstable-data.png" />
+</td>
+</tr>
+</tbody>
+</table>
 <p>Notice in system <em>(2)</em>, the first period analysis predicted the same
 buffer size as system <em>(1)</em>, but when analyzing two periods the
 predicted buffer size changed.  Clearly the behavior of the system is
 changing between these two periods.  If we continue to analyze more
 periods of system <em>(2)</em>, as we did with system <em>(1)</em>, we&#8217;ll find the
-unfortunate circumstance that the predicted buffer size increases with
+unfortunate conclusion that the predicted buffer size increases with
 every period we add to the analysis.</p>
 <p>We have discovered a system level property that can be calculated from
 these profiles, but we must determine what it means and how it can be
 used.  First, we see that in system <em>(1)</em>, the predicted required
-buffer size does not change regarless of the number of periods
-over which we analyze the system.  Second, we see that for system
-<em>(2)</em>, the predicted required buffer size changes depending on how
-many periods of activity we choose for our analysis window.  Third, we
-see that the second period of system <em>(2)</em> contains the larger of the
-two predicted buffer sizes.  These three observations align with our
-intuitive understanding of deterministic periodic systems, which
-behave the same way each period (hence their being classified as
-<em>periodic</em>).  Clearly, system <em>(2)</em> can no longer be classified as
-periodic, since its behavior is not consistent between its periods.
-If system <em>(2)</em> was designed to be periodic, this analysis
-indicates that system <em>(2)</em> is in fact unstable.</p>
+buffer size does not change regarless of the number of periods over
+which we analyze the system.  Second, we see that for system <em>(2)</em>,
+the predicted required buffer size changes depending on how many
+periods of activity we choose for our analysis window.  Third, we see
+that the second period of system <em>(2)</em> contains the larger of the two
+predicted buffer sizes.  These observations (with our understanding of
+deterministic periodic systems) lead us to the conclusion: system
+<em>(2)</em> can no longer be classified as periodic, since its behavior is
+not consistent between its periods.  Furthermore, because the required
+buffer size predicted for system system <em>(2)</em> continually increases,
+we can determine that the system is in fact <em>unstable</em> due to
+unbounded buffer growth.</p>
 <p>Let us now formally prove the assertion about system periodicity and
 stability which have been stated above.  We will show that our
 analysis results provide quantitative measures about the behavior of
@@ -338,37 +385,78 @@ i.e. <img class="math" src="_images/math/d196db590a966706d982ef4e085bf610163f423
 at the end of the second period than there was at the end of the first
 period.  Since the system is deterministic, for any two successive
 periods, <img class="math" src="_images/math/afc6727332181d3af697bd911f29c6d508998b23.png" alt="n*T_p, (n+1)*T_p"/>, <img class="math" src="_images/math/e65cdd431b1ce7d2b0f9dc0731bdf89b2baebc12.png" alt="B[n*T_p] &gt; B[(n+1)*T_p]"/>,
-i.e. the amount of data in the system&#8217;s buffer increases every period,
-therefore the system is unstable.</p>
+which extends to:</p>
+<div class="math">
+<p><img src="_images/math/7e7a261a636059df53ad55f64f1af296ad87c7a3.png" alt="B[n*T_p] &gt; B[m*T_p], \forall n&gt;m&gt;0"/></p>
+</div><p>Therefore the amount of data in the system&#8217;s buffer increases every
+period, and the system is unstable.</p>
 <p>If however, there is enough remaining capacity in the system to
 service the data in the buffer, i.e. <img class="math" src="_images/math/f14219b37c6f7adadce486123a40ecf1f8514a45.png" alt="R[T_p] &gt;= B[T_p]"/>, then
 <img class="math" src="_images/math/33d4f4dd02841f21b6856ee7772cc8d0f77c4bf3.png" alt="B[2*T_p] = B[T_p]"/>. Similarly to above, since the system is
 deterministic, for any two successive periods, <img class="math" src="_images/math/e426ee14cb8e6d9d0017a30e9f5d90c7a61c54b4.png" alt="n*T_p,
-(n+1)*T_p"/>, <img class="math" src="_images/math/064adfcaa5038095b62fe3b69df90234102d7c0f.png" alt="B[n*T_p] = B[(n+1)*T_p]"/>, i.e. the buffer size does
-not grow between periods, therefore the system is stable.</p>
+(n+1)*T_p"/>, <img class="math" src="_images/math/064adfcaa5038095b62fe3b69df90234102d7c0f.png" alt="B[n*T_p] = B[(n+1)*T_p]"/>.  This extends to:</p>
+<div class="math">
+<p><img src="_images/math/1ace35d66a4aae424e454d2cea432abc6c23c589.png" alt="B[n*T_p] = B[m*T_p], \forall m,n &gt; 0"/></p>
+</div><p>Therefore the buffer size does not grow between periods, and the
+system is stable.</p>
 <p>If we are only concerned with system stability, we do not need to
 calculate <img class="math" src="_images/math/9d86170e7de539c0ff999de09621ee0c7b6c8ed0.png" alt="R"/>, and can instead infer system stability by
 comparing the values of the buffer at any two period-offset times
-during the steady-state operation of the system, i.e. any <img class="math" src="_images/math/fb94512d14316611cc27a719654855fab8267985.png" alt="t &gt;=
-T_p"/>.  This means that system stability check can resolve to
-<img class="math" src="_images/math/47dcd7a6c641add112476436b1ab318aeda39f16.png" alt="B[T_p] == B[2*T_p]"/>.</p>
+during the steady-state operation of the system (<img class="math" src="_images/math/7bca1764693474a28844c96d8310bca28a0509b8.png" alt="t &gt;= T_p"/>).
+This means that system stability check can resolve to <img class="math" src="_images/math/ed30632b17a537a7c1ec647a7a14b1cc7eea7fb3.png" alt="B[T_p] ==
+B[2*T_p]"/>.</p>
 </div>
 <div class="section" id="comparison-with-nc-rtc">
 <h3>Comparison with NC/RTC<a class="headerlink" href="#comparison-with-nc-rtc" title="Permalink to this headline">¶</a></h3>
 <p>To show how our analysis techniques compare to other available
-methods, we developed methods in our tools which allow us to analyze
-the input system using Network Calculus/Real-Time Calculus techniques
-as well as our own.  Using these capabilities, we can directly compare
-the analysis results to each other, and then finally compare both
-results to the measurements from the actual system.</p>
+methods, we developed our tools to allow us to analyze the input
+system using Network Calculus/Real-Time Calculus techniques as well as
+our own.  Using these capabilities, we can directly compare the
+analysis results to each other, and then finally compare both results
+to the measurements from the actual system.</p>
 <p>Taking the results from our published work, where our methods
-predicted a buffer size of</p>
+predicted a buffer size of 64000 bits / 8000 bytes, we show that
+Network Calculus predicts a required buffer size of 3155000 bits.</p>
 <div class="figure align-center">
 <img alt="_images/maren_namek_data.png" src="_images/maren_namek_data.png" />
 </div>
 <div class="figure align-center">
 <img alt="_images/nc_namek_data.png" src="_images/nc_namek_data.png" />
 </div>
+<p>We developed software which produces data according to a supplied
+input profile and configured the system&#8217;s network to provide the
+bandwidth profile described in the system configuration profile.
+Using this experimental infrastructure, we were able to measure the
+transmitted traffic profile, the received traffic profile, the latency
+experienced by the data, and the transmitter&#8217;s buffer requirements.
+The results are displayed in the table below:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="21%" />
+<col width="47%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">&nbsp;</th>
+<th class="head">Predicted</th>
+<th class="head">Measured (<img class="math" src="_images/math/4b4dedc5cdec56161ae4dac2a0baf86f1c72b094.png" alt="\mu,\sigma"/>)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Buffer Delay (s)</td>
+<td>0.0625</td>
+<td>(0.06003 , 0.00029)</td>
+</tr>
+<tr class="row-odd"><td>Time of Delay (s)</td>
+<td>3.0</td>
+<td>(2.90547 , 0.00025)</td>
+</tr>
+<tr class="row-even"><td>Buffer Size (bytes)</td>
+<td>8000</td>
+<td>(7722.59 , 36.94)</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="analysis-of-tdma-scheduling">
 <h3>Analysis of TDMA Scheduling<a class="headerlink" href="#analysis-of-tdma-scheduling" title="Permalink to this headline">¶</a></h3>

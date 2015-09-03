@@ -48,30 +48,35 @@ a sliding-window and instead takes the transformed minimum of the
 profiles. For a given application data generation profile,
 :math:`r[t]`, and a given system link capacity profile :math:`p[t]`,
 where :math:`t\in\mathbb{N}`, the link transmitted data profile
-:math:`l[t]` is given by the convolution
-Equation~\ref{eq:convolution}. The difference :math:`(p[t-1] -
-l[t-1])` represents the difference between the amount of data that has
-been transmitted on the link :math:`(l[t-1])` and the data that the
-link could have transmitted at full utilization :math:`(p[t-1])`. As
-demonstrated by the convolution equation, :math:`\forall t : l[t] \le
-r[t]`, which is the relation that, without lower-layer reliable
-transport, the link cannot transmit more application data for the
-application than the application requests as there will be
-packetization and communication header overhead as well.
+:math:`l[t]` is given by the convolution equation
+:eq:`convolution`. The difference :math:`(p[t-1] - l[t-1])` represents
+the difference between the amount of data that has been transmitted on
+the link :math:`(l[t-1])` and the data that the link could have
+transmitted at full utilization :math:`(p[t-1])`. As demonstrated by
+the convolution equation, :math:`\forall t : l[t] \le r[t]`, which is
+the relation that, without lower-layer reliable transport, the link
+cannot transmit more application data for the application than the
+application requests as there will be packetization and communication
+header overhead as well.  The buffer and delay equations
+:eq:`convolution` use the output of the convolution with the input
+profile to predict the minimum required buffer size for lossless
+tranmission and the maximum delay experienced by the transmitted data,
+respectively.
 
 .. math::
    y=l[t] &= (r \otimes p)[t] \\
-   &= min( r[t] , p[t] - (p[t-1] - l[t-1]) )
+   &= min( r[t] , p[t] - (p[t-1] - l[t-1]) )\\
+   \text{buffer}&= sup\{r[t] - l[t] : t \in \mathbb{N}\}\\
+   \text{delay} &= sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}
+   :label: convolution
 
-   &\text{buffer}= sup\{r[t] - l[t] : t \in \mathbb{N}\}\\
-   &\text{delay} = sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}
-
-.. figure:: /images/math/convolution.png
+.. figure:: /images/results/convolution.png
    :align: center
 
    Representative example for network profile conovlution between the
    *required* profile :math:`r[t]` and the *provided* profile
    :math:`p[t]` to produce the *link* output profile :math:`l[t]`.
+
 
 Given that the required data profile and system data service profile
 are periodic, we must determine the periodicity of the output
@@ -80,17 +85,20 @@ periodic, then we can show that the system is stable.  First, let us
 look at the profile behavior over the course of its first two periods
 of activity.
 
-.. figure:: /images/results/1-period-system-bw.png
+We will examine two systems, *system (1)* and *system (2)*.  Firstly,
+examine *(1)*, shown below:
 
-.. figure:: /images/results/1-period-system-data.png
-	   
-   An example system *(1)* analyzed over one period.
++---------------------------------------------------+-----------------------------------------------------+
+| System *(1)* Bandwidth for 1 Period               | System *(1)* Data for 1 Period                      |
++===================================================+=====================================================+
+| .. image:: /images/results/1-period-system-bw.png | .. image:: /images/results/1-period-system-data.png |
++---------------------------------------------------+-----------------------------------------------------+
 
-.. figure:: /images/results/2-period-system-bw.png
-	    
-.. figure:: /images/results/2-period-system-data.png
-	   
-   The same example system *(1)* analyzed over two periods. 
++---------------------------------------------------+-----------------------------------------------------+
+| System *(1)* Bandwidth for 2 Periods              | System *(1)* Data for 2 Periods                     |
++===================================================+=====================================================+
+| .. image:: /images/results/2-period-system-bw.png | .. image:: /images/results/2-period-system-data.png |
++---------------------------------------------------+-----------------------------------------------------+
 
 We notice that for this example system, the second period output
 profile is not an exact copy of the first (most easily seen by
@@ -103,43 +111,41 @@ how many periods we analyze for this system.  Let us look at a system
 where this is not the case before we begin the analysis of such system
 characteristics.
 
-.. figure:: /images/results/1-period-unstable-bw.png
++-----------------------------------------------------+-------------------------------------------------------+
+| System *(2)* Bandwidth for 1 Period                 | System *(2)* Data for 1 Period                        |
++=====================================================+=======================================================+
+| .. image:: /images/results/1-period-unstable-bw.png | .. image:: /images/results/1-period-unstable-data.png |
++-----------------------------------------------------+-------------------------------------------------------+
 
-.. figure:: /images/results/1-period-unstable-data.png
-	   
-   A different example system *(2)* analyzed over one period.
-
-.. figure:: /images/results/2-period-unstable-bw.png
-	    
-.. figure:: /images/results/2-period-unstable-data.png
-	   
-   The same example system *(2)* analyzed over two periods.  Note the
-   change in the required buffer size between this analysis and the
-   previous analysis over one period.  
++-----------------------------------------------------+-------------------------------------------------------+
+| System *(2)* Bandwidth for 2 Periods                | System *(2)* Data for 2 Periods                       |
++=====================================================+=======================================================+
+| .. image:: /images/results/2-period-unstable-bw.png | .. image:: /images/results/2-period-unstable-data.png |
++-----------------------------------------------------+-------------------------------------------------------+
 
 Notice in system *(2)*, the first period analysis predicted the same
 buffer size as system *(1)*, but when analyzing two periods the
 predicted buffer size changed.  Clearly the behavior of the system is
 changing between these two periods.  If we continue to analyze more
 periods of system *(2)*, as we did with system *(1)*, we'll find the
-unfortunate circumstance that the predicted buffer size increases with
+unfortunate conclusion that the predicted buffer size increases with
 every period we add to the analysis.
 
 We have discovered a system level property that can be calculated from
 these profiles, but we must determine what it means and how it can be
 used.  First, we see that in system *(1)*, the predicted required
-buffer size does not change regarless of the number of periods
-over which we analyze the system.  Second, we see that for system
-*(2)*, the predicted required buffer size changes depending on how
-many periods of activity we choose for our analysis window.  Third, we
-see that the second period of system *(2)* contains the larger of the
-two predicted buffer sizes.  These three observations align with our
-intuitive understanding of deterministic periodic systems, which
-behave the same way each period (hence their being classified as
-*periodic*).  Clearly, system *(2)* can no longer be classified as
-periodic, since its behavior is not consistent between its periods.
-If system *(2)* was designed to be periodic, this analysis
-indicates that system *(2)* is in fact unstable.  
+buffer size does not change regarless of the number of periods over
+which we analyze the system.  Second, we see that for system *(2)*,
+the predicted required buffer size changes depending on how many
+periods of activity we choose for our analysis window.  Third, we see
+that the second period of system *(2)* contains the larger of the two
+predicted buffer sizes.  These observations (with our understanding of
+deterministic periodic systems) lead us to the conclusion: system
+*(2)* can no longer be classified as periodic, since its behavior is
+not consistent between its periods.  Furthermore, because the required
+buffer size predicted for system system *(2)* continually increases,
+we can determine that the system is in fact *unstable* due to
+unbounded buffer growth.  
 
 Let us now formally prove the assertion about system periodicity and
 stability which have been stated above.  We will show that our
@@ -184,36 +190,46 @@ i.e. :math:`R[T_p] < B[T_p]`.  In this scenario, clearly,
 at the end of the second period than there was at the end of the first
 period.  Since the system is deterministic, for any two successive
 periods, :math:`n*T_p, (n+1)*T_p`, :math:`B[n*T_p] > B[(n+1)*T_p]`,
-i.e. the amount of data in the system's buffer increases every period,
-therefore the system is unstable.
+which extends to:
+
+.. math::
+   B[n*T_p] > B[m*T_p], \forall n>m>0
+
+Therefore the amount of data in the system's buffer increases every
+period, and the system is unstable.
 
 If however, there is enough remaining capacity in the system to
 service the data in the buffer, i.e. :math:`R[T_p] >= B[T_p]`, then
 :math:`B[2*T_p] = B[T_p]`. Similarly to above, since the system is
 deterministic, for any two successive periods, :math:`n*T_p,
-(n+1)*T_p`, :math:`B[n*T_p] = B[(n+1)*T_p]`, i.e. the buffer size does
-not grow between periods, therefore the system is stable.
+(n+1)*T_p`, :math:`B[n*T_p] = B[(n+1)*T_p]`.  This extends to:
+
+.. math::
+   B[n*T_p] = B[m*T_p], \forall m,n > 0
+
+Therefore the buffer size does not grow between periods, and the
+system is stable.
 
 If we are only concerned with system stability, we do not need to
 calculate :math:`R`, and can instead infer system stability by
 comparing the values of the buffer at any two period-offset times
-during the steady-state operation of the system, i.e. any :math:`t >=
-T_p`.  This means that system stability check can resolve to
-:math:`B[T_p] == B[2*T_p]`.
+during the steady-state operation of the system (:math:`t >= T_p`).
+This means that system stability check can resolve to :math:`B[T_p] ==
+B[2*T_p]`.
 
 Comparison with NC/RTC
 ~~~~~~~~~~~~~~~~~~~~~~
 
 To show how our analysis techniques compare to other available
-methods, we developed methods in our tools which allow us to analyze
-the input system using Network Calculus/Real-Time Calculus techniques
-as well as our own.  Using these capabilities, we can directly compare
-the analysis results to each other, and then finally compare both
-results to the measurements from the actual system.
+methods, we developed our tools to allow us to analyze the input
+system using Network Calculus/Real-Time Calculus techniques as well as
+our own.  Using these capabilities, we can directly compare the
+analysis results to each other, and then finally compare both results
+to the measurements from the actual system.
 
 Taking the results from our published work, where our methods
-predicted a buffer size of
-
+predicted a buffer size of 64000 bits / 8000 bytes, we show that
+Network Calculus predicts a required buffer size of 3155000 bits.
 
 .. figure:: /images/results/maren_namek_data.png
    :align: center
@@ -221,6 +237,24 @@ predicted a buffer size of
 	
 .. figure:: /images/results/nc_namek_data.png
    :align: center
+
+We developed software which produces data according to a supplied
+input profile and configured the system's network to provide the
+bandwidth profile described in the system configuration profile.
+Using this experimental infrastructure, we were able to measure the
+transmitted traffic profile, the received traffic profile, the latency
+experienced by the data, and the transmitter's buffer requirements.
+The results are displayed in the table below:
+
++---------------------+--------------+-------------------------------+
+|                     | Predicted    | Measured (:math:`\mu,\sigma`) |
++=====================+==============+===============================+
+| Buffer Delay (s)    | 0.0625       | (0.06003 , 0.00029)           |
++---------------------+--------------+-------------------------------+
+| Time of Delay (s)   | 3.0          | (2.90547 , 0.00025)           |
++---------------------+--------------+-------------------------------+
+| Buffer Size (bytes) | 8000         | (7722.59 , 36.94)             |
++---------------------+--------------+-------------------------------+
 
 	
 Analysis of TDMA Scheduling
