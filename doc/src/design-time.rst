@@ -283,7 +283,7 @@ under-approximating the utilization of the network, since a known drop
 in network performance which is expected and handled by the
 application cannot be accurately modeled.  In our case, the system is
 using a system profile which can service data during the period from
-:math:`0<=t<=7` seconds with a period of 10 seconds.  The application
+:math:`0\le t\le 7` seconds with a period of 10 seconds.  The application
 is designed around this constraint and only produces data during that
 interval.  Because our technique directly compares when the application
 produces data to when the system can service the data, we are able to
