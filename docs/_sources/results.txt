@@ -89,18 +89,21 @@ look at the profile behavior over the course of its first two periods
 of activity.
 
 We will examine two systems, *system (1)* and *system (2)*.  Firstly,
-examine *(1)*, shown below:
+examine *(1)*, shown below (note: you can click on the images to open
+them in a larger format):
 
 +---------------------------------------------------+-----------------------------------------------------+
 | System *(1)* Bandwidth for 1 Period               | System *(1)* Data for 1 Period                      |
 +===================================================+=====================================================+
 | .. image:: /images/results/1-period-system-bw.png | .. image:: /images/results/1-period-system-data.png |
+|    :height: 200                                   |    :height: 200                                     |
 +---------------------------------------------------+-----------------------------------------------------+
 
 +---------------------------------------------------+-----------------------------------------------------+
 | System *(1)* Bandwidth for 2 Periods              | System *(1)* Data for 2 Periods                     |
 +===================================================+=====================================================+
 | .. image:: /images/results/2-period-system-bw.png | .. image:: /images/results/2-period-system-data.png |
+|    :height: 200                                   |    :height: 200                                     |
 +---------------------------------------------------+-----------------------------------------------------+
 
 We notice that for this example system, the second period output
@@ -118,12 +121,14 @@ characteristics.
 | System *(2)* Bandwidth for 1 Period                 | System *(2)* Data for 1 Period                        |
 +=====================================================+=======================================================+
 | .. image:: /images/results/1-period-unstable-bw.png | .. image:: /images/results/1-period-unstable-data.png |
+|    :height: 200                                     |    :height: 200                                       |
 +-----------------------------------------------------+-------------------------------------------------------+
 
 +-----------------------------------------------------+-------------------------------------------------------+
 | System *(2)* Bandwidth for 2 Periods                | System *(2)* Data for 2 Periods                       |
 +=====================================================+=======================================================+
 | .. image:: /images/results/2-period-unstable-bw.png | .. image:: /images/results/2-period-unstable-data.png |
+|    :height: 200                                     |    :height: 200                                       |
 +-----------------------------------------------------+-------------------------------------------------------+
 
 Notice in system *(2)*, the first period analysis predicted the same
