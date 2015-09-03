@@ -33,7 +33,7 @@
 
   
     <link rel="top" title="CBSAT 0.2.0 documentation" href="index.html"/>
-        <link rel="next" title="Analysis API" href="analysis-api.html"/>
+        <link rel="next" title="Design Time Results" href="design-time.html"/>
         <link rel="prev" title="Math" href="math.html"/> 
 
   
@@ -95,17 +95,17 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Results</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#design-time-results">Design Time Results</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#precise-analysis-for-deterministic-queuing-systems">Precise Analysis for Deterministic Queuing Systems</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#comparison-with-nc-rtc">Comparison with NC/RTC</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#analysis-of-tdma-scheduling">Analysis of TDMA Scheduling</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#compositional-analysis">Compositional Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#delay-analysis">Delay Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#routing-analysis">Routing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design-time.html">Design Time Results</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="design-time.html#precise-analysis-for-deterministic-queuing-systems">Precise Analysis for Deterministic Queuing Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="design-time.html#comparison-with-nc-rtc">Comparison with NC/RTC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="design-time.html#analysis-of-tdma-scheduling">Analysis of TDMA Scheduling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="design-time.html#compositional-analysis">Compositional Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="design-time.html#delay-analysis">Delay Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="design-time.html#routing-analysis">Routing Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#run-time-results">Run Time Results</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#middleware-integrated-measurement-detection-and-enforcement">Middleware-integrated Measurement, Detection, and Enforcement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run-time.html">Run Time Results</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="run-time.html#middleware-integrated-measurement-detection-and-enforcement">Middleware-integrated Measurement, Detection, and Enforcement</a></li>
 </ul>
 </li>
 </ul>
@@ -170,520 +170,34 @@
             
   <div class="section" id="results">
 <span id="id1"></span><h1>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h1>
-<p>This page covers the results of my research as it applies to analysis
+<p>These pages cover the results of my research as it applies to analysis
 of networked CPS.  I will cover the research contributions in two
 aspects:</p>
 <ul class="simple">
-<li><a class="reference internal" href="#design-time"><span>Design Time Results</span></a> : Details design-time network analysis
+<li><a class="reference internal" href="design-time.html#design-time"><span>Design Time Results</span></a> : Details design-time network analysis
 contributions and improvements to network performance prediction</li>
-<li><a class="reference internal" href="#run-time"><span>Run Time Results</span></a> : Details the run-time network monitoring and
+<li><a class="reference internal" href="run-time.html#run-time"><span>Run Time Results</span></a> : Details the run-time network monitoring and
 management contributions which have been based of the design-time
 work</li>
 </ul>
-<div class="section" id="design-time-results">
-<span id="design-time"></span><h2>Design Time Results<a class="headerlink" href="#design-time-results" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="precise-analysis-for-deterministic-queuing-systems">
-<h3>Precise Analysis for Deterministic Queuing Systems<a class="headerlink" href="#precise-analysis-for-deterministic-queuing-systems" title="Permalink to this headline">¶</a></h3>
-<p>To model the network capability of the system and the application
-traffic patterns, we have developed a network modeling paradigm
-similar to Network Calculus&#8217; traffic arrival curves and traffic shaper
-service curves.</p>
-<p>Similarly to Network Calculus&#8217; arrival curves and service curves, our
-network profiles model how the network performance or application
-traffic generation changes with respect to time.  Whereas Network
-Calculus&#8217; modeling transforms application data profiles and network
-service profiles into min and max curves for data received vs. size of
-time-window, our models take a simpler, deterministic approach which
-models exactly the data generated by the application and the data
-which could be sent through the network, allowing our performance
-metrics to be more precise.  Specifically, the bandwidth that the
-network provides on a given communication link is specified as a time
-series of scalar bandwidth values. Here, bandwidth is defined as data
-rate, i.e. bits per second, over some averaging interval.  This
-bandwidth profile can then be time-integrated to determine the maximum
-amount of data throughput the network link could provide over a given
-time.  The bandwidth profile for the application traffic similarly can
-be time-integrated to determine the amount of data that the
-application attempts to send on the network link as a function of
-time.</p>
-<p>Having time-integrated the bandwidth profiles to obtain data vs. time
-profiles that the application requires and that the system provides,
-we can use convolution (<img class="math" src="_images/math/58f7acd8e0a3bb3e46d50b29fa7a2fb35fb1a41a.png" alt="\otimes"/>) on these two profiles to
-obtain the transmitted link data profile as a function of discrete
-time. The convolution we define on these profiles borrows concepts
-from the min-plus calculus used in Network Calculus, but does not use
-a sliding-window and instead takes the transformed minimum of the
-profiles. For a given application data generation profile,
-<img class="math" src="_images/math/8d85052c33844b2074fa63b28dcb671b60af6411.png" alt="r[t]"/>, and a given system link capacity profile <img class="math" src="_images/math/0dbbb6284c52a5c09f5b48ad92262621f105e135.png" alt="p[t]"/>,
-where <img class="math" src="_images/math/dabb2a80e171850efb7893179444bbcf3d9befa8.png" alt="t\in\mathbb{N}"/>, the link transmitted data profile
-<img class="math" src="_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/> is given by the convolution equation
-<a href="#equation-convolution">(1)</a>. The difference <img class="math" src="_images/math/9465858efbe52662754f887345be2050bbba2c0d.png" alt="(p[t-1] - l[t-1])"/> represents
-the difference between the amount of data that has been transmitted on
-the link <img class="math" src="_images/math/134395d31a37b43835aaa38482a8b40111cf297b.png" alt="(l[t-1])"/> and the data that the link could have
-transmitted at full utilization <img class="math" src="_images/math/9c3f19d8351f954b7742f329357f44e13a73aded.png" alt="(p[t-1])"/>. As demonstrated by
-the convolution equation, <img class="math" src="_images/math/10089afa2b64cbf0fa8f9c9d7c42e44f3dcb0e40.png" alt="\forall t : l[t] \le r[t]"/>, which is
-the relation that, without lower-layer reliable transport, the link
-cannot transmit more application data for the application than the
-application requests as there will be packetization and communication
-header overhead as well.  The buffer and delay equations
-<a href="#equation-convolution">(1)</a> use the output of the convolution with the input
-profile to predict the minimum required buffer size for lossless
-tranmission and the maximum delay experienced by the transmitted data,
-respectively.  A representative convolution example is shown below for
-reference.</p>
-<div class="math" id="equation-convolution">
-<p><span class="eqno">(1)</span><img src="_images/math/b2221bb7df3b63389ecfd179231dfc542c08b17c.png" alt="y=l[t] &amp;= (r \otimes p)[t] \\
-&amp;= min( r[t] , p[t] - (p[t-1] - l[t-1]) )\\
-\text{buffer}&amp;= sup\{r[t] - l[t] : t \in \mathbb{N}\}\\
-\text{delay} &amp;= sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}"/></p>
-</div><div class="figure align-center">
-<img alt="_images/convolution1.png" src="_images/convolution1.png" />
-</div>
-<p>Given that the required data profile and system data service profile
-are periodic, we must determine the periodicity of the output
-profile.  If we can show that the output profile is similarly
-periodic, then we can show that the system is stable.  First, let us
-look at the profile behavior over the course of its first two periods
-of activity.</p>
-<p>We will examine two systems, <em>system (1)</em> and <em>system (2)</em>.  Firstly,
-examine <em>(1)</em>, shown below (note: you can click on the images to open
-them in a larger format):</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="49%" />
-<col width="51%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">System <em>(1)</em> Bandwidth for 1 Period</th>
-<th class="head">System <em>(1)</em> Data for 1 Period</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><a class="first last reference internal image-reference" href="_images/1-period-system-bw.png"><img alt="_images/1-period-system-bw.png" src="_images/1-period-system-bw.png" style="height: 200px;" /></a>
-</td>
-<td><a class="first last reference internal image-reference" href="_images/1-period-system-data.png"><img alt="_images/1-period-system-data.png" src="_images/1-period-system-data.png" style="height: 200px;" /></a>
-</td>
-</tr>
-</tbody>
-</table>
-<table border="1" class="docutils">
-<colgroup>
-<col width="49%" />
-<col width="51%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">System <em>(1)</em> Bandwidth for 2 Periods</th>
-<th class="head">System <em>(1)</em> Data for 2 Periods</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><a class="first last reference internal image-reference" href="_images/2-period-system-bw.png"><img alt="_images/2-period-system-bw.png" src="_images/2-period-system-bw.png" style="height: 200px;" /></a>
-</td>
-<td><a class="first last reference internal image-reference" href="_images/2-period-system-data.png"><img alt="_images/2-period-system-data.png" src="_images/2-period-system-data.png" style="height: 200px;" /></a>
-</td>
-</tr>
-</tbody>
-</table>
-<p>We notice that for this example system, the second period output
-profile is not an exact copy of the first (most easily seen by
-examining the bandwidth plots), and yet the required buffer size is
-still the same as it was when analyzing the system over one period.
-Furthermore, by running the analysis over even larger number of
-periods, we can determine (not plotted here for space and
-readability), that the predicted buffer size does not change no matter
-how many periods we analyze for this system.  Let us look at a system
-where this is not the case before we begin the analysis of such system
-characteristics.</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="49%" />
-<col width="51%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">System <em>(2)</em> Bandwidth for 1 Period</th>
-<th class="head">System <em>(2)</em> Data for 1 Period</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><a class="first last reference internal image-reference" href="_images/1-period-unstable-bw.png"><img alt="_images/1-period-unstable-bw.png" src="_images/1-period-unstable-bw.png" style="height: 200px;" /></a>
-</td>
-<td><a class="first last reference internal image-reference" href="_images/1-period-unstable-data.png"><img alt="_images/1-period-unstable-data.png" src="_images/1-period-unstable-data.png" style="height: 200px;" /></a>
-</td>
-</tr>
-</tbody>
-</table>
-<table border="1" class="docutils">
-<colgroup>
-<col width="49%" />
-<col width="51%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">System <em>(2)</em> Bandwidth for 2 Periods</th>
-<th class="head">System <em>(2)</em> Data for 2 Periods</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><a class="first last reference internal image-reference" href="_images/2-period-unstable-bw.png"><img alt="_images/2-period-unstable-bw.png" src="_images/2-period-unstable-bw.png" style="height: 200px;" /></a>
-</td>
-<td><a class="first last reference internal image-reference" href="_images/2-period-unstable-data.png"><img alt="_images/2-period-unstable-data.png" src="_images/2-period-unstable-data.png" style="height: 200px;" /></a>
-</td>
-</tr>
-</tbody>
-</table>
-<p>Notice in system <em>(2)</em>, the first period analysis predicted the same
-buffer size as system <em>(1)</em>, but when analyzing two periods the
-predicted buffer size changed.  Clearly the behavior of the system is
-changing between these two periods.  If we continue to analyze more
-periods of system <em>(2)</em>, as we did with system <em>(1)</em>, we&#8217;ll find the
-unfortunate conclusion that the predicted buffer size increases with
-every period we add to the analysis.</p>
-<p>We have discovered a system level property that can be calculated from
-these profiles, but we must determine what it means and how it can be
-used.  First, we see that in system <em>(1)</em>, the predicted required
-buffer size does not change regarless of the number of periods over
-which we analyze the system.  Second, we see that for system <em>(2)</em>,
-the predicted required buffer size changes depending on how many
-periods of activity we choose for our analysis window.  Third, we see
-that the second period of system <em>(2)</em> contains the larger of the two
-predicted buffer sizes.  These observations (with our understanding of
-deterministic periodic systems) lead us to the conclusion: system
-<em>(2)</em> can no longer be classified as periodic, since its behavior is
-not consistent between its periods.  Furthermore, because the required
-buffer size predicted for system system <em>(2)</em> continually increases,
-we can determine that the system is in fact <em>unstable</em> due to
-unbounded buffer growth.</p>
-<p>Let us now formally prove the assertion about system periodicity and
-stability which have been stated above.  We will show that our
-analysis results provide quantitative measures about the behavior of
-the system and we will determine for how long we must analyze a system
-to glean such behaviors.</p>
-<p>Consider a deterministic queuing system providing a data service
-function <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/> to input data flow <img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/> to produce output data
-flow <img class="math" src="_images/math/f3f716e1c56d5ebdca97bb1546662b9e96f5be07.png" alt="O"/>.  At any time <img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>, the amount of data in the
-system&#8217;s buffer is given by <img class="math" src="_images/math/182fedb62e8623cd880abf38d211d0455fa2e477.png" alt="B_t"/>.  After servicing the input
-flow, the system has a remaining capacity function <img class="math" src="_images/math/9d86170e7de539c0ff999de09621ee0c7b6c8ed0.png" alt="R"/>.</p>
-<ul class="simple">
-<li><img class="math" src="_images/math/a08ad3515eac0feebd61d7a1b6eaf157eedbdd3e.png" alt="S[t]"/> : the service function of the system, data service
-capacity versus time</li>
-<li><img class="math" src="_images/math/6d5f8ae3ceb47a2a475bb2f02fc8107d6ffb9b06.png" alt="I[t]"/> : the input data flow to the system, data versus time</li>
-<li><img class="math" src="_images/math/a4b883e2dcb9cf31b5a935b8539949ef4333dfc8.png" alt="O[t]"/> : the output data flow from the system, data versus time</li>
-<li><img class="math" src="_images/math/01cd005a7eb681a16f7d214ea489cee0570eca8f.png" alt="B[t]"/> : the amount of data in the system&#8217;s buffer at time
-<img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>, i.e. <img class="math" src="_images/math/2e3d35b2dc6e8c76e4412baaa21a1b190aed4d37.png" alt="I[t]-O[t]"/></li>
-<li><img class="math" src="_images/math/2296df10353d0d24932ae9239bb1c004522bd7d2.png" alt="R[t]"/> : the remaining service capacity of the system after
-servicing <img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/>, i.e. <img class="math" src="_images/math/6e4faafd2b95bb8f49c163b2d0436418269ab2d7.png" alt="S[t] - O[t]"/></li>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="design-time.html">Design Time Results</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="design-time.html#precise-analysis-for-deterministic-queuing-systems">Precise Analysis for Deterministic Queuing Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design-time.html#comparison-with-nc-rtc">Comparison with NC/RTC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design-time.html#analysis-of-tdma-scheduling">Analysis of TDMA Scheduling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design-time.html#compositional-analysis">Compositional Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design-time.html#delay-analysis">Delay Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="design-time.html#routing-analysis">Routing Analysis</a></li>
 </ul>
-<p>Because <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/> and <img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/> are deterministic and periodic, they
-do not change from period to period, i.e. given the period <img class="math" src="_images/math/5ff95e0eeb56451cbcfe611d1c422c9381195596.png" alt="T_I"/>
-of <img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/>, <img class="math" src="_images/math/e553891519dc0083bea30ab930ce6b358bd6e75d.png" alt="\forall t,n : I[t] = I[t + n*T_I]"/>.  Similarly,
-given the period <img class="math" src="_images/math/c1060ce177cee9b3af63aa8e847dbe201c1afab0.png" alt="T_S"/> of <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/>, <img class="math" src="_images/math/44c2e0f64e1e1ce85a7c7ed766e289700d79f4b4.png" alt="\forall t,n : S[t] =
-S[t + n*T_S]"/>.</p>
-<p>We can determine the hyperperiod of the system as the lcm of input
-flow period and the service function period, <img class="math" src="_images/math/3856e38d70416a9b3dee493b4190ed04456c6428.png" alt="T_p =
-lcm(T_S,T_I)"/>.</p>
-<p>At the start of the system, <img class="math" src="_images/math/4e2677b4edfbb85a135b7807d780a44ffa83f052.png" alt="t=0"/>, the system&#8217;s buffer is empty,
-i.e.  <img class="math" src="_images/math/5a98622e28dc27be71d5e9cbb4b6fc663dc53b33.png" alt="B_0 = 0"/>.  Therefore, the amount of data in the buffer at
-the end of the first period, <img class="math" src="_images/math/99a8de8b225ffd7a8236c5d0894b31d1ce616cc4.png" alt="t=T_p"/>, is the amount of data that
-entered the system on input flow <img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/> but was not able to be
-serviced by <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/>.  At the start of the next period, this data
-will exist in the buffer.  Consider the scenario that the system&#8217;s
-remaining capacity <img class="math" src="_images/math/9d86170e7de539c0ff999de09621ee0c7b6c8ed0.png" alt="R"/> is less than the size of the buffer,
-i.e. <img class="math" src="_images/math/d196db590a966706d982ef4e085bf610163f423e.png" alt="R[T_p] &lt; B[T_p]"/>.  In this scenario, clearly,
-<img class="math" src="_images/math/d122eaebcd3be7a2931e55b4f8a488d7fd88e9c2.png" alt="B[2*T_p] &gt; B[T_p]"/>, i.e. there will be more data in the buffer
-at the end of the second period than there was at the end of the first
-period.  Since the system is deterministic, for any two successive
-periods, <img class="math" src="_images/math/afc6727332181d3af697bd911f29c6d508998b23.png" alt="n*T_p, (n+1)*T_p"/>, <img class="math" src="_images/math/e65cdd431b1ce7d2b0f9dc0731bdf89b2baebc12.png" alt="B[n*T_p] &gt; B[(n+1)*T_p]"/>,
-which extends to:</p>
-<div class="math">
-<p><img src="_images/math/7e7a261a636059df53ad55f64f1af296ad87c7a3.png" alt="B[n*T_p] &gt; B[m*T_p], \forall n&gt;m&gt;0"/></p>
-</div><p>Therefore the amount of data in the system&#8217;s buffer increases every
-period, and the system is unstable.</p>
-<p>If however, there is enough remaining capacity in the system to
-service the data in the buffer, i.e. <img class="math" src="_images/math/f14219b37c6f7adadce486123a40ecf1f8514a45.png" alt="R[T_p] &gt;= B[T_p]"/>, then
-<img class="math" src="_images/math/33d4f4dd02841f21b6856ee7772cc8d0f77c4bf3.png" alt="B[2*T_p] = B[T_p]"/>. Similarly to above, since the system is
-deterministic, for any two successive periods, <img class="math" src="_images/math/e426ee14cb8e6d9d0017a30e9f5d90c7a61c54b4.png" alt="n*T_p,
-(n+1)*T_p"/>, <img class="math" src="_images/math/064adfcaa5038095b62fe3b69df90234102d7c0f.png" alt="B[n*T_p] = B[(n+1)*T_p]"/>.  This extends to:</p>
-<div class="math">
-<p><img src="_images/math/1ace35d66a4aae424e454d2cea432abc6c23c589.png" alt="B[n*T_p] = B[m*T_p], \forall m,n &gt; 0"/></p>
-</div><p>Therefore the buffer size does not grow between periods, and the
-system is stable.</p>
-<p>If we are only concerned with system stability, we do not need to
-calculate <img class="math" src="_images/math/9d86170e7de539c0ff999de09621ee0c7b6c8ed0.png" alt="R"/>, and can instead infer system stability by
-comparing the values of the buffer at any two period-offset times
-during the steady-state operation of the system (<img class="math" src="_images/math/7bca1764693474a28844c96d8310bca28a0509b8.png" alt="t &gt;= T_p"/>).
-This means that system stability check can resolve to <img class="math" src="_images/math/ed30632b17a537a7c1ec647a7a14b1cc7eea7fb3.png" alt="B[T_p] ==
-B[2*T_p]"/>.</p>
-</div>
-<div class="section" id="comparison-with-nc-rtc">
-<h3>Comparison with NC/RTC<a class="headerlink" href="#comparison-with-nc-rtc" title="Permalink to this headline">¶</a></h3>
-<p>To show how our analysis techniques compare to other available
-methods, we developed our tools to allow us to analyze the input
-system using Network Calculus/Real-Time Calculus techniques as well as
-our own.  Using these capabilities, we can directly compare the
-analysis results to each other, and then finally compare both results
-to the measurements from the actual system.</p>
-<p>Taking the results from our published work, where our methods
-predicted a buffer size of 64000 bits / 8000 bytes, we show that
-Network Calculus predicts a required buffer size of 3155000 bits.</p>
-<div class="figure align-center" id="id2">
-<img alt="_images/maren_namek_data.png" src="_images/maren_namek_data.png" />
-<p class="caption"><span class="caption-text">Analysis of the system with our tools.</span></p>
-</div>
-<div class="figure align-center" id="id3">
-<img alt="_images/nc_namek_data.png" src="_images/nc_namek_data.png" />
-<p class="caption"><span class="caption-text">Network-Calculus based analysis of the system.</span></p>
-</div>
-<p>We developed software which produces data according to a supplied
-input profile and configured the system&#8217;s network to provide the
-bandwidth profile described in the system configuration profile.
-Using this experimental infrastructure, we were able to measure the
-transmitted traffic profile, the received traffic profile, the latency
-experienced by the data, and the transmitter&#8217;s buffer requirements.
-The results are displayed in the table below:</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="32%" />
-<col width="21%" />
-<col width="47%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">&nbsp;</th>
-<th class="head">Predicted</th>
-<th class="head">Measured (<img class="math" src="_images/math/4b4dedc5cdec56161ae4dac2a0baf86f1c72b094.png" alt="\mu,\sigma"/>)</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>Buffer Delay (s)</td>
-<td>0.0625</td>
-<td>(0.06003 , 0.00029)</td>
-</tr>
-<tr class="row-odd"><td>Time of Delay (s)</td>
-<td>3.0</td>
-<td>(2.90547 , 0.00025)</td>
-</tr>
-<tr class="row-even"><td>Buffer Size (bytes)</td>
-<td>8000</td>
-<td>(7722.59 , 36.94)</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="analysis-of-tdma-scheduling">
-<h3>Analysis of TDMA Scheduling<a class="headerlink" href="#analysis-of-tdma-scheduling" title="Permalink to this headline">¶</a></h3>
-<p>So far, the description of the system provided network service profile
-(<img class="math" src="_images/math/380e32ec071686ecc085988bde7ac1814b342625.png" alt="p[t]=y"/>), has been abstracted as simply the available
-bandwidth as a function of time integrated to produce the amount of
-data serviced as a function of time.  In order to more precisely model
-the system, a network medium channel access protocol must be
-integrated into the abstract system provided profile.  TDMA is such a
-protocol which assigns to each node one or more time slots in a
-repeating period during which only the selected node is allowed to
-transmit.  We show how to model such a protocol and extend the
-abstract system network profile to include the model of the TDMA
-channel access protocol.</p>
-<p>As an example TDMA system which benefits from our analysis techniques,
-consider an application platform provided by a fractionated satellite
-cluster.  A fractionated satellite cluster consists of many small
-satellites that may each have different hardware, computing, and
-communications capabilities.  These capabilities are provided to
-distributed components of the satellite cluster&#8217;s applications.  Such
-a system has the combined challenges of (1) being expensive to
-develop, test, and deploy, (2) being very difficult to repair or
-replace in the event of failure, and (3) having to support
-mixed-criticality and possibly multiple levels of security
-applications.  For this system, the network between these satellites
-is a precious resource shared between each of the applications&#8217;
-components in the cluster.  To ensure the stability of the network
-resources, each satellite has a direct connection to every other
-satellite and is assigned a slot in the TDMA schedule during which the
-satellite may transmit.  Each TDMA slot has a sinusoidally
-time-varying bandwidth profile which may differ from the other TDMA
-slot bandwidth profiles.  The time-varying profile of the slot
-bandwidth comes from the coupling between the radios&#8217; inverse-squared
-bandwidth-as-a-function-of-distance and the satellites&#8217; sinusoidal
-distance-as-a-function-of-orbital-position.</p>
-<p>Such a system and applications necessitates design-time guarantees
-about resource utilization and availability.  Applications which
-utilize the satellite network need assurances that the network
-resources they require during each part of the orbital period will be
-satisfied.  To provide these assurances, we provide the application
-developers and system integrators the ability to specify and analyze
-the network profiles as (possibly periodic) functions of time.
-Furthermore, the requirement for accurate predictions necessitates the
-incorporation of the TDMA scheduling and bandwidth profiling into the
-network modeling and analysis tools.</p>
-<p>TDMA schedules can be described by their period, their number of
-slots, and the bandwidth available to each slot as a function of time.
-For simplicity of explanation, we assume that each node only gets a
-single slot in the TDMA period and all slots have the same length, but
-the results are valid for all static TDMA schedules.  Note that each
-slot still has a bandwidth profile which varies as a function of time
-and that each slots may have a different bandwidth profile.  In a
-given TDMA period (<img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>), the node can transmit a certain number
-of bits governed by its slot length (<img class="math" src="_images/math/cf9587087c31a9c170c37ca7b177cbba7dd214b8.png" alt="t_{slot}"/>) and the slot&#8217;s
-available bandwidth (<img class="math" src="_images/math/b5aaef650b359f1ef3ce8bd77a565a360c1cd610.png" alt="bw_{slot}"/>).  During the rest of the TDMA
-period, the node&#8217;s available bandwidth is <img class="math" src="_images/math/74c081db590f3d35421c1f6b9afd4cdda36ee210.png" alt="0"/>.  This scheduling
-has the effect of amortizing the node&#8217;s slot bandwidth into an
-effective bandwidth of <img class="math" src="_images/math/7a2a5b141cbf3fe40c9626c35cf419cd5206e4a2.png" alt="bw_{effective} = bw_{slot} *
-\dfrac{t_{slot}}{T}"/>.  The addition of the TDMA scheduling can affect
-the buffer and delay calculations, based on the slot&#8217;s bandwidth, the
-number of slots, and the slot length.  The maximum additional delay is
-<img class="math" src="_images/math/aa52ef22198842540e73e53c88f8e67cdcfefad8.png" alt="\Delta_{delay} = T - t_{slot}"/>, and the maximum additional
-buffer space is <img class="math" src="_images/math/40f6366fdabeedf2fa9a799fb062c1797e6011f7.png" alt="\Delta_{buffer} = \Delta_{delay} *
-bw_{effective}"/>.  These deviations are shown in
-Figure~ref{fig:deviation}.  Clearly, <img class="math" src="_images/math/e2678b0d7673a4e642bca4131b013ff653c6da9d.png" alt="\Delta_{delay}"/> is
-bounded by <img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/> and <img class="math" src="_images/math/78014df4d22e583ce4060d725331e353dbda529d.png" alt="\Delta_{buffer}"/> is governed by
-<img class="math" src="_images/math/cf9587087c31a9c170c37ca7b177cbba7dd214b8.png" alt="t_{slot}"/>.  Therefore, because <img class="math" src="_images/math/cf9587087c31a9c170c37ca7b177cbba7dd214b8.png" alt="t_{slot}"/> is dependent on
-<img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>, minimizing <img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/> minimizes both the maximum extra delay
-and maximum extra buffer space.</p>
-</div>
-<div class="section" id="compositional-analysis">
-<h3>Compositional Analysis<a class="headerlink" href="#compositional-analysis" title="Permalink to this headline">¶</a></h3>
-<p>Now that we have precise network performance analysis for aggregate
-flows or singular flows on individual nodes of the network, we must
-determine how best to compose these flows and nodes together to
-analyze the overal system.  The aim of this work is to allow the flows
-from each application to be analyzed separately from the other flows
-in the network, so that application developers and system integrators
-can derive meaningful perfomance predictions for specific
-applications.</p>
-<p>We have implemented min-plus calculus based compositional operations
-for the network profiles which allow us to compose and decompose
-systems based on functional components.  For network flows, this means
-we can analyze flows individually to determine per-flow performance
-metrics or we can aggregate flows together to determine aggregate
-performance.</p>
-<p>The composition is priority based, with each flow receiving a unique
-priority.  This priority determines the oder in which the flows are
-individually analyzed, with the system&#8217;s remaining capacity being
-provided to the flow with the next highest priority.  This is similar
-to the modular performance analysis provided by Real-Time Calculus.</p>
-<p>The basis for this priority-based interaction is the QoS management
-provided by many different types of networking infrastructure.
-DiffServ&#8217;s DSCP provides one mechanism to implement this
-priority-based transmission and routing.</p>
-</div>
-<div class="section" id="delay-analysis">
-<h3>Delay Analysis<a class="headerlink" href="#delay-analysis" title="Permalink to this headline">¶</a></h3>
-<p>When dealing with queueing systems (esp. networks) where precise
-design-time guarantees are required, the delay in the links of the
-network must be taken into account.</p>
-<p>The delay is modeled as a continuous function of latency (seconds)
-versus time.  In the profiles, the latency is specified discretely as
-<img class="math" src="_images/math/91afa6a0c10f8e9475164168f94fe6080b3bc3f9.png" alt="(time, latency)"/> pairs, and is interpolated linearly between
-successive pairs.</p>
-<p>Using these latency semantics, the delay convolution of a profile
-becomes</p>
-<div class="math">
-<p><img src="_images/math/58781499305d2973dc0695f586fc8daa50ad2fe3.png" alt="r[t + \delta[t]] = l[t]"/></p>
-</div><p>Where</p>
-<ul class="simple">
-<li><img class="math" src="_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/> is the <em>link</em> profile describing the data as a function
-of time as it enters the link</li>
-<li><img class="math" src="_images/math/2a0a2f67e07caa3e17e5f8f645b78f5cad3812dd.png" alt="\delta[t]"/> is the <em>delay</em> profile describing the latency as a
-function of time on the link</li>
-<li><img class="math" src="_images/math/8d85052c33844b2074fa63b28dcb671b60af6411.png" alt="r[t]"/> is the <em>received</em> profile describing the data as a
-function of time as it is received at the end of the link</li>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="run-time.html">Run Time Results</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="run-time.html#middleware-integrated-measurement-detection-and-enforcement">Middleware-integrated Measurement, Detection, and Enforcement</a></li>
 </ul>
-<p>When analyzing delay in a periodic system, it is important to
-determine the effects of delay on the system&#8217;s periodicity.  We know
-that the period of the periodic profiles is defined by the time
-difference between the start of the profile and the end of the
-profile.  Therefore, we can show that if the time difference between
-the <strong>start time</strong> of the <em>received</em> profile and the <strong>end time</strong> of
-the <em>received</em> profile is the same as the <strong>period</strong> of the <em>link</em>
-profile, the periodicity of the profile is unchanged.</p>
-<ul class="simple">
-<li><img class="math" src="_images/math/d3a93ce5fdd86a1a6cea538e4b3ad7616156ff25.png" alt="T_p"/> is the period of the <em>link</em> profile</li>
-<li><img class="math" src="_images/math/bb9f50d66397f6337f4cfddb0ca20a1977e482ce.png" alt="r[t + \delta[t]]"/> is the beginning of the <em>received</em> profile</li>
-<li><img class="math" src="_images/math/c80e1df5ca2c0f162a61382b667eecc1026dc37f.png" alt="r[(t + T_p) + \delta[(t + T_p)]]"/> is the end of the
-<em>received</em> profile</li>
+</li>
 </ul>
-<p>We determine the condition for which <img class="math" src="_images/math/b1021500b5fe6128b7c4c8eb175cb1585710e999.png" alt="(t_{end}) - (t_{start}) =
-T_p"/>:</p>
-<div class="math">
-<p><img src="_images/math/46245c7be404e773c109d1748baac82a5d546fcd.png" alt="(T_p + t + \delta[T_p + t]) - (t + \delta[t]) &amp;= T_p \\
-T_p + \delta[T_p + t] - \delta[t] &amp;= T_p \\
-\delta[T_p + t] - \delta[t] &amp;= 0\\
-\delta[T_p + t] &amp;= \delta[t]"/></p>
-</div><p>From this we determine that the periodicitiy of the profile is
-unchanged <em>iff</em> the profile is period-continuous, i.e. if the latency
-at the end of the profile is the same as the latency at the beginning
-of the profile.</p>
 </div>
-<div class="section" id="routing-analysis">
-<h3>Routing Analysis<a class="headerlink" href="#routing-analysis" title="Permalink to this headline">¶</a></h3>
-<p>By incorporating both the latency analysis with the compositional
-operations we developed, we can perform system-level analysis of flows
-which are routed by nodes of the system.  In this paradigm, nodes can
-transmit/receive their own data, i.e. they can host applications which
-act as data sources or sinks, as well as acting as routers for flows
-from and to other nodes.  To make such a system amenable to analysis
-we must ensure that we know the routes the flows will take at design
-time, i.e. the routes in the network are static and known or
-calculable.  Furthermore, we must, for the sake of flow composition as
-decribed above, ensure that each flow has a priority that is unique
-within the network which governs how the transmitting and routing
-nodes handle the flow&#8217;s data.</p>
-<p>We have extended our network analysis tool to support such system
-analysis by taking as input:</p>
-<ul class="simple">
-<li>the flows in the network</li>
-<li>the provided service of each node in the network</li>
-<li>the network configuration specifying the nodes in the network and
-the routes in the network</li>
-</ul>
-<p>where a flow is defined by:</p>
-<ul class="simple">
-<li>ID of the source node</li>
-<li>ID of the destination node</li>
-<li>Priority of the flow</li>
-<li>flow profile, i.e. bandwidth vs time</li>
-</ul>
-<p>and a route is specified as a list of node IDs starting with the
-source node ID and ending with the destination node ID.  Any flows
-which have the respective source and destination IDs must travel along
-the path specified by the respective route.</p>
-<p>We can then run the following algorithm to iteratively analyze the
-flows and the system:</p>
-<div class="figure">
-<a class="reference internal image-reference" href="_images/algorithm.svg"><img height="600px" src="_images/algorithm.svg" width="600px" /></a>
-</div>
-<p>In this algorithm, the remaining capacity of the node is provided to
-each profile with a lower priority iteratively.</p>
-<p>We have implmented these functions for statically routed network
-analysis into our tool, which automatically parses the flow profiles,
-the network configuration and uses the algorithm and the implemented
-mathematics to iteratively analyze the network.  Analytical results
-for example systems will be provided when the experimental results can
-be used as a comparison.</p>
-<p>We are finishing the design and development of code which will allow
-us to run experiments to validate our routing analysis results.  They
-will be complete in the next two weeks.</p>
-</div>
-</div>
-<div class="section" id="run-time-results">
-<span id="run-time"></span><h2>Run Time Results<a class="headerlink" href="#run-time-results" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="middleware-integrated-measurement-detection-and-enforcement">
-<h3>Middleware-integrated Measurement, Detection, and Enforcement<a class="headerlink" href="#middleware-integrated-measurement-detection-and-enforcement" title="Permalink to this headline">¶</a></h3>
-<p>We have implemented these features based on our design-time results:</p>
-<ul class="simple">
-<li>Traffic generators according to profile generated into sender code</li>
-<li>Receiver service according to profile generated into receiver code</li>
-<li>Measurement of output traffic on sender side and input traffic on
-server side generated into code</li>
-<li>Detection of anomalous sending on sender side</li>
-<li>Mitigation of anoumalous sending on sender side</li>
-<li>Detection of anomalous sending on receiver side</li>
-<li>Push back to sender middleware through out-of-band channel for
-anomaly detection on server side</li>
-</ul>
-<p>We have implemented our</p>
-<p>We shown experimentally that, for example, a server side buffer size
-of 400000 bits, which would normally grow to 459424 bits because of
-excessive data pumps on the sender side, is kept to 393792 by
-utilizing this out-of-band channel and secure middleware.</p>
-</div>
-</div>
+<p><a class="reference internal" href="genindex.html"><span>Index</span></a></p>
 </div>
 
 
@@ -692,7 +206,7 @@ utilizing this out-of-band channel and secure middleware.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="analysis-api.html" class="btn btn-neutral float-right" title="Analysis API" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="design-time.html" class="btn btn-neutral float-right" title="Design Time Results" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="math.html" class="btn btn-neutral" title="Math" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
