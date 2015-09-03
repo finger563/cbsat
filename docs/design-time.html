@@ -97,7 +97,10 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="results.html">Results</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="">Design Time Results</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#precise-analysis-for-deterministic-queuing-systems">Precise Analysis for Deterministic Queuing Systems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mathematical-foundation-for-precise-performance-prediction">Mathematical Foundation for Precise Performance Prediction</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#proving-the-required-minimum">Proving the required minimum</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#comparison-with-nc-rtc">Comparison with NC/RTC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#analysis-of-tdma-scheduling">Analysis of TDMA Scheduling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#compositional-analysis">Compositional Analysis</a></li>
@@ -173,8 +176,22 @@
             
   <div class="section" id="design-time-results">
 <span id="design-time"></span><h1>Design Time Results<a class="headerlink" href="#design-time-results" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="precise-analysis-for-deterministic-queuing-systems">
-<h2>Precise Analysis for Deterministic Queuing Systems<a class="headerlink" href="#precise-analysis-for-deterministic-queuing-systems" title="Permalink to this headline">¶</a></h2>
+<p>These results provide a methodology and a means for application
+developers and system integrators to determine conservative, precise,
+tightly bounded performance metrics for distributed networked
+applications and systems at design time.  The contributions of this
+work are broken into sections by topic:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#math-foundation"><span>Mathematical Foundation for Precise Performance Prediction</span></a></li>
+<li><a class="reference internal" href="#periodic-analysis-proof"><span>Proving the required minimum</span></a></li>
+<li><a class="reference internal" href="#nc-comparison"><span>Comparison with NC/RTC</span></a></li>
+<li><a class="reference internal" href="#tdma-analysis"><span>Analysis of TDMA Scheduling</span></a></li>
+<li><a class="reference internal" href="#compositional-analysis"><span>Compositional Analysis</span></a></li>
+<li><a class="reference internal" href="#delay-analysis"><span>Delay Analysis</span></a></li>
+<li><a class="reference internal" href="#routing-analysis"><span>Routing Analysis</span></a></li>
+</ul>
+<div class="section" id="mathematical-foundation-for-precise-performance-prediction">
+<span id="math-foundation"></span><h2>Mathematical Foundation for Precise Performance Prediction<a class="headerlink" href="#mathematical-foundation-for-precise-performance-prediction" title="Permalink to this headline">¶</a></h2>
 <p>To model the network capability of the system and the application
 traffic patterns, we have developed a network modeling paradigm
 similar to Network Calculus&#8217; traffic arrival curves and traffic shaper
@@ -343,6 +360,8 @@ not consistent between its periods.  Furthermore, because the required
 buffer size predicted for system system <em>(2)</em> continually increases,
 we can determine that the system is in fact <em>unstable</em> due to
 unbounded buffer growth.</p>
+<div class="section" id="proving-the-required-minimum">
+<span id="periodic-analysis-proof"></span><h3>Proving the required minimum<a class="headerlink" href="#proving-the-required-minimum" title="Permalink to this headline">¶</a></h3>
 <p>Let us now formally prove the assertion about system periodicity and
 stability which have been stated above.  We will show that our
 analysis results provide quantitative measures about the behavior of
@@ -372,7 +391,7 @@ S[t + n*T_S]"/>.</p>
 flow period and the service function period, <img class="math" src="_images/math/3856e38d70416a9b3dee493b4190ed04456c6428.png" alt="T_p =
 lcm(T_S,T_I)"/>.</p>
 <p>At the start of the system, <img class="math" src="_images/math/4e2677b4edfbb85a135b7807d780a44ffa83f052.png" alt="t=0"/>, the system&#8217;s buffer is empty,
-i.e.  <img class="math" src="_images/math/5a98622e28dc27be71d5e9cbb4b6fc663dc53b33.png" alt="B_0 = 0"/>.  Therefore, the amount of data in the buffer at
+i.e.  <img class="math" src="_images/math/f6a3588d85e5c4783a1151a85bdb615bb4d66db1.png" alt="B[0] = 0"/>.  Therefore, the amount of data in the buffer at
 the end of the first period, <img class="math" src="_images/math/99a8de8b225ffd7a8236c5d0894b31d1ce616cc4.png" alt="t=T_p"/>, is the amount of data that
 entered the system on input flow <img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/> but was not able to be
 serviced by <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/>.  At the start of the next period, this data
@@ -382,30 +401,32 @@ i.e. <img class="math" src="_images/math/d196db590a966706d982ef4e085bf610163f423
 <img class="math" src="_images/math/d122eaebcd3be7a2931e55b4f8a488d7fd88e9c2.png" alt="B[2*T_p] &gt; B[T_p]"/>, i.e. there will be more data in the buffer
 at the end of the second period than there was at the end of the first
 period.  Since the system is deterministic, for any two successive
-periods, <img class="math" src="_images/math/afc6727332181d3af697bd911f29c6d508998b23.png" alt="n*T_p, (n+1)*T_p"/>, <img class="math" src="_images/math/e65cdd431b1ce7d2b0f9dc0731bdf89b2baebc12.png" alt="B[n*T_p] &gt; B[(n+1)*T_p]"/>,
+periods, <img class="math" src="_images/math/b9a9df387042bbb0961875f39567147b9326c3e0.png" alt="n*T_p"/> and <img class="math" src="_images/math/819cd3c4776e788abaa849b87e2071c589d13d0f.png" alt="(n+1)*T_p"/>, <img class="math" src="_images/math/e65cdd431b1ce7d2b0f9dc0731bdf89b2baebc12.png" alt="B[n*T_p] &gt; B[(n+1)*T_p]"/>,
 which extends to:</p>
 <div class="math">
-<p><img src="_images/math/7e7a261a636059df53ad55f64f1af296ad87c7a3.png" alt="B[n*T_p] &gt; B[m*T_p], \forall n&gt;m&gt;0"/></p>
+<p><img src="_images/math/b32dffeddd6858728ce6aa1959a915155e7a9f39.png" alt="B[m*T_p] &gt; B[n*T_p], \forall m&gt;n&gt;0"/></p>
 </div><p>Therefore the amount of data in the system&#8217;s buffer increases every
 period, and the system is unstable.</p>
 <p>If however, there is enough remaining capacity in the system to
 service the data in the buffer, i.e. <img class="math" src="_images/math/f14219b37c6f7adadce486123a40ecf1f8514a45.png" alt="R[T_p] &gt;= B[T_p]"/>, then
 <img class="math" src="_images/math/33d4f4dd02841f21b6856ee7772cc8d0f77c4bf3.png" alt="B[2*T_p] = B[T_p]"/>. Similarly to above, since the system is
-deterministic, for any two successive periods, <img class="math" src="_images/math/e426ee14cb8e6d9d0017a30e9f5d90c7a61c54b4.png" alt="n*T_p,
-(n+1)*T_p"/>, <img class="math" src="_images/math/064adfcaa5038095b62fe3b69df90234102d7c0f.png" alt="B[n*T_p] = B[(n+1)*T_p]"/>.  This extends to:</p>
+deterministic, for any two successive periods, <img class="math" src="_images/math/b9a9df387042bbb0961875f39567147b9326c3e0.png" alt="n*T_p"/> and
+<img class="math" src="_images/math/819cd3c4776e788abaa849b87e2071c589d13d0f.png" alt="(n+1)*T_p"/>, <img class="math" src="_images/math/875277b8532466efb8412008d89be2dc4e8d5ee9.png" alt="B[(n+1)*T_p] = B[n*T_p]"/>.  This extends to:</p>
 <div class="math">
-<p><img src="_images/math/1ace35d66a4aae424e454d2cea432abc6c23c589.png" alt="B[n*T_p] = B[m*T_p], \forall m,n &gt; 0"/></p>
+<p><img src="_images/math/feaedd13a5444527e22d3532712f4e23dbc59f03.png" alt="B[m*T_p] = B[n*T_p], \forall m,n &gt; 0"/></p>
 </div><p>Therefore the buffer size does not grow between periods, and the
 system is stable.</p>
 <p>If we are only concerned with system stability, we do not need to
 calculate <img class="math" src="_images/math/9d86170e7de539c0ff999de09621ee0c7b6c8ed0.png" alt="R"/>, and can instead infer system stability by
 comparing the values of the buffer at any two period-offset times
 during the steady-state operation of the system (<img class="math" src="_images/math/7bca1764693474a28844c96d8310bca28a0509b8.png" alt="t &gt;= T_p"/>).
-This means that system stability check can resolve to <img class="math" src="_images/math/ed30632b17a537a7c1ec647a7a14b1cc7eea7fb3.png" alt="B[T_p] ==
-B[2*T_p]"/>.</p>
+This means that system stability check can resolve to <img class="math" src="_images/math/22f50a751ef795d2b5dd655238463e698c18a4c9.png" alt="B[2*T_p] ==
+B[T_p]"/>.  This comparison abides by the conditions above, with
+<img class="math" src="_images/math/70040fec2de75cc96fc8cc94208dbfc28684cc85.png" alt="m=2"/> and <img class="math" src="_images/math/163a19eac5182aaabe8bd9cc931dfa15e75a71dc.png" alt="n=1"/></p>
+</div>
 </div>
 <div class="section" id="comparison-with-nc-rtc">
-<h2>Comparison with NC/RTC<a class="headerlink" href="#comparison-with-nc-rtc" title="Permalink to this headline">¶</a></h2>
+<span id="nc-comparison"></span><h2>Comparison with NC/RTC<a class="headerlink" href="#comparison-with-nc-rtc" title="Permalink to this headline">¶</a></h2>
 <p>To show how our analysis techniques compare to other available
 methods, we developed our tools to allow us to analyze the input
 system using Network Calculus/Real-Time Calculus techniques as well as
@@ -415,11 +436,11 @@ to the measurements from the actual system.</p>
 <p>Taking the results from our published work, where our methods
 predicted a buffer size of 64000 bits / 8000 bytes, we show that
 Network Calculus predicts a required buffer size of 3155000 bits.</p>
-<div class="figure align-center" id="id1">
+<div class="figure align-center" id="id4">
 <img alt="_images/maren_namek_data.png" src="_images/maren_namek_data.png" />
 <p class="caption"><span class="caption-text">Analysis of the system with our tools.</span></p>
 </div>
-<div class="figure align-center" id="id2">
+<div class="figure align-center" id="id5">
 <img alt="_images/nc_namek_data.png" src="_images/nc_namek_data.png" />
 <p class="caption"><span class="caption-text">Network-Calculus based analysis of the system.</span></p>
 </div>
@@ -459,7 +480,7 @@ The results are displayed in the table below:</p>
 </table>
 </div>
 <div class="section" id="analysis-of-tdma-scheduling">
-<h2>Analysis of TDMA Scheduling<a class="headerlink" href="#analysis-of-tdma-scheduling" title="Permalink to this headline">¶</a></h2>
+<span id="tdma-analysis"></span><h2>Analysis of TDMA Scheduling<a class="headerlink" href="#analysis-of-tdma-scheduling" title="Permalink to this headline">¶</a></h2>
 <p>So far, the description of the system provided network service profile
 (<img class="math" src="_images/math/380e32ec071686ecc085988bde7ac1814b342625.png" alt="p[t]=y"/>), has been abstracted as simply the available
 bandwidth as a function of time integrated to produce the amount of
@@ -528,7 +549,7 @@ bounded by <img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c2
 and maximum extra buffer space.</p>
 </div>
 <div class="section" id="compositional-analysis">
-<h2>Compositional Analysis<a class="headerlink" href="#compositional-analysis" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>Compositional Analysis<a class="headerlink" href="#compositional-analysis" title="Permalink to this headline">¶</a></h2>
 <p>Now that we have precise network performance analysis for aggregate
 flows or singular flows on individual nodes of the network, we must
 determine how best to compose these flows and nodes together to
@@ -554,7 +575,7 @@ DiffServ&#8217;s DSCP provides one mechanism to implement this
 priority-based transmission and routing.</p>
 </div>
 <div class="section" id="delay-analysis">
-<h2>Delay Analysis<a class="headerlink" href="#delay-analysis" title="Permalink to this headline">¶</a></h2>
+<span id="id2"></span><h2>Delay Analysis<a class="headerlink" href="#delay-analysis" title="Permalink to this headline">¶</a></h2>
 <p>When dealing with queueing systems (esp. networks) where precise
 design-time guarantees are required, the delay in the links of the
 network must be taken into account.</p>
@@ -602,7 +623,7 @@ at the end of the profile is the same as the latency at the beginning
 of the profile.</p>
 </div>
 <div class="section" id="routing-analysis">
-<h2>Routing Analysis<a class="headerlink" href="#routing-analysis" title="Permalink to this headline">¶</a></h2>
+<span id="id3"></span><h2>Routing Analysis<a class="headerlink" href="#routing-analysis" title="Permalink to this headline">¶</a></h2>
 <p>By incorporating both the latency analysis with the compositional
 operations we developed, we can perform system-level analysis of flows
 which are routed by nodes of the system.  In this paradigm, nodes can

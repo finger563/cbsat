@@ -3,8 +3,24 @@
 Design Time Results
 ===================
 
-Precise Analysis for Deterministic Queuing Systems
---------------------------------------------------
+These results provide a methodology and a means for application
+developers and system integrators to determine conservative, precise,
+tightly bounded performance metrics for distributed networked
+applications and systems at design time.  The contributions of this
+work are broken into sections by topic:
+
+* :ref:`math_foundation`
+* :ref:`periodic_analysis_proof`
+* :ref:`nc_comparison`
+* :ref:`tdma_analysis`
+* :ref:`compositional_analysis`
+* :ref:`delay_analysis`
+* :ref:`routing_analysis`
+
+.. _math_foundation:
+
+Mathematical Foundation for Precise Performance Prediction
+----------------------------------------------------------
 
 To model the network capability of the system and the application
 traffic patterns, we have developed a network modeling paradigm
@@ -140,6 +156,11 @@ buffer size predicted for system system *(2)* continually increases,
 we can determine that the system is in fact *unstable* due to
 unbounded buffer growth.  
 
+.. _periodic_analysis_proof:
+
+Proving the required minimum 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Let us now formally prove the assertion about system periodicity and
 stability which have been stated above.  We will show that our
 analysis results provide quantitative measures about the behavior of
@@ -172,7 +193,7 @@ flow period and the service function period, :math:`T_p =
 lcm(T_S,T_I)`.
 
 At the start of the system, :math:`t=0`, the system's buffer is empty,
-i.e.  :math:`B_0 = 0`.  Therefore, the amount of data in the buffer at
+i.e.  :math:`B[0] = 0`.  Therefore, the amount of data in the buffer at
 the end of the first period, :math:`t=T_p`, is the amount of data that
 entered the system on input flow :math:`I` but was not able to be
 serviced by :math:`S`.  At the start of the next period, this data
@@ -182,11 +203,11 @@ i.e. :math:`R[T_p] < B[T_p]`.  In this scenario, clearly,
 :math:`B[2*T_p] > B[T_p]`, i.e. there will be more data in the buffer
 at the end of the second period than there was at the end of the first
 period.  Since the system is deterministic, for any two successive
-periods, :math:`n*T_p, (n+1)*T_p`, :math:`B[n*T_p] > B[(n+1)*T_p]`,
+periods, :math:`n*T_p` and :math:`(n+1)*T_p`, :math:`B[n*T_p] > B[(n+1)*T_p]`,
 which extends to:
 
 .. math::
-   B[n*T_p] > B[m*T_p], \forall n>m>0
+   B[m*T_p] > B[n*T_p], \forall m>n>0
 
 Therefore the amount of data in the system's buffer increases every
 period, and the system is unstable.
@@ -194,11 +215,11 @@ period, and the system is unstable.
 If however, there is enough remaining capacity in the system to
 service the data in the buffer, i.e. :math:`R[T_p] >= B[T_p]`, then
 :math:`B[2*T_p] = B[T_p]`. Similarly to above, since the system is
-deterministic, for any two successive periods, :math:`n*T_p,
-(n+1)*T_p`, :math:`B[n*T_p] = B[(n+1)*T_p]`.  This extends to:
+deterministic, for any two successive periods, :math:`n*T_p` and
+:math:`(n+1)*T_p`, :math:`B[(n+1)*T_p] = B[n*T_p]`.  This extends to:
 
 .. math::
-   B[n*T_p] = B[m*T_p], \forall m,n > 0
+   B[m*T_p] = B[n*T_p], \forall m,n > 0
 
 Therefore the buffer size does not grow between periods, and the
 system is stable.
@@ -207,9 +228,12 @@ If we are only concerned with system stability, we do not need to
 calculate :math:`R`, and can instead infer system stability by
 comparing the values of the buffer at any two period-offset times
 during the steady-state operation of the system (:math:`t >= T_p`).
-This means that system stability check can resolve to :math:`B[T_p] ==
-B[2*T_p]`.
+This means that system stability check can resolve to :math:`B[2*T_p] ==
+B[T_p]`.  This comparison abides by the conditions above, with
+:math:`m=2` and :math:`n=1`
 
+.. _nc_comparison:
+      
 Comparison with NC/RTC
 ----------------------
 
@@ -252,6 +276,7 @@ The results are displayed in the table below:
 | Buffer Size (bytes) | 8000         | (7722.59 , 36.94)             |
 +---------------------+--------------+-------------------------------+
 
+.. _tdma_analysis:
 	
 Analysis of TDMA Scheduling
 ---------------------------
@@ -326,6 +351,7 @@ bounded by :math:`T` and :math:`\Delta_{buffer}` is governed by
 :math:`T`, minimizing :math:`T` minimizes both the maximum extra delay
 and maximum extra buffer space.
 
+.. _compositional_analysis:
 
 Compositional Analysis
 ----------------------
@@ -357,6 +383,7 @@ provided by many different types of networking infrastructure.
 DiffServ's DSCP provides one mechanism to implement this
 priority-based transmission and routing.
 
+.. _delay_analysis:
 
 Delay Analysis
 --------------
@@ -413,6 +440,8 @@ From this we determine that the periodicitiy of the profile is
 unchanged *iff* the profile is period-continuous, i.e. if the latency
 at the end of the profile is the same as the latency at the beginning
 of the profile.
+
+.. _routing_analysis:
 
 Routing Analysis
 ----------------
