@@ -255,15 +255,41 @@ Taking the results from our published work, where our methods
 predicted a buffer size of 64000 bits / 8000 bytes, we show that
 Network Calculus predicts a required buffer size of 3155000 bits.
 
+.. figure:: /images/results/maren_namek_bw.png
+   :align: center
+   :height: 400px
+   :width: 400px
+
+   Bandwidth profile describing the system and application.
+
 .. figure:: /images/results/maren_namek_data.png
    :align: center
+   :height: 400px
+   :width: 400px
 
    Analysis of the system with our tools.
 	
 .. figure:: /images/results/nc_namek_data.png
    :align: center
+   :height: 400px
+   :width: 400px
 
    Network-Calculus based analysis of the system.
+
+The major drawback for Network Calculus that our work aims to solve is
+the disconnect from the real system that stems from using an approach
+based on time-window analysis.  Such an approach leads to dramatically
+under-approximating the utilization of the network, since a known drop
+in network performance which is expected and handled by the
+application cannot be accurately modeled.  In our case, the system is
+using a system profile which can service data during the period from
+:math:`0<=t<=7` seconds with a period of 10 seconds.  The application
+is designed around this constraint and only produces data during that
+interval.  Because our technique directly compares when the application
+produces data to when the system can service the data, we are able to
+derive more precise performance prediction metrics than Network
+Calculus, which compares the 3 seconds of system downtime to the 3
+seconds of maximum application data production.  
 
 We developed software which produces data according to a supplied
 input profile and configured the system's network to provide the

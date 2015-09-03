@@ -443,13 +443,31 @@ in <a class="reference internal" href="python-api/analysis/network-profile.html#
 predicted a buffer size of 64000 bits / 8000 bytes, we show that
 Network Calculus predicts a required buffer size of 3155000 bits.</p>
 <div class="figure align-center" id="id4">
-<img alt="_images/maren_namek_data.png" src="_images/maren_namek_data.png" />
-<p class="caption"><span class="caption-text">Analysis of the system with our tools.</span></p>
+<a class="reference internal image-reference" href="_images/maren_namek_bw.png"><img alt="_images/maren_namek_bw.png" src="_images/maren_namek_bw.png" style="width: 400px; height: 400px;" /></a>
+<p class="caption"><span class="caption-text">Bandwidth profile describing the system and application.</span></p>
 </div>
 <div class="figure align-center" id="id5">
-<img alt="_images/nc_namek_data.png" src="_images/nc_namek_data.png" />
+<a class="reference internal image-reference" href="_images/maren_namek_data.png"><img alt="_images/maren_namek_data.png" src="_images/maren_namek_data.png" style="width: 400px; height: 400px;" /></a>
+<p class="caption"><span class="caption-text">Analysis of the system with our tools.</span></p>
+</div>
+<div class="figure align-center" id="id6">
+<a class="reference internal image-reference" href="_images/nc_namek_data.png"><img alt="_images/nc_namek_data.png" src="_images/nc_namek_data.png" style="width: 400px; height: 400px;" /></a>
 <p class="caption"><span class="caption-text">Network-Calculus based analysis of the system.</span></p>
 </div>
+<p>The major drawback for Network Calculus that our work aims to solve is
+the disconnect from the real system that stems from using an approach
+based on time-window analysis.  Such an approach leads to dramatically
+under-approximating the utilization of the network, since a known drop
+in network performance which is expected and handled by the
+application cannot be accurately modeled.  In our case, the system is
+using a system profile which can service data during the period from
+<img class="math" src="_images/math/47ccfeb5675ba74d120b0a84db6af31c0c62ec64.png" alt="0&lt;=t&lt;=7"/> seconds with a period of 10 seconds.  The application
+is designed around this constraint and only produces data during that
+interval.  Because our technique directly compares when the application
+produces data to when the system can service the data, we are able to
+derive more precise performance prediction metrics than Network
+Calculus, which compares the 3 seconds of system downtime to the 3
+seconds of maximum application data production.</p>
 <p>We developed software which produces data according to a supplied
 input profile and configured the system&#8217;s network to provide the
 bandwidth profile described in the system configuration profile.
