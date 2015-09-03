@@ -50,6 +50,8 @@ def analyze(required, provided, config, options):
     nc_step_size = options.nc_step_size
     print_profiles = options.print_profiles
     plot_profiles = options.plot_profiles
+    plot_received = options.plot_received
+    plot_leftover = options.plot_leftover
     plot_line_width = options.plot_line_width
     
     topology = config.topology
@@ -85,7 +87,7 @@ def analyze(required, provided, config, options):
 
     # calculate the remaining capacity of the node's link
     remaining = provided.SubtractProfile(output)
-    remaining.Kind("remaining")
+    remaining.Kind("leftover")
     remaining.period = hyperPeriod
     remaining.Integrate(hyperPeriod * num_periods)
 
@@ -125,7 +127,11 @@ def analyze(required, provided, config, options):
                 bcolors.ENDC
 
     if plot_profiles:
-        profList = [required,provided,output,remaining, received]
+        profList = [required,provided,output]
+        if plot_leftover:
+            profList.append(remaining)
+        if plot_received:
+            profList.append(received)
         plot_bandwidth_and_data( profList, maxDelay, maxBuffer,
                                  num_periods, plot_line_width)
         if nc_mode:
@@ -265,6 +271,8 @@ class Options:
     """
     def __init__(self):
         self.plot_profiles = havePLT   #: plot the profiles?
+        self.plot_leftover = True      #: plot the leftover profile?
+        self.plot_received = True      #: plot the received profile?
         self.print_profiles = False    #: print the profiles?
         self.num_periods = 1           #: number of periods to analyze
         self.plot_line_width = 4       #: line width for plots
@@ -287,6 +295,10 @@ class Options:
                 argind += 1
             elif args[argind] == "--no_plot":
                 self.plot_profiles = False
+            elif args[argind] == "--no_received":
+                self.plot_received = False
+            elif args[argind] == "--no_leftover":
+                self.plot_leftover = False
             elif args[argind] == '--print':
                 self.print_profiles = True
             elif args[argind] == "--nc_mode":

@@ -342,7 +342,9 @@ class Profile:
         """
         r = self.entries['data']
         o = output.entries['data']
-        return utils.max_horizontal_difference(r, o, True)
+        delay = utils.max_horizontal_difference(r, o,
+                                                interpolate = 'data' in self.interpolated_profiles)
+        return delay
 
     def CalcBuffer(self, output):
         """
@@ -366,7 +368,9 @@ class Profile:
         """
         r = self.entries['data']
         o = output.entries['data']
-        return utils.max_vertical_difference(r, o, True)
+        buff = utils.max_vertical_difference(r, o,
+                                             interpolate = 'data' in self.interpolated_profiles)
+        return buff
 
     def Delay(self, delayProf):
         """

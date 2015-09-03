@@ -224,27 +224,98 @@ packetization and communication header overhead as well.</p>
 
 &amp;\text{buffer}= sup\{r[t] - l[t] : t \in \mathbb{N}\}\\
 &amp;\text{delay} = sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}"/></p>
-</div><div class="figure align-center">
+</div><div class="figure align-center" id="id2">
 <img alt="_images/convolution.png" src="_images/convolution.png" />
+<p class="caption"><span class="caption-text">Representative example for network profile conovlution between the
+<em>required</em> profile <img class="math" src="_images/math/8d85052c33844b2074fa63b28dcb671b60af6411.png" alt="r[t]"/> and the <em>provided</em> profile
+<img class="math" src="_images/math/0dbbb6284c52a5c09f5b48ad92262621f105e135.png" alt="p[t]"/> to produce the <em>link</em> output profile <img class="math" src="_images/math/c52328274518603a2cc478a4db8925ffa035faed.png" alt="l[t]"/>.</span></p>
 </div>
-<p>For relevant analysis, we must know that our analysis results
-(e.g. buffer size) will hold for the lifetime of the system.  Because
-the system we are analyzing is the deterministic and periodic, we must
-determine how many periods of activity must be analyzed to capture
-full system behavior.</p>
+<p>Given that the required data profile and system data service profile
+are periodic, we must determine the periodicity of the output
+profile.  If we can show that the output profile is similarly
+periodic, then we can show that the system is stable.  First, let us
+look at the profile behavior over the course of its first two periods
+of activity.</p>
+<div class="figure">
+<img alt="_images/1-period-system-bw.png" src="_images/1-period-system-bw.png" />
+</div>
+<div class="figure" id="id3">
+<img alt="_images/1-period-system-data.png" src="_images/1-period-system-data.png" />
+<p class="caption"><span class="caption-text">An example system <em>(1)</em> analyzed over one period.</span></p>
+</div>
+<div class="figure">
+<img alt="_images/2-period-system-bw.png" src="_images/2-period-system-bw.png" />
+</div>
+<div class="figure" id="id4">
+<img alt="_images/2-period-system-data.png" src="_images/2-period-system-data.png" />
+<p class="caption"><span class="caption-text">The same example system <em>(1)</em> analyzed over two periods.</span></p>
+</div>
+<p>We notice that for this example system, the second period output
+profile is not an exact copy of the first (most easily seen by
+examining the bandwidth plots), and yet the required buffer size is
+still the same as it was when analyzing the system over one period.
+Furthermore, by running the analysis over even larger number of
+periods, we can determine (not plotted here for space and
+readability), that the predicted buffer size does not change no matter
+how many periods we analyze for this system.  Let us look at a system
+where this is not the case before we begin the analysis of such system
+characteristics.</p>
+<div class="figure">
+<img alt="_images/1-period-unstable-bw.png" src="_images/1-period-unstable-bw.png" />
+</div>
+<div class="figure" id="id5">
+<img alt="_images/1-period-unstable-data.png" src="_images/1-period-unstable-data.png" />
+<p class="caption"><span class="caption-text">A different example system <em>(2)</em> analyzed over one period.</span></p>
+</div>
+<div class="figure">
+<img alt="_images/2-period-unstable-bw.png" src="_images/2-period-unstable-bw.png" />
+</div>
+<div class="figure" id="id6">
+<img alt="_images/2-period-unstable-data.png" src="_images/2-period-unstable-data.png" />
+<p class="caption"><span class="caption-text">The same example system <em>(2)</em> analyzed over two periods.  Note the
+change in the required buffer size between this analysis and the
+previous analysis over one period.</span></p>
+</div>
+<p>Notice in system <em>(2)</em>, the first period analysis predicted the same
+buffer size as system <em>(1)</em>, but when analyzing two periods the
+predicted buffer size changed.  Clearly the behavior of the system is
+changing between these two periods.  If we continue to analyze more
+periods of system <em>(2)</em>, as we did with system <em>(1)</em>, we&#8217;ll find the
+unfortunate circumstance that the predicted buffer size increases with
+every period we add to the analysis.</p>
+<p>We have discovered a system level property that can be calculated from
+these profiles, but we must determine what it means and how it can be
+used.  First, we see that in system <em>(1)</em>, the predicted required
+buffer size does not change regarless of the number of periods
+over which we analyze the system.  Second, we see that for system
+<em>(2)</em>, the predicted required buffer size changes depending on how
+many periods of activity we choose for our analysis window.  Third, we
+see that the second period of system <em>(2)</em> contains the larger of the
+two predicted buffer sizes.  These three observations align with our
+intuitive understanding of deterministic periodic systems, which
+behave the same way each period (hence their being classified as
+<em>periodic</em>).  Clearly, system <em>(2)</em> can no longer be classified as
+periodic, since its behavior is not consistent between its periods.
+If system <em>(2)</em> was designed to be periodic, this analysis
+indicates that system <em>(2)</em> is in fact unstable.</p>
+<p>Let us now formally prove the assertion about system periodicity and
+stability which have been stated above.  We will show that our
+analysis results provide quantitative measures about the behavior of
+the system and we will determine for how long we must analyze a system
+to glean such behaviors.</p>
 <p>Consider a deterministic queuing system providing a data service
 function <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/> to input data flow <img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/> to produce output data
 flow <img class="math" src="_images/math/f3f716e1c56d5ebdca97bb1546662b9e96f5be07.png" alt="O"/>.  At any time <img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>, the amount of data in the
 system&#8217;s buffer is given by <img class="math" src="_images/math/182fedb62e8623cd880abf38d211d0455fa2e477.png" alt="B_t"/>.  After servicing the input
 flow, the system has a remaining capacity function <img class="math" src="_images/math/9d86170e7de539c0ff999de09621ee0c7b6c8ed0.png" alt="R"/>.</p>
 <ul class="simple">
-<li><img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/> : the service function of the system, data service
+<li><img class="math" src="_images/math/a08ad3515eac0feebd61d7a1b6eaf157eedbdd3e.png" alt="S[t]"/> : the service function of the system, data service
 capacity versus time</li>
-<li><img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/> : the input data flow to the system, data versus time</li>
-<li><img class="math" src="_images/math/f3f716e1c56d5ebdca97bb1546662b9e96f5be07.png" alt="O"/> : the output data flow from the system, data versus time</li>
-<li><img class="math" src="_images/math/182fedb62e8623cd880abf38d211d0455fa2e477.png" alt="B_t"/> : the amount of data in the system&#8217;s buffer at time
+<li><img class="math" src="_images/math/6d5f8ae3ceb47a2a475bb2f02fc8107d6ffb9b06.png" alt="I[t]"/> : the input data flow to the system, data versus time</li>
+<li><img class="math" src="_images/math/a4b883e2dcb9cf31b5a935b8539949ef4333dfc8.png" alt="O[t]"/> : the output data flow from the system, data versus time</li>
+<li><img class="math" src="_images/math/01cd005a7eb681a16f7d214ea489cee0570eca8f.png" alt="B[t]"/> : the amount of data in the system&#8217;s buffer at time
 <img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>, i.e. <img class="math" src="_images/math/2e3d35b2dc6e8c76e4412baaa21a1b190aed4d37.png" alt="I[t]-O[t]"/></li>
-<li><img class="math" src="_images/math/9d86170e7de539c0ff999de09621ee0c7b6c8ed0.png" alt="R"/> : the remaining service capacity of the system after
+<li><img class="math" src="_images/math/2296df10353d0d24932ae9239bb1c004522bd7d2.png" alt="R[t]"/> : the remaining service capacity of the system after
 servicing <img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/>, i.e. <img class="math" src="_images/math/6e4faafd2b95bb8f49c163b2d0436418269ab2d7.png" alt="S[t] - O[t]"/></li>
 </ul>
 <p>Because <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/> and <img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/> are deterministic and periodic, they
@@ -279,7 +350,7 @@ not grow between periods, therefore the system is stable.</p>
 calculate <img class="math" src="_images/math/9d86170e7de539c0ff999de09621ee0c7b6c8ed0.png" alt="R"/>, and can instead infer system stability by
 comparing the values of the buffer at any two period-offset times
 during the steady-state operation of the system, i.e. any <img class="math" src="_images/math/fb94512d14316611cc27a719654855fab8267985.png" alt="t &gt;=
-T_p"/>.  This means that system stability check resolves to
+T_p"/>.  This means that system stability check can resolve to
 <img class="math" src="_images/math/47dcd7a6c641add112476436b1ab318aeda39f16.png" alt="B[T_p] == B[2*T_p]"/>.</p>
 </div>
 <div class="section" id="comparison-with-nc-rtc">

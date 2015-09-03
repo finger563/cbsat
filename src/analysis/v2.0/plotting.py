@@ -141,7 +141,7 @@ def addAnnotation(annotation):
     :param in list annotation: a :func:`list` of the form [ <string>, <x position>, <y position> ]
     """
     xy = (annotation[1],annotation[2])
-    xytext = (10,10)
+    xytext = (10,-10)
     frame1 = plt.gca()
     if annotations and abs(annotations[-1].xy[1] - xy[1]) < xy[1]/5.0:
         if xy[1] > annotations[-1].xy[1]:
@@ -151,7 +151,7 @@ def addAnnotation(annotation):
     ann = frame1.annotate(annotation[0],
                           xy=xy, xycoords='data',
                           xytext=xytext, textcoords="offset points",
-                          bbox=dict(boxstyle="round4", fc="w"),
+                          bbox=dict(boxstyle="round", fc="w"),
                           arrowprops=dict(arrowstyle="-|>",
                                           connectionstyle="arc3,rad=-0.2",
                                           fc="w"), 

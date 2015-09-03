@@ -13,7 +13,7 @@
    \While{$route.hasNodes()$}
    \State $node = route.popNode()$
    \State $provided = node.provided$
-   \State $[output, remaining, received] = analyze(required, provided)$
+   \State $[output, remaining, received] = convolve(required, provided)$
    \State $node.provided = remaining$
    \State $required = received$
    \EndWhile

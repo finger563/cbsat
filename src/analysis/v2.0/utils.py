@@ -272,6 +272,11 @@ def max_horizontal_difference(values1, values2, interpolate = True, epsilon = 0.
                 diff = abs(t_2[1] - t_1[0])
             if diff > max_diff[2] and diff > epsilon:
                 max_diff = [ min(t_1[0], t_2[0]), d, diff ]
+        elif t_1:
+            if d > 0:
+                diff = abs(values1[-1][0] - t_1[0])
+                if diff > max_diff[2] and diff > epsilon:
+                    max_diff = [ t_1[0], d, diff ]
     max_diff = [float(max_diff[0]), float(max_diff[1]), float(max_diff[2])]
     return max_diff
 

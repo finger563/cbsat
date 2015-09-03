@@ -69,11 +69,83 @@ packetization and communication header overhead as well.
 .. figure:: /images/math/convolution.png
    :align: center
 
-For relevant analysis, we must know that our analysis results
-(e.g. buffer size) will hold for the lifetime of the system.  Because
-the system we are analyzing is the deterministic and periodic, we must
-determine how many periods of activity must be analyzed to capture
-full system behavior.
+   Representative example for network profile conovlution between the
+   *required* profile :math:`r[t]` and the *provided* profile
+   :math:`p[t]` to produce the *link* output profile :math:`l[t]`.
+
+Given that the required data profile and system data service profile
+are periodic, we must determine the periodicity of the output
+profile.  If we can show that the output profile is similarly
+periodic, then we can show that the system is stable.  First, let us
+look at the profile behavior over the course of its first two periods
+of activity.
+
+.. figure:: /images/results/1-period-system-bw.png
+
+.. figure:: /images/results/1-period-system-data.png
+	   
+   An example system *(1)* analyzed over one period.
+
+.. figure:: /images/results/2-period-system-bw.png
+	    
+.. figure:: /images/results/2-period-system-data.png
+	   
+   The same example system *(1)* analyzed over two periods. 
+
+We notice that for this example system, the second period output
+profile is not an exact copy of the first (most easily seen by
+examining the bandwidth plots), and yet the required buffer size is
+still the same as it was when analyzing the system over one period.
+Furthermore, by running the analysis over even larger number of
+periods, we can determine (not plotted here for space and
+readability), that the predicted buffer size does not change no matter
+how many periods we analyze for this system.  Let us look at a system
+where this is not the case before we begin the analysis of such system
+characteristics.
+
+.. figure:: /images/results/1-period-unstable-bw.png
+
+.. figure:: /images/results/1-period-unstable-data.png
+	   
+   A different example system *(2)* analyzed over one period.
+
+.. figure:: /images/results/2-period-unstable-bw.png
+	    
+.. figure:: /images/results/2-period-unstable-data.png
+	   
+   The same example system *(2)* analyzed over two periods.  Note the
+   change in the required buffer size between this analysis and the
+   previous analysis over one period.  
+
+Notice in system *(2)*, the first period analysis predicted the same
+buffer size as system *(1)*, but when analyzing two periods the
+predicted buffer size changed.  Clearly the behavior of the system is
+changing between these two periods.  If we continue to analyze more
+periods of system *(2)*, as we did with system *(1)*, we'll find the
+unfortunate circumstance that the predicted buffer size increases with
+every period we add to the analysis.
+
+We have discovered a system level property that can be calculated from
+these profiles, but we must determine what it means and how it can be
+used.  First, we see that in system *(1)*, the predicted required
+buffer size does not change regarless of the number of periods
+over which we analyze the system.  Second, we see that for system
+*(2)*, the predicted required buffer size changes depending on how
+many periods of activity we choose for our analysis window.  Third, we
+see that the second period of system *(2)* contains the larger of the
+two predicted buffer sizes.  These three observations align with our
+intuitive understanding of deterministic periodic systems, which
+behave the same way each period (hence their being classified as
+*periodic*).  Clearly, system *(2)* can no longer be classified as
+periodic, since its behavior is not consistent between its periods.
+If system *(2)* was designed to be periodic, this analysis
+indicates that system *(2)* is in fact unstable.  
+
+Let us now formally prove the assertion about system periodicity and
+stability which have been stated above.  We will show that our
+analysis results provide quantitative measures about the behavior of
+the system and we will determine for how long we must analyze a system
+to glean such behaviors. 
 
 Consider a deterministic queuing system providing a data service
 function :math:`S` to input data flow :math:`I` to produce output data
@@ -81,13 +153,13 @@ flow :math:`O`.  At any time :math:`t`, the amount of data in the
 system's buffer is given by :math:`B_t`.  After servicing the input
 flow, the system has a remaining capacity function :math:`R`.
 
-* :math:`S` : the service function of the system, data service
+* :math:`S[t]` : the service function of the system, data service
   capacity versus time
-* :math:`I` : the input data flow to the system, data versus time
-* :math:`O` : the output data flow from the system, data versus time
-* :math:`B_t` : the amount of data in the system's buffer at time
+* :math:`I[t]` : the input data flow to the system, data versus time
+* :math:`O[t]` : the output data flow from the system, data versus time
+* :math:`B[t]` : the amount of data in the system's buffer at time
   :math:`t`, i.e. :math:`I[t]-O[t]`
-* :math:`R` : the remaining service capacity of the system after
+* :math:`R[t]` : the remaining service capacity of the system after
   servicing :math:`I`, i.e. :math:`S[t] - O[t]`
 
 Because :math:`S` and :math:`I` are deterministic and periodic, they
@@ -126,7 +198,7 @@ If we are only concerned with system stability, we do not need to
 calculate :math:`R`, and can instead infer system stability by
 comparing the values of the buffer at any two period-offset times
 during the steady-state operation of the system, i.e. any :math:`t >=
-T_p`.  This means that system stability check resolves to
+T_p`.  This means that system stability check can resolve to
 :math:`B[T_p] == B[2*T_p]`.
 
 Comparison with NC/RTC
