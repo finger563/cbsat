@@ -1,8 +1,8 @@
 """
-Network Config implements classes related to node-based 
-flow/profile aggregation, routing, link management, and
-management of system level concerns such as mtu size or
-multicast-capability.
+Network Config implements classes related to node-based
+flow/profile aggregation, routing, link management, and management of
+system level concerns such as multicast-capability.
+
 """
 
 import copy,sys
@@ -12,13 +12,15 @@ class Node:
     Defines all the required information for a node in the network.
     This includes:
     
-    * ID
-    * provided profiles, i.e. all profiles whose kind is 'provided' and whose source ID is this node
+    * ID provided profiles, i.e. all profiles whose kind is 'provided'
+    * and whose source ID is this node
+
     """
 
     def __init__(self, _id):
         self.ID = _id        #: the ID of this node
         self.provided = None #: aggregate of all 'provided' profiles whose source ID is this node
+        self.receivers = {}  #: dictionary mapping all receiver flow types : receiver list
 
     def HasProfiles(self):
         if not self.provided:
@@ -28,12 +30,17 @@ class Node:
     def AddProfile(self, prof):
         if prof.IsKind('provided'):
             self.AddProvidedProfile(prof)
+        elif prof.IsKind('receiver'):
+            self.AddReceiverProfile(prof)
 
     def AddProvidedProfile(self, prof):
         if not self.provided:
             self.provided = prof
         else:
             self.provided = self.provided.AddProfile(prof)
+
+    def AddReceiverProfile(self, prof):
+        self.receivers.setdefault(prof.flow_type,[]).append(prof)
 
     def __repr__(self):
         retStr = "Node( id = {} )".format(self.ID)
@@ -127,13 +134,19 @@ class Config:
     multicast, etc.
     """
 
-    def __init__(self, nodes = {}, multicast = False, retransmit = False, routes = [], topology = Topology(), mtu = 1024 ):
-        self.mtu = mtu
+    def __init__(self, nodes = {}, multicast = False, retransmit = False, routes = [], topology = Topology()):
         self.multicast = multicast
         self.retransmit = retransmit
         self.routes = routes
         self.topology = topology
         self.nodes = nodes
+        self.senders = {}
+
+    def addProfile(prof):
+        if prof.IsKind('required'):
+            self.senders[prof.priority] = prof
+        elif prof.IsKind('provided') or prof.IsKind('receiver'):
+            self.nodes[prof.node_id].AddProfile(prof)
 
     def GetRoute(self, src, dst):
         """Returns the path for the flow from *src* to *dst*."""
@@ -150,14 +163,13 @@ class Config:
                 if node not in route_tree:
                     route_tree[node] = {}
         return route_tree
-    
+
     def ParseHeader(self, header):
         """
         Parses information from the configuration's header if it exists:
 
         * multicast capability
         * retransmission setting
-        * mtu for the system's network
 
         A profile header is at the top of the file and has the following syntax::
 
@@ -172,8 +184,6 @@ class Config:
                     self.multicast = bool(value)
                 elif "retransmit" in prop:
                     self.retransmit = bool(value)
-                elif "mtu" in prop:
-                    self.mtu = int(value)
 
     def ParseFromFile(self, fName):
         """
@@ -216,7 +226,6 @@ class Config:
 
     def __repr__(self):
         retStr = "Config:\n"
-        retStr+= "\tmtu:        {}\n".format(self.mtu)
         retStr+= "\tmulticast:  {}\n".format(self.multicast)
         retStr+= "\tretransmit: {}\n".format(self.retransmit)
         retStr+= "\tnodes:\n\t\t{}\n".format(self.nodes)

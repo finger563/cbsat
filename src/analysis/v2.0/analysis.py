@@ -54,7 +54,6 @@ def analyze(required, provided, config, options):
     
     topology = config.topology
     routes = config.routes
-    mtu = config.mtu
     multicast = config.multicast
     retransmit = config.retransmit
     
@@ -144,54 +143,13 @@ def analyze(required, provided, config, options):
 
     return output, remaining, received, maxBuffer, maxDelay
 
-def main(argv):
-    """
-    Performs the main analysis of the profiles using the following steps:
-
-    * Parses the command line options according to the :class:`Options` specification.
-    * Loads the specified network configuration
-    * Gathers all the profile file names (folder or cmd line)
-    * Parses the files in to separate profiles
-    * Sorts the profiles by priority (for required profiles)
-    * Analyzes the profiles in priority order, iteratively along the route required by the profile
-    """
-    options = Options()
-    if options.parse_args(argv):
-        return -1
-
-    # COPY THE COMMAND LINE OPTIONS LOCALLY
-    confName = options.network_configName
-    profDir = options.profile_folderName
+def parse_profiles(options, config):
+    # COPY THE CONFIG'S RELEVANT MEMBERS LOCALLY
     req_fName = options.required_fileName
     prov_fName = options.provided_fileName
-    num_periods = options.num_periods
-
-    nc_mode = options.nc_mode
-    nc_step_size = options.nc_step_size
-
-    print_profiles = options.print_profiles
-    plot_dict = options.plot_dict
-    plot_line_width = options.plot_line_width
-
-    # LOAD THE NETWORK CONFIG
-    config = Config()
-    if config.ParseFromFile( confName ) == -1:
-        return -1
-    print "Using network configuration defined in {}.".format(
-        confName)
-
-    # COPY THE CONFIG'S RELEVANT MEMBERS LOCALLY
-    nodes = config.nodes
-    topology = config.topology
-    routes = config.routes
-    mtu = config.mtu
-    multicast = config.multicast
-    retransmit = config.retransmit
+    profDir = options.profile_folderName
 
     # GET ALL PROFILE FILE NAMES
-    senders = {}
-    receivers = {}
-    receiver_node_map = {}
     fNames = []
     if profDir:
         if os.path.isdir(profDir):
@@ -209,23 +167,49 @@ def main(argv):
             print "ERROR: could not parse {}".format(fName)
             return -1
         print "Profile {} has a period of {} seconds".format(fName, newProf.period)
-        if newProf.IsKind('required'):
-            senders[newProf.priority] = newProf
-        elif newProf.IsKind('receiver'):
-            receivers.setdefault(newProf.flow_type,[]).append(newProf)
-            receiver_node_map.setdefault(newProf.node_id,[]).append(newProf)
-        elif newProf.IsKind('provided'):
-            nodes[newProf.src_id].AddProfile(newProf)
+        config.addProfile(newProf)
 
-    # SORT PROFILES BY PRIORITY
-    senders = sorted(senders.items(), key=operator.itemgetter(0))
+def sort_required(config):
+    senders = sorted(config.senders.items(), key=operator.itemgetter(0))
     newsenders = OrderedDict()
     for priority, profile in senders:
         newSenders[priority] = profile
-    senders = newSenders
+    config.senders = newSenders
+
+def main(argv):
+    """
+    Performs the main analysis of the profiles using the following steps:
+
+    * Parses the command line options according to the :class:`Options` specification.
+    * Loads the specified network configuration
+    * Gathers all the profile file names (folder or cmd line)
+    * Parses the files in to separate profiles
+    * Sorts the profiles by priority (for required profiles)
+    * Analyzes the profiles in priority order, iteratively along the route required by the profile
+    """
+    options = Options()
+    if options.parse_args(argv):
+        return -1
+
+    # COPY THE COMMAND LINE OPTIONS LOCALLY
+    confName = options.network_configName
+    print_profiles = options.print_profiles
+
+    # LOAD THE NETWORK CONFIG
+    config = Config()
+    if config.ParseFromFile( confName ) == -1:
+        return -1
+    print "Using network configuration defined in {}.".format(
+        confName)
+
+    # PARSE THE PROFILES
+    parse_profiles(options, config)
+
+    # SORT PROFILES BY PRIORITY
+    sort_required(config)
 
     # ANALYZE THE SYSTEM BY PRIORITY AND ITERATIVE ANALYSIS
-    for priority, required in senders.iteritems():
+    for priority, required in config.senders.iteritems():
         flow_receivers = receivers[required.flow_type]
         receiver_routes = []
         for recv in flow_receivers:
@@ -233,6 +217,8 @@ def main(argv):
         output_receiver_map = {}
         if multicast:
             output = 
+
+
         # for each node the profile traverses:
         route = config.GetRoute(required.src_id, required.dst_id)
         print "\nAnalyzing {}".format(required)

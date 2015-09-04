@@ -38,6 +38,15 @@ a critical hindrance, as many such critical systems, e.g. satellite
 constellations or UAVs have GPS synchronized clocks, which provide
 such a foundation.
 
+Another restriction with our modeling paradigm is that data-dependent
+flows cannot be accurately represented, since we have no way of
+modeling data-dependence.  A related assumption is processing power
+and the ability of the software to adhere to the profiles: we assume
+the applications are able to accurately and precisely follow their
+data production profiles, regardless of the number of other components
+on their hardware node.  Similarly, we assume that under all
+circumstances, the service profile of a hardware node will be adhered to.
+
 
 .. _math_foundation:
 
