@@ -53,7 +53,7 @@ class Profile:
         * period
         * priority
         * node ID
-        * flow_type             (match this profile sender<->receiver)
+        * flow_type             (for matching senders <--> receivers)
         * profile kind          (provided, required, receiver, output, leftover)
 
         A profile header is at the top of the file and has the following syntax::

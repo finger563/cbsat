@@ -266,7 +266,7 @@ during the steady-state operation of the system (:math:`t >= T_p`).
 This means that system stability check can resolve to :math:`B[2*T_p]
 == B[T_p]`.  This comparison abides by the conditions above, with
 :math:`m=2` and :math:`n=1`.  Checking for system stability occurs in
-:func:`analysis.analyze`.
+:func:`analysis.analyze_profile`.
 
 .. _nc_comparison:
       
@@ -554,7 +554,7 @@ nodes handle the flow's data.
 We have extended our network analysis tool to support such system
 analysis by taking as input:
 
-* the flows in the network
+* the sender flows and receiver functions in the network
 * the provided service of each node in the network
 * the network configuration specifying the nodes in the network and
   the routes in the network
@@ -562,8 +562,10 @@ analysis by taking as input:
 where a flow is defined by (see
 :func:`networkProfile.Profile.ParseHeader`):
 
-* ID of the source node
-* ID of the destination node
+* Node ID of the profile
+* Kind of the flow
+* Period of the flow
+* Flow type of the profile 
 * Priority of the flow
 * flow properties vs time profile, see
   :func:`networkProfile.Profile.ParseEntriesFromLine`
@@ -584,7 +586,14 @@ flows and the system:
 	    :width: 600px
 
 In this algorithm, the remaining capacity of the node is provided to
-each profile with a lower priority iteratively.
+each profile with a lower priority iteratively.  We take care of
+matching all senders to their respective receivers, and ensure that if
+the system supports multicast, a no retransmissions occur; only nodes
+which must route the flow to a new part of the network retransmit the
+data.  However, if the system does not support multicast, then the
+sender must issue a separate transmission, further consuming network
+resources.  In this way, lower-level transport capabilities can be at
+least partially accounted for by our analysis.
 
 We have implmented these functions for statically routed network
 analysis into our tool, which automatically parses the flow profiles,
@@ -592,7 +601,7 @@ the network configuration and uses the algorithm and the implemented
 mathematics to iteratively analyze the network.  Analytical results
 for example systems will be provided when the experimental results can
 be used as a comparison.  The analysis algorithm is implemented by
-:func:`analysis.main`.
+:func:`analysis.analyze_config`.
 
 We are finishing the design and development of code which will allow
 us to run experiments to validate our routing analysis results.  They

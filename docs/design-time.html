@@ -453,7 +453,7 @@ during the steady-state operation of the system (<img class="math" src="_images/
 This means that system stability check can resolve to <img class="math" src="_images/math/b49800f6b85aed932c632ddcba6a1037827b6f67.png" alt="B[2*T_p]
 == B[T_p]"/>.  This comparison abides by the conditions above, with
 <img class="math" src="_images/math/70040fec2de75cc96fc8cc94208dbfc28684cc85.png" alt="m=2"/> and <img class="math" src="_images/math/163a19eac5182aaabe8bd9cc931dfa15e75a71dc.png" alt="n=1"/>.  Checking for system stability occurs in
-<code class="xref py py-func docutils literal"><span class="pre">analysis.analyze()</span></code>.</p>
+<a class="reference internal" href="python-api/analysis/analysis.html#analysis.analyze_profile" title="analysis.analyze_profile"><code class="xref py py-func docutils literal"><span class="pre">analysis.analyze_profile()</span></code></a>.</p>
 </div>
 </div>
 <div class="section" id="comparison-with-nc-rtc">
@@ -726,7 +726,7 @@ nodes handle the flow&#8217;s data.</p>
 <p>We have extended our network analysis tool to support such system
 analysis by taking as input:</p>
 <ul class="simple">
-<li>the flows in the network</li>
+<li>the sender flows and receiver functions in the network</li>
 <li>the provided service of each node in the network</li>
 <li>the network configuration specifying the nodes in the network and
 the routes in the network</li>
@@ -734,8 +734,10 @@ the routes in the network</li>
 <p>where a flow is defined by (see
 <a class="reference internal" href="python-api/analysis/network-profile.html#networkProfile.Profile.ParseHeader" title="networkProfile.Profile.ParseHeader"><code class="xref py py-func docutils literal"><span class="pre">networkProfile.Profile.ParseHeader()</span></code></a>):</p>
 <ul class="simple">
-<li>ID of the source node</li>
-<li>ID of the destination node</li>
+<li>Node ID of the profile</li>
+<li>Kind of the flow</li>
+<li>Period of the flow</li>
+<li>Flow type of the profile</li>
 <li>Priority of the flow</li>
 <li>flow properties vs time profile, see
 <a class="reference internal" href="python-api/analysis/network-profile.html#networkProfile.Profile.ParseEntriesFromLine" title="networkProfile.Profile.ParseEntriesFromLine"><code class="xref py py-func docutils literal"><span class="pre">networkProfile.Profile.ParseEntriesFromLine()</span></code></a></li>
@@ -753,14 +755,21 @@ flows and the system:</p>
 <a class="reference internal image-reference" href="_images/algorithm.svg"><img height="600px" src="_images/algorithm.svg" width="600px" /></a>
 </div>
 <p>In this algorithm, the remaining capacity of the node is provided to
-each profile with a lower priority iteratively.</p>
+each profile with a lower priority iteratively.  We take care of
+matching all senders to their respective receivers, and ensure that if
+the system supports multicast, a no retransmissions occur; only nodes
+which must route the flow to a new part of the network retransmit the
+data.  However, if the system does not support multicast, then the
+sender must issue a separate transmission, further consuming network
+resources.  In this way, lower-level transport capabilities can be at
+least partially accounted for by our analysis.</p>
 <p>We have implmented these functions for statically routed network
 analysis into our tool, which automatically parses the flow profiles,
 the network configuration and uses the algorithm and the implemented
 mathematics to iteratively analyze the network.  Analytical results
 for example systems will be provided when the experimental results can
 be used as a comparison.  The analysis algorithm is implemented by
-<a class="reference internal" href="python-api/analysis/analysis.html#analysis.main" title="analysis.main"><code class="xref py py-func docutils literal"><span class="pre">analysis.main()</span></code></a>.</p>
+<a class="reference internal" href="python-api/analysis/analysis.html#analysis.analyze_config" title="analysis.analyze_config"><code class="xref py py-func docutils literal"><span class="pre">analysis.analyze_config()</span></code></a>.</p>
 <p>We are finishing the design and development of code which will allow
 us to run experiments to validate our routing analysis results.  They
 will be complete in the next two weeks.</p>

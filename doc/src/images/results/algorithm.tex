@@ -8,15 +8,22 @@
  \begin{algorithmic}[1]
    \Procedure{Analyze}{$profiles$}
    \State $profiles = sorted(profiles,priority)$
-   \For{$required$ in $profiles$}
+   \For{$required$ \textbf{in} $profiles$}
+   \State $transmitted\_nodes = []$
+   \For{$receiver$ \textbf{in} $profile.receivers()$}
    \State $route = profile.route$
-   \While{$route.hasNodes()$}
-   \State $node = route.popNode()$
+   \For{$node$ \textbf{in} $route$}
+   \If{$node$ \textbf{in} $transmitted\_nodes$ \textbf{and} $multicast == True$}
+   \State \textbf{Continue}
+   \EndIf
    \State $provided = node.provided$
    \State $[output, remaining, received] = convolve(required, provided)$
    \State $node.provided = remaining$
    \State $required = received$
-   \EndWhile
+   \State $transmitted\_nodes.append(node)$
+   \EndFor
+   \State $[recv\_output, recv\_remaining, ] = convolve(required, receiver)$
+   \EndFor
    \EndFor
    \EndProcedure
  \end{algorithmic}
