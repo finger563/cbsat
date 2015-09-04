@@ -254,17 +254,17 @@ def main(argv):
   
 class Options:
     """
-\t--help              (to show this help and exit)
-\t--nc_mode           (to run network calculus calcs)
-\t--no_plot           (to not output any plots)
-\t--no_<profile name> (to not plot <profile name>, e.g. 'required')
-\t--print             (to print the profiles as they are analyzed)
-\t--required          <fileName containing the required profile>
-\t--provided          <fileName containing the provided profile>
-\t--profile_folder    <path containing profiles to be loaded>
-\t--network_config    <file containing network configuration>
-\t--num_periods       <number of periods to analyze>
-\t--nc_step_size      <step size for time-windows in NC mode>
+\t--help                   (to show this help and exit)
+\t--nc_mode                (to run network calculus calcs)
+\t--no_plot                (to not output any plots)
+\t--no_profile_name        (to not plot 'profile_name', e.g. 'required')
+\t--print                  (to print the profiles as they are analyzed)
+\t--required               <fileName containing the required profile>
+\t--provided               <fileName containing the provided profile>
+\t--profile_folder         <path containing profiles to be loaded>
+\t--network_config         <file containing network configuration>
+\t--num_periods            <number of periods to analyze>
+\t--nc_step_size           <step size for time-windows in NC mode>
     """
     def __init__(self):
         self.plot_profiles = havePLT   #: plot the profiles?
