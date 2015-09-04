@@ -192,29 +192,29 @@ server side generated into code</li>
 <li>Push back to sender middleware through out-of-band channel for
 anomaly detection on server side</li>
 </ul>
-<p>Each of these functions uses the profile semantics that are used at
-design time for system and application analysis.  This integration
-not only helps with running experiments and data collection but also
-helps to ensure model to system consistency.</p>
-<p>We have implemented our traffic generators and traffic measurement
-into our code generators we use with our model-driven design software.
-We developed this toolsuite to create distributed component-based
-software which uses ROS as the communications middleware.  For
-publish/subscribe interactions between components, into the generated
-code we add generic traffic generators which read their associated
-profile from the deployment XML file and publish traffic on their
-publisher port according to that profile.  Additionally, these publish
-operations are generated to use a small wrapper which can measure the
-publish rate and can decide to throw a <em>profile exceeded</em> exception if
-the application attempts to send too much data or if the receiver has
-pushed back to the sender informing it to stop.</p>
+<p>Each of these functions uses the same profiles which enable
+design-time system and application analysis.  This integration not
+only helps with running experiments and data collection but also helps
+to ensure model to system consistency.</p>
+<p>We have implemented profile-based traffic generators and traffic
+measurement into our code generators that we use with our model-driven
+design software.  We developed this toolsuite to create distributed
+component-based software which uses ROS as the communications
+middleware.  For publish/subscribe interactions between components,
+into the generated code we add generic traffic generators which read
+their associated profile from the deployment XML file and publish
+traffic on their publisher port according to that profile.
+Additionally, these publish operations are generated to use a small
+wrapper which can measure the publish rate and can decide to throw a
+<em>profile exceeded</em> exception if the application attempts to send too
+much data or if the receiver has pushed back to the sender informing
+it to stop.</p>
 <p>This push back from the receiver occurs through the use of an
 out-of-band (OOB) channel using UDP multicast, which receivers use to
 inform specific senders that they are sending too much data to the
 receivers (and possibly overflowing the receiver buffers).  This OOB
 channel provides a mechanism by which the secure middleware layer can
-protect itself and good applications from malicious or faulty
-applications.</p>
+protect the system from malicious or faulty applications.</p>
 <p>Into the receiver code (for subscribers) we additionally generate a
 receive buffer and receiver thread which reads the receiver profile
 from the deployment XML file and pulls data from the buffer according
@@ -231,7 +231,7 @@ again.</p>
 <p class="caption"><span class="caption-text">Demonstration of the accuracy with which our traffic generators
 follow the specified profile.</span></p>
 </div>
-<p>Note that our original implementation of traffic generators performed
+<p>Note: our original implementation of traffic generators performed
 better since they did not utilize a middleware layer and relied
 instead on simple point to point ipv6 connections.  However, that code
 was less useful for system analysis because it could do nothing aside
