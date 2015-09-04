@@ -97,8 +97,9 @@
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="results.html">Results</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="">Design Time Results</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#assumptions-required-for-analysis-and-performance-prediction">Assumptions Required for Analysis and Performance Prediction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#mathematical-foundation-for-precise-performance-prediction">Mathematical Foundation for Precise Performance Prediction</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#proving-the-required-minimum">Proving the required minimum</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#proving-the-minimum-analysis-for-system-stability">Proving the Minimum Analysis for System Stability</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#comparison-with-nc-rtc">Comparison with NC/RTC</a></li>
@@ -182,14 +183,31 @@ tightly bounded performance metrics for distributed networked
 applications and systems at design time.  The contributions of this
 work are broken into sections by topic:</p>
 <ul class="simple">
+<li><a class="reference internal" href="#assumptions"><span>Assumptions Required for Analysis and Performance Prediction</span></a></li>
 <li><a class="reference internal" href="#math-foundation"><span>Mathematical Foundation for Precise Performance Prediction</span></a></li>
-<li><a class="reference internal" href="#periodic-analysis-proof"><span>Proving the required minimum</span></a></li>
+<li><a class="reference internal" href="#periodic-analysis-proof"><span>Proving the Minimum Analysis for System Stability</span></a></li>
 <li><a class="reference internal" href="#nc-comparison"><span>Comparison with NC/RTC</span></a></li>
 <li><a class="reference internal" href="#tdma-analysis"><span>Analysis of TDMA Scheduling</span></a></li>
 <li><a class="reference internal" href="#compositional-analysis"><span>Compositional Analysis</span></a></li>
 <li><a class="reference internal" href="#delay-analysis"><span>Delay Analysis</span></a></li>
 <li><a class="reference internal" href="#routing-analysis"><span>Routing Analysis</span></a></li>
 </ul>
+<div class="section" id="assumptions-required-for-analysis-and-performance-prediction">
+<span id="assumptions"></span><h2>Assumptions Required for Analysis and Performance Prediction<a class="headerlink" href="#assumptions-required-for-analysis-and-performance-prediction" title="Permalink to this headline">¶</a></h2>
+<p>As with any type of system modeling and analysis paradigm, it is
+important to remain aware of the types of systems the
+modeling/analysis is applicable to, the requirements imposed on the
+system by the model, and any edge cases or scenarios where the
+analysis or modeling paradigm breaks down.</p>
+<p>A key assumption and thus requirement of our modeling and analysis
+framework is a system-wide synchronized clock which all nodes use.
+This is required for the composition of profiles as they traverse the
+network and are routed through nodes.  This assumption restricts the
+types of systems for which our analysis can be most useful, but is not
+a critical hindrance, as many such critical systems, e.g. satellite
+constellations or UAVs have GPS synchronized clocks, which provide
+such a foundation.</p>
+</div>
 <div class="section" id="mathematical-foundation-for-precise-performance-prediction">
 <span id="math-foundation"></span><h2>Mathematical Foundation for Precise Performance Prediction<a class="headerlink" href="#mathematical-foundation-for-precise-performance-prediction" title="Permalink to this headline">¶</a></h2>
 <p>To model the network capability of the system and the application
@@ -363,8 +381,8 @@ not consistent between its periods.  Furthermore, because the required
 buffer size predicted for system system <em>(2)</em> continually increases,
 we can determine that the system is in fact <em>unstable</em> due to
 unbounded buffer growth.</p>
-<div class="section" id="proving-the-required-minimum">
-<span id="periodic-analysis-proof"></span><h3>Proving the required minimum<a class="headerlink" href="#proving-the-required-minimum" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="proving-the-minimum-analysis-for-system-stability">
+<span id="periodic-analysis-proof"></span><h3>Proving the Minimum Analysis for System Stability<a class="headerlink" href="#proving-the-minimum-analysis-for-system-stability" title="Permalink to this headline">¶</a></h3>
 <p>Let us now formally prove the assertion about system periodicity and
 stability which has been stated above.  We will show that our analysis
 results provide quantitative measures about the behavior of the system
@@ -457,17 +475,18 @@ Network Calculus predicts a required buffer size of 3155000 bits.</p>
 <p>The major drawback for Network Calculus that our work aims to solve is
 the disconnect from the real system that stems from using an approach
 based on time-window analysis.  Such an approach leads to dramatically
-under-approximating the utilization of the network, since a known drop
+under-approximating the capacity of the network while simultaneously
+over-approximating the utilization of the network, since a known drop
 in network performance which is expected and handled by the
 application cannot be accurately modeled.  In our case, the system is
 using a system profile which can service data during the period from
-<img class="math" src="_images/math/76ef67173b0843b70edb0503ab614cc3d716ddf2.png" alt="0\le t\le 7"/> seconds with a period of 10 seconds.  The application
-is designed around this constraint and only produces data during that
-interval.  Because our technique directly compares when the application
-produces data to when the system can service the data, we are able to
-derive more precise performance prediction metrics than Network
-Calculus, which compares the 3 seconds of system downtime to the 3
-seconds of maximum application data production.</p>
+<img class="math" src="_images/math/76ef67173b0843b70edb0503ab614cc3d716ddf2.png" alt="0\le t\le 7"/> seconds with a period of 10 seconds.  The
+application is designed around this constraint and only produces data
+during that interval.  Because our technique directly compares when
+the application produces data to when the system can service the data,
+we are able to derive more precise performance prediction metrics than
+Network Calculus, which compares the 3 seconds of system downtime to
+the 3 seconds of maximum application data production.</p>
 <p>We developed software which produces data according to a supplied
 input profile and configured the system&#8217;s network to provide the
 bandwidth profile described in the system configuration profile.
@@ -565,12 +584,39 @@ the buffer and delay calculations, based on the slot&#8217;s bandwidth, the
 number of slots, and the slot length.  The maximum additional delay is
 <img class="math" src="_images/math/aa52ef22198842540e73e53c88f8e67cdcfefad8.png" alt="\Delta_{delay} = T - t_{slot}"/>, and the maximum additional
 buffer space is <img class="math" src="_images/math/40f6366fdabeedf2fa9a799fb062c1797e6011f7.png" alt="\Delta_{buffer} = \Delta_{delay} *
-bw_{effective}"/>.  These deviations are shown in
-Figure-ref{fig:deviation}.  Clearly, <img class="math" src="_images/math/e2678b0d7673a4e642bca4131b013ff653c6da9d.png" alt="\Delta_{delay}"/> is
-bounded by <img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/> and <img class="math" src="_images/math/78014df4d22e583ce4060d725331e353dbda529d.png" alt="\Delta_{buffer}"/> is governed by
-<img class="math" src="_images/math/cf9587087c31a9c170c37ca7b177cbba7dd214b8.png" alt="t_{slot}"/>.  Therefore, because <img class="math" src="_images/math/cf9587087c31a9c170c37ca7b177cbba7dd214b8.png" alt="t_{slot}"/> is dependent on
-<img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>, minimizing <img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/> minimizes both the maximum extra delay
-and maximum extra buffer space.</p>
+bw_{effective}"/>.  These deviations are shown below.  Clearly,
+<img class="math" src="_images/math/e2678b0d7673a4e642bca4131b013ff653c6da9d.png" alt="\Delta_{delay}"/> is bounded by <img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/> and
+<img class="math" src="_images/math/78014df4d22e583ce4060d725331e353dbda529d.png" alt="\Delta_{buffer}"/> is governed by <img class="math" src="_images/math/cf9587087c31a9c170c37ca7b177cbba7dd214b8.png" alt="t_{slot}"/>.  Therefore,
+because <img class="math" src="_images/math/cf9587087c31a9c170c37ca7b177cbba7dd214b8.png" alt="t_{slot}"/> is dependent on <img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>, minimizing
+<img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/> minimizes both the maximum extra delay and maximum extra
+buffer space.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">In-Phase TDMA profile vs abstract</th>
+<th class="head">Out-of-Phase TDMA Profile vs abstract</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="first last reference internal image-reference" href="_images/tdma_phase0.png"><img alt="_images/tdma_phase0.png" src="_images/tdma_phase0.png" style="height: 200px;" /></a>
+</td>
+<td><a class="first last reference internal image-reference" href="_images/tdma_phase1.png"><img alt="_images/tdma_phase1.png" src="_images/tdma_phase1.png" style="height: 200px;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Following from this analysis, we see that if: (1) the TDMA effective
+bandwidth profile is provided as the abstract system network service
+profile, and (2) the TDMA period is much smaller than the duration of
+the shortest profile interval; then the system with explicit modeling
+of the TDMA schedule has similar predicted application network
+characteristics as the abstract system.  Additionally, the maximum
+deviation formulas derived above provide a means for application
+developers to analyze the their application on a TDMA system without
+explicitly integrating the TDMA model into the system profile model.</p>
 </div>
 <div class="section" id="compositional-analysis">
 <span id="id1"></span><h2>Compositional Analysis<a class="headerlink" href="#compositional-analysis" title="Permalink to this headline">¶</a></h2>

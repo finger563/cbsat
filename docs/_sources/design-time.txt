@@ -9,6 +9,7 @@ tightly bounded performance metrics for distributed networked
 applications and systems at design time.  The contributions of this
 work are broken into sections by topic:
 
+* :ref:`assumptions`
 * :ref:`math_foundation`
 * :ref:`periodic_analysis_proof`
 * :ref:`nc_comparison`
@@ -16,6 +17,27 @@ work are broken into sections by topic:
 * :ref:`compositional_analysis`
 * :ref:`delay_analysis`
 * :ref:`routing_analysis`
+
+.. _assumptions:
+
+Assumptions Required for Analysis and Performance Prediction
+------------------------------------------------------------
+
+As with any type of system modeling and analysis paradigm, it is
+important to remain aware of the types of systems the
+modeling/analysis is applicable to, the requirements imposed on the
+system by the model, and any edge cases or scenarios where the
+analysis or modeling paradigm breaks down.
+
+A key assumption and thus requirement of our modeling and analysis
+framework is a system-wide synchronized clock which all nodes use.
+This is required for the composition of profiles as they traverse the
+network and are routed through nodes.  This assumption restricts the
+types of systems for which our analysis can be most useful, but is not
+a critical hindrance, as many such critical systems, e.g. satellite
+constellations or UAVs have GPS synchronized clocks, which provide
+such a foundation.
+
 
 .. _math_foundation:
 
@@ -162,7 +184,7 @@ unbounded buffer growth.
 
 .. _periodic_analysis_proof:
 
-Proving the required minimum 
+Proving the Minimum Analysis for System Stability
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Let us now formally prove the assertion about system periodicity and
@@ -279,17 +301,18 @@ Network Calculus predicts a required buffer size of 3155000 bits.
 The major drawback for Network Calculus that our work aims to solve is
 the disconnect from the real system that stems from using an approach
 based on time-window analysis.  Such an approach leads to dramatically
-under-approximating the utilization of the network, since a known drop
+under-approximating the capacity of the network while simultaneously
+over-approximating the utilization of the network, since a known drop
 in network performance which is expected and handled by the
 application cannot be accurately modeled.  In our case, the system is
 using a system profile which can service data during the period from
-:math:`0\le t\le 7` seconds with a period of 10 seconds.  The application
-is designed around this constraint and only produces data during that
-interval.  Because our technique directly compares when the application
-produces data to when the system can service the data, we are able to
-derive more precise performance prediction metrics than Network
-Calculus, which compares the 3 seconds of system downtime to the 3
-seconds of maximum application data production.  
+:math:`0\le t\le 7` seconds with a period of 10 seconds.  The
+application is designed around this constraint and only produces data
+during that interval.  Because our technique directly compares when
+the application produces data to when the system can service the data,
+we are able to derive more precise performance prediction metrics than
+Network Calculus, which compares the 3 seconds of system downtime to
+the 3 seconds of maximum application data production.
 
 We developed software which produces data according to a supplied
 input profile and configured the system's network to provide the
@@ -377,12 +400,29 @@ the buffer and delay calculations, based on the slot's bandwidth, the
 number of slots, and the slot length.  The maximum additional delay is
 :math:`\Delta_{delay} = T - t_{slot}`, and the maximum additional
 buffer space is :math:`\Delta_{buffer} = \Delta_{delay} *
-bw_{effective}`.  These deviations are shown in
-Figure-\ref{fig:deviation}.  Clearly, :math:`\Delta_{delay}` is
-bounded by :math:`T` and :math:`\Delta_{buffer}` is governed by
-:math:`t_{slot}`.  Therefore, because :math:`t_{slot}` is dependent on
-:math:`T`, minimizing :math:`T` minimizes both the maximum extra delay
-and maximum extra buffer space.
+bw_{effective}`.  These deviations are shown below.  Clearly,
+:math:`\Delta_{delay}` is bounded by :math:`T` and
+:math:`\Delta_{buffer}` is governed by :math:`t_{slot}`.  Therefore,
+because :math:`t_{slot}` is dependent on :math:`T`, minimizing
+:math:`T` minimizes both the maximum extra delay and maximum extra
+buffer space.
+
++---------------------------------------------------+-----------------------------------------------------+
+| In-Phase TDMA profile vs abstract                 | Out-of-Phase TDMA Profile vs abstract               |
++===================================================+=====================================================+
+| .. image:: /images/results/tdma_phase0.png        | .. image:: /images/results/tdma_phase1.png          |
+|    :height: 200                                   |    :height: 200                                     |
++---------------------------------------------------+-----------------------------------------------------+
+
+Following from this analysis, we see that if: (1) the TDMA effective
+bandwidth profile is provided as the abstract system network service
+profile, and (2) the TDMA period is much smaller than the duration of
+the shortest profile interval; then the system with explicit modeling
+of the TDMA schedule has similar predicted application network
+characteristics as the abstract system.  Additionally, the maximum
+deviation formulas derived above provide a means for application
+developers to analyze the their application on a TDMA system without
+explicitly integrating the TDMA model into the system profile model.
 
 .. _compositional_analysis:
 

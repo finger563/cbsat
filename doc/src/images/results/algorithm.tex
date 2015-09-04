@@ -8,7 +8,7 @@
  \begin{algorithmic}[1]
    \Procedure{Analyze}{$profiles$}
    \State $profiles = sorted(profiles,priority)$
-   \For{$required$ $in$ $profiles$}
+   \For{$required$ in $profiles$}
    \State $route = profile.route$
    \While{$route.hasNodes()$}
    \State $node = route.popNode()$
