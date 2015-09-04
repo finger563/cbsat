@@ -246,10 +246,8 @@ def main(argv):
 
     * Parses the command line options according to the :class:`Options` specification.
     * Loads the specified network configuration
-    * Gathers all the profile file names (folder or cmd line)
     * Parses the files in to separate profiles
-    * Sorts the profiles by priority (for required profiles)
-    * Analyzes the profiles in priority order, iteratively along the route required by the profile
+    * Analyzes the system configuration
     """
     options = Options()
     if options.parse_args(argv):
