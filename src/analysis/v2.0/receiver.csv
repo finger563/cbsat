@@ -1,7 +1,6 @@
 # period = 10
-# priority = 1
-# kind = required
-# node ID = 1
+# kind = receiver
+# node ID = 2
 # flow type = topic1
 0,800000,0,0
 1,850000,0,0

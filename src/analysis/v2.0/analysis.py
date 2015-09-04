@@ -23,7 +23,7 @@ from plotting import plot_bandwidth_and_data, havePLT
 from utils import lcm, bcolors
 
 
-def analyze(required, provided, config, options):
+def analyze_profile(required, provided, config, options):
     """
     * Calculates the hyperperiod of the profiles
     * Repeats the profiles for the specified number of hyperperiods in *options*
@@ -143,10 +143,11 @@ def analyze(required, provided, config, options):
 
     return output, remaining, received, maxBuffer, maxDelay
 
-def parse_profiles(options, config):
+def parse_profiles(config, options):
     # COPY THE CONFIG'S RELEVANT MEMBERS LOCALLY
     req_fName = options.required_fileName
     prov_fName = options.provided_fileName
+    recv_fName = options.receiver_fileName
     profDir = options.profile_folderName
 
     # GET ALL PROFILE FILE NAMES
@@ -158,7 +159,7 @@ def parse_profiles(options, config):
         else:
             print "ERROR: cannot find {}".format(profDir)
     else:
-        fNames = [req_fName, prov_fName]
+        fNames = [req_fName, prov_fName, recv_fName]
 
     # PARSE THE PROFILES FROM THE REQUESTED FILES
     for fName in fNames:
@@ -175,6 +176,56 @@ def sort_required(config):
     for priority, profile in senders:
         newSenders[priority] = profile
     config.senders = newSenders
+
+def analyze_config(config, options):
+    nodes = config.nodes
+    print_profiles = options.print_profiles
+
+    keys = config.senders.keys()
+    keys = sorted(keys)
+
+    for key in keys:
+        priority = key
+        required = config.senders[key]
+        transmitted_nodes = []
+        flow_receivers = config.receivers[required.flow_type]
+        print flow_receivers
+        for recv in flow_receivers:
+            route = config.GetRoute(required.node_id, recv.node_id)
+            print "\nAnalyzing {}".format(route)
+            if options.print_profiles:
+                print required.ToString('\t')
+            print "along route: {}".format(route)
+            
+            recv_node = route[-1]
+            route = route[:-1] # don't want the final node to transmit the data
+            # analyze all the transmitters in the system
+            for node_id in route:
+                if config.multicast and node_id in transmitted_nodes:
+                    print "Node {} Has already transmitted this data and multicast is enabled, skipping.".format(
+                        node_id
+                    )
+                    continue
+
+                print "Node {} is (re-)transmitting".format(node_id)
+                if print_profiles:
+                    print nodes[node_id].provided.ToString('\t')
+                output, remaining, received, buf, delay = analyze_profile(
+                    required, nodes[node_id].provided,
+                    config,
+                    options
+                )
+                nodes[node_id].provided = remaining
+                nodes[node_id].provided.Kind('provided') # since the kind is now 'remaining'
+                output.priority = required.priority
+                required = received
+                required.Kind('required')
+                transmitted_nodes.append(node_id)
+            # now analyze the receiver on the final node
+            output, remaining, received, buf, delay = analyze_profile( required,
+                                                                       recv,
+                                                                       config,
+                                                                       options)
 
 def main(argv):
     """
@@ -203,48 +254,13 @@ def main(argv):
         confName)
 
     # PARSE THE PROFILES
-    parse_profiles(options, config)
+    parse_profiles(config, options)
 
     # SORT PROFILES BY PRIORITY
-    sort_required(config)
+    #sort_required(config)
 
-    # ANALYZE THE SYSTEM BY PRIORITY AND ITERATIVE ANALYSIS
-    for priority, required in config.senders.iteritems():
-        flow_receivers = receivers[required.flow_type]
-        receiver_routes = []
-        for recv in flow_receivers:
-            route = config.GetRoute(required.node_id, recv.node_id)
-        output_receiver_map = {}
-        if multicast:
-            output = 
-
-
-        # for each node the profile traverses:
-        route = config.GetRoute(required.src_id, required.dst_id)
-        print "\nAnalyzing {}".format(required)
-        if print_profiles:
-            print required.ToString('\t')
-        print "along route: {}".format(route)
-        route = route[:-1]
-        for node_id in route:
-            print "Against provided {}".format(nodes[node_id].provided)
-            if print_profiles:
-                print nodes[node_id].provided.ToString('\t')
-            output, remaining, received, buf, delay = analyze(
-                required,
-                nodes[node_id].provided,
-                config,
-                options
-            )
-            nodes[node_id].provided = remaining
-            nodes[node_id].provided.Kind('provided') # since the kind is now 'remaining'
-            output.src_id = node_id
-            output.dst_id = required.dst_id
-            output.priority = required.priority
-            required = received
-            required.Kind('required')
-
-    return
+    # ANALYZE THE SYSTEM
+    analyze_config(config, options)
   
 class Options:
     """
@@ -255,6 +271,7 @@ class Options:
 \t--print                  (to print the profiles as they are analyzed)
 \t--required               <fileName containing the required profile>
 \t--provided               <fileName containing the provided profile>
+\t--receiver               <fileName containing the receiver profile>
 \t--profile_folder         <path containing profiles to be loaded>
 \t--network_config         <file containing network configuration>
 \t--num_periods            <number of periods to analyze>
@@ -271,6 +288,7 @@ class Options:
         self.nc_step_size = 1          #: step size for network calculus analysis
         self.required_fileName = "required.csv"  #: what file to load as the required profile
         self.provided_fileName = "provided.csv"  #: what file to load as the provided profile
+        self.receiver_fileName = "receiver.csv"  #: what file to load as the receiver profile
         self.profile_folderName = ""  #: path to a folder which contains all the profiles to be analyzed
         self.network_configName = "config.csv"  #: file which contains the topology and configuration of the network
 
@@ -297,6 +315,9 @@ class Options:
                 argind += 1
             elif args[argind] == "--provided":
                 self.provided_fileName = args[argind+1]
+                argind += 1
+            elif args[argind] == "--receiver":
+                self.receiver_fileName = args[argind+1]
                 argind += 1
             elif args[argind] == "--profile_folder":
                 self.profile_folderName = args[argind+1]

@@ -12,35 +12,30 @@ class Node:
     Defines all the required information for a node in the network.
     This includes:
     
-    * ID provided profiles, i.e. all profiles whose kind is 'provided'
-    * and whose source ID is this node
+    * All provided profiles (aggregated) whose node_id is this node
 
     """
+
+    id_type = str
 
     def __init__(self, _id):
         self.ID = _id        #: the ID of this node
         self.provided = None #: aggregate of all 'provided' profiles whose source ID is this node
-        self.receivers = {}  #: dictionary mapping all receiver flow types : receiver list
 
     def HasProfiles(self):
-        if not self.provided:
+        if not self.provided and not self.receivers:
             return False
         return True
         
     def AddProfile(self, prof):
         if prof.IsKind('provided'):
             self.AddProvidedProfile(prof)
-        elif prof.IsKind('receiver'):
-            self.AddReceiverProfile(prof)
 
     def AddProvidedProfile(self, prof):
         if not self.provided:
             self.provided = prof
         else:
             self.provided = self.provided.AddProfile(prof)
-
-    def AddReceiverProfile(self, prof):
-        self.receivers.setdefault(prof.flow_type,[]).append(prof)
 
     def __repr__(self):
         retStr = "Node( id = {} )".format(self.ID)
@@ -79,9 +74,9 @@ class Route:
         """
         self.path = []
         line = line.strip(self.header)
-        node_id_list = map(int,line.split(','))
+        node_id_list = map(Node.id_type, line.split(','))
         for node_id in node_id_list:
-            self.AddDest( node_id )
+            self.AddDest( node_id.strip(' ') )
         return 0
 
     def Length(self):
@@ -113,10 +108,10 @@ class Topology:
             topology: src_node_id : direct_node_1, ... , direct_node_n
         """
         line = line.strip(self.header)
-        node, node_list_str = line.split(':')
-        node = int(node)
-        node_list = map(int,node_list_str.split(','))
-        self.links[node] = node_list
+        src_node, node_list_str = line.split(':')
+        node_list = map(Node.id_type, node_list_str.split(','))
+        node_list = [x.strip() for x in node_list]
+        self.links[src_node.strip()] = node_list
         return 0
 
     def __repr__(self):
@@ -141,12 +136,16 @@ class Config:
         self.topology = topology
         self.nodes = nodes
         self.senders = {}
+        self.receivers = {}
 
-    def addProfile(prof):
+    def addProfile(self, prof):
+        print self.nodes
         if prof.IsKind('required'):
             self.senders[prof.priority] = prof
-        elif prof.IsKind('provided') or prof.IsKind('receiver'):
+        elif prof.IsKind('provided'):
             self.nodes[prof.node_id].AddProfile(prof)
+        elif prof.IsKind('receiver'):
+            self.receivers.setdefault(prof.flow_type,[]).append(prof)
 
     def GetRoute(self, src, dst):
         """Returns the path for the flow from *src* to *dst*."""
@@ -154,15 +153,6 @@ class Config:
         if dst not in self.topology.links[src]:
             route = [x for x in self.routes if x[0] == src and x[-1] == dst][0].path
         return route
-
-    def BuildRouteTree(self, routesList):
-        ''' fix this function '''
-        route_tree = {}
-        for route in routesList:
-            for node in route:
-                if node not in route_tree:
-                    route_tree[node] = {}
-        return route_tree
 
     def ParseHeader(self, header):
         """

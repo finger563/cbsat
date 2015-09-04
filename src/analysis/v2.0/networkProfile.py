@@ -31,7 +31,7 @@ class Profile:
     interpolated_profiles = ['data','latency']
     
     def __init__(self, kind = None, period = 0, priority = 0,
-                 node = 0, num_periods = 1, sender_names = []):
+                 node = 0, flow_type = None, num_periods = 1, sender_names = []):
         """
         :param string kind: what kind of profile is it?
         :param double period: what is the periodicity (in seconds) of the profile
@@ -70,11 +70,11 @@ class Profile:
                 elif "priority" in prop:
                     self.priority = int(value)
                 elif "node ID" in prop:
-                    self.node_id = int(value)
+                    self.node_id = value.strip()
                 elif "flow type" in prop:
-                    self.flow_type = value.strip(' ')
+                    self.flow_type = value.strip()
                 elif "kind" in prop:
-                    self.kind = value.strip(' ')
+                    self.kind = value.strip()
 
     def ParseFromFile(self, prof_fName):
         """

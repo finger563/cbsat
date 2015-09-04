@@ -1,7 +1,6 @@
 # period = 10
 # kind = provided
-# source ID = 1
-# destination ID = 2
+# node ID = 1
 0,900000,0,0
 1,870000,0,0
 2,940000,0,0
