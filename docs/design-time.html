@@ -208,6 +208,14 @@ types of systems for which our analysis can be most useful, but is not
 a critical hindrance, as many such critical systems, e.g. satellite
 constellations or UAVs have GPS synchronized clocks, which provide
 such a foundation.</p>
+<p>Another restriction with our modeling paradigm is that data-dependent
+flows cannot be accurately represented, since we have no way of
+modeling data-dependence.  A related assumption is processing power
+and the ability of the software to adhere to the profiles: we assume
+the applications are able to accurately and precisely follow their
+data production profiles, regardless of the number of other components
+on their hardware node.  Similarly, we assume that under all
+circumstances, the service profile of a hardware node will be adhered to.</p>
 </div>
 <div class="section" id="mathematical-foundation-for-precise-performance-prediction">
 <span id="math-foundation"></span><h2>Mathematical Foundation for Precise Performance Prediction<a class="headerlink" href="#mathematical-foundation-for-precise-performance-prediction" title="Permalink to this headline">¶</a></h2>
@@ -445,7 +453,7 @@ during the steady-state operation of the system (<img class="math" src="_images/
 This means that system stability check can resolve to <img class="math" src="_images/math/b49800f6b85aed932c632ddcba6a1037827b6f67.png" alt="B[2*T_p]
 == B[T_p]"/>.  This comparison abides by the conditions above, with
 <img class="math" src="_images/math/70040fec2de75cc96fc8cc94208dbfc28684cc85.png" alt="m=2"/> and <img class="math" src="_images/math/163a19eac5182aaabe8bd9cc931dfa15e75a71dc.png" alt="n=1"/>.  Checking for system stability occurs in
-<a class="reference internal" href="python-api/analysis/analysis.html#analysis.analyze" title="analysis.analyze"><code class="xref py py-func docutils literal"><span class="pre">analysis.analyze()</span></code></a>.</p>
+<code class="xref py py-func docutils literal"><span class="pre">analysis.analyze()</span></code>.</p>
 </div>
 </div>
 <div class="section" id="comparison-with-nc-rtc">

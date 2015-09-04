@@ -180,12 +180,15 @@ def analyze_config(config, options):
     * retrieve from the system config all receiver profiles associated
       with this flow type
     * for each receiver:
+
       * get the route the flow will take from the sender to the
         receiver
       * for each node along the route:
+
         * analyze the flow's profile with the node's provided profile
         * set the node's provided profile to the remaining profile
         * set the flow's required profile to the received profile
+
       * analyze the flow's profile with the receiver's profile
 
     '''
