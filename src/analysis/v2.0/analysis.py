@@ -189,7 +189,9 @@ def main(argv):
     retransmit = config.retransmit
 
     # GET ALL PROFILE FILE NAMES
-    profiles = {}
+    senders = {}
+    receivers = {}
+    receiver_node_map = {}
     fNames = []
     if profDir:
         if os.path.isdir(profDir):
@@ -208,25 +210,31 @@ def main(argv):
             return -1
         print "Profile {} has a period of {} seconds".format(fName, newProf.period)
         if newProf.IsKind('required'):
-            profiles[newProf.priority] = newProf
+            senders[newProf.priority] = newProf
+        elif newProf.IsKind('receiver'):
+            receivers.setdefault(newProf.flow_type,[]).append(newProf)
+            receiver_node_map.setdefault(newProf.node_id,[]).append(newProf)
         elif newProf.IsKind('provided'):
             nodes[newProf.src_id].AddProfile(newProf)
 
     # SORT PROFILES BY PRIORITY
-    profiles = sorted(profiles.items(), key=operator.itemgetter(0))
-    newProfiles = OrderedDict()
-    for priority, profile in profiles:
-        newProfiles[priority] = profile
-    profiles = newProfiles
+    senders = sorted(senders.items(), key=operator.itemgetter(0))
+    newsenders = OrderedDict()
+    for priority, profile in senders:
+        newSenders[priority] = profile
+    senders = newSenders
 
     # ANALYZE THE SYSTEM BY PRIORITY AND ITERATIVE ANALYSIS
-    for priority, required in profiles.iteritems():
+    for priority, required in senders.iteritems():
+        flow_receivers = receivers[required.flow_type]
+        receiver_routes = []
+        for recv in flow_receivers:
+            route = config.GetRoute(required.node_id, recv.node_id)
+        output_receiver_map = {}
+        if multicast:
+            output = 
         # for each node the profile traverses:
-        src = required.src_id
-        dst = required.dst_id
-        route = [src, dst]
-        if dst not in topology.links[src]:
-            route = [x for x in routes if x[0] == src and x[-1] == dst][0].path
+        route = config.GetRoute(required.src_id, required.dst_id)
         print "\nAnalyzing {}".format(required)
         if print_profiles:
             print required.ToString('\t')

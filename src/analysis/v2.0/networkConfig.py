@@ -135,6 +135,22 @@ class Config:
         self.topology = topology
         self.nodes = nodes
 
+    def GetRoute(self, src, dst):
+        """Returns the path for the flow from *src* to *dst*."""
+        route = [src, dst]
+        if dst not in self.topology.links[src]:
+            route = [x for x in self.routes if x[0] == src and x[-1] == dst][0].path
+        return route
+
+    def BuildRouteTree(self, routesList):
+        ''' fix this function '''
+        route_tree = {}
+        for route in routesList:
+            for node in route:
+                if node not in route_tree:
+                    route_tree[node] = {}
+        return route_tree
+    
     def ParseHeader(self, header):
         """
         Parses information from the configuration's header if it exists:

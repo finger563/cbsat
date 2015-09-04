@@ -30,7 +30,8 @@ class Profile:
     #: Which profiles are interpolated between points
     interpolated_profiles = ['data','latency']
     
-    def __init__(self, kind = None, period = 0, priority = 0, source = 0, dest = 0, num_periods = 1):
+    def __init__(self, kind = None, period = 0, priority = 0,
+                 node = 0, num_periods = 1, sender_names = []):
         """
         :param string kind: what kind of profile is it?
         :param double period: what is the periodicity (in seconds) of the profile
@@ -38,25 +39,12 @@ class Profile:
         :param int source: what is the node id from which the data on this profile will be sent
         :param int dest: what is the node id to which the data on this profile will be sent
         """
-        self.kind = kind         #: The kind of this profile, e.g. 'required'
-        self.period = period     #: The length of one period of this profile
-        self.priority = priority #: The priority of the profile; relevant for 'required' profiles
-        self.src_id = source     #: The node ID which is the source of this profile
-        self.dst_id = dest       #: The node ID which is the destination of this profile
-        self.entries = OrderedDict()  #: Dictionary of 'type name' -> 'list of [x,y] points' k,v pairs 
-
-    def __repr__(self):
-        return "Profile(kind = {}, period = {}, priority = {})\n".format(
-            self.kind, self.period, self.priority)
-    
-    def __str__(self):
-        retstr = "Profile:\n"
-        retstr += "\tkind = {}\n".format(self.kind)
-        retstr += "\tperiod = {}\n".format(self.period)
-        retstr += "\tpriority = {}\n".format(self.priority)
-        retstr += "\tsrc node = {}\n".format(self.src_id)
-        retstr += "\tdst node = {}".format(self.dst_id)
-        return retstr
+        self.kind = kind              #: The kind of this profile, e.g. 'required'
+        self.period = period          #: The length of one period of this profile
+        self.priority = priority      #: The priority of the profile; relevant for 'required' profiles
+        self.node_id = node           #: The node ID which is the source of this profile
+        self.flow_type = flow_type    #: This flow is the reciever for which sender flows?
+        self.entries = OrderedDict()  #: Dictionary of 'type name' : 'list of [x,y] points' k:v pairs 
 
     def ParseHeader(self, header):
         """
@@ -64,9 +52,9 @@ class Profile:
 
         * period
         * priority
-        * source node ID        (provided, required, or receiver)
-        * destination node ID   (provided or required)
-        * profile kind          (provided, required, receiver, output, remaining)
+        * node ID
+        * flow_type             (match this profile sender<->receiver)
+        * profile kind          (provided, required, receiver, output, leftover)
 
         A profile header is at the top of the file and has the following syntax::
 
@@ -81,10 +69,10 @@ class Profile:
                     self.period = Decimal(value)
                 elif "priority" in prop:
                     self.priority = int(value)
-                elif "source ID" in prop:
-                    self.src_id = int(value)
-                elif "destination ID" in prop:
-                    self.dst_id = int(value)
+                elif "node ID" in prop:
+                    self.node_id = int(value)
+                elif "flow type" in prop:
+                    self.flow_type = value.strip(' ')
                 elif "kind" in prop:
                     self.kind = value.strip(' ')
 
