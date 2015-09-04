@@ -111,6 +111,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../run-time.html">Run Time Results</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../run-time.html#middleware-integrated-measurement-detection-and-enforcement">Middleware-integrated Measurement, Detection, and Enforcement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../run-time.html#distributed-denial-of-service-ddos-detection">Distributed Denial of Service (DDoS) Detection</a></li>
 </ul>
 </li>
 </ul>
@@ -281,9 +282,9 @@ and a lists of relevant data vs time series (e.g. bandwidth, latency, data, etc.
 <ul class="simple">
 <li>period</li>
 <li>priority</li>
-<li>source node ID</li>
-<li>destination node ID</li>
-<li>profile kind</li>
+<li>source node ID        (provided, required, or receiver)</li>
+<li>destination node ID   (provided or required)</li>
+<li>profile kind          (provided, required, receiver, output, remaining)</li>
 </ul>
 <p>A profile header is at the top of the file and has the following syntax:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># &lt;property&gt; = &lt;value&gt;</span>

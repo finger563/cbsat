@@ -64,9 +64,9 @@ class Profile:
 
         * period
         * priority
-        * source node ID
-        * destination node ID
-        * profile kind
+        * source node ID        (provided, required, or receiver)
+        * destination node ID   (provided or required)
+        * profile kind          (provided, required, receiver, output, remaining)
 
         A profile header is at the top of the file and has the following syntax::
 
