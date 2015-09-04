@@ -49,9 +49,7 @@ def analyze(required, provided, config, options):
     nc_mode = options.nc_mode
     nc_step_size = options.nc_step_size
     print_profiles = options.print_profiles
-    plot_profiles = options.plot_profiles
-    plot_received = options.plot_received
-    plot_leftover = options.plot_leftover
+    plot_dict = options.plot_dict
     plot_line_width = options.plot_line_width
     
     topology = config.topology
@@ -126,12 +124,10 @@ def analyze(required, provided, config, options):
             print "\t APPLICATION MAY HAVE UNBOUNDED BUFFER GROWTH ON NETWORK\n" +\
                 bcolors.ENDC
 
-    if plot_profiles:
-        profList = [required,provided,output]
-        if plot_leftover:
-            profList.append(remaining)
-        if plot_received:
-            profList.append(received)
+    if plot_dict['plot']:
+        profList = [required,provided,output, remaining, received]
+        for key in plot_dict:
+            profList = [x for x in profList if key not in x.kind]
         plot_bandwidth_and_data( profList, maxDelay, maxBuffer,
                                  num_periods, plot_line_width)
         if nc_mode:
@@ -174,7 +170,7 @@ def main(argv):
     nc_step_size = options.nc_step_size
 
     print_profiles = options.print_profiles
-    plot_profiles = options.plot_profiles
+    plot_dict = options.plot_dict
     plot_line_width = options.plot_line_width
 
     # LOAD THE NETWORK CONFIG
@@ -258,21 +254,21 @@ def main(argv):
   
 class Options:
     """
-\t--help             (to show this help and exit)
-\t--nc_mode          (to run network calculus calcs)
-\t--no_plot          (to not output any plots)
-\t--print            (to print the profiles as they are analyzed)
-\t--required         <fileName containing the required profile>
-\t--provided         <fileName containing the provided profile>
-\t--profile_folder   <path containing profiles to be loaded>
-\t--network_config   <file containing network configuration>
-\t--num_periods      <number of periods to analyze>
-\t--nc_step_size     <step size for time-windows in NC mode>
+\t--help              (to show this help and exit)
+\t--nc_mode           (to run network calculus calcs)
+\t--no_plot           (to not output any plots)
+\t--no_<profile name> (to not plot <profile name>, e.g. 'required')
+\t--print             (to print the profiles as they are analyzed)
+\t--required          <fileName containing the required profile>
+\t--provided          <fileName containing the provided profile>
+\t--profile_folder    <path containing profiles to be loaded>
+\t--network_config    <file containing network configuration>
+\t--num_periods       <number of periods to analyze>
+\t--nc_step_size      <step size for time-windows in NC mode>
     """
     def __init__(self):
         self.plot_profiles = havePLT   #: plot the profiles?
-        self.plot_leftover = True      #: plot the leftover profile?
-        self.plot_received = True      #: plot the received profile?
+        self.plot_dict = {'plot' : True}  #: dictionary with plot options generated
         self.print_profiles = False    #: print the profiles?
         self.num_periods = 1           #: number of periods to analyze
         self.plot_line_width = 4       #: line width for plots
@@ -293,12 +289,8 @@ class Options:
                     print "Error! You must specify a number of periods > 0"
                     return -1
                 argind += 1
-            elif args[argind] == "--no_plot":
-                self.plot_profiles = False
-            elif args[argind] == "--no_received":
-                self.plot_received = False
-            elif args[argind] == "--no_leftover":
-                self.plot_leftover = False
+            elif "--no_" in args[argind]:
+                self.plot_dict[args[argind].split('_')[-1]] = False
             elif args[argind] == '--print':
                 self.print_profiles = True
             elif args[argind] == "--nc_mode":

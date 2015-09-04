@@ -129,7 +129,7 @@ buffer in the near future, it can use the measurements that have been
 gathered about the received traffic up to this point to determine
 which sender components to throttle temporarily.
 
-.. figure:: images/results/routed_ddos_network.png
+.. figure:: images/results/example_setup.png
    :align: center
    :width: 400px
 

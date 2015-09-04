@@ -254,31 +254,16 @@ or the system, respectively.</p>
 <tr><td class="option-group">
 <kbd><span class="option">--no_plot</span></kbd></td>
 <td>(to not output any plots)</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--print</span></kbd></td>
-<td>(to print the profiles as they are analyzed)</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--required</span></kbd></td>
-<td>&lt;fileName containing the required profile&gt;</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--provided</span></kbd></td>
-<td>&lt;fileName containing the provided profile&gt;</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--profile_folder</span></kbd></td>
-</tr>
-<tr><td>&nbsp;</td><td>&lt;path containing profiles to be loaded&gt;</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--network_config</span></kbd></td>
-</tr>
-<tr><td>&nbsp;</td><td>&lt;file containing network configuration&gt;</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--num_periods</span></kbd></td>
-<td>&lt;number of periods to analyze&gt;</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--nc_step_size</span></kbd></td>
-<td>&lt;step size for time-windows in NC mode&gt;</td></tr>
 </tbody>
 </table>
+<p>&#8211;no_&lt;profile name&gt; (to not plot &lt;profile name&gt;, e.g. &#8216;required&#8217;)
+&#8211;print             (to print the profiles as they are analyzed)
+&#8211;required          &lt;fileName containing the required profile&gt;
+&#8211;provided          &lt;fileName containing the provided profile&gt;
+&#8211;profile_folder    &lt;path containing profiles to be loaded&gt;
+&#8211;network_config    &lt;file containing network configuration&gt;
+&#8211;num_periods       &lt;number of periods to analyze&gt;
+&#8211;nc_step_size      &lt;step size for time-windows in NC mode&gt;</p>
 <dl class="attribute">
 <dt id="analysis.Options.plot_profiles">
 <code class="descname">plot_profiles</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.plot_profiles" title="Permalink to this definition">¶</a></dt>
@@ -286,15 +271,9 @@ or the system, respectively.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="analysis.Options.plot_leftover">
-<code class="descname">plot_leftover</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.plot_leftover" title="Permalink to this definition">¶</a></dt>
-<dd><p>plot the leftover profile?</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="analysis.Options.plot_received">
-<code class="descname">plot_received</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.plot_received" title="Permalink to this definition">¶</a></dt>
-<dd><p>plot the received profile?</p>
+<dt id="analysis.Options.plot_dict">
+<code class="descname">plot_dict</code><em class="property"> = None</em><a class="headerlink" href="#analysis.Options.plot_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>dictionary with plot options generated</p>
 </dd></dl>
 
 <dl class="attribute">
