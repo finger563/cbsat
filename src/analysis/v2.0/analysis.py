@@ -170,14 +170,25 @@ def parse_profiles(config, options):
         print "Profile {} has a period of {} seconds".format(fName, newProf.period)
         config.addProfile(newProf)
 
-def sort_required(config):
-    senders = sorted(config.senders.items(), key=operator.itemgetter(0))
-    newsenders = OrderedDict()
-    for priority, profile in senders:
-        newSenders[priority] = profile
-    config.senders = newSenders
-
 def analyze_config(config, options):
+    '''
+    This function analyzes the system configuration in flow priority
+    order, taking into account system-level concepts such as multicast
+    capabilities.  It performs the following steps:
+
+    * sort the sender profiles by priority
+    * retrieve from the system config all receiver profiles associated
+      with this flow type
+    * for each receiver:
+      * get the route the flow will take from the sender to the
+        receiver
+      * for each node along the route:
+        * analyze the flow's profile with the node's provided profile
+        * set the node's provided profile to the remaining profile
+        * set the flow's required profile to the received profile
+      * analyze the flow's profile with the receiver's profile
+
+    '''
     nodes = config.nodes
     print_profiles = options.print_profiles
 
@@ -189,13 +200,14 @@ def analyze_config(config, options):
         required = config.senders[key]
         transmitted_nodes = []
         flow_receivers = config.receivers[required.flow_type]
-        print flow_receivers
         for recv in flow_receivers:
             route = config.GetRoute(required.node_id, recv.node_id)
-            print "\nAnalyzing {}".format(route)
+            
+            print ''
             if options.print_profiles:
+                print "Analyzing:"
                 print required.ToString('\t')
-            print "along route: {}".format(route)
+                print "along route: {}".format(route)
             
             recv_node = route[-1]
             route = route[:-1] # don't want the final node to transmit the data
@@ -207,9 +219,9 @@ def analyze_config(config, options):
                     )
                     continue
 
-                print "Node {} is (re-)transmitting".format(node_id)
                 if print_profiles:
                     print nodes[node_id].provided.ToString('\t')
+                print "(Re-)transmitter {} analysis:".format(node_id)
                 output, remaining, received, buf, delay = analyze_profile(
                     required, nodes[node_id].provided,
                     config,
@@ -222,6 +234,7 @@ def analyze_config(config, options):
                 required.Kind('required')
                 transmitted_nodes.append(node_id)
             # now analyze the receiver on the final node
+            print "Receiver analysis:"
             output, remaining, received, buf, delay = analyze_profile( required,
                                                                        recv,
                                                                        config,
@@ -255,9 +268,6 @@ def main(argv):
 
     # PARSE THE PROFILES
     parse_profiles(config, options)
-
-    # SORT PROFILES BY PRIORITY
-    #sort_required(config)
 
     # ANALYZE THE SYSTEM
     analyze_config(config, options)

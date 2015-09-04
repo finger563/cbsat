@@ -139,7 +139,6 @@ class Config:
         self.receivers = {}
 
     def addProfile(self, prof):
-        print self.nodes
         if prof.IsKind('required'):
             self.senders[prof.priority] = prof
         elif prof.IsKind('provided'):
