@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Using the Code &mdash; CBSAT 0.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="./_static/custom.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="CBSAT 0.2.0 documentation" href="index.html"/>
+        <link rel="next" title="The Inner Workings" href="developers.html"/>
+        <link rel="prev" title="Run Time Results" href="run-time.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> CBSAT
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory-results.html">Background, Theory, and Results</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="background.html">Background: Network Performance Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="background.html#network-calculus">Network Calculus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="background.html#real-time-calculus">Real Time Calculus</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="math.html"><strong>P3N</strong> : Theory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="math.html#formalism-for-precise-performance-prediction-for-networks">Formalism for Precise Performance Prediction for Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math.html#assumptions-required-for-analysis-and-performance-prediction">Assumptions Required for Analysis and Performance Prediction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math.html#factors-impacting-analysis">Factors Impacting Analysis:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="results.html"><strong>P3N</strong> : Results</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="design-time.html">Design Time Results</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#periodic-system-analysis">Periodic System Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#comparison-with-nc-rtc">Comparison with NC/RTC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#analysis-of-tdma-scheduling">Analysis of TDMA Scheduling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#compositional-analysis">Compositional Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#delay-analysis">Delay Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#routing-analysis">Routing Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="run-time.html">Run Time Results</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="run-time.html#middleware-integrated-measurement-detection-and-enforcement">Middleware-integrated Measurement, Detection, and Enforcement</a></li>
+<li class="toctree-l4"><a class="reference internal" href="run-time.html#distributed-denial-of-service-ddos-detection">Distributed Denial of Service (DDoS) Detection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Using the Code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-analysis-tool">The Analysis Tool</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#the-middleware">The Middleware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#compilation">Compilation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">The Inner Workings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="analysis-api.html">Analysis API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/analysis.html">Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/network-profile.html">Network Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/network-config.html">Network Config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/plotting.html">Plotting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/utils.html">Utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/generate-tdma.html">Generate TDMA</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="middleware-api.html">Middleware API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/network-profile.html">Network Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/network-buffer.html">Network Buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/network-middleware.html">Network Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/message.html">Message</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/client.html">Client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/server.html">Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/connection-subsys.html">Connection Subsys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/csv-iterator.html">CSV Iterator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/tc-wrapper.html">TC Wrapper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">CBSAT</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Using the Code</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/users.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="using-the-code">
+<span id="users"></span><h1>Using the Code<a class="headerlink" href="#using-the-code" title="Permalink to this headline">¶</a></h1>
+<p><strong>THIS SECTION IS NOT COMPLETE</strong></p>
+<p>Explain here how to use the code with specific references to the API
+and give an example to help people set up an example system and
+analyze it</p>
+<div class="section" id="the-analysis-tool">
+<h2>The Analysis Tool<a class="headerlink" href="#the-analysis-tool" title="Permalink to this headline">¶</a></h2>
+<p>The analysis tool is a python library which implements both
+the Network Calculus and MAReN techniques described
+<span class="xref std std-ref">above</span>.</p>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic" start="0">
+<li><p class="first">Install tabulate for nice formatting of the output:</p>
+<p><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">tabulate</span></code></p>
+</li>
+<li><p class="first">Download the analysis tool from the <a class="reference external" href="https://github.com/finger563/cbsat/releases">CBSAT repo</a>.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="the-middleware">
+<h2>The Middleware<a class="headerlink" href="#the-middleware" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The middleware is C++ and supports Linux.</p>
+</div>
+<div class="section" id="compilation">
+<h3>Compilation<a class="headerlink" href="#compilation" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p class="first">To Build the client and server test of the middleware, run from a terminal:</p>
+<p><code class="docutils literal"><span class="pre">make</span></code></p>
+</li>
+</ol>
+<p>Congratulations!  The set-up of the analysis tool and the middleware
+are complete!</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="developers.html" class="btn btn-neutral float-right" title="The Inner Workings" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="run-time.html" class="btn btn-neutral" title="Run Time Results" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, finger563.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+  
+ 
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-61341323-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>

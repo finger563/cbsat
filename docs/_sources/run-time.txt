@@ -63,24 +63,31 @@ again.
    Demonstration of the accuracy with which our traffic generators
    follow the specified profile.  
 
-Note: our original implementation of traffic generators performed
-better since they did not utilize a middleware layer and relied
-instead on simple point to point ipv6 connections.  However, that code
-was less useful for system analysis because it could do nothing aside
-from traffic generation and measurement; our current implementation
-which generates traffic generation code into component code is more
-versatile for several reasons:
+.. note:: The measured bandwidth profile is calculated based on
+	  recorded time series data of :math:`[reception\_time,
+	  message\_size]`, so the bandwidth drops to nearly 0
+	  periodically since the :math:`\Delta t` is so large between
+	  the messages.
 
-* The component-based code integrates directly into our development
-  toolsuite and deployment framework so it can be easily deployed on
-  our cluster.
-* Configuring different system topologies or component to host
-  mappings (deployments) is simpler and more robust, allowing us to
-  perform more and more varied experiments.
-* The traffic generation code can be removed (or the code can be
-  regenerated without the option selected) and the rest of the
-  component-based and middleware code is still useful as an actual
-  application.
+.. note:: Our original implementation of traffic generators performed
+	  better since they did not utilize a middleware layer and
+	  relied instead on simple point to point ipv6 connections.
+	  However, that code was less useful for system analysis
+	  because it could do nothing aside from traffic generation
+	  and measurement; our current implementation which generates
+	  traffic generation code into component code is more
+	  versatile for several reasons:
+
+	  * The component-based code integrates directly into our development
+	    toolsuite and deployment framework so it can be easily deployed on
+	    our cluster.
+	  * Configuring different system topologies or component to host
+	    mappings (deployments) is simpler and more robust, allowing us to
+	    perform more and more varied experiments.
+	  * The traffic generation code can be removed (or the code can be
+	    regenerated without the option selected) and the rest of the
+	    component-based and middleware code is still useful as an actual
+	    application.
 
 Distributed Denial of Service (DDoS) Detection
 ----------------------------------------------

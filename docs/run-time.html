@@ -33,8 +33,8 @@
 
   
     <link rel="top" title="CBSAT 0.2.0 documentation" href="index.html"/>
-        <link rel="up" title="Results" href="results.html"/>
-        <link rel="next" title="Analysis API" href="analysis-api.html"/>
+        <link rel="up" title="P3N : Results" href="results.html"/>
+        <link rel="next" title="Using the Code" href="users.html"/>
         <link rel="prev" title="Design Time Results" href="design-time.html"/> 
 
   
@@ -75,66 +75,71 @@
           
           
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="getting-started.html#network-performance-analysis">Network Performance Analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="getting-started.html#background">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="theory-results.html">Background, Theory, and Results</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="background.html">Background: Network Performance Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="background.html#network-calculus">Network Calculus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="background.html#real-time-calculus">Real Time Calculus</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="getting-started.html#the-analysis-tool">The Analysis Tool</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="getting-started.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math.html"><strong>P3N</strong> : Theory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="math.html#formalism-for-precise-performance-prediction-for-networks">Formalism for Precise Performance Prediction for Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math.html#assumptions-required-for-analysis-and-performance-prediction">Assumptions Required for Analysis and Performance Prediction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math.html#factors-impacting-analysis">Factors Impacting Analysis:</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="getting-started.html#the-middleware">The Middleware</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="getting-started.html#compilation">Compilation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="results.html"><strong>P3N</strong> : Results</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="design-time.html">Design Time Results</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#periodic-system-analysis">Periodic System Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#comparison-with-nc-rtc">Comparison with NC/RTC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#analysis-of-tdma-scheduling">Analysis of TDMA Scheduling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#compositional-analysis">Compositional Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#delay-analysis">Delay Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#routing-analysis">Routing Analysis</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="math.html">Math</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="math.html#network-calculus-background">Network Calculus Background</a></li>
-<li class="toctree-l2"><a class="reference internal" href="math.html#formalism-for-better-precision-network-analysis">Formalism for Better Precision Network Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l1 current"><a class="reference internal" href="results.html">Results</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="design-time.html">Design Time Results</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="design-time.html#assumptions-required-for-analysis-and-performance-prediction">Assumptions Required for Analysis and Performance Prediction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="design-time.html#mathematical-foundation-for-precise-performance-prediction">Mathematical Foundation for Precise Performance Prediction</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="design-time.html#proving-the-minimum-analysis-for-system-stability">Proving the Minimum Analysis for System Stability</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="design-time.html#comparison-with-nc-rtc">Comparison with NC/RTC</a></li>
-<li class="toctree-l3"><a class="reference internal" href="design-time.html#analysis-of-tdma-scheduling">Analysis of TDMA Scheduling</a></li>
-<li class="toctree-l3"><a class="reference internal" href="design-time.html#compositional-analysis">Compositional Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="design-time.html#delay-analysis">Delay Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="design-time.html#routing-analysis">Routing Analysis</a></li>
-</ul>
-</li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Run Time Results</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#middleware-integrated-measurement-detection-and-enforcement">Middleware-integrated Measurement, Detection, and Enforcement</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#distributed-denial-of-service-ddos-detection">Distributed Denial of Service (DDoS) Detection</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">Run Time Results</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#middleware-integrated-measurement-detection-and-enforcement">Middleware-integrated Measurement, Detection, and Enforcement</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#distributed-denial-of-service-ddos-detection">Distributed Denial of Service (DDoS) Detection</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="analysis-api.html">Analysis API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/analysis.html">Analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/network-profile.html">Network Profile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/network-config.html">Network Config</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/plotting.html">Plotting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/utils.html">Utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python-api/analysis/generate-tdma.html">Generate TDMA</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="middleware-api.html">Middleware API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/network-profile.html">Network Profile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/network-buffer.html">Network Buffer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/network-middleware.html">Network Middleware</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/message.html">Message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/client.html">Client</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/server.html">Server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/connection-subsys.html">Connection Subsys</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/csv-iterator.html">CSV Iterator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python-api/middleware/tc-wrapper.html">TC Wrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users.html">Using the Code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="users.html#the-analysis-tool">The Analysis Tool</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="users.html#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="users.html#the-middleware">The Middleware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="users.html#compilation">Compilation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">The Inner Workings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="analysis-api.html">Analysis API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/analysis.html">Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/network-profile.html">Network Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/network-config.html">Network Config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/plotting.html">Plotting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/utils.html">Utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/generate-tdma.html">Generate TDMA</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="middleware-api.html">Middleware API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/network-profile.html">Network Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/network-buffer.html">Network Buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/network-middleware.html">Network Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/message.html">Message</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/client.html">Client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/server.html">Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/connection-subsys.html">Connection Subsys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/csv-iterator.html">CSV Iterator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/tc-wrapper.html">TC Wrapper</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -161,7 +166,9 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-          <li><a href="results.html">Results</a> &raquo;</li>
+          <li><a href="theory-results.html">Background, Theory, and Results</a> &raquo;</li>
+      
+          <li><a href="results.html"><strong>P3N</strong> : Results</a> &raquo;</li>
       
     <li>Run Time Results</li>
       <li class="wy-breadcrumbs-aside">
@@ -231,14 +238,25 @@ again.</p>
 <p class="caption"><span class="caption-text">Demonstration of the accuracy with which our traffic generators
 follow the specified profile.</span></p>
 </div>
-<p>Note: our original implementation of traffic generators performed
-better since they did not utilize a middleware layer and relied
-instead on simple point to point ipv6 connections.  However, that code
-was less useful for system analysis because it could do nothing aside
-from traffic generation and measurement; our current implementation
-which generates traffic generation code into component code is more
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The measured bandwidth profile is calculated based on
+recorded time series data of <img class="math" src="_images/math/d402bd47034875456f3816c1116906b0efb5ddce.png" alt="[reception\_time,
+message\_size]"/>, so the bandwidth drops to nearly 0
+periodically since the <img class="math" src="_images/math/5b4271afe7fc7c0ee84172e0ad19b82caf450c00.png" alt="\Delta t"/> is so large between
+the messages.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Our original implementation of traffic generators performed
+better since they did not utilize a middleware layer and
+relied instead on simple point to point ipv6 connections.
+However, that code was less useful for system analysis
+because it could do nothing aside from traffic generation
+and measurement; our current implementation which generates
+traffic generation code into component code is more
 versatile for several reasons:</p>
-<ul class="simple">
+<ul class="last simple">
 <li>The component-based code integrates directly into our development
 toolsuite and deployment framework so it can be easily deployed on
 our cluster.</li>
@@ -250,6 +268,7 @@ regenerated without the option selected) and the rest of the
 component-based and middleware code is still useful as an actual
 application.</li>
 </ul>
+</div>
 </div>
 <div class="section" id="distributed-denial-of-service-ddos-detection">
 <h2>Distributed Denial of Service (DDoS) Detection<a class="headerlink" href="#distributed-denial-of-service-ddos-detection" title="Permalink to this headline">¶</a></h2>
@@ -309,7 +328,7 @@ utilizing this out-of-band channel and secure middleware.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="analysis-api.html" class="btn btn-neutral float-right" title="Analysis API" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="users.html" class="btn btn-neutral float-right" title="Using the Code" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="design-time.html" class="btn btn-neutral" title="Design Time Results" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>

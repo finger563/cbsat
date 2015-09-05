@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Background: Network Performance Analysis &mdash; CBSAT 0.2.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="./_static/custom.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="CBSAT 0.2.0 documentation" href="index.html"/>
+        <link rel="up" title="Background, Theory, and Results" href="theory-results.html"/>
+        <link rel="next" title="P3N : Theory" href="math.html"/>
+        <link rel="prev" title="Background, Theory, and Results" href="theory-results.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> CBSAT
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="theory-results.html">Background, Theory, and Results</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">Background: Network Performance Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#network-calculus">Network Calculus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#real-time-calculus">Real Time Calculus</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="math.html"><strong>P3N</strong> : Theory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="math.html#formalism-for-precise-performance-prediction-for-networks">Formalism for Precise Performance Prediction for Networks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math.html#assumptions-required-for-analysis-and-performance-prediction">Assumptions Required for Analysis and Performance Prediction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="math.html#factors-impacting-analysis">Factors Impacting Analysis:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="results.html"><strong>P3N</strong> : Results</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="design-time.html">Design Time Results</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#periodic-system-analysis">Periodic System Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#comparison-with-nc-rtc">Comparison with NC/RTC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#analysis-of-tdma-scheduling">Analysis of TDMA Scheduling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#compositional-analysis">Compositional Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#delay-analysis">Delay Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#routing-analysis">Routing Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="run-time.html">Run Time Results</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="run-time.html#middleware-integrated-measurement-detection-and-enforcement">Middleware-integrated Measurement, Detection, and Enforcement</a></li>
+<li class="toctree-l4"><a class="reference internal" href="run-time.html#distributed-denial-of-service-ddos-detection">Distributed Denial of Service (DDoS) Detection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="users.html">Using the Code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="users.html#the-analysis-tool">The Analysis Tool</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="users.html#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="users.html#the-middleware">The Middleware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="users.html#compilation">Compilation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">The Inner Workings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="analysis-api.html">Analysis API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/analysis.html">Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/network-profile.html">Network Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/network-config.html">Network Config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/plotting.html">Plotting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/utils.html">Utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/generate-tdma.html">Generate TDMA</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="middleware-api.html">Middleware API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/network-profile.html">Network Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/network-buffer.html">Network Buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/network-middleware.html">Network Middleware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/message.html">Message</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/client.html">Client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/server.html">Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/connection-subsys.html">Connection Subsys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/csv-iterator.html">CSV Iterator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/tc-wrapper.html">TC Wrapper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">CBSAT</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="theory-results.html">Background, Theory, and Results</a> &raquo;</li>
+      
+    <li>Background: Network Performance Analysis</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/background.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="background-network-performance-analysis">
+<h1>Background: Network Performance Analysis<a class="headerlink" href="#background-network-performance-analysis" title="Permalink to this headline">¶</a></h1>
+<p>Networking systems have been developed for over half a century and the
+analysis of processing networks and communications networks began even
+earlier.  As computing power has increased, the field of network
+performance analysis at design-time has evolved into two main
+paradigms: (1) network performance testing of the applications and
+system to be deployed to determine performance and pitfalls, and (2)
+analytical models and techniques to provide application network
+performance guarantees based on those models.  The first paradigm
+generally involves either arbitrarily precise network simulation, or
+network emulation, or sub-scale experiments on the actual system.  The
+second paradigm focuses on formal models and methods for composing and
+analyzing those models to derive performance predictions.</p>
+<p>We focus on the second paradigm, using models for predicting network
+performance at design-time.  This focus comes mainly from the types of
+systems to which we wish to apply our analysis: safety- or
+mission-critical distributed cyber-physical systems, such as
+satellites, or autonomous vehicles.  For such systems, resources come
+at a premium and design-time analysis must provide strict guarantees
+about run-time performance and safety before the system is ever
+deployed.</p>
+<p>For such systems, probabilistic approaches do not provide high enough
+confidence on performance predictions since they are based on
+statistical models.  Therefore, we must use deterministic analysis
+techniques to analyze these systems.</p>
+<div class="section" id="network-calculus">
+<span id="network-calc"></span><h2>Network Calculus<a class="headerlink" href="#network-calculus" title="Permalink to this headline">¶</a></h2>
+<p>Network Calculus provides a modeling and analysis paradigm for
+deterministically analyzing networking and queueing systems.  Its
+roots come from the desire to analyze network and queuing systems
+using similar techniques as traditiional electrical circuit systems,
+i.e. by analyzing the <em>convolution</em> of an <em>input</em> function with a
+<em>system</em> function to produce an <em>output</em> function.  Instead of the
+convolution mathematics from traditional systems theory, Network
+Calculus is based on the concepts of <em>(min,+)-calculus</em>, which we will
+not cover here for clarity, but for which an explanation can be found
+in my proposal and thesis.</p>
+<p>By using the concepts of <em>(min,+)-calculus</em>, Network Calculus provides
+a way to model the application network requirements and system network
+capacity as functions, not of time, but of <em>time-window size</em>.  Such
+application network requirements become a cumulative curve defined as
+the <em>maximum arrival curve</em>.  This curve represents the cumulative
+amount of data that can be transmitted as a function of time-window
+size.  Similarly, the system network capacity becomes a cumulative
+curve defined as the <em>minimum service curve</em>. These curves bound the
+application requirements and system service capacity.</p>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="_images/nc_arrival_curve.png"><img alt="_images/nc_arrival_curve.png" src="_images/nc_arrival_curve.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">Network Calculus arrival curve (<img class="math" src="_images/math/ad59b6e24a4a00ac621801f8d7513d68be654ab5.png" alt="\alpha"/>)</span></p>
+</div>
+<div class="figure align-center" id="id2">
+<a class="reference internal image-reference" href="_images/nc_service_curve.png"><img alt="_images/nc_service_curve.png" src="_images/nc_service_curve.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">Network Calculus service curve (<img class="math" src="_images/math/8ce03f78ed945f2ef3dac87c8799b55b393527e7.png" alt="\beta"/>)</span></p>
+</div>
+<p>Network calculus uses <em>(min,+)-calculus convolution</em> to compose the
+application requirement curve with the system service curve.  The
+output of this convolution is the maximum data arrival curve for the
+output flow from the node providing the service.  By analyzing these
+curves, bounds on the application&#8217;s required buffer size and buffering
+delay can be determined.</p>
+<div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="_images/nc_bounds.png"><img alt="_images/nc_bounds.png" src="_images/nc_bounds.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">Schematic deptiction of the buffer size (vertical difference) and
+delay (horizontal difference) calculations in Network Calculus.</span></p>
+</div>
+<p>With these bounds and the convolution, developers can make
+<em>worst-case</em> performance predictions of the applications on the
+network.  These bounds are <em>worst-case</em> because the curves are
+functions of <em>time-window size</em>, instead of directly being functions
+of time.  This distinction means that the worst service period
+provided by the system is directly compared with the maximum data
+production period of the application.  Clearly such a comparison can
+lead to over-estimating the buffer requirements if the application&#8217;s
+maximum data production does not occur during that period.</p>
+</div>
+<div class="section" id="real-time-calculus">
+<span id="rtc"></span><h2>Real Time Calculus<a class="headerlink" href="#real-time-calculus" title="Permalink to this headline">¶</a></h2>
+<p>Real-Time Calculus is based on Network Calculus and extends their work
+to allow for compositional system analysis.</p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="math.html" class="btn btn-neutral float-right" title="P3N : Theory" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="theory-results.html" class="btn btn-neutral" title="Background, Theory, and Results" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, finger563.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.2.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+  
+ 
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-61341323-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+</body>
+</html>
