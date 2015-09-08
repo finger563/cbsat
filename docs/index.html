@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Precise Network Performance Prediction &mdash; CBSAT 0.2.0 documentation</title>
+  <title>Precise Network Performance Prediction &mdash; PNP2 0.2.0 documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="CBSAT 0.2.0 documentation" href="#"/>
+    <link rel="top" title="PNP2 0.2.0 documentation" href="#"/>
         <link rel="next" title="Background: Network Performance Analysis" href="background.html"/> 
 
   
@@ -50,7 +50,7 @@
         
 
         
-          <a href="#" class="icon icon-home"> CBSAT
+          <a href="#" class="icon icon-home"> PNP2
         
 
         
@@ -118,7 +118,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">CBSAT</a>
+        <a href="#">PNP2</a>
       </nav>
 
 
@@ -144,6 +144,34 @@
             
   <div class="section" id="precise-network-performance-prediction">
 <h1>Precise Network Performance Prediction<a class="headerlink" href="#precise-network-performance-prediction" title="Permalink to this headline">¶</a></h1>
+<p>This documentation covers the background, theory, and results for my
+research, <em>Precise Network Performance Prediction</em>, (<img class="math" src="_images/math/25e201674a37202d448849e78eb163897d9373f6.png" alt="PNP^2"/>),
+the aim of which is to provide design-time analysis of distributed
+cyber-physical systems&#8217; (CPS) and their applications&#8217; network
+performance.  The type of network performance we will focus on
+predicting is the application buffer size requirements and the
+application network traffic buffering delay.  These factors were
+chosen because they relate directly to how well the application
+traffic is serviced by the system and they directly affect resource
+utilization of the application on the system.</p>
+<p>Because the buffering resources available to applications may be fixed
+by the system, application developers need to know at design time
+whether or not the application&#8217;s data production versus data
+consumption will overflow the application&#8217;s allotted buffer space.  By
+analyzing these systems, developers can assess these conditions at
+design-time and try to mitigate any predicted overflows before
+deploying the applications.</p>
+<p>Furthermore, buffering delay/latency is an important metric for
+determining application network performance because in many of these
+CPS, interactions and computation have deadlines that must be met, for
+instance in an attitude control system where the physical dynamics of
+the system determine the required reaction time of the software from
+sensing to calculation to actuation.  Developers need guarantees that
+such reaction times can be met, and for distributed systems, the
+buffering latency and transmission latency for network data affects
+these reaction times.</p>
+<p>Such design-time performance analysis and feedback is critical to the
+development of robust safety- or mission-critical applications.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="background.html">Background: Network Performance Analysis</a><ul>

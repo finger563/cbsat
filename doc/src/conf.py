@@ -1,4 +1,4 @@
-project = 'CBSAT'
+project = 'PNP2'
 version = '0.2'
 release = '0.2.0'
 copyright = '2015, finger563'
