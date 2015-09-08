@@ -170,9 +170,9 @@ Similarly, given the period :math:`T_S` of :math:`S`,
 .. math:: \forall t, \forall n \in \mathbb{N} > 0 : S[t + n*T_S] =
           S[t] + n*S[T_S]
 
-We can determine the hyperperiod of the system as the
-:func:`utils.lcm` of input function period and the service function
-period, :math:`T_p = lcm(T_S,T_I)`.
+We can determine the hyperperiod of the system as the :math:`lcm` of
+input function period and the service function period, :math:`T_p =
+lcm(T_S,T_I)`.
 
 At the start of the system, :math:`t=0`, the system's buffer is empty,
 i.e.  :math:`B[0] = 0`.  Therefore, the amount of data in the buffer
@@ -194,20 +194,41 @@ B[(n+1)*T_p]`, which extends to:
 .. math::
    B[m*T_p] > B[n*T_p], \forall m>n>0
 
-Therefore the amount of data in the system's buffer increases every
-period, i.e. the system has *unbounded buffer growth*.
+implying that:
+
+.. math::
+   B[t] < B[t + k*T_p], \forall k \in \mathbb{N} > 0
+
+meaning that the amount of data in the buffer versus time is *not
+periodic*, therefore the amount of data in the system's buffer
+increases every period, i.e. the system has *unbounded buffer growth*.
 
 If however, there is enough remaining capacity in the system to
 service the data in the buffer, i.e. :math:`R[T_p] >= B[T_p]`, then
-:math:`B[2*T_p] = B[T_p]`. Similarly to above, since the system is
-deterministic, for any two successive periods, :math:`n*T_p` and
-:math:`(n+1)*T_p`, :math:`B[(n+1)*T_p] = B[n*T_p]`.  This extends to:
+:math:`B[2*T_p] = B[T_p]`.  This relation means that if the remaining
+capacity of the system that exists after all the period's required
+traffic has been serviced is equal to or larger than the size of the
+buffer at the end of the period, then in the next period the system
+will be able to service fully both the data in the buffer and the
+period's required traffic.  Since both the period's traffic and the
+buffer's data will have been serviced in that period, the amount of
+data in the buffer at the end of the period will be the same as the
+amount of data that was in the buffer at the start of the
+period. Similarly to above, since the system is deterministic, for any
+two successive periods, :math:`n*T_p` and :math:`(n+1)*T_p`,
+:math:`B[(n+1)*T_p] = B[n*T_p]`.  This extends to:
 
 .. math::
    B[m*T_p] = B[n*T_p], \forall m,n > 0
 
-Therefore the buffer size does not grow between periods, and the
-system has a *finite buffer*.
+which implies that:
+
+.. math::
+   B[t] = B[t + k*T_p], \forall k \in \mathbb{N} > 0
+
+meaning that the amount of data in the buffer versus time is a
+*periodic function*, therefore the buffer size does not grow between
+periods, and the system has a *finite buffer*.
 
 If we are only concerned with buffer growth, we do not need to
 calculate :math:`R`, and can instead infer buffer growth by comparing
@@ -215,8 +236,7 @@ the values of the buffer at any two period-offset times during the
 steady-state operation of the system (:math:`t >= T_p`).  This means
 that the system buffer growth check can resolve to :math:`B[2*T_p] ==
 B[T_p]`.  This comparison abides by the conditions above, with
-:math:`m=2` and :math:`n=1`.  Checking for system buffer growth occurs
-in :func:`analysis.analyze_profile`.
+:math:`m=2` and :math:`n=1`.
 
 .. _nc_comparison:
       
@@ -228,9 +248,7 @@ methods, we developed our tools to allow us to analyze the input
 system using Network Calculus/Real-Time Calculus techniques as well as
 our own.  Using these capabilities, we can directly compare the
 analysis results to each other, and then finally compare both results
-to the measurements from the actual system.  The convenience function
-to generate a NC-based profile from our profile model is implemented
-in :func:`networkProfile.Profile.ConvertToNC`.
+to the measurements from the actual system.
 
 Taking the results from our published work, where our methods
 predicted a buffer size of 64000 bits / 8000 bytes, we show that
@@ -445,10 +463,7 @@ for the network profiles which allow us to compose and decompose
 systems based on functional components.  For network flows, this means
 we can analyze flows individually to determine per-flow performance
 metrics or we can aggregate flows together to determine aggregate
-performance.  Profile addition and subtraciton are implemented
-in :func:`networkProfile.Profile.AddProfile` and
-:func:`networkProfile.Profile.SubtractProfile`.  Using these functions
-we can aggregate or separate flow profiles and service profiles.
+performance.
 
 The composition is priority based, with each flow receiving a unique
 priority.  This priority determines the oder in which the flows are
@@ -523,9 +538,6 @@ unchanged *iff* the latency profile is **periodic**, i.e.
 
 .. math:: \delta[t] = \delta[t + k*T_p], \forall k\in\mathbb{N} > 0
 
-The profile delay operation is implemented in
-:func:`networkProfile.Profile.Delay`.
-
 .. _routing_analysis:
 
 Routing Analysis
@@ -552,24 +564,19 @@ analysis by taking as input:
 * the network configuration specifying the nodes in the network and
   the routes in the network
 
-where a flow is defined by (see
-:func:`networkProfile.Profile.ParseHeader`):
+where a flow is defined by:
 
 * Node ID of the profile
 * Kind of the flow
 * Period of the flow
 * Flow type of the profile 
 * Priority of the flow
-* flow properties vs time profile, see
-  :func:`networkProfile.Profile.ParseEntriesFromLine`
+* flow properties vs time profile
 
 and a route is specified as a list of node IDs starting with the
 source node ID and ending with the destination node ID.  Any flows
 which have the respective source and destination IDs must travel along
-the path specified by the respective route.  The route and the toplogy
-are implemented in :class:`networkConfig.Route` and
-:class:`networkConfig.Topology`, and the network configuration
-specification is found in :class:`networkConfig.Config`.
+the path specified by the respective route.
 
 We can then run the following algorithm to iteratively analyze the
 flows and the system
@@ -628,8 +635,7 @@ analysis into our tool, which automatically parses the flow profiles,
 the network configuration and uses the algorithm and the implemented
 mathematics to iteratively analyze the network.  Analytical results
 for example systems will be provided when the experimental results can
-be used as a comparison.  The analysis algorithm is implemented by
-:func:`analysis.analyze_config`.
+be used as a comparison.
 
 We are finishing the design and development of code which will allow
 us to run experiments to validate our routing analysis results.  They

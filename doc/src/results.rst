@@ -1,9 +1,9 @@
 .. _results:
 
-**P3N** : Results
-=================
+Precise Network Performance Prediction : Results
+==================================================
 
-These pages cover the results of my research as it applies to analysis
+This chapter covers the results of my research as it applies to analysis
 of networked CPS.  I will cover the research contributions in two
 aspects:
 

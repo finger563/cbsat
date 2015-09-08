@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>P3N : Theory &mdash; CBSAT 0.2.0 documentation</title>
+  <title>Precise Network Performance Prediction : Theory &mdash; CBSAT 0.2.0 documentation</title>
   
 
   
@@ -33,8 +33,7 @@
 
   
     <link rel="top" title="CBSAT 0.2.0 documentation" href="index.html"/>
-        <link rel="up" title="Background, Theory, and Results" href="theory-results.html"/>
-        <link rel="next" title="P3N : Results" href="results.html"/>
+        <link rel="next" title="Precise Network Performance Prediction : Results" href="results.html"/>
         <link rel="prev" title="Background: Network Performance Analysis" href="background.html"/> 
 
   
@@ -75,70 +74,34 @@
           
           
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="theory-results.html">Background, Theory, and Results</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="background.html">Background: Network Performance Analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="background.html#min-plus-calculus">Min-Plus Calculus</a></li>
-<li class="toctree-l3"><a class="reference internal" href="background.html#network-calculus">Network Calculus</a></li>
-<li class="toctree-l3"><a class="reference internal" href="background.html#real-time-calculus">Real Time Calculus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="background.html">Background: Network Performance Analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="background.html#min-plus-calculus">Min-Plus Calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="background.html#network-calculus">Network Calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="background.html#real-time-calculus">Real Time Calculus</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current"><a class="current reference internal" href=""><strong>P3N</strong> : Theory</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#formalism-for-precise-performance-prediction-for-networks">Formalism for Precise Performance Prediction for Networks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#assumptions-required-for-analysis-and-performance-prediction">Assumptions Required for Analysis and Performance Prediction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#factors-impacting-analysis">Factors Impacting Analysis:</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Precise Network Performance Prediction : Theory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mathematical-formalism">Mathematical Formalism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#assumptions-involved">Assumptions Involved</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#factors-impacting-analysis">Factors Impacting Analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="results.html"><strong>P3N</strong> : Results</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="design-time.html">Design Time Results</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="design-time.html#periodic-system-analysis">Periodic System Analysis</a></li>
-<li class="toctree-l4"><a class="reference internal" href="design-time.html#comparison-with-nc-rtc">Comparison with NC/RTC</a></li>
-<li class="toctree-l4"><a class="reference internal" href="design-time.html#analysis-of-tdma-scheduling">Analysis of TDMA Scheduling</a></li>
-<li class="toctree-l4"><a class="reference internal" href="design-time.html#compositional-analysis">Compositional Analysis</a></li>
-<li class="toctree-l4"><a class="reference internal" href="design-time.html#delay-analysis">Delay Analysis</a></li>
-<li class="toctree-l4"><a class="reference internal" href="design-time.html#routing-analysis">Routing Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="results.html">Precise Network Performance Prediction : Results</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="design-time.html">Design Time Results</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="design-time.html#periodic-system-analysis">Periodic System Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="design-time.html#proving-the-minimum-analysis-for-system-stability">Proving the Minimum Analysis for System Stability</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="run-time.html">Run Time Results</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="run-time.html#middleware-integrated-measurement-detection-and-enforcement">Middleware-integrated Measurement, Detection, and Enforcement</a></li>
-<li class="toctree-l4"><a class="reference internal" href="run-time.html#distributed-denial-of-service-ddos-detection">Distributed Denial of Service (DDoS) Detection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="design-time.html#comparison-with-nc-rtc">Comparison with NC/RTC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="design-time.html#analysis-of-tdma-scheduling">Analysis of TDMA Scheduling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="design-time.html#compositional-analysis">Compositional Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="design-time.html#delay-analysis">Delay Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="design-time.html#routing-analysis">Routing Analysis</a></li>
 </ul>
 </li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="users.html">Using the Code</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="users.html#the-analysis-tool">The Analysis Tool</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="users.html#installation">Installation</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="users.html#the-middleware">The Middleware</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="users.html#compilation">Compilation</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="developers.html">The Inner Workings</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="analysis-api.html">Analysis API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/analysis.html">Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/network-profile.html">Network Profile</a></li>
-<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/network-config.html">Network Config</a></li>
-<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/plotting.html">Plotting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/utils.html">Utils</a></li>
-<li class="toctree-l3"><a class="reference internal" href="python-api/analysis/generate-tdma.html">Generate TDMA</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="middleware-api.html">Middleware API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/network-profile.html">Network Profile</a></li>
-<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/network-buffer.html">Network Buffer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/network-middleware.html">Network Middleware</a></li>
-<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/message.html">Message</a></li>
-<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/client.html">Client</a></li>
-<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/server.html">Server</a></li>
-<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/connection-subsys.html">Connection Subsys</a></li>
-<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/csv-iterator.html">CSV Iterator</a></li>
-<li class="toctree-l3"><a class="reference internal" href="python-api/middleware/tc-wrapper.html">TC Wrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run-time.html">Run Time Results</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="run-time.html#middleware-integrated-measurement-detection-and-enforcement">Middleware-integrated Measurement, Detection, and Enforcement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run-time.html#distributed-denial-of-service-ddos-detection">Distributed Denial of Service (DDoS) Detection</a></li>
 </ul>
 </li>
 </ul>
@@ -167,9 +130,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-          <li><a href="theory-results.html">Background, Theory, and Results</a> &raquo;</li>
-      
-    <li><strong>P3N</strong> : Theory</li>
+    <li>Precise Network Performance Prediction : Theory</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -182,12 +143,13 @@
 </div>
           <div role="main" class="document">
             
-  <div class="section" id="p3n-theory">
-<span id="math"></span><h1><strong>P3N</strong> : Theory<a class="headerlink" href="#p3n-theory" title="Permalink to this headline">¶</a></h1>
-<p>This page describes the mathematical formalization behind the network
-analysis techniques used by <strong>P3N</strong>.</p>
-<div class="section" id="formalism-for-precise-performance-prediction-for-networks">
-<span id="network-math-formalism"></span><h2>Formalism for Precise Performance Prediction for Networks<a class="headerlink" href="#formalism-for-precise-performance-prediction-for-networks" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="precise-network-performance-prediction-theory">
+<h1>Precise Network Performance Prediction : Theory<a class="headerlink" href="#precise-network-performance-prediction-theory" title="Permalink to this headline">¶</a></h1>
+<p>This chapter describes the mathematical formalization behind the
+network analysis techniques used by <em>Precise Network Performance
+Prediction</em>, (<img class="math" src="_images/math/25e201674a37202d448849e78eb163897d9373f6.png" alt="PNP^2"/>).</p>
+<div class="section" id="mathematical-formalism">
+<span id="network-math-formalism"></span><h2>Mathematical Formalism<a class="headerlink" href="#mathematical-formalism" title="Permalink to this headline">¶</a></h2>
 <p>To model the network capability of the system and the application
 traffic patterns, we have developed a network modeling paradigm
 similar to Network Calculus&#8217; traffic arrival curves and traffic shaper
@@ -235,21 +197,19 @@ header overhead as well.  The buffer and delay equations
 profile to predict the minimum required buffer size for lossless
 tranmission and the maximum delay experienced by the transmitted data,
 respectively.  A representative convolution example is shown below for
-reference.  These functions are implemented as:
-<a class="reference internal" href="python-api/analysis/network-profile.html#networkProfile.Profile.Convolve" title="networkProfile.Profile.Convolve"><code class="xref py py-func docutils literal"><span class="pre">networkProfile.Profile.Convolve()</span></code></a>,
-<a class="reference internal" href="python-api/analysis/network-profile.html#networkProfile.Profile.CalcBuffer" title="networkProfile.Profile.CalcBuffer"><code class="xref py py-func docutils literal"><span class="pre">networkProfile.Profile.CalcBuffer()</span></code></a>, and
-<a class="reference internal" href="python-api/analysis/network-profile.html#networkProfile.Profile.CalcDelay" title="networkProfile.Profile.CalcDelay"><code class="xref py py-func docutils literal"><span class="pre">networkProfile.Profile.CalcDelay()</span></code></a>.</p>
+reference.</p>
 <div class="math" id="equation-convolution">
 <p><span class="eqno">(1)</span><img src="_images/math/b2221bb7df3b63389ecfd179231dfc542c08b17c.png" alt="y=l[t] &amp;= (r \otimes p)[t] \\
 &amp;= min( r[t] , p[t] - (p[t-1] - l[t-1]) )\\
 \text{buffer}&amp;= sup\{r[t] - l[t] : t \in \mathbb{N}\}\\
 \text{delay} &amp;= sup\{l^{-1}[y]-r^{-1}[y] : y \in \mathbb{N}\}"/></p>
-</div><div class="figure align-center">
+</div><div class="figure align-center" id="id1">
 <img alt="_images/convolution.png" src="_images/convolution.png" />
+<p class="caption"><span class="caption-text">Illustrative example for network profile convolution.</span></p>
 </div>
 </div>
-<div class="section" id="assumptions-required-for-analysis-and-performance-prediction">
-<span id="assumptions"></span><h2>Assumptions Required for Analysis and Performance Prediction<a class="headerlink" href="#assumptions-required-for-analysis-and-performance-prediction" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="assumptions-involved">
+<span id="assumptions"></span><h2>Assumptions Involved<a class="headerlink" href="#assumptions-involved" title="Permalink to this headline">¶</a></h2>
 <p>As with any type of system modeling and analysis paradigm, it is
 important to remain aware of the types of systems the
 modeling/analysis is applicable to, the requirements imposed on the
@@ -282,7 +242,7 @@ on their hardware node.  Similarly, we assume that under all
 circumstances, the service profile of a hardware node will be adhered to.</p>
 </div>
 <div class="section" id="factors-impacting-analysis">
-<span id="impacts"></span><h2>Factors Impacting Analysis:<a class="headerlink" href="#factors-impacting-analysis" title="Permalink to this headline">¶</a></h2>
+<span id="impacts"></span><h2>Factors Impacting Analysis<a class="headerlink" href="#factors-impacting-analysis" title="Permalink to this headline">¶</a></h2>
 <p>It is important when developing modeling and analysis techniques to
 analyze how the analysis time and results are affected by changes in
 the model.  This is especially true when trying to determine how
@@ -319,7 +279,7 @@ given increase in model precision and analysis time.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="results.html" class="btn btn-neutral float-right" title="P3N : Results" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="results.html" class="btn btn-neutral float-right" title="Precise Network Performance Prediction : Results" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="background.html" class="btn btn-neutral" title="Background: Network Performance Analysis" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>

@@ -25,7 +25,7 @@ deployed.
 
 For such systems, probabilistic approaches do not provide high enough
 confidence on performance predictions since they are based on
-statistical models.  Therefore, we must use deterministic analysis
+statistical models [Cruz1991_]. Therefore, we must use deterministic analysis
 techniques to analyze these systems.  
 
 .. _min_plus_calc:
@@ -35,7 +35,7 @@ Min-Plus Calculus
 
 Because our work and other work in the field, e.g. Network Calculus,
 is based on Min-Plus Calculus, or (min,+)-calculus, we will give a
-brief overview of it here.
+brief overview of it here, adapted from [Thiran2001_].
 
 Min-plus calculus, :math:`(\mathbb{R}\cup\{+\infty\},\wedge,+)`, deals
 with *wide-sense increasing functions* :
@@ -81,16 +81,17 @@ Convolution in min-plus calculus has the properties of
 Network Calculus
 ----------------
 
-Network Calculus provides a modeling and analysis paradigm for
-deterministically analyzing networking and queueing systems.  Its
-roots come from the desire to analyze network and queuing systems
-using similar techniques as traditiional electrical circuit systems,
-i.e. by analyzing the *convolution* of an *input* function with a
-*system* function to produce an *output* function.  Instead of the
-convolution mathematics from traditional systems theory, Network
-Calculus is based on the concepts of *(min,+)-calculus*, which we will
-not cover here for clarity, but for which an explanation can be found
-in my proposal and thesis.
+Network Calculus [Cruz1991_, Cruz1991a_, Thiran2001_] provides a
+modeling and analysis paradigm for deterministically analyzing
+networking and queueing systems.  Its roots come from the desire to
+analyze network and queuing systems using similar techniques as
+traditiional electrical circuit systems, i.e. by analyzing the
+*convolution* of an *input* function with a *system* function to
+produce an *output* function.  Instead of the convolution mathematics
+from traditional systems theory, Network Calculus is based on the
+concepts of *(min,+)-calculus*, which we will not cover here for
+clarity, but for which an explanation can be found in my proposal and
+thesis.
 
 By using the concepts of *(min,+)-calculus*, Network Calculus provides
 a way to model the application network requirements and system network
@@ -116,13 +117,15 @@ the maximum data production of shorter time-windows.
    :align: center
    :width: 400px
 
-   Network Calculus arrival curve (:math:`\alpha`)
+   Network Calculus arrival curve (:math:`\alpha`). Reprinted from
+   [Thiran2001_].
 
 .. figure:: images/background/nc_service_curve.png
    :align: center
    :width: 400px
 
-   Network Calculus service curve (:math:`\beta`)
+   Network Calculus service curve (:math:`\beta`).  Reprinted from
+   [Thiran2001_].
 
 Network calculus uses *(min,+)-calculus convolution* to compose the
 application requirement curve with the system service curve.  The
@@ -136,7 +139,8 @@ delay can be determined.
    :width: 400px
 
    Schematic deptiction of the buffer size (vertical difference) and
-   delay (horizontal difference) calculations in Network Calculus.
+   delay (horizontal difference) calculations in Network
+   Calculus. Reprinted from [Thiran2001_].
 
 With these bounds and the convolution, developers can make
 *worst-case* performance predictions of the applications on the
@@ -153,7 +157,7 @@ maximum data production does not occur during that period.
 Real Time Calculus
 ------------------
 
-Real-Time Calculus builds from Network Calculus, Max-Plus Linear
+Real-Time Calculus[Thiele2000_] builds from Network Calculus, Max-Plus Linear
 System Theory, and real-time scheduling to analyze systems which
 provide computational or communications services.  Unlike Network
 Calculus, Real-Time Calculus (RTC) is designed to analyze real-time
@@ -215,5 +219,23 @@ computation of performance metrics such as computation backlog bounds:
 .. math::
    \text{backlog}\leq sup_{\{t\geq0\}}\{\alpha^u(t)-\beta^l(t)\}
 
-which is equivalent to the network backlog bound derived in Network
+which is equivalent to the *network buffer bound* derived in Network
 Calculus.
+
+
+.. [Cruz1991] R. L. Cruz.  A calculus for network delay-I: Network
+              elements in isolation.  *IEEE Transactions on
+              Information Theory*, 37(1):114-131, 1991
+
+.. [Cruz1991a] R. L. Cruz.  A calculus for network delay-II: Network
+              analysis.  *IEEE Transactions on Information Theory*,
+              37(1):132-141, 1991
+
+.. [Thiran2001] J.-Y. Le Boudec and P. Thiran.  *Network Calclulus: A
+                Theory of Deterministic Queuing Systems for the
+                Internet*.  Springer-Verlag, Berlin, Heidelberg, 2001.
+
+.. [Thiele2000] L. Thiele, S. Chakraborty, and M. Naedele.  Real-time
+                calculus for scheduling hard real-time systems.  In
+                *ISCAS*, pages 101-104, 2000.
+

@@ -1,15 +1,14 @@
-.. _math:
+Precise Network Performance Prediction : Theory
+=================================================
 
-**P3N** : Theory
-================
-
-This page describes the mathematical formalization behind the network
-analysis techniques used by **P3N**.
+This chapter describes the mathematical formalization behind the
+network analysis techniques used by *Precise Network Performance
+Prediction*, (:math:`PNP^2`).
 
 .. _network_math_formalism:
 
-Formalism for Precise Performance Prediction for Networks
----------------------------------------------------------
+Mathematical Formalism
+----------------------
 
 To model the network capability of the system and the application
 traffic patterns, we have developed a network modeling paradigm
@@ -60,10 +59,7 @@ header overhead as well.  The buffer and delay equations
 profile to predict the minimum required buffer size for lossless
 tranmission and the maximum delay experienced by the transmitted data,
 respectively.  A representative convolution example is shown below for
-reference.  These functions are implemented as:
-:func:`networkProfile.Profile.Convolve`,
-:func:`networkProfile.Profile.CalcBuffer`, and
-:func:`networkProfile.Profile.CalcDelay`.
+reference.
 
 .. math::
    y=l[t] &= (r \otimes p)[t] \\
@@ -75,10 +71,12 @@ reference.  These functions are implemented as:
 .. figure:: /images/results/convolution.png
    :align: center
 
+   Illustrative example for network profile convolution.
+
 .. _assumptions:
 
-Assumptions Required for Analysis and Performance Prediction
-------------------------------------------------------------
+Assumptions Involved
+--------------------
 
 As with any type of system modeling and analysis paradigm, it is
 important to remain aware of the types of systems the
@@ -116,8 +114,8 @@ circumstances, the service profile of a hardware node will be adhered to.
 
 .. _impacts:
 
-Factors Impacting Analysis:
----------------------------
+Factors Impacting Analysis
+--------------------------
 
 It is important when developing modeling and analysis techniques to
 analyze how the analysis time and results are affected by changes in
