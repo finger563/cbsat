@@ -572,11 +572,38 @@ are implemented in :class:`networkConfig.Route` and
 specification is found in :class:`networkConfig.Config`.
 
 We can then run the following algorithm to iteratively analyze the
-flows and the system:
+flows and the system::
 
-.. figure:: /images/results/algorithm.png
-	    :height: 600px
-	    :width: 600px
+  analyze( profiles )
+  {
+    profiles = sorted(profiles, priority)
+    for required in profiles
+    {
+      transmitted_nodes = []
+      for receiver in required.receivers()
+      {
+        route = required.route()
+	for node in route
+	{
+	  if node in transmitted_nodes and multicast == true
+	  {
+	    continue
+	  }
+	  provided = node.provided
+	  [output, remaining, received] = convolve(required, provided)
+	  node.provided = remaining
+	  required = received
+	  transmitted_nodes.append(node)
+	}
+	[recv_output, recv_remaining, ] = convolve(required, receiver)
+      }
+    }
+  }
+
+
+.. .. figure:: /images/results/algorithm.png
+..	    :height: 600px
+..	    :width: 600px
 
 In this algorithm, the remaining capacity of the node is provided to
 each profile with a lower priority iteratively.  Because of this
