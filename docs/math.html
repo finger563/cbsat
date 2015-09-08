@@ -78,6 +78,7 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="theory-results.html">Background, Theory, and Results</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="background.html">Background: Network Performance Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="background.html#min-plus-calculus">Min-Plus Calculus</a></li>
 <li class="toctree-l3"><a class="reference internal" href="background.html#network-calculus">Network Calculus</a></li>
 <li class="toctree-l3"><a class="reference internal" href="background.html#real-time-calculus">Real Time Calculus</a></li>
 </ul>
@@ -294,13 +295,21 @@ the bandwidth is held constant.  Clearly, to represent changing
 bandwidth over time, the developer must use sufficiently short enough
 time intervals to allow step-wise approximation of the curve.
 However, as with any system, there is a tradeoff between precision of
-the model and the analysis time and results.  Because the fundamental
-mathematics are linear for the convolution, convolution scales with
-<strong>O(n)</strong>, where <em>n</em> is the total number of intervals in all of the
-profiles analyzed.  However, for larger scale systems which may have
-retransmission or routing, this scaling and performance will be system
-dependent.  Furthermore, the tradeoff is asymptotically increasing
-result precision with increasing model precision and analysis time.</p>
+the model and the analysis time and results.</p>
+<p>Because the fundamental mathematics are linear for our convolution,
+our convolution scales with <img class="math" src="_images/math/03e5516c1889957839a83599a7a7c92de1e380f4.png" alt="O(n)"/>, where <img class="math" src="_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> is the total
+number of intervals in all of the profiles analyzed.  It is worth
+noting that this complexity is not the same as the <img class="math" src="_images/math/050b75980d00e72d3a1d37cb7d030ca5f0eb012c.png" alt="O(n^2)"/> or
+<img class="math" src="_images/math/6b31155d10b2e9adec0a62d7e83af35de41be728.png" alt="O(n*log(n))"/> complexity that traditional convolution has.  This
+decrease in complexity is due to our convolution only requiring a
+single operation (comparison operation for the minimum) for each value
+of <img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>.  As such, each element in both of the profiles being
+convolved only needs to be operated on once.</p>
+<p>Clearly, the overall system analysis complexity depends on the
+complexity of the system, so as the system scales and increases
+routing complexity, so too will the analysis complexity.  However, for
+all systems there is an asymptotically increasing precision for a
+given increase in model precision and analysis time.</p>
 </div>
 </div>
 

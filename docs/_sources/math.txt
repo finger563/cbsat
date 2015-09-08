@@ -131,10 +131,20 @@ the bandwidth is held constant.  Clearly, to represent changing
 bandwidth over time, the developer must use sufficiently short enough
 time intervals to allow step-wise approximation of the curve.
 However, as with any system, there is a tradeoff between precision of
-the model and the analysis time and results.  Because the fundamental
-mathematics are linear for the convolution, convolution scales with
-**O(n)**, where *n* is the total number of intervals in all of the
-profiles analyzed.  However, for larger scale systems which may have
-retransmission or routing, this scaling and performance will be system
-dependent.  Furthermore, the tradeoff is asymptotically increasing
-result precision with increasing model precision and analysis time.
+the model and the analysis time and results.
+
+Because the fundamental mathematics are linear for our convolution,
+our convolution scales with :math:`O(n)`, where :math:`n` is the total
+number of intervals in all of the profiles analyzed.  It is worth
+noting that this complexity is not the same as the :math:`O(n^2)` or
+:math:`O(n*log(n))` complexity that traditional convolution has.  This
+decrease in complexity is due to our convolution only requiring a
+single operation (comparison operation for the minimum) for each value
+of :math:`t`.  As such, each element in both of the profiles being
+convolved only needs to be operated on once.
+
+Clearly, the overall system analysis complexity depends on the
+complexity of the system, so as the system scales and increases
+routing complexity, so too will the analysis complexity.  However, for
+all systems there is an asymptotically increasing precision for a
+given increase in model precision and analysis time.  

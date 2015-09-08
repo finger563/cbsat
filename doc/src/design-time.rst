@@ -25,14 +25,19 @@ Periodic System Analysis
 One subset of systems which we would like to analyze are periodic
 systems, since many systems in the real world exhibit some form of
 periodicity, e.g. satellites in orbit, traffic congestion patterns,
-power draw patterns.
+power draw patterns.  We define systems to be periodic if the data
+production rate (or consumption rate) of the system is a periodic
+function of time.  The time-integral of these periodic data
+consumption/production rates is the cumulative data
+production/consumption of the system.  These cumulative functions are
+called *repeating*.
 
 Given that the required data profile and system data service profile
-are periodic, we must determine the periodicity of the output profile.
-If we can show that the output profile is similarly periodic, then we
-can show that the system has no unbounded buffer growth.  First, let
-us look at the profile behavior over the course of its first two
-periods of activity.
+are *repeating*, we must determine the periodicity of the output
+profile.  If we can show that the output profile similarly repeats,
+then we can show that the system has no unbounded buffer growth.
+First, let us look at the profile behavior over the course of its
+first two periods of activity.
 
 We will examine two systems, *system (1)* and *system (2)*.  Firstly,
 examine *(1)*, shown below (note: you can click on the images to open
@@ -119,16 +124,22 @@ Typically, periodicity is defined for functions as the equality:
 
 but for our type of system analysis this cannot hold since we deal
 with cumulative functions (of data vs. time).  Instead we must define
-a these functions to be **iterative**, where a function is iterative
+a these functions to be **repeating**, where a function is repeating
 *iff*:
 
 .. math:: x(0) &= 0 \text{  and}\\
 	  x(t + k * T) &= x(t) + k * x(T), \forall k \in \mathbb{N} > 0
 
-Clearly, an iterative function :math:`x` is **periodic** *iff*
-:math:`x(T)=0`.
+Clearly, a repeating function :math:`x` is **periodic** *iff*
+:math:`x(T)=0`.  Note that repeating functions like the cumulative
+data vs. time profiles we deal with, are the result of **integrating**
+*periodic* functions, like the periodic bandwidth vs. time profiles we
+use to describe application network traffic and system network
+capacity.  All periodic functions, when integrated, produce repeating
+functions and similarly, all repeating functions, when differentiated,
+procduce periodic functions.
 
-Now we will consider a deterministic, *iterative* queuing system
+Now we will consider a deterministic, *repeating* queuing system
 providing a data service function :math:`S` to input data function
 :math:`I` to produce output data function :math:`O`, where these
 functions are *cumulative data versus time*.  At any time :math:`t`,
@@ -147,7 +158,7 @@ function :math:`R`.
 * :math:`R[t]` : the remaining service capacity of the system after
   servicing :math:`I`, i.e. :math:`S[t] - O[t]`
 
-Because :math:`S` and :math:`I` are deterministic and iterative, they
+Because :math:`S` and :math:`I` are deterministic and repeating, they
 increase deterministically from period to period, i.e. given the
 period :math:`T_I` of :math:`I`,
 
@@ -199,13 +210,13 @@ Therefore the buffer size does not grow between periods, and the
 system has a *finite buffer*.
 
 If we are only concerned with buffer growth, we do not need to
-calculate :math:`R`, and can instead infer system stability by
-comparing the values of the buffer at any two period-offset times
-during the steady-state operation of the system (:math:`t >= T_p`).
-This means that system stability check can resolve to :math:`B[2*T_p]
-== B[T_p]`.  This comparison abides by the conditions above, with
-:math:`m=2` and :math:`n=1`.  Checking for system stability occurs in
-:func:`analysis.analyze_profile`.
+calculate :math:`R`, and can instead infer buffer growth by comparing
+the values of the buffer at any two period-offset times during the
+steady-state operation of the system (:math:`t >= T_p`).  This means
+that the system buffer growth check can resolve to :math:`B[2*T_p] ==
+B[T_p]`.  This comparison abides by the conditions above, with
+:math:`m=2` and :math:`n=1`.  Checking for system buffer growth occurs
+in :func:`analysis.analyze_profile`.
 
 .. _nc_comparison:
       
@@ -285,17 +296,60 @@ The results are displayed in the table below:
 Analysis of TDMA Scheduling
 ---------------------------
 
+Medium channel access (MAC) protocols are used in networking systems
+to govern the communication between computing nodes which share a
+network communications medium.  They are designed to allow reliable
+communication between the nodes, while maintaining certain goals, such
+as minimizing network collisions, maximizing bandwidth, or maximizing
+the number of nodes the network can handle.  Such protocols include
+Time Division Multiple Access (TDMA), which tries to minimize the
+number of packet collisions; Frequency Division Multiple Access
+(FDMA), which tries to maximize the bandwidth available to each
+transmitter; and Code Division Multiple Access (CDMA) which tries to
+maximize the number of nodes that the network can handle.  We will not
+discuss CDMA in the scope of this work.
+
+In FDMA, each node of the network is assigned a different transmission
+frequency from a prescribed frequency band allocated for system
+communications.  Since each node transmits on its own frequency,
+collisions between nodes transmitting simultaneously are reduced.
+Communications paradigms of this type, i.e. shared medium with
+collision-free simultaneous transmission between nodes, can be modeled
+easily by our MAReN modeling paradigm described above, since the
+network resource model for each node can be developed without taking
+into account the transmissions of other nodes.
+
+In TDMA, each node on the network is assigned one or more time-slots
+per communications period in which only that node is allowed to
+transmit.  By governing these timeslots and having each node agree
+upon the slot allocation and communications period, the protocol
+ensures that at a given time, only a single node will be transmitting
+data, minimizing the number of collisions due to multiple simultaneous
+transmitters.  In such a medium access protocol, transmissions of each
+node affect other nodes' transmission capability.  Because these
+transmissions are scheduled by TDMA, they can be explicitly integrated
+into the system network resource model.
+
+TDMA transmission scheduling has an impact on the timing
+characteristics of the applications' network communications.  Because
+applications' network data production is decoupled from their node's
+TDMA transmission time slot, buffering may be required when an
+application on one node tries to send data on the network during the
+transmission slot of a different node.  In this case, the data would
+need to be buffered on the application's node and would therefore
+incur additional buffering delay.  If this TDMA schedule is not
+integrated into the analysis of the network resources, the additional
+buffer space required may exceed the buffer space allocation given to
+the application or the buffering delay may exceed the application's
+acceptable latency.
+
 So far, the description of the system provided network service profile
 (:math:`p[t]=y`), has been abstracted as simply the available
 bandwidth as a function of time integrated to produce the amount of
-data serviced as a function of time.  In order to more precisely model
-the system, a network medium channel access protocol must be
-integrated into the abstract system provided profile.  TDMA is such a
-protocol which assigns to each node one or more time slots in a
-repeating period during which only the selected node is allowed to
-transmit.  We show how to model such a protocol and extend the
-abstract system network profile to include the model of the TDMA
-channel access protocol.
+data serviced as a function of time. We show how to model and analyze
+the network's lower-level TDMA MAC protocol using our network modeling
+semantics.  We then derive general formulas for determining the affect
+TDMA has on buffer size and delay predictions.
 
 As an example TDMA system which benefits from our analysis techniques,
 consider an application platform provided by a fractionated satellite
@@ -464,10 +518,10 @@ T_p`:
    \delta[T_p + t] - \delta[t] &= 0\\
    \delta[T_p + t] &= \delta[t]
 
-From this we determine that the periodicitiy of the profile is
-unchanged *iff* the profile is period-continuous, i.e. if the latency
-at the end of the profile is the same as the latency at the beginning
-of the profile.
+Which is just confirms that the periodicity of the delayed profile is
+unchanged *iff* the latency profile is **periodic**, i.e.
+
+.. math:: \delta[t] = \delta[t + k*T_p], \forall k\in\mathbb{N} > 0
 
 The profile delay operation is implemented in
 :func:`networkProfile.Profile.Delay`.
@@ -481,9 +535,9 @@ By incorporating both the latency analysis with the compositional
 operations we developed, we can perform system-level analysis of flows
 which are routed by nodes of the system.  In this paradigm, nodes can
 transmit/receive their own data, i.e. they can host applications which
-act as data sources or sinks, as well as acting as routers for flows
-from and to other nodes.  To make such a system amenable to analysis
-we must ensure that we know the routes the flows will take at design
+act as data sources or sinks, as well as act as routers for flows from
+and to other nodes.  To make such a system amenable to analysis we
+must ensure that we know the routes the flows will take at design
 time, i.e. the routes in the network are static and known or
 calculable.  Furthermore, we must, for the sake of flow composition as
 decribed above, ensure that each flow has a priority that is unique
@@ -520,7 +574,7 @@ specification is found in :class:`networkConfig.Config`.
 We can then run the following algorithm to iteratively analyze the
 flows and the system:
 
-.. figure:: /images/results/algorithm.svg
+.. figure:: /images/results/algorithm.png
 	    :height: 600px
 	    :width: 600px
 

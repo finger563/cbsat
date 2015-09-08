@@ -78,6 +78,7 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="theory-results.html">Background, Theory, and Results</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="background.html">Background: Network Performance Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="background.html#min-plus-calculus">Min-Plus Calculus</a></li>
 <li class="toctree-l3"><a class="reference internal" href="background.html#network-calculus">Network Calculus</a></li>
 <li class="toctree-l3"><a class="reference internal" href="background.html#real-time-calculus">Real Time Calculus</a></li>
 </ul>
@@ -204,13 +205,18 @@ work are broken into sections by topic:</p>
 <p>One subset of systems which we would like to analyze are periodic
 systems, since many systems in the real world exhibit some form of
 periodicity, e.g. satellites in orbit, traffic congestion patterns,
-power draw patterns.</p>
+power draw patterns.  We define systems to be periodic if the data
+production rate (or consumption rate) of the system is a periodic
+function of time.  The time-integral of these periodic data
+consumption/production rates is the cumulative data
+production/consumption of the system.  These cumulative functions are
+called <em>repeating</em>.</p>
 <p>Given that the required data profile and system data service profile
-are periodic, we must determine the periodicity of the output profile.
-If we can show that the output profile is similarly periodic, then we
-can show that the system has no unbounded buffer growth.  First, let
-us look at the profile behavior over the course of its first two
-periods of activity.</p>
+are <em>repeating</em>, we must determine the periodicity of the output
+profile.  If we can show that the output profile similarly repeats,
+then we can show that the system has no unbounded buffer growth.
+First, let us look at the profile behavior over the course of its
+first two periods of activity.</p>
 <p>We will examine two systems, <em>system (1)</em> and <em>system (2)</em>.  Firstly,
 examine <em>(1)</em>, shown below (note: you can click on the images to open
 them in a larger format):</p>
@@ -330,14 +336,20 @@ such behaviors.</p>
 <p><img src="_images/math/c334144f9896123b590c4cfccaa70ca012c95807.png" alt="x(t) = x(t + k * T), \forall k \in \mathbb{N} &gt; 0"/></p>
 </div><p>but for our type of system analysis this cannot hold since we deal
 with cumulative functions (of data vs. time).  Instead we must define
-a these functions to be <strong>iterative</strong>, where a function is iterative
+a these functions to be <strong>repeating</strong>, where a function is repeating
 <em>iff</em>:</p>
 <div class="math">
 <p><img src="_images/math/30e4f8159751a8c913decd16c7a8703a205ebd79.png" alt="x(0) &amp;= 0 \text{  and}\\
 x(t + k * T) &amp;= x(t) + k * x(T), \forall k \in \mathbb{N} &gt; 0"/></p>
-</div><p>Clearly, an iterative function <img class="math" src="_images/math/188c175aac0a8a9c22499336711b5d7256407254.png" alt="x"/> is <strong>periodic</strong> <em>iff</em>
-<img class="math" src="_images/math/20c77058fe03716b694fb60e36e18d8d2170c018.png" alt="x(T)=0"/>.</p>
-<p>Now we will consider a deterministic, <em>iterative</em> queuing system
+</div><p>Clearly, a repeating function <img class="math" src="_images/math/188c175aac0a8a9c22499336711b5d7256407254.png" alt="x"/> is <strong>periodic</strong> <em>iff</em>
+<img class="math" src="_images/math/20c77058fe03716b694fb60e36e18d8d2170c018.png" alt="x(T)=0"/>.  Note that repeating functions like the cumulative
+data vs. time profiles we deal with, are the result of <strong>integrating</strong>
+<em>periodic</em> functions, like the periodic bandwidth vs. time profiles we
+use to describe application network traffic and system network
+capacity.  All periodic functions, when integrated, produce repeating
+functions and similarly, all repeating functions, when differentiated,
+procduce periodic functions.</p>
+<p>Now we will consider a deterministic, <em>repeating</em> queuing system
 providing a data service function <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/> to input data function
 <img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/> to produce output data function <img class="math" src="_images/math/f3f716e1c56d5ebdca97bb1546662b9e96f5be07.png" alt="O"/>, where these
 functions are <em>cumulative data versus time</em>.  At any time <img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>,
@@ -356,7 +368,7 @@ versus time</li>
 <li><img class="math" src="_images/math/2296df10353d0d24932ae9239bb1c004522bd7d2.png" alt="R[t]"/> : the remaining service capacity of the system after
 servicing <img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/>, i.e. <img class="math" src="_images/math/6e4faafd2b95bb8f49c163b2d0436418269ab2d7.png" alt="S[t] - O[t]"/></li>
 </ul>
-<p>Because <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/> and <img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/> are deterministic and iterative, they
+<p>Because <img class="math" src="_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/> and <img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/> are deterministic and repeating, they
 increase deterministically from period to period, i.e. given the
 period <img class="math" src="_images/math/5ff95e0eeb56451cbcfe611d1c422c9381195596.png" alt="T_I"/> of <img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/>,</p>
 <div class="math">
@@ -399,13 +411,13 @@ deterministic, for any two successive periods, <img class="math" src="_images/ma
 </div><p>Therefore the buffer size does not grow between periods, and the
 system has a <em>finite buffer</em>.</p>
 <p>If we are only concerned with buffer growth, we do not need to
-calculate <img class="math" src="_images/math/9d86170e7de539c0ff999de09621ee0c7b6c8ed0.png" alt="R"/>, and can instead infer system stability by
-comparing the values of the buffer at any two period-offset times
-during the steady-state operation of the system (<img class="math" src="_images/math/7bca1764693474a28844c96d8310bca28a0509b8.png" alt="t &gt;= T_p"/>).
-This means that system stability check can resolve to <img class="math" src="_images/math/b49800f6b85aed932c632ddcba6a1037827b6f67.png" alt="B[2*T_p]
-== B[T_p]"/>.  This comparison abides by the conditions above, with
-<img class="math" src="_images/math/70040fec2de75cc96fc8cc94208dbfc28684cc85.png" alt="m=2"/> and <img class="math" src="_images/math/163a19eac5182aaabe8bd9cc931dfa15e75a71dc.png" alt="n=1"/>.  Checking for system stability occurs in
-<a class="reference internal" href="python-api/analysis/analysis.html#analysis.analyze_profile" title="analysis.analyze_profile"><code class="xref py py-func docutils literal"><span class="pre">analysis.analyze_profile()</span></code></a>.</p>
+calculate <img class="math" src="_images/math/9d86170e7de539c0ff999de09621ee0c7b6c8ed0.png" alt="R"/>, and can instead infer buffer growth by comparing
+the values of the buffer at any two period-offset times during the
+steady-state operation of the system (<img class="math" src="_images/math/7bca1764693474a28844c96d8310bca28a0509b8.png" alt="t &gt;= T_p"/>).  This means
+that the system buffer growth check can resolve to <img class="math" src="_images/math/22f50a751ef795d2b5dd655238463e698c18a4c9.png" alt="B[2*T_p] ==
+B[T_p]"/>.  This comparison abides by the conditions above, with
+<img class="math" src="_images/math/70040fec2de75cc96fc8cc94208dbfc28684cc85.png" alt="m=2"/> and <img class="math" src="_images/math/163a19eac5182aaabe8bd9cc931dfa15e75a71dc.png" alt="n=1"/>.  Checking for system buffer growth occurs
+in <a class="reference internal" href="python-api/analysis/analysis.html#analysis.analyze_profile" title="analysis.analyze_profile"><code class="xref py py-func docutils literal"><span class="pre">analysis.analyze_profile()</span></code></a>.</p>
 </div>
 </div>
 <div class="section" id="comparison-with-nc-rtc">
@@ -485,17 +497,56 @@ The results are displayed in the table below:</p>
 </div>
 <div class="section" id="analysis-of-tdma-scheduling">
 <span id="tdma-analysis"></span><h2>Analysis of TDMA Scheduling<a class="headerlink" href="#analysis-of-tdma-scheduling" title="Permalink to this headline">¶</a></h2>
+<p>Medium channel access (MAC) protocols are used in networking systems
+to govern the communication between computing nodes which share a
+network communications medium.  They are designed to allow reliable
+communication between the nodes, while maintaining certain goals, such
+as minimizing network collisions, maximizing bandwidth, or maximizing
+the number of nodes the network can handle.  Such protocols include
+Time Division Multiple Access (TDMA), which tries to minimize the
+number of packet collisions; Frequency Division Multiple Access
+(FDMA), which tries to maximize the bandwidth available to each
+transmitter; and Code Division Multiple Access (CDMA) which tries to
+maximize the number of nodes that the network can handle.  We will not
+discuss CDMA in the scope of this work.</p>
+<p>In FDMA, each node of the network is assigned a different transmission
+frequency from a prescribed frequency band allocated for system
+communications.  Since each node transmits on its own frequency,
+collisions between nodes transmitting simultaneously are reduced.
+Communications paradigms of this type, i.e. shared medium with
+collision-free simultaneous transmission between nodes, can be modeled
+easily by our MAReN modeling paradigm described above, since the
+network resource model for each node can be developed without taking
+into account the transmissions of other nodes.</p>
+<p>In TDMA, each node on the network is assigned one or more time-slots
+per communications period in which only that node is allowed to
+transmit.  By governing these timeslots and having each node agree
+upon the slot allocation and communications period, the protocol
+ensures that at a given time, only a single node will be transmitting
+data, minimizing the number of collisions due to multiple simultaneous
+transmitters.  In such a medium access protocol, transmissions of each
+node affect other nodes&#8217; transmission capability.  Because these
+transmissions are scheduled by TDMA, they can be explicitly integrated
+into the system network resource model.</p>
+<p>TDMA transmission scheduling has an impact on the timing
+characteristics of the applications&#8217; network communications.  Because
+applications&#8217; network data production is decoupled from their node&#8217;s
+TDMA transmission time slot, buffering may be required when an
+application on one node tries to send data on the network during the
+transmission slot of a different node.  In this case, the data would
+need to be buffered on the application&#8217;s node and would therefore
+incur additional buffering delay.  If this TDMA schedule is not
+integrated into the analysis of the network resources, the additional
+buffer space required may exceed the buffer space allocation given to
+the application or the buffering delay may exceed the application&#8217;s
+acceptable latency.</p>
 <p>So far, the description of the system provided network service profile
 (<img class="math" src="_images/math/380e32ec071686ecc085988bde7ac1814b342625.png" alt="p[t]=y"/>), has been abstracted as simply the available
 bandwidth as a function of time integrated to produce the amount of
-data serviced as a function of time.  In order to more precisely model
-the system, a network medium channel access protocol must be
-integrated into the abstract system provided profile.  TDMA is such a
-protocol which assigns to each node one or more time slots in a
-repeating period during which only the selected node is allowed to
-transmit.  We show how to model such a protocol and extend the
-abstract system network profile to include the model of the TDMA
-channel access protocol.</p>
+data serviced as a function of time. We show how to model and analyze
+the network&#8217;s lower-level TDMA MAC protocol using our network modeling
+semantics.  We then derive general formulas for determining the affect
+TDMA has on buffer size and delay predictions.</p>
 <p>As an example TDMA system which benefits from our analysis techniques,
 consider an application platform provided by a fractionated satellite
 cluster.  A fractionated satellite cluster consists of many small
@@ -654,11 +705,11 @@ T_p"/>:</p>
 T_p + \delta[T_p + t] - \delta[t] &amp;= T_p \\
 \delta[T_p + t] - \delta[t] &amp;= 0\\
 \delta[T_p + t] &amp;= \delta[t]"/></p>
-</div><p>From this we determine that the periodicitiy of the profile is
-unchanged <em>iff</em> the profile is period-continuous, i.e. if the latency
-at the end of the profile is the same as the latency at the beginning
-of the profile.</p>
-<p>The profile delay operation is implemented in
+</div><p>Which is just confirms that the periodicity of the delayed profile is
+unchanged <em>iff</em> the latency profile is <strong>periodic</strong>, i.e.</p>
+<div class="math">
+<p><img src="_images/math/dc90d07f427d8cceca6257bcd610427067e32b93.png" alt="\delta[t] = \delta[t + k*T_p], \forall k\in\mathbb{N} &gt; 0"/></p>
+</div><p>The profile delay operation is implemented in
 <a class="reference internal" href="python-api/analysis/network-profile.html#networkProfile.Profile.Delay" title="networkProfile.Profile.Delay"><code class="xref py py-func docutils literal"><span class="pre">networkProfile.Profile.Delay()</span></code></a>.</p>
 </div>
 <div class="section" id="routing-analysis">
@@ -667,9 +718,9 @@ of the profile.</p>
 operations we developed, we can perform system-level analysis of flows
 which are routed by nodes of the system.  In this paradigm, nodes can
 transmit/receive their own data, i.e. they can host applications which
-act as data sources or sinks, as well as acting as routers for flows
-from and to other nodes.  To make such a system amenable to analysis
-we must ensure that we know the routes the flows will take at design
+act as data sources or sinks, as well as act as routers for flows from
+and to other nodes.  To make such a system amenable to analysis we
+must ensure that we know the routes the flows will take at design
 time, i.e. the routes in the network are static and known or
 calculable.  Furthermore, we must, for the sake of flow composition as
 decribed above, ensure that each flow has a priority that is unique
@@ -704,7 +755,7 @@ specification is found in <a class="reference internal" href="python-api/analysi
 <p>We can then run the following algorithm to iteratively analyze the
 flows and the system:</p>
 <div class="figure">
-<a class="reference internal image-reference" href="_images/algorithm.svg"><img height="600px" src="_images/algorithm.svg" width="600px" /></a>
+<a class="reference internal image-reference" href="_images/algorithm.png"><img alt="_images/algorithm.png" src="_images/algorithm.png" style="width: 600px; height: 600px;" /></a>
 </div>
 <p>In this algorithm, the remaining capacity of the node is provided to
 each profile with a lower priority iteratively.  Because of this

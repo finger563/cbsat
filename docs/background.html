@@ -78,6 +78,7 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="theory-results.html">Background, Theory, and Results</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="">Background: Network Performance Analysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#min-plus-calculus">Min-Plus Calculus</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#network-calculus">Network Calculus</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#real-time-calculus">Real Time Calculus</a></li>
 </ul>
@@ -207,6 +208,42 @@ deployed.</p>
 confidence on performance predictions since they are based on
 statistical models.  Therefore, we must use deterministic analysis
 techniques to analyze these systems.</p>
+<div class="section" id="min-plus-calculus">
+<span id="min-plus-calc"></span><h2>Min-Plus Calculus<a class="headerlink" href="#min-plus-calculus" title="Permalink to this headline">¶</a></h2>
+<p>Because our work and other work in the field, e.g. Network Calculus,
+is based on Min-Plus Calculus, or (min,+)-calculus, we will give a
+brief overview of it here.</p>
+<p>Min-plus calculus, <img class="math" src="_images/math/20ab35a56888ef60cf0fed02a4bd1dc65572254d.png" alt="(\mathbb{R}\cup\{+\infty\},\wedge,+)"/>, deals
+with <em>wide-sense increasing functions</em> :</p>
+<div class="math">
+<p><img src="_images/math/e7ff08b47fd9fe012f620417d9a1d609a275962e.png" alt="F=\{f : \mathbb{R}^+ \rightarrow \mathbb{R}^+, \forall s \leq t : f(s) \leq f(t), f(0) = 0\}"/></p>
+</div><p>which represent functions whose slopes are always <img class="math" src="_images/math/be4bb2bf0f538729fbbcba6fcbe1af045763e02a.png" alt="\geq 0"/>.
+Intuitively this makes sense for modeling network traffic, as data can
+only ever by sent or not sent by the network, therefore the cumulative
+amount of data sent by the network as a function of time can only ever
+increase or stagnate.  A wide-sense increasing function can further be
+classified as a sub-additive function if</p>
+<div class="math">
+<p><img src="_images/math/7ee5e0e6e7c963c01d43afe063767174df2e6ea0.png" alt="\forall s,t : f(s+t) \leq f(s) + f(t)"/></p>
+</div><p>Note that if a function is concave with <img class="math" src="_images/math/b4e94b2a500ec495fae771eac0a0a12b500758ae.png" alt="f(0)=0"/>, it is
+sub-additive, e.g. <img class="math" src="_images/math/71b8efe5fe996d941eeace89de9529c8c250af5b.png" alt="y=\sqrt{x}"/>.</p>
+<p>The main operations of min-plus calculus are the convolution and
+deconvolution operations, which act on sub-additive functions.
+Convolution is a function of the form:</p>
+<div class="math">
+<p><img src="_images/math/2d2391d4fccb363ada57c25d61ad2c5f418719b6.png" alt="(f\otimes g)(t)\equiv inf_{\{0\leq s \leq t\}}\{f(t-s)+g(s)\}"/></p>
+</div><p>Note that if the functions <img class="math" src="_images/math/2fd908b5cf279a76235533d5e8443d596463abf9.png" alt="f,g"/> are concave, this convolution
+simplifies into the computation of the minimum:</p>
+<div class="math">
+<p><img src="_images/math/1410a80a13d159bfd3e611f70c8d275c21cffb16.png" alt="(f\otimes g)(t)=min(f,g)"/></p>
+</div><p>Convolution in min-plus calculus has the properties of</p>
+<ul class="simple">
+<li>closure: <img class="math" src="_images/math/d6068df5d49c302e2674ec79ac03eff31092a7b1.png" alt="(f\otimes g)(t) \in F"/>,</li>
+<li>Associativity,</li>
+<li>Commutativity, and</li>
+<li>Distributivity</li>
+</ul>
+</div>
 <div class="section" id="network-calculus">
 <span id="network-calc"></span><h2>Network Calculus<a class="headerlink" href="#network-calculus" title="Permalink to this headline">¶</a></h2>
 <p>Network Calculus provides a modeling and analysis paradigm for
@@ -228,6 +265,15 @@ amount of data that can be transmitted as a function of time-window
 size.  Similarly, the system network capacity becomes a cumulative
 curve defined as the <em>minimum service curve</em>. These curves bound the
 application requirements and system service capacity.</p>
+<p>Note that sub-additivity of functions is required to be able to define
+meaningful constraints for network calculus, though realistically
+modeled systems (in Network Calculus) will always have sub-additive
+functions to describe their network characteristics (e.g. data
+serviced or data produced).  This sub-additivity comes from the
+semantics of the modeling; since the models describe maximum data
+production or minimum service as functions of <em>time-windows</em>, maximum
+data production over a longer time window must inherently encompass
+the maximum data production of shorter time-windows.</p>
 <div class="figure align-center" id="id1">
 <a class="reference internal image-reference" href="_images/nc_arrival_curve.png"><img alt="_images/nc_arrival_curve.png" src="_images/nc_arrival_curve.png" style="width: 400px;" /></a>
 <p class="caption"><span class="caption-text">Network Calculus arrival curve (<img class="math" src="_images/math/ad59b6e24a4a00ac621801f8d7513d68be654ab5.png" alt="\alpha"/>)</span></p>
@@ -259,8 +305,61 @@ maximum data production does not occur during that period.</p>
 </div>
 <div class="section" id="real-time-calculus">
 <span id="rtc"></span><h2>Real Time Calculus<a class="headerlink" href="#real-time-calculus" title="Permalink to this headline">¶</a></h2>
-<p>Real-Time Calculus is based on Network Calculus and extends their work
-to allow for compositional system analysis.</p>
+<p>Real-Time Calculus builds from Network Calculus, Max-Plus Linear
+System Theory, and real-time scheduling to analyze systems which
+provide computational or communications services.  Unlike Network
+Calculus, Real-Time Calculus (RTC) is designed to analyze real-time
+scheduling and priority assignment in task service systems.  The use
+of (max,+)-calculus in RTC allows specification and analysis not of
+only the arrival and service curves described above for Network
+Calculus, but of upper and lower arrival curves
+(<img class="math" src="_images/math/d5cdc119425c02188c3f0182c9caa2223a349721.png" alt="\alpha^u(\Delta)"/> and <img class="math" src="_images/math/75a72e8f8896d34527e1e003c864d10cc83fbf25.png" alt="\alpha^l(\Delta)"/>) and upper and
+lower service curves (<img class="math" src="_images/math/14d178b2a57f48a73b2c29713a07e41fb6f74dee.png" alt="\beta^u(\Delta)"/> and
+<img class="math" src="_images/math/656fea500bf931b6b6084117c8de725136142237.png" alt="\beta^l(\Delta)"/>).  These curves represent the miniumum and
+maximum computation requested and computation serviced, respectively.
+An overview of RTC is shown below.</p>
+<div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="_images/rtc_overview.png"><img alt="_images/rtc_overview.png" src="_images/rtc_overview.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">Overview of Real-Time Calculus&#8217; request, computation, and capacity
+models.</span></p>
+</div>
+<p><img class="math" src="_images/math/aed5c9dd87e4bce9d97e3e99dca38e697031e0f6.png" alt="R(t)"/> is the request function that represents the amount of
+computation that has been requested up to time <img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>, with
+associated minimum request curve, <img class="math" src="_images/math/ad59b6e24a4a00ac621801f8d7513d68be654ab5.png" alt="\alpha"/>.  <img class="math" src="_images/math/bf60f37734ae67ea8f01319e3ba9250833ad5a85.png" alt="R'(t)"/> is
+the total amount of computation delivered up to time <img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>, with
+associated delivered computation bound <img class="math" src="_images/math/4b5b1e879953472bdc39a81b3e8d3d0fc7bf54c0.png" alt="R_b(t)"/>.  <img class="math" src="_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/> and
+<img class="math" src="_images/math/00c0d352089aa5c8b196a0f2dc5dfc5739a8cc6b.png" alt="C'"/> are the capacity function and remaining capacity functions
+which describe the total processing capacity under full load and the
+remaining processing capacity, respectively.  <img class="math" src="_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/> and <img class="math" src="_images/math/00c0d352089aa5c8b196a0f2dc5dfc5739a8cc6b.png" alt="C'"/>
+are bounded by the delivery curve <img class="math" src="_images/math/8ce03f78ed945f2ef3dac87c8799b55b393527e7.png" alt="\beta"/> and the remaining
+delivery curve <img class="math" src="_images/math/808e6ba137ab4f06fb6b91282aeec26caf82a56c.png" alt="\beta'"/>.</p>
+<p>RTC allows for the analysis of task scheduling systems by computing
+the request curve for a task model which is represented as a directed
+acyclic graph (DAG), the task graph <img class="math" src="_images/math/dc12aacf2241e28de3621a1eaa018c694f047ef2.png" alt="G(T)"/>.  The graph&#8217;s
+vertices represent subtasks and each have their own associated
+required computation time <img class="math" src="_images/math/f08fc9912eca9679d62616325862fbaddc869e58.png" alt="e(u)"/>, and relative deadline
+<img class="math" src="_images/math/61dd665a5a33ac4cd6921ad806c673b2d71e404f.png" alt="d(u)"/> specifying that the task must be completed <img class="math" src="_images/math/61dd665a5a33ac4cd6921ad806c673b2d71e404f.png" alt="d(u)"/>
+units of time after its triggering.  Two vertices in <img class="math" src="_images/math/dc12aacf2241e28de3621a1eaa018c694f047ef2.png" alt="G(T)"/> may
+be connected by a directed edge <img class="math" src="_images/math/2d6bf630586c698ccb735d756e4a4f0674d5ff68.png" alt="(u,v)"/> which has an associated
+parameter <img class="math" src="_images/math/3497a8ece64a5e0a3e85c7f183835e5c34d71242.png" alt="p(u,v)"/> which specifies the minimum time that must
+elapse after the triggering of <img class="math" src="_images/math/e5fc41b391867da81606413e3389c7efc73abaf0.png" alt="u"/> before <img class="math" src="_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> can be
+triggered.  RTC develops from this specification the minimum
+computation request curve <img class="math" src="_images/math/1ce1b4c735c5b8ff6d35385071dc9bffb1d53d78.png" alt="\alpha_r"/> and the maximum computation
+demand curve <img class="math" src="_images/math/07ba396141948d28cf6e7b1993ba49df3af3fa7c.png" alt="\alpha_d"/>.  Finally, the schedulability of a task
+<img class="math" src="_images/math/33e3f187d69da5b9b2776855d9a192e7a57cad5b.png" alt="T_i"/> is determined by the relation:</p>
+<div class="math">
+<p><img src="_images/math/6f4746f0d9596f4f9f6a34d1406fbad9cfe0554d.png" alt="\beta'(\Delta)\geq\alpha^i_d(\Delta)\ \ \ \forall\Delta"/></p>
+</div><p>which, if satisfied, guarantees that task <img class="math" src="_images/math/33e3f187d69da5b9b2776855d9a192e7a57cad5b.png" alt="T_i"/> will meet all of
+its deadlines for a static priority scheduler where tasks are ordered
+with decreasing priority.  Note that the remaining delivery curve
+<img class="math" src="_images/math/02ef8655d50a37eb9e499a71b4f8a79adad52c70.png" alt="\beta'(\Delta)"/> is the capacity offered to task <img class="math" src="_images/math/33e3f187d69da5b9b2776855d9a192e7a57cad5b.png" alt="T_i"/>
+after all tasks <img class="math" src="_images/math/6d5cb0de59a52cbeb3c8ca509878f25d35847def.png" alt="T_{1\leq j&lt;i}"/> have been processed. Similarly
+to Network Calculus, RTC provides analytical techniques for the
+computation of performance metrics such as computation backlog bounds:</p>
+<div class="math">
+<p><img src="_images/math/b2ac4f51d145f2c4c56d90fe2290e0cfe6c3bce6.png" alt="\text{backlog}\leq sup_{\{t\geq0\}}\{\alpha^u(t)-\beta^l(t)\}"/></p>
+</div><p>which is equivalent to the network backlog bound derived in Network
+Calculus.</p>
 </div>
 </div>
 
