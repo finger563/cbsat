@@ -21,5 +21,3 @@ aspects:
    design-time
    run-time
 
-:ref:`genindex`
-
