@@ -572,7 +572,9 @@ are implemented in :class:`networkConfig.Route` and
 specification is found in :class:`networkConfig.Config`.
 
 We can then run the following algorithm to iteratively analyze the
-flows and the system::
+flows and the system
+
+.. code-block:: C#
 
   analyze( profiles )
   {
