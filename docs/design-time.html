@@ -410,17 +410,22 @@ to the measurements from the actual system.</p>
 predicted a buffer size of 64000 bits / 8000 bytes, we show that
 Network Calculus predicts a required buffer size of 3155000 bits.</p>
 <div class="figure align-center" id="id5">
-<a class="reference internal image-reference" href="_images/maren_namek_bw.png"><img alt="_images/maren_namek_bw.png" src="_images/maren_namek_bw.png" style="width: 400px; height: 400px;" /></a>
-<p class="caption"><span class="caption-text">Bandwidth profile describing the system and application.</span></p>
+<span id="fig-bandwidth"></span><a class="reference internal image-reference" href="_images/maren_namek_bw.png"><img alt="_images/maren_namek_bw.png" src="_images/maren_namek_bw.png" style="width: 400px; height: 400px;" /></a>
+<p class="caption"><span class="caption-text">Figure 1: Bandwidth profile describing the system and application.</span></p>
 </div>
 <div class="figure align-center" id="id6">
-<a class="reference internal image-reference" href="_images/maren_namek_data.png"><img alt="_images/maren_namek_data.png" src="_images/maren_namek_data.png" style="width: 400px; height: 400px;" /></a>
-<p class="caption"><span class="caption-text">Analysis of the system with our tools.</span></p>
+<span id="fig-data-pnpp"></span><a class="reference internal image-reference" href="_images/maren_namek_data.png"><img alt="_images/maren_namek_data.png" src="_images/maren_namek_data.png" style="width: 400px; height: 400px;" /></a>
+<p class="caption"><span class="caption-text">Figure 2: Analysis of the system with our tools.</span></p>
 </div>
 <div class="figure align-center" id="id7">
-<a class="reference internal image-reference" href="_images/nc_namek_data.png"><img alt="_images/nc_namek_data.png" src="_images/nc_namek_data.png" style="width: 400px; height: 400px;" /></a>
-<p class="caption"><span class="caption-text">Network-Calculus based analysis of the system.</span></p>
+<span id="fig-data-nc"></span><a class="reference internal image-reference" href="_images/nc_namek_data.png"><img alt="_images/nc_namek_data.png" src="_images/nc_namek_data.png" style="width: 400px; height: 400px;" /></a>
+<p class="caption"><span class="caption-text">Figure 3: Network-Calculus based analysis of the system.</span></p>
 </div>
+<p><a class="pageref" href="#fig-bandwidth">Figure  1</a> shows the bandwidth profile describing
+the bandwidth versus time for the example system.  <a class="pageref" href="#fig-data-pnpp">Figure  2</a> shows the data versus time profile (time-integrated
+from <a class="pageref" href="#fig-bandwidth">Figure  1</a>) as analyzed by <img class="math" src="_images/math/25e201674a37202d448849e78eb163897d9373f6.png" alt="PNP^2"/>.
+<a class="pageref" href="#fig-data-nc">Figure  3</a> shows the same system analyzed using
+Network Calculus.</p>
 <p>The major drawback for Network Calculus that our work aims to solve is
 the disconnect from the real system that stems from using an approach
 based on time-window analysis.  Such an approach leads to dramatically

@@ -1,7 +1,8 @@
 .. _design_time:
 
-Design Time Results
-===================
+=====================
+ Design Time Results
+=====================
 
 These results provide a methodology and a means for application
 developers and system integrators to determine conservative, precise,
@@ -20,7 +21,7 @@ work are broken into sections by topic:
 .. _periodic_system_analysis:
 
 Periodic System Analysis
-------------------------
+========================
 
 One subset of systems which we would like to analyze are periodic
 systems, since many systems in the real world exhibit some form of
@@ -110,7 +111,7 @@ unbounded buffer growth.
 .. _periodic_analysis_proof:
 
 Proving the Minimum Analysis for System Stability
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------------------------
 
 Let us now formally prove the assertion about system periodicity and
 stability which has been stated above.  We will show that our analysis
@@ -241,7 +242,7 @@ B[T_p]`.  This comparison abides by the conditions above, with
 .. _nc_comparison:
       
 Comparison with NC/RTC
-----------------------
+======================
 
 To show how our analysis techniques compare to other available
 methods, we developed our tools to allow us to analyze the input
@@ -254,12 +255,16 @@ Taking the results from our published work, where our methods
 predicted a buffer size of 64000 bits / 8000 bytes, we show that
 Network Calculus predicts a required buffer size of 3155000 bits.
 
+.. _fig-bandwidth:
+
 .. figure:: /images/results/maren_namek_bw.png
    :align: center
    :height: 400px
    :width: 400px
 
    Bandwidth profile describing the system and application.
+
+.. _fig-data-pnpp:
 
 .. figure:: /images/results/maren_namek_data.png
    :align: center
@@ -268,12 +273,21 @@ Network Calculus predicts a required buffer size of 3155000 bits.
 
    Analysis of the system with our tools.
 	
+.. _fig-data-nc:
+
 .. figure:: /images/results/nc_namek_data.png
    :align: center
    :height: 400px
    :width: 400px
 
    Network-Calculus based analysis of the system.
+
+:num:`Figure #fig-bandwidth` shows the bandwidth profile describing
+the bandwidth versus time for the example system.  :num:`Figure
+#fig-data-pnpp` shows the data versus time profile (time-integrated
+from :num:`Figure #fig-bandwidth`) as analyzed by :math:`PNP^2`.
+:num:`Figure #fig-data-nc` shows the same system analyzed using
+Network Calculus.
 
 The major drawback for Network Calculus that our work aims to solve is
 the disconnect from the real system that stems from using an approach
@@ -312,7 +326,7 @@ The results are displayed in the table below:
 .. _tdma_analysis:
 	
 Analysis of TDMA Scheduling
----------------------------
+===========================
 
 Medium channel access (MAC) protocols are used in networking systems
 to govern the communication between computing nodes which share a
@@ -447,7 +461,7 @@ explicitly integrating the TDMA model into the system profile model.
 .. _compositional_analysis:
 
 Compositional Analysis
-----------------------
+======================
 
 Now that we have precise network performance analysis for aggregate
 flows or singular flows on individual nodes of the network, we must
@@ -483,7 +497,7 @@ analysis techniques are correct for these types of systems.
 .. _delay_analysis:
 
 Delay Analysis
---------------
+==============
 
 When dealing with queueing systems (esp. networks) where precise
 design-time guarantees are required, the delay in the links of the
@@ -541,7 +555,7 @@ unchanged *iff* the latency profile is **periodic**, i.e.
 .. _routing_analysis:
 
 Routing Analysis
-----------------
+================
 
 By incorporating both the latency analysis with the compositional
 operations we developed, we can perform system-level analysis of flows

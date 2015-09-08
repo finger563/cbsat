@@ -25,10 +25,12 @@ middleware = os.path.realpath(os.path.abspath
 if middleware not in sys.path:
     sys.path.insert(0, middleware)
 
+sys.path.insert(0, os.path.abspath('.'))
+
 master_doc = 'index'
 source_suffix = '.rst'
 exclude_patterns = ['**/.#*']
-extensions = ['sphinx.ext.pngmath', 'sphinx.ext.autodoc', 'sphinxcontrib.spelling', 'sphinx.ext.todo']
+extensions = ['numfig','sphinx.ext.pngmath', 'sphinx.ext.autodoc', 'sphinxcontrib.spelling', 'sphinx.ext.todo']
 templates_path = ['_templates']
 autoclass_content = "both"
 autodoc_member_order = "bysource"
@@ -47,4 +49,6 @@ spelling_word_list_filename = 'dictionary.txt'
 
 latex_elements = {}
 latex_elements['preamble'] = '\usepackage{amsmath}\n\usepackage{amssymb}\n'
+latex_elements['classoptions'] = ',openany,oneside'
+latex_elements['babel'] = '\\usepackage[english]{babel}'
 
