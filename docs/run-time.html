@@ -305,53 +305,111 @@ application.</li>
 </div>
 <div class="section" id="distributed-denial-of-service-ddos-detection">
 <h2>Distributed Denial of Service (DDoS) Detection<a class="headerlink" href="#distributed-denial-of-service-ddos-detection" title="Permalink to this headline">¶</a></h2>
-<p>DDoS attacks can take many forms, but are generally classified as
-excessive traffic from a large amount of (possibly heterogeneous)
-sources targeted towards a single point or a single group.  Such
-attacks are common to machines on the internet, but can also become a
-hazard for machines on private networks which become infected or
-inadvertently expose an input path for external malicious data.</p>
+<p>Denial-of-Service (DoS) [<a class="reference internal" href="#rfc4732">RFC4732</a>] and Distributed DoS (DDoS) attacks
+can take many forms, but are generally classified as excessive traffic
+from a large amount of (possibly heterogeneous) sources targeted
+towards a single point or a single group.  Such attacks are common to
+machines on the internet, but can also become a hazard for machines on
+private networks which become infected or inadvertently expose an
+input path for external malicious data.</p>
 <p>These private or semi-private systems must have mechanisms for
 detecting and mitigating such attacks, and the combination of our
 design-time analysis and run-time measurement, detection, and
-mitigation tools provides such capability.</p>
+mitigation tools provides a form for such capability.  The goal of
+this work is for a receiver, which is being targeted for attack by a
+set of senders, to determine which of the senders are behaving
+anomalously and prevent them from sending any more data.  In this way,
+a group of senders performing a DDoS attack can be mitigated by the
+targeted receiver.  Towards this goal we make the following changes
+outlined below to our modeling/analysis framework and implementation.</p>
 <p>If we relax the constraint from the design-time section that all
 sender profiles are absolute and the system behavior is completely
 known at design-time, then we not only expand the scope of
 applications that can be supported but also enable meaningful anomaly
-detection.  Instead of treating the application profiles as the exact
-amount of data that the applications need to send, we assume they are
-the mean amount of data that the application will need to send over
-each respective interval.  Additionally, we add an upper curve to the
-application profiles which is the guaranteed maximum that the
-application will ever try to send in each respective period.</p>
-<p>For system analysis, we perform the design-time analysis on both the
-mean-data curve and the max-data curve which each give predicted
-buffer space requirements for the senders and receivers. Since buffer
-space on many of these systems comes at a premium, we cannot always
-take the maximum buffer size from this calculation as our
-implementation. For the senders, we are free to choose the allocated
-buffer space in the deployed system within this range as we see fit,
-since the senders have a large degree (or full) control over the
-sender rate and can meter themselves to not lose data.  However, for
-the receivers, we can select a buffer size within the mean-max range
-based on our total system capacity and then rely on the measurement,
-detection, and mitigation code to ensure that we do not lose data due
-to buffer overflowing.</p>
-<p>In this scenario, the receiver has been given knowledge of all of the
-sender profiles which might transmit data to it.  When the receiver
-detects that the buffer is filling up quickly enough to overflow the
-buffer in the near future, it can use the measurements that have been
-gathered about the received traffic up to this point to determine
-which sender components to throttle temporarily.</p>
+detection.</p>
+<p>Whereas previously, profiles captured in their definition the
+<img class="math" src="_images/math/87c2faaa595684b1a0ec3c5a6fee140ce3220be9.png" alt="data\ rate"/> as a function of time that the application
+produced, we now alter the definition to capture two parameters:
+<img class="math" src="_images/math/cdd559c7ae38bd6a6ca2539bb98a6f493e1fc06e.png" alt="mean\ data\ rate"/> (<img class="math" src="_images/math/2e6c76553063a94d2e1a8d12e23a6228b3b14ad5.png" alt="mDR"/>) and <img class="math" src="_images/math/93c44d176051e93323d93e84baf3dc32fd6e3385.png" alt="max\ data\ rate"/>
+(<img class="math" src="_images/math/d4e3b7b525c72434a1a98db671d6244d133913fa.png" alt="MDR"/>), which again are both functions of time.  Just as
+before, these functions are constant-valued between successive values
+of <img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> and are time-integrated to produce the <img class="math" src="_images/math/026c968a41e051d6065b6d42a8f2fb20326f4e10.png" alt="mean\ data"/>
+and <img class="math" src="_images/math/73aa92f05c2eca9e84b4acd363c3b97530e58640.png" alt="max\ data"/> cumulative profiles as functions of time.  With
+this specification, we no longer know exactly how much data an
+application will produce at a given point in time, but instead are
+provided two values by the developer: the <img class="math" src="_images/math/d848cef57efa4f3c97e11490921df7d760a445b2.png" alt="mean"/> and
+<img class="math" src="_images/math/244a015597005c01cf64d7a028918ccfefd5eee7.png" alt="max"/>.</p>
+<p>Now that we have these two profiles for the application, we could
+simply analyze the <img class="math" src="_images/math/244a015597005c01cf64d7a028918ccfefd5eee7.png" alt="max"/> data profile to determine buffer and
+latency requirements, but this would end up wasting resources by
+allocating memory and network resources of the system to the
+application even if is not producing data at its <em>max rate</em>.  Instead,
+we analyze the system according to the <img class="math" src="_images/math/d848cef57efa4f3c97e11490921df7d760a445b2.png" alt="mean"/> data profile to
+determine buffer requirements and latency for the application in the
+system.  In doing so, two buffer overflow risks are possible:</p>
+<ul class="simple">
+<li>Sender-side buffer overflow</li>
+<li>Receiver-side buffer overflow</li>
+</ul>
+<p>We make the assumption that the application meters its sending to
+prevent the first scenario, so that its data is not lost before making
+it onto the network.  In this case, the sender can still send data at
+a rate greater than the <img class="math" src="_images/math/d848cef57efa4f3c97e11490921df7d760a445b2.png" alt="mean"/>, but that rate is partially
+governed by the capacity given to it by the node&#8217;s network.</p>
+<p>For the second case, we must ensure that there is no buffer overflow
+on the receiver-side.  To enable this functionality, we must provide a
+mechanism for the receiver to communicate with the sender.  This
+push-back communication should travel through a channel outside the
+communications channel that the application has access to, so that the
+application, either maliciously or inadvertently, cannot disrupt this
+push-back and in turn cause the receiver&#8217;s buffer to overflow.  For
+this reason, we add into the sender and receiver middleware an
+out-of-band (OOB) channel that provides a communications layer between
+all senders and receivers that is invisible to the application.  For
+our component model and communications middleware, we have implemented
+this OOB channel as a UDP multicast group.</p>
+<p>Because the goal of this work is to only meter senders which are
+producing <em>too much</em> data, we must define what <em>too much data</em> is.
+Because we have developed these application profiles for analysis, and
+these profiles describe the <img class="math" src="_images/math/2e6c76553063a94d2e1a8d12e23a6228b3b14ad5.png" alt="mDR"/> and <img class="math" src="_images/math/d4e3b7b525c72434a1a98db671d6244d133913fa.png" alt="MDR"/> of the
+senders, they will be used to determine when a sender is sending too
+much data.  In this paradigm, a sender is determined as behaving
+anomalously (i.e. sending too much data) if the sender, <img class="math" src="_images/math/3f1a4e430c239029fe31b52c95bb3278d0bc3d49.png" alt="S_i"/> is
+sending data at a rate <img class="math" src="_images/math/33b55130ff9da65d5f02b14607f87992664e71f0.png" alt="DR_i &gt; mDR_i"/>.  The assumption implicit
+in this comparison is that the sender, to be able to make this
+comparison, has full knowledge of <img class="math" src="_images/math/78c3eab1130bc97f9a4b2b65b9f782c29fc9af7d.png" alt="mDR_i"/>, since <img class="math" src="_images/math/78a867df45f544573456c6e21cfc5f6be736ac79.png" alt="DR_i"/> is
+calculable on the receiver side.  If the receiver&#8217;s buffer is filling
+up, it looks through the all of the measured <img class="math" src="_images/math/0448930ecd0b9bc5f1873722fb397111e2b57eb3.png" alt="DR"/> for each of
+the senders it has been receiving data from, and compares it against
+the sender&#8217;s <img class="math" src="_images/math/2e6c76553063a94d2e1a8d12e23a6228b3b14ad5.png" alt="mDR"/>.  If the comparison is <em>true</em>, it uses the
+OOB channel to push back to that specific sender, informing the
+sender-side middleware to stop transmitting data until the receiver
+has re-enabled that sender&#8217;s transmission.  When the receiver has
+emptied it&#8217;s buffer enough it can then use the OOB channel to
+re-enable the disabled senders.</p>
 <div class="figure align-center" id="id5">
-<a class="reference internal image-reference" href="_images/example_setup.png"><img alt="_images/example_setup.png" src="_images/example_setup.png" style="width: 400px;" /></a>
-<p class="caption"><span class="caption-text">Figure 5: The nodes in the network and how they communicate (using pub/sub).</span></p>
+<span id="fig-ddos"></span><a class="reference internal image-reference" href="_images/example_setup.png"><img alt="_images/example_setup.png" src="_images/example_setup.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">Figure 5: Nodes in an example network and how they communicate (using
+pub/sub).</span></p>
 </div>
-<p>We shown experimentally that, for example, a server side buffer size
-of 400000 bits, which would normally grow to 459424 bits because of
-excessive data pumps on the sender sides, is kept to 393792 by
-utilizing this out-of-band channel and secure middleware.</p>
+<p>We have implemented the OOB channel communication into our sender and
+receiver component code along with the profile measurement and
+comparison.  Using these code generators, we are able to run
+experiments validating that the receiver can properly manage its
+buffer by throttling excessive senders during times of congestion.</p>
+<p>We have shown experimentally (for the system in <a class="pageref" href="#fig-ddos">Figure  5</a>)
+that, for example, a receiver side buffer size of 400000 bits, which
+would normally grow to 459424 bits because of excessive data pumps on
+the sender sides, is kept to 393792 by utilizing this out-of-band
+channel and secure middleware.</p>
+<table class="docutils citation" frame="void" id="rfc4732" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[RFC4732]</td><td>M. Handley, et al., “Internet Denial of
+Service Considerations,” IETF, RFC 4732, Nov.
+2006. [Online]. Available: <a class="reference external" href="https://tools.ietf.org/html/rfc4732">https://tools.ietf.org/html/rfc4732</a></td></tr>
+</tbody>
+</table>
 </div>
 </div>
 
