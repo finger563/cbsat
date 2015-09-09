@@ -70,8 +70,8 @@ def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_line_wid
         dashList = dashList,
         line_width = plot_line_width,
         annotationList = annotationList,
-        title = "Network Bandwidth vs. Time over {} period(s)".format(num_periods),
-        ylabel = "Bandwidth (bps)",
+        title = "Network Data Rate vs. Time over {} period(s)".format(num_periods),
+        ylabel = "Data Rate (bps)",
         xlabel = "Time (s)",
         legend_loc = "lower left"
     )
@@ -98,7 +98,7 @@ def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_line_wid
         dashList = dashList,
         line_width = plot_line_width,
         annotationList = annotationList,
-        title = "Network Traffic vs. Time over {} period(s)".format(num_periods),
+        title = "Network Data vs. Time over {} period(s)".format(num_periods),
         ylabel = "Data (bits)",
         xlabel = "Time (s)",
         legend_loc = "upper left"
