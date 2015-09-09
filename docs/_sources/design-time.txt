@@ -251,27 +251,21 @@ our own.  Using these capabilities, we can directly compare the
 analysis results to each other, and then finally compare both results
 to the measurements from the actual system.
 
-Taking the results from our published work, where our methods
-predicted a buffer size of 64000 bits / 8000 bytes, we show that
-Network Calculus predicts a required buffer size of 3155000 bits.
++---------------------------------------------------+-----------------------------------------------------+
+| System Data Rate vs. Time                         | System Data Analyzed with :math:`PNP^2`             |
++===================================================+=====================================================+
+| .. image:: /images/results/maren_namek_bw.png     | .. image:: /images/results/maren_namek_data.png     |
+|    :height: 200                                   |    :height: 200                                     |
++---------------------------------------------------+-----------------------------------------------------+
 
-.. _fig-bandwidth:
+.. _fig-zoom:
 
-.. figure:: /images/results/maren_namek_bw.png
+.. figure:: /images/results/maren_namek_data_zoom.png
    :align: center
    :height: 400px
    :width: 400px
 
-   Bandwidth profile describing the system and application.
-
-.. _fig-data-pnpp:
-
-.. figure:: /images/results/maren_namek_data.png
-   :align: center
-   :height: 400px
-   :width: 400px
-
-   Analysis of the system with our tools.
+   Zoomed-in version of :math:`PNP^2` analysis.
 	
 .. _fig-data-nc:
 
@@ -282,12 +276,12 @@ Network Calculus predicts a required buffer size of 3155000 bits.
 
    Network-Calculus based analysis of the system.
 
-:num:`Figure #fig-bandwidth` shows the bandwidth profile describing
-the bandwidth versus time for the example system.  :num:`Figure
-#fig-data-pnpp` shows the data versus time profile (time-integrated
-from :num:`Figure #fig-bandwidth`) as analyzed by :math:`PNP^2`.
-:num:`Figure #fig-data-nc` shows the same system analyzed using
-Network Calculus.
+The table above shows the data rate versus time profile describing the
+example system, side-by-side with the time-integrated and analyzed
+data versus time profile.  :num:`Figure #fig-zoom` shows a zoomed in
+portion of the second plot, focusing on the area with the maximum
+delay and buffer as analyzed by :math:`PNP^2`.  :num:`Figure
+#fig-data-nc` shows the same system analyzed using Network Calculus.
 
 The major drawback for Network Calculus that our work aims to solve is
 the disconnect from the real system that stems from using an approach
@@ -322,6 +316,12 @@ The results are displayed in the table below:
 +---------------------+--------------+-------------------------------+
 | Buffer Size (bytes) | 8000         | (7722.59 , 36.94)             |
 +---------------------+--------------+-------------------------------+
+
+Taking the results from our published work, where our methods
+predicted a buffer size of 64000 bits / 8000 bytes, we show that
+Network Calculus predicts a required buffer size of 3155000 bits. This
+drastic difference comes from the mis-match between down-time and max
+data production mentioned above.
 
 .. _tdma_analysis:
 	
@@ -570,83 +570,110 @@ decribed above, ensure that each flow has a priority that is unique
 within the network which governs how the transmitting and routing
 nodes handle the flow's data.
 
-We have extended our network analysis tool to support such system
-analysis by taking as input:
+Let us define the system configuration :math:`C` as:
 
-* the sender flows and receiver functions in the network
-* the provided service of each node in the network
-* the network configuration specifying the nodes in the network and
-  the routes in the network
+.. math:: C = \{\{P_S\},\{N\},\{R\}\}
 
-where a flow is defined by:
+Where
 
-* Node ID of the profile
-* Kind of the flow
-* Period of the flow
-* Flow type of the profile 
-* Priority of the flow
-* flow properties vs time profile
+* :math:`\{P_S\}` is the *set* of all *sender* profiles in the system
+  configuration
+* :math:`\{N\}` is the *set* of all *nodes* in the system configuration, and
+* :math:`\{R\}` is the *set* of all *routes* in the system configuration
 
-and a route is specified as a list of node IDs starting with the
-source node ID and ending with the destination node ID.  Any flows
-which have the respective source and destination IDs must travel along
-the path specified by the respective route.
+We define a profile :math:`P` as:
+
+.. math:: P = \{N_I,K,T,F,U,\{(t,R_D,D,L)\}\}
+
+Where
+
+* :math:`N_I` is the *Node ID* to which the profile applies
+* :math:`K` is the *kind* of the profile, where
+  :math:`K\in\{provided,required,receiver\}`
+* :math:`T` is the *period* of the profile
+* :math:`F` is the *flow ID* of the profile, where two profiles,
+  :math:`P_1,P_2` belong to the same flow *iff*
+  :math:`F_{P_1}==F_{P_2}`
+* :math:`U` is the *priority* of the profile, where profile
+  :math:`P_1` has a higher priority than profile :math:`P_2` *iff*
+  :math:`U_{P_1} < U_{P_2}`, and
+* :math:`\{(t,R_D,D,L)\}` is a *set* of :math:`(time, data\ rate,
+  data, latency)` tuples describing how each of :math:`\{data\ rate,
+  data, latency\}` vary with respect to time.  The initial profile
+  specification does not have the :math:`data` field; :math:`data` is
+  calculated based on :math:`data\ rate`.
+
+Then we define a node :math:`N` as:
+
+.. math:: N = \{I,P_P,\{P_R\}\}
+
+Where 
+
+* :math:`I` is the *ID* of the node
+* :math:`P_P` is the *provided* profile of the node, and
+* :math:`\{P_R\}` is the *set* of all *receiver* profiles on the node
+
+And finally, we define a route :math:`R` as:
+
+.. math:: R = \{N_{I_1},N_{I_2},...,N_{I_N}\}
+
+Where
+
+.. math:: \forall N_X,N_Y \subset N, \exists! R_{X,Y} = \{N_{I_X},...,N_{I_Y}\}
 
 We can then run the following algorithm to iteratively analyze the
-flows and the system
+system:
 
 .. code-block:: C#
 
-  analyze( profiles )
+  analyze( sender_profiles )
   {
-    profiles = sorted(profiles, priority)
-    for required in profiles
+    sender_profiles = sorted(sender_profiles, priority)
+    for required_profile in sender_profiles
     {
-      transmitted_nodes = []
-      for receiver in required.receivers()
+      transmitted_nodes = list.empty() 
+      for receiver_profile in required_profile.receiver_profiles()
       {
-        route = required.route()
+        route = getRoute(required_profile, receiver_profile)
 	for node in route
 	{
 	  if node in transmitted_nodes and multicast == true
 	  {
 	    continue
 	  }
-	  provided = node.provided
-	  [output, remaining, received] = convolve(required, provided)
-	  node.provided = remaining
-	  required = received
+	  provided_profile = node.provided_profile
+
+	  tuple(output, remaining, received) = convolve(required_profile, provided_profile)
+
+	  node.provided_profile = remaining
+	  required_profile = received
 	  transmitted_nodes.append(node)
 	}
-	[recv_output, recv_remaining, ] = convolve(required, receiver)
+	tuple(recv_output, recv_remaining) = convolve(required_profile, receiver_profile)
       }
     }
   }
 
 
-.. .. figure:: /images/results/algorithm.png
-..	    :height: 600px
-..	    :width: 600px
-
 In this algorithm, the remaining capacity of the node is provided to
 each profile with a lower priority iteratively.  Because of this
 iterative recalculation of node provided profiles based on routed
 profiles, we directly take into account the effect of multiple
-independent flows traversing the same router; the highest priority
-flow receives as much bandwidth as the router can give it, the next
-highest priority flow receives the remaining bandwidth, and so on.
+independent profiles traversing the same router; the highest priority
+profile receives as much bandwidth as the router can give it, the next
+highest priority profile receives the remaining bandwidth, and so on.
 
 We take care of matching all senders to their respective receivers,
 and ensure that if the system supports multicast, a no retransmissions
-occur; only nodes which must route the flow to a new part of the
+occur; only nodes which must route the profile to a new part of the
 network retransmit the data.  However, if the system does not support
 multicast, then the sender must issue a separate transmission, further
 consuming network resources.  In this way, lower-level transport
 capabilities can be at least partially accounted for by our analysis.
 
 We have implmented these functions for statically routed network
-analysis into our tool, which automatically parses the flow profiles,
-the network configuration and uses the algorithm and the implemented
+analysis into our tool, which automatically parses the profiles, the
+network configuration and uses the algorithm and the implemented
 mathematics to iteratively analyze the network.  Analytical results
 for example systems will be provided when the experimental results can
 be used as a comparison.

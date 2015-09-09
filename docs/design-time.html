@@ -406,26 +406,37 @@ system using Network Calculus/Real-Time Calculus techniques as well as
 our own.  Using these capabilities, we can directly compare the
 analysis results to each other, and then finally compare both results
 to the measurements from the actual system.</p>
-<p>Taking the results from our published work, where our methods
-predicted a buffer size of 64000 bits / 8000 bytes, we show that
-Network Calculus predicts a required buffer size of 3155000 bits.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">System Data Rate vs. Time</th>
+<th class="head">System Data Analyzed with <img class="math" src="_images/math/25e201674a37202d448849e78eb163897d9373f6.png" alt="PNP^2"/></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="first last reference internal image-reference" href="_images/maren_namek_bw.png"><img alt="_images/maren_namek_bw.png" src="_images/maren_namek_bw.png" style="height: 200px;" /></a>
+</td>
+<td><a class="first last reference internal image-reference" href="_images/maren_namek_data.png"><img alt="_images/maren_namek_data.png" src="_images/maren_namek_data.png" style="height: 200px;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="figure align-center" id="id5">
-<span id="fig-bandwidth"></span><a class="reference internal image-reference" href="_images/maren_namek_bw.png"><img alt="_images/maren_namek_bw.png" src="_images/maren_namek_bw.png" style="width: 400px; height: 400px;" /></a>
-<p class="caption"><span class="caption-text">Figure 1: Bandwidth profile describing the system and application.</span></p>
+<span id="fig-zoom"></span><a class="reference internal image-reference" href="_images/maren_namek_data_zoom.png"><img alt="_images/maren_namek_data_zoom.png" src="_images/maren_namek_data_zoom.png" style="width: 400px; height: 400px;" /></a>
+<p class="caption"><span class="caption-text">Figure 1: Zoomed-in version of <img class="math" src="_images/math/25e201674a37202d448849e78eb163897d9373f6.png" alt="PNP^2"/> analysis.</span></p>
 </div>
 <div class="figure align-center" id="id6">
-<span id="fig-data-pnpp"></span><a class="reference internal image-reference" href="_images/maren_namek_data.png"><img alt="_images/maren_namek_data.png" src="_images/maren_namek_data.png" style="width: 400px; height: 400px;" /></a>
-<p class="caption"><span class="caption-text">Figure 2: Analysis of the system with our tools.</span></p>
-</div>
-<div class="figure align-center" id="id7">
 <span id="fig-data-nc"></span><a class="reference internal image-reference" href="_images/nc_namek_data.png"><img alt="_images/nc_namek_data.png" src="_images/nc_namek_data.png" style="width: 400px; height: 400px;" /></a>
-<p class="caption"><span class="caption-text">Figure 3: Network-Calculus based analysis of the system.</span></p>
+<p class="caption"><span class="caption-text">Figure 2: Network-Calculus based analysis of the system.</span></p>
 </div>
-<p><a class="pageref" href="#fig-bandwidth">Figure  1</a> shows the bandwidth profile describing
-the bandwidth versus time for the example system.  <a class="pageref" href="#fig-data-pnpp">Figure  2</a> shows the data versus time profile (time-integrated
-from <a class="pageref" href="#fig-bandwidth">Figure  1</a>) as analyzed by <img class="math" src="_images/math/25e201674a37202d448849e78eb163897d9373f6.png" alt="PNP^2"/>.
-<a class="pageref" href="#fig-data-nc">Figure  3</a> shows the same system analyzed using
-Network Calculus.</p>
+<p>The table above shows the data rate versus time profile describing the
+example system, side-by-side with the time-integrated and analyzed
+data versus time profile.  <a class="pageref" href="#fig-zoom">Figure  1</a> shows a zoomed in
+portion of the second plot, focusing on the area with the maximum
+delay and buffer as analyzed by <img class="math" src="_images/math/25e201674a37202d448849e78eb163897d9373f6.png" alt="PNP^2"/>.  <a class="pageref" href="#fig-data-nc">Figure  2</a> shows the same system analyzed using Network Calculus.</p>
 <p>The major drawback for Network Calculus that our work aims to solve is
 the disconnect from the real system that stems from using an approach
 based on time-window analysis.  Such an approach leads to dramatically
@@ -475,6 +486,11 @@ The results are displayed in the table below:</p>
 </tr>
 </tbody>
 </table>
+<p>Taking the results from our published work, where our methods
+predicted a buffer size of 64000 bits / 8000 bytes, we show that
+Network Calculus predicts a required buffer size of 3155000 bits. This
+drastic difference comes from the mis-match between down-time and max
+data production mentioned above.</p>
 </div>
 <div class="section" id="analysis-of-tdma-scheduling">
 <span id="tdma-analysis"></span><h2>Analysis of TDMA Scheduling<a class="headerlink" href="#analysis-of-tdma-scheduling" title="Permalink to this headline">¶</a></h2>
@@ -702,51 +718,78 @@ calculable.  Furthermore, we must, for the sake of flow composition as
 decribed above, ensure that each flow has a priority that is unique
 within the network which governs how the transmitting and routing
 nodes handle the flow&#8217;s data.</p>
-<p>We have extended our network analysis tool to support such system
-analysis by taking as input:</p>
+<p>Let us define the system configuration <img class="math" src="_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/> as:</p>
+<div class="math">
+<p><img src="_images/math/1665b44bb6ec1578353806fafa7c9f5e674abe68.png" alt="C = \{\{P_S\},\{N\},\{R\}\}"/></p>
+</div><p>Where</p>
 <ul class="simple">
-<li>the sender flows and receiver functions in the network</li>
-<li>the provided service of each node in the network</li>
-<li>the network configuration specifying the nodes in the network and
-the routes in the network</li>
+<li><img class="math" src="_images/math/a4dc88a5769b894edba3cd17bae8090a07e901a0.png" alt="\{P_S\}"/> is the <em>set</em> of all <em>sender</em> profiles in the system
+configuration</li>
+<li><img class="math" src="_images/math/965f1d1188ca407fa91a1324b28e9ccbfad460e5.png" alt="\{N\}"/> is the <em>set</em> of all <em>nodes</em> in the system configuration, and</li>
+<li><img class="math" src="_images/math/3683f44cdad2d76441db6cc320ade9b5b51f01da.png" alt="\{R\}"/> is the <em>set</em> of all <em>routes</em> in the system configuration</li>
 </ul>
-<p>where a flow is defined by:</p>
+<p>We define a profile <img class="math" src="_images/math/f48b617185733d8dd6712643f1ab17c736661a06.png" alt="P"/> as:</p>
+<div class="math">
+<p><img src="_images/math/c54f6b742ee67d299e31508af8bb75bd840fbd5c.png" alt="P = \{N_I,K,T,F,U,\{(t,R_D,D,L)\}\}"/></p>
+</div><p>Where</p>
 <ul class="simple">
-<li>Node ID of the profile</li>
-<li>Kind of the flow</li>
-<li>Period of the flow</li>
-<li>Flow type of the profile</li>
-<li>Priority of the flow</li>
-<li>flow properties vs time profile</li>
+<li><img class="math" src="_images/math/2705e64f930f972a3b115371e168a346474acbff.png" alt="N_I"/> is the <em>Node ID</em> to which the profile applies</li>
+<li><img class="math" src="_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> is the <em>kind</em> of the profile, where
+<img class="math" src="_images/math/e00ae89710542dd5ac2331c713b84ccf72150e6a.png" alt="K\in\{provided,required,receiver\}"/></li>
+<li><img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/> is the <em>period</em> of the profile</li>
+<li><img class="math" src="_images/math/183421431fcc0a42e22f825a33dcc3c51607fa6e.png" alt="F"/> is the <em>flow ID</em> of the profile, where two profiles,
+<img class="math" src="_images/math/27e729d0949488c03d6b072196dfd11c4677399f.png" alt="P_1,P_2"/> belong to the same flow <em>iff</em>
+<img class="math" src="_images/math/17eb4fd4601d9534dbab75e6269acf0070efece0.png" alt="F_{P_1}==F_{P_2}"/></li>
+<li><img class="math" src="_images/math/73f5e249c88b2b3068263480f576b051cb5c4f6e.png" alt="U"/> is the <em>priority</em> of the profile, where profile
+<img class="math" src="_images/math/26a00c0666e9094d8aac94f0ef300011af9b38a5.png" alt="P_1"/> has a higher priority than profile <img class="math" src="_images/math/6534eb155fcde09dbe8489e513d1925f86997578.png" alt="P_2"/> <em>iff</em>
+<img class="math" src="_images/math/b70132060f3b882366b3a6fa59cdd0cdfa72019e.png" alt="U_{P_1} &lt; U_{P_2}"/>, and</li>
+<li><img class="math" src="_images/math/3a539cc9333e612eacb291652faa876d4f4a7425.png" alt="\{(t,R_D,D,L)\}"/> is a <em>set</em> of <img class="math" src="_images/math/114836fcecfead07cc75d93f059620e5ed764848.png" alt="(time, data\ rate,
+data, latency)"/> tuples describing how each of <img class="math" src="_images/math/6b8c45efdcdccdad4cc24eaad3e07e61705426e6.png" alt="\{data\ rate,
+data, latency\}"/> vary with respect to time.  The initial profile
+specification does not have the <img class="math" src="_images/math/7373470a3f752ced5c52b35f0247cd49be63b14b.png" alt="data"/> field; <img class="math" src="_images/math/7373470a3f752ced5c52b35f0247cd49be63b14b.png" alt="data"/> is
+calculated based on <img class="math" src="_images/math/87c2faaa595684b1a0ec3c5a6fee140ce3220be9.png" alt="data\ rate"/>.</li>
 </ul>
-<p>and a route is specified as a list of node IDs starting with the
-source node ID and ending with the destination node ID.  Any flows
-which have the respective source and destination IDs must travel along
-the path specified by the respective route.</p>
-<p>We can then run the following algorithm to iteratively analyze the
-flows and the system</p>
-<div class="highlight-C#"><div class="highlight"><pre><span class="n">analyze</span><span class="p">(</span> <span class="n">profiles</span> <span class="p">)</span>
+<p>Then we define a node <img class="math" src="_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> as:</p>
+<div class="math">
+<p><img src="_images/math/9d9fc73d16271dcee9c70c50d281ae09cf40590e.png" alt="N = \{I,P_P,\{P_R\}\}"/></p>
+</div><p>Where</p>
+<ul class="simple">
+<li><img class="math" src="_images/math/5d9e7b2aec3287330051a115f2ea3cdc8c7a6587.png" alt="I"/> is the <em>ID</em> of the node</li>
+<li><img class="math" src="_images/math/8aac03b267c0d6a8b10bada564e2169d6a73179a.png" alt="P_P"/> is the <em>provided</em> profile of the node, and</li>
+<li><img class="math" src="_images/math/8276945460b005875b6df89c9fb30ad46a7d839b.png" alt="\{P_R\}"/> is the <em>set</em> of all <em>receiver</em> profiles on the node</li>
+</ul>
+<p>And finally, we define a route <img class="math" src="_images/math/9d86170e7de539c0ff999de09621ee0c7b6c8ed0.png" alt="R"/> as:</p>
+<div class="math">
+<p><img src="_images/math/176a9ae50c289679f2afee45f09b4032f892ab47.png" alt="R = \{N_{I_1},N_{I_2},...,N_{I_N}\}"/></p>
+</div><p>Where</p>
+<div class="math">
+<p><img src="_images/math/120c275657b165a069f50e7f448be4fb60d8c541.png" alt="\forall N_X,N_Y \subset N, \exists! R_{X,Y} = \{N_{I_X},...,N_{I_Y}\}"/></p>
+</div><p>We can then run the following algorithm to iteratively analyze the
+system:</p>
+<div class="highlight-C#"><div class="highlight"><pre><span class="n">analyze</span><span class="p">(</span> <span class="n">sender_profiles</span> <span class="p">)</span>
 <span class="p">{</span>
-  <span class="n">profiles</span> <span class="p">=</span> <span class="n">sorted</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">priority</span><span class="p">)</span>
-  <span class="k">for</span> <span class="n">required</span> <span class="k">in</span> <span class="n">profiles</span>
+  <span class="n">sender_profiles</span> <span class="p">=</span> <span class="n">sorted</span><span class="p">(</span><span class="n">sender_profiles</span><span class="p">,</span> <span class="n">priority</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">required_profile</span> <span class="k">in</span> <span class="n">sender_profiles</span>
   <span class="p">{</span>
-    <span class="n">transmitted_nodes</span> <span class="p">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">receiver</span> <span class="k">in</span> <span class="n">required</span><span class="p">.</span><span class="n">receivers</span><span class="p">()</span>
+    <span class="n">transmitted_nodes</span> <span class="p">=</span> <span class="n">list</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">receiver_profile</span> <span class="k">in</span> <span class="n">required_profile</span><span class="p">.</span><span class="n">receiver_profiles</span><span class="p">()</span>
     <span class="p">{</span>
-      <span class="n">route</span> <span class="p">=</span> <span class="n">required</span><span class="p">.</span><span class="n">route</span><span class="p">()</span>
+      <span class="n">route</span> <span class="p">=</span> <span class="n">getRoute</span><span class="p">(</span><span class="n">required_profile</span><span class="p">,</span> <span class="n">receiver_profile</span><span class="p">)</span>
       <span class="k">for</span> <span class="n">node</span> <span class="k">in</span> <span class="n">route</span>
       <span class="p">{</span>
         <span class="k">if</span> <span class="n">node</span> <span class="k">in</span> <span class="n">transmitted_nodes</span> <span class="n">and</span> <span class="n">multicast</span> <span class="p">==</span> <span class="k">true</span>
         <span class="p">{</span>
           <span class="k">continue</span>
         <span class="p">}</span>
-        <span class="n">provided</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">provided</span>
-<span class="na">        [output, remaining, received]</span> <span class="p">=</span> <span class="n">convolve</span><span class="p">(</span><span class="n">required</span><span class="p">,</span> <span class="n">provided</span><span class="p">)</span>
-        <span class="n">node</span><span class="p">.</span><span class="n">provided</span> <span class="p">=</span> <span class="n">remaining</span>
-        <span class="n">required</span> <span class="p">=</span> <span class="n">received</span>
+        <span class="n">provided_profile</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">provided_profile</span>
+
+        <span class="n">tuple</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">remaining</span><span class="p">,</span> <span class="n">received</span><span class="p">)</span> <span class="p">=</span> <span class="n">convolve</span><span class="p">(</span><span class="n">required_profile</span><span class="p">,</span> <span class="n">provided_profile</span><span class="p">)</span>
+
+        <span class="n">node</span><span class="p">.</span><span class="n">provided_profile</span> <span class="p">=</span> <span class="n">remaining</span>
+        <span class="n">required_profile</span> <span class="p">=</span> <span class="n">received</span>
         <span class="n">transmitted_nodes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
       <span class="p">}</span>
-<span class="na">      [recv_output, recv_remaining, ]</span> <span class="p">=</span> <span class="n">convolve</span><span class="p">(</span><span class="n">required</span><span class="p">,</span> <span class="n">receiver</span><span class="p">)</span>
+      <span class="n">tuple</span><span class="p">(</span><span class="n">recv_output</span><span class="p">,</span> <span class="n">recv_remaining</span><span class="p">)</span> <span class="p">=</span> <span class="n">convolve</span><span class="p">(</span><span class="n">required_profile</span><span class="p">,</span> <span class="n">receiver_profile</span><span class="p">)</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
@@ -756,19 +799,19 @@ flows and the system</p>
 each profile with a lower priority iteratively.  Because of this
 iterative recalculation of node provided profiles based on routed
 profiles, we directly take into account the effect of multiple
-independent flows traversing the same router; the highest priority
-flow receives as much bandwidth as the router can give it, the next
-highest priority flow receives the remaining bandwidth, and so on.</p>
+independent profiles traversing the same router; the highest priority
+profile receives as much bandwidth as the router can give it, the next
+highest priority profile receives the remaining bandwidth, and so on.</p>
 <p>We take care of matching all senders to their respective receivers,
 and ensure that if the system supports multicast, a no retransmissions
-occur; only nodes which must route the flow to a new part of the
+occur; only nodes which must route the profile to a new part of the
 network retransmit the data.  However, if the system does not support
 multicast, then the sender must issue a separate transmission, further
 consuming network resources.  In this way, lower-level transport
 capabilities can be at least partially accounted for by our analysis.</p>
 <p>We have implmented these functions for statically routed network
-analysis into our tool, which automatically parses the flow profiles,
-the network configuration and uses the algorithm and the implemented
+analysis into our tool, which automatically parses the profiles, the
+network configuration and uses the algorithm and the implemented
 mathematics to iteratively analyze the network.  Analytical results
 for example systems will be provided when the experimental results can
 be used as a comparison.</p>

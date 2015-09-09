@@ -659,21 +659,21 @@ In this algorithm, the remaining capacity of the node is provided to
 each profile with a lower priority iteratively.  Because of this
 iterative recalculation of node provided profiles based on routed
 profiles, we directly take into account the effect of multiple
-independent flows traversing the same router; the highest priority
-flow receives as much bandwidth as the router can give it, the next
-highest priority flow receives the remaining bandwidth, and so on.
+independent profiles traversing the same router; the highest priority
+profile receives as much bandwidth as the router can give it, the next
+highest priority profile receives the remaining bandwidth, and so on.
 
 We take care of matching all senders to their respective receivers,
 and ensure that if the system supports multicast, a no retransmissions
-occur; only nodes which must route the flow to a new part of the
+occur; only nodes which must route the profile to a new part of the
 network retransmit the data.  However, if the system does not support
 multicast, then the sender must issue a separate transmission, further
 consuming network resources.  In this way, lower-level transport
 capabilities can be at least partially accounted for by our analysis.
 
 We have implmented these functions for statically routed network
-analysis into our tool, which automatically parses the flow profiles,
-the network configuration and uses the algorithm and the implemented
+analysis into our tool, which automatically parses the profiles, the
+network configuration and uses the algorithm and the implemented
 mathematics to iteratively analyze the network.  Analytical results
 for example systems will be provided when the experimental results can
 be used as a comparison.
