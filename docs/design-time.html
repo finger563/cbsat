@@ -638,16 +638,27 @@ in the network, so that application developers and system integrators
 can derive meaningful perfomance predictions for specific
 applications.  For this goal, let us define:</p>
 <div class="line-block">
-<div class="line"><strong>Compositionality:</strong></div>
+<div class="line"><strong>Compositionality:</strong> [<a class="reference internal" href="#sifakis2002">sifakis2002</a>]</div>
 <div class="line-block">
-<div class="line">provides rules and guarantees ensuring that a component&#8217;s</div>
-<div class="line">properties will not change after system integration.</div>
+<div class="line">A system is compositional if its properties can be derived from</div>
+<div class="line">the properties of its components and how they are interconnected.</div>
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><strong>Composability:</strong> [<a class="reference internal" href="#sifakis2002">sifakis2002</a>]</div>
+<div class="line-block">
+<div class="line">A component is composable if its properties do not change</div>
+<div class="line">when the component is composed with other components.</div>
 <div class="line"><br /></div>
 </div>
 </div>
 <p>For our analysis techniques to be compositional, an application&#8217;s
 required profile must be analyzable individually without requiring
-aggregation with the rest of the required profiles in the system.</p>
+aggregation with the rest of the required profiles in the system.
+This means that the system&#8217;s performance, i.e. the peformance of all
+the applications on the system, can be determined by analyzing the
+performance of each application individually.</p>
 <p>For this compositionality, we must not only define mathematical
 operations which allow us to aggregate and separate profiles with/from
 each other, but also the semantics of how these profiles are composed
@@ -871,20 +882,28 @@ be used as a comparison.</p>
 <p>We are finishing the design and development of code which will allow
 us to run experiments to validate our routing analysis results.  They
 will be complete in the next two weeks.</p>
+<table class="docutils citation" frame="void" id="sifakis2002" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[sifakis2002]</td><td>G. Goessler, J. Sifakis, &#8220;Composition for
+Component-Based Modeling,&#8221; Springer, Formal Methods
+for Components and Objects, 2003.</td></tr>
+</tbody>
+</table>
 <table class="docutils citation" frame="void" id="rfc2474" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[RFC2474]</td><td>K. Nichols, Cisco Systems, et al., “Definition of the
+<tr><td class="label">[RFC2474]</td><td>K. Nichols, Cisco Systems, et al., &#8220;Definition of the
 Differentiated Services Field (DS Field) in the IPv4 and
-IPv6 Headers,” IETF, RFC 2474, Dec.
+IPv6 Headers,&#8221; IETF, RFC 2474, Dec.
 1998. [Online]. Available: <a class="reference external" href="https://tools.ietf.org/html/rfc2474">https://tools.ietf.org/html/rfc2474</a></td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="rfc3246" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[RFC3246]</td><td>B. Davie, A. Charny, et al., “An Expedited Forwarding
-PHB (Per-Hop Behavior),” IETF, RFC 3246, Mar.
+<tr><td class="label">[RFC3246]</td><td>B. Davie, A. Charny, et al., &#8220;An Expedited Forwarding
+PHB (Per-Hop Behavior),&#8221; IETF, RFC 3246, Mar.
 2002. [Online]. Available: <a class="reference external" href="https://tools.ietf.org/html/rfc3246">https://tools.ietf.org/html/rfc3246</a></td></tr>
 </tbody>
 </table>

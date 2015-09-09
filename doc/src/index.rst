@@ -58,4 +58,3 @@ development of robust safety- or mission-critical applications.
    users
    developers
 
-:ref:`genindex`

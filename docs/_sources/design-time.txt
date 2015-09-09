@@ -472,14 +472,22 @@ in the network, so that application developers and system integrators
 can derive meaningful perfomance predictions for specific
 applications.  For this goal, let us define:
 
-| **Compositionality:**
-|   provides rules and guarantees ensuring that a component's
-|   properties will not change after system integration.
+| **Compositionality:** [sifakis2002_]
+|   A system is compositional if its properties can be derived from
+|   the properties of its components and how they are interconnected.
+|
+
+| **Composability:** [sifakis2002_]
+|   A component is composable if its properties do not change
+|   when the component is composed with other components.
 |
 
 For our analysis techniques to be compositional, an application's
 required profile must be analyzable individually without requiring
 aggregation with the rest of the required profiles in the system.
+This means that the system's performance, i.e. the peformance of all
+the applications on the system, can be determined by analyzing the
+performance of each application individually.
 
 For this compositionality, we must not only define mathematical
 operations which allow us to aggregate and separate profiles with/from
@@ -734,11 +742,15 @@ We are finishing the design and development of code which will allow
 us to run experiments to validate our routing analysis results.  They
 will be complete in the next two weeks.
 
-.. [RFC2474]  K. Nichols, Cisco Systems, et al., “Definition of the
+.. [sifakis2002] G. Goessler, J. Sifakis, "Composition for
+		 Component-Based Modeling," Springer, Formal Methods
+		 for Components and Objects, 2003.
+
+.. [RFC2474]  K. Nichols, Cisco Systems, et al., "Definition of the
 	      Differentiated Services Field (DS Field) in the IPv4 and
-	      IPv6 Headers,” IETF, RFC 2474, Dec.
+	      IPv6 Headers," IETF, RFC 2474, Dec.
 	      1998. [Online]. Available: https://tools.ietf.org/html/rfc2474
 
-.. [RFC3246]  B. Davie, A. Charny, et al., “An Expedited Forwarding
-	      PHB (Per-Hop Behavior),” IETF, RFC 3246, Mar.
+.. [RFC3246]  B. Davie, A. Charny, et al., "An Expedited Forwarding
+	      PHB (Per-Hop Behavior)," IETF, RFC 3246, Mar.
 	      2002. [Online]. Available: https://tools.ietf.org/html/rfc3246
