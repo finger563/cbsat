@@ -646,7 +646,10 @@ Where
   :math:`U_{P_1} < U_{P_2}`, and
 * :math:`\{(t,R_D,D,L)\}` is a *set* of :math:`(time, data\ rate,
   data, latency)` tuples describing how each of :math:`\{data\ rate,
-  data, latency\}` vary with respect to time.  The initial profile
+  data, latency\}` vary with respect to time.  Semantically, the
+  :math:`data\ rate` is constant between any two successive values of
+  :math:`t`, while the :math:`data` and :math:`latency` are *linearly
+  interpolated* during the same interval.  The initial profile
   specification does not have the :math:`data` field; :math:`data` is
   calculated based on :math:`data\ rate`.
 

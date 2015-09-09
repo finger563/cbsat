@@ -6,6 +6,85 @@ Run Time Results
 Middleware-integrated Measurement, Detection, and Enforcement
 -------------------------------------------------------------
 
+.. _fig-component:
+
+.. figure:: images/results/ros_component.png
+   :align: center
+   :width: 400px
+
+   Schematic representation of a software component.
+
+Our run-time research and development of measurement, detection, and
+enforcement code for networked applications is built on the foundation
+of component-based software engineering (CBSE).  The goal of CBSE is
+to provide a reusable framework for the development of application
+building-blocks, called *components* so that developers can develop
+and *analyze* applications in a more robust and scalable manner.  In
+CBSE, a *component*, shown schematically in :num:`Figure
+#fig-component`, is the smallest deployable part of an application and
+is defined as:
+
+.. math:: C = \{\{T\},\{P\},H\}
+
+Where
+
+* :math:`\{T\}` is the *set* of all *timers* within the component.  A
+  timer provides a periodic event trigger to the component which
+  triggers the callback associated with :math:`T`.
+* :math:`\{P\}` is the *set* of all *input/output ports* within the
+  component.  An i/o port provides a mechanism for message passing and
+  event triggering between components, and may take the form of
+  asynchronous *publish/subscribe* or synchronous *client/server*
+  interaction patterns.  Similarly to timers, each incoming event
+  triggers the callback associated with :math:`P`.
+* :math:`H` is the single thread which executes all event events for
+  the component, in FIFO order, without preemption.  
+
+From this component definition, we can define an application as:
+
+.. math:: A = \{\{C\},\{M\}\}
+
+Where
+
+* :math:`\{C\}` is the *set* of components in the application
+* :math:`\{M\}` is the *set* of *mappings* between ports of the
+  components in :math:`\{C\}`, for instance connecting a subscriber of
+  :math:`C_x` to a publisher of :math:`C_y`, :math:`M_{x,y} :
+  C_x\{P_S\}\mapsto C_y\{P_P\}`.
+
+And finally, an application's components are grouped into processes
+and distributed onto the nodes of a system through a deployment
+defined as:
+
+.. math:: D = \{\{N\},\{U\},\{M\}\}
+
+Where
+
+* :math:`\{N\}` is the *set* of hardware *nodes* in the system
+* :math:`\{U\}` is the *set* of *processes* defining the deployment,
+  where a process is a collection of components
+  :math:`U=\{C\}\subseteq A\{\{C\}\}`.
+* :math:`\{M\}` is the *set* of *mappings* between processes and nodes
+  in the system, e.g. :math:`M_{U_1,N_1} : U_1\mapsto N_1`.
+
+Note here that though the components may be single threaded
+internally, the application containing these components may run them
+in parallel, e.g. by grouping them into a process or distributing them
+among the hardware nodes of the system.  An example application and
+deployment onto a system of nodes is shown in :num:`Figure #fig-cbse`.
+Note that multiple applications (shades of blue in this figure) may be
+deployed simultaneously onto the same system and may even interact
+with each other.
+
+.. _fig-cbse:
+
+.. figure:: images/results/cbse.png
+   :align: center
+   :width: 400px
+
+   Two example distributed CBSE applications deployed on a system with
+   4 nodes.
+
 We have implemented these features based on our design-time results:
 
 * Traffic generators according to profile generated into sender code
@@ -23,6 +102,15 @@ design-time system and application analysis.  This integration not
 only helps with running experiments and data collection but also helps
 to ensure model to system consistency.
   
+.. _fig-sender:
+
+.. figure:: images/results/app_layers.png
+   :align: center
+   :width: 400px
+
+   The structure of component-based applications and how their network
+   traffic traverses the middleware and the OS stack.
+
 We have implemented profile-based traffic generators and traffic
 measurement into our code generators that we use with our model-driven
 design software.  We developed this toolsuite to create distributed
@@ -35,7 +123,8 @@ Additionally, these publish operations are generated to use a small
 wrapper which can measure the publish rate and can decide to throw a
 *profile exceeded* exception if the application attempts to send too
 much data or if the receiver has pushed back to the sender informing
-it to stop.
+it to stop.  The sender-side middleware layer is shown in :num:`Figure
+#fig-sender`.
 
 This push back from the receiver occurs through the use of an
 out-of-band (OOB) channel using UDP multicast, which receivers use to
@@ -97,7 +186,7 @@ excessive traffic from a large amount of (possibly heterogeneous)
 sources targeted towards a single point or a single group.  Such
 attacks are common to machines on the internet, but can also become a
 hazard for machines on private networks which become infected or
-inadvertently expose a path for data traversal.  
+inadvertently expose an input path for external malicious data.  
 
 These private or semi-private systems must have mechanisms for
 detecting and mitigating such attacks, and the combination of our

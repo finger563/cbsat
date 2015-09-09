@@ -149,6 +149,72 @@
 <span id="run-time"></span><h1>Run Time Results<a class="headerlink" href="#run-time-results" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="middleware-integrated-measurement-detection-and-enforcement">
 <h2>Middleware-integrated Measurement, Detection, and Enforcement<a class="headerlink" href="#middleware-integrated-measurement-detection-and-enforcement" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center" id="id1">
+<span id="fig-component"></span><a class="reference internal image-reference" href="_images/ros_component.png"><img alt="_images/ros_component.png" src="_images/ros_component.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">Figure 1: Schematic representation of a software component.</span></p>
+</div>
+<p>Our run-time research and development of measurement, detection, and
+enforcement code for networked applications is built on the foundation
+of component-based software engineering (CBSE).  The goal of CBSE is
+to provide a reusable framework for the development of application
+building-blocks, called <em>components</em> so that developers can develop
+and <em>analyze</em> applications in a more robust and scalable manner.  In
+CBSE, a <em>component</em>, shown schematically in <a class="pageref" href="#fig-component">Figure  1</a>, is the smallest deployable part of an application and
+is defined as:</p>
+<div class="math">
+<p><img src="_images/math/40611739391a1c17b6ec459e52482c7322d20809.png" alt="C = \{\{T\},\{P\},H\}"/></p>
+</div><p>Where</p>
+<ul class="simple">
+<li><img class="math" src="_images/math/71676f7f49d77829c48f5d2218113e8ebe7a1017.png" alt="\{T\}"/> is the <em>set</em> of all <em>timers</em> within the component.  A
+timer provides a periodic event trigger to the component which
+triggers the callback associated with <img class="math" src="_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>.</li>
+<li><img class="math" src="_images/math/65d6b17699350b738003572a33a80c618658bf7e.png" alt="\{P\}"/> is the <em>set</em> of all <em>input/output ports</em> within the
+component.  An i/o port provides a mechanism for message passing and
+event triggering between components, and may take the form of
+asynchronous <em>publish/subscribe</em> or synchronous <em>client/server</em>
+interaction patterns.  Similarly to timers, each incoming event
+triggers the callback associated with <img class="math" src="_images/math/f48b617185733d8dd6712643f1ab17c736661a06.png" alt="P"/>.</li>
+<li><img class="math" src="_images/math/48f75e0b463f2fdb7fca9566cffdc439cae6967f.png" alt="H"/> is the single thread which executes all event events for
+the component, in FIFO order, without preemption.</li>
+</ul>
+<p>From this component definition, we can define an application as:</p>
+<div class="math">
+<p><img src="_images/math/2124f9728e0724286a9335990c9fefae9f0c3155.png" alt="A = \{\{C\},\{M\}\}"/></p>
+</div><p>Where</p>
+<ul class="simple">
+<li><img class="math" src="_images/math/37b36d1290f8dff33b593bab466813939fbfcc95.png" alt="\{C\}"/> is the <em>set</em> of components in the application</li>
+<li><img class="math" src="_images/math/7b41fd5fb50c9e53f0e5bea049144017ca7726e4.png" alt="\{M\}"/> is the <em>set</em> of <em>mappings</em> between ports of the
+components in <img class="math" src="_images/math/37b36d1290f8dff33b593bab466813939fbfcc95.png" alt="\{C\}"/>, for instance connecting a subscriber of
+<img class="math" src="_images/math/eb06e2d848c46b5ebd3c7c71d2a0c4c77d571023.png" alt="C_x"/> to a publisher of <img class="math" src="_images/math/39a8ec6d3eff4f14d2414d8091b3015d8d3d0969.png" alt="C_y"/>, <img class="math" src="_images/math/e9fd93b1230ec487f927850c88e903aa52723a47.png" alt="M_{x,y} :
+C_x\{P_S\}\mapsto C_y\{P_P\}"/>.</li>
+</ul>
+<p>And finally, an application&#8217;s components are grouped into processes
+and distributed onto the nodes of a system through a deployment
+defined as:</p>
+<div class="math">
+<p><img src="_images/math/bd1acc1ff13c5fec38e58e23b1d45faae7926a4e.png" alt="D = \{\{N\},\{U\},\{M\}\}"/></p>
+</div><p>Where</p>
+<ul class="simple">
+<li><img class="math" src="_images/math/965f1d1188ca407fa91a1324b28e9ccbfad460e5.png" alt="\{N\}"/> is the <em>set</em> of hardware <em>nodes</em> in the system</li>
+<li><img class="math" src="_images/math/eaf2c6be2cbfcd7e5236de248087e34b9da6aa83.png" alt="\{U\}"/> is the <em>set</em> of <em>processes</em> defining the deployment,
+where a process is a collection of components
+<img class="math" src="_images/math/14282023fb6c5d867d6470bb0bb6b2b0f4826e5b.png" alt="U=\{C\}\subseteq A\{\{C\}\}"/>.</li>
+<li><img class="math" src="_images/math/7b41fd5fb50c9e53f0e5bea049144017ca7726e4.png" alt="\{M\}"/> is the <em>set</em> of <em>mappings</em> between processes and nodes
+in the system, e.g. <img class="math" src="_images/math/0642ec897e463735bb62c269e2bac8fea2d86bc4.png" alt="M_{U_1,N_1} : U_1\mapsto N_1"/>.</li>
+</ul>
+<p>Note here that though the components may be single threaded
+internally, the application containing these components may run them
+in parallel, e.g. by grouping them into a process or distributing them
+among the hardware nodes of the system.  An example application and
+deployment onto a system of nodes is shown in <a class="pageref" href="#fig-cbse">Figure  2</a>.
+Note that multiple applications (shades of blue in this figure) may be
+deployed simultaneously onto the same system and may even interact
+with each other.</p>
+<div class="figure align-center" id="id2">
+<span id="fig-cbse"></span><a class="reference internal image-reference" href="_images/cbse.png"><img alt="_images/cbse.png" src="_images/cbse.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">Figure 2: Two example distributed CBSE applications deployed on a system with
+4 nodes.</span></p>
+</div>
 <p>We have implemented these features based on our design-time results:</p>
 <ul class="simple">
 <li>Traffic generators according to profile generated into sender code</li>
@@ -165,6 +231,11 @@ anomaly detection on server side</li>
 design-time system and application analysis.  This integration not
 only helps with running experiments and data collection but also helps
 to ensure model to system consistency.</p>
+<div class="figure align-center" id="id3">
+<span id="fig-sender"></span><a class="reference internal image-reference" href="_images/app_layers.png"><img alt="_images/app_layers.png" src="_images/app_layers.png" style="width: 400px;" /></a>
+<p class="caption"><span class="caption-text">Figure 3: The structure of component-based applications and how their network
+traffic traverses the middleware and the OS stack.</span></p>
+</div>
 <p>We have implemented profile-based traffic generators and traffic
 measurement into our code generators that we use with our model-driven
 design software.  We developed this toolsuite to create distributed
@@ -177,7 +248,7 @@ Additionally, these publish operations are generated to use a small
 wrapper which can measure the publish rate and can decide to throw a
 <em>profile exceeded</em> exception if the application attempts to send too
 much data or if the receiver has pushed back to the sender informing
-it to stop.</p>
+it to stop.  The sender-side middleware layer is shown in <a class="pageref" href="#fig-sender">Figure  3</a>.</p>
 <p>This push back from the receiver occurs through the use of an
 out-of-band (OOB) channel using UDP multicast, which receivers use to
 inform specific senders that they are sending too much data to the
@@ -195,9 +266,9 @@ overflow.  When the buffer has had some time empty (so that it&#8217;s not
 in danger of running out of buffer space), the receiver can use the
 OOB channel to inform the halted senders that it is alright to send
 again.</p>
-<div class="figure align-center" id="id1">
+<div class="figure align-center" id="id4">
 <a class="reference internal image-reference" href="_images/traffic_generation.png"><img alt="_images/traffic_generation.png" src="_images/traffic_generation.png" style="width: 400px;" /></a>
-<p class="caption"><span class="caption-text">Figure 1: Demonstration of the accuracy with which our traffic generators
+<p class="caption"><span class="caption-text">Figure 4: Demonstration of the accuracy with which our traffic generators
 follow the specified profile.</span></p>
 </div>
 <div class="admonition note">
@@ -239,7 +310,7 @@ excessive traffic from a large amount of (possibly heterogeneous)
 sources targeted towards a single point or a single group.  Such
 attacks are common to machines on the internet, but can also become a
 hazard for machines on private networks which become infected or
-inadvertently expose a path for data traversal.</p>
+inadvertently expose an input path for external malicious data.</p>
 <p>These private or semi-private systems must have mechanisms for
 detecting and mitigating such attacks, and the combination of our
 design-time analysis and run-time measurement, detection, and
@@ -273,9 +344,9 @@ detects that the buffer is filling up quickly enough to overflow the
 buffer in the near future, it can use the measurements that have been
 gathered about the received traffic up to this point to determine
 which sender components to throttle temporarily.</p>
-<div class="figure align-center" id="id2">
+<div class="figure align-center" id="id5">
 <a class="reference internal image-reference" href="_images/example_setup.png"><img alt="_images/example_setup.png" src="_images/example_setup.png" style="width: 400px;" /></a>
-<p class="caption"><span class="caption-text">Figure 2: The nodes in the network and how they communicate (using pub/sub).</span></p>
+<p class="caption"><span class="caption-text">Figure 5: The nodes in the network and how they communicate (using pub/sub).</span></p>
 </div>
 <p>We shown experimentally that, for example, a server side buffer size
 of 400000 bits, which would normally grow to 459424 bits because of
