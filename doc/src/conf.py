@@ -1,6 +1,8 @@
-project = 'PNP2'
-version = '0.2'
-release = '0.2.0'
+project = 'Research Progress Report'
+html_short_title = 'Research Progress Report'
+#project = 'PNP2'
+#version = '0.2'
+#release = '0.2.0'
 copyright = '2015, finger563'
 
 import os,inspect,sys
@@ -45,10 +47,16 @@ html_context = { 'css_files': ['./_static/custom.css'] }
 
 todo_include_todos = True
 
+add_module_names = False
+show_authors = True
+
 spelling_word_list_filename = 'dictionary.txt'
 
 latex_elements = {}
 latex_elements['preamble'] = '\usepackage{amsmath}\n\usepackage{amssymb}\n'
 latex_elements['classoptions'] = ',openany,oneside'
 latex_elements['babel'] = '\\usepackage[english]{babel}'
-
+latex_elements['title'] = 'Research Progress Report'
+latex_elements['release'] = ''
+latex_elements['releasename'] = ''
+latex_elements['author'] = 'William Emfinger'

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Network Config &mdash; PNP2 0.2.0 documentation</title>
+  <title>Network Config &mdash; Research Progress Report  documentation</title>
   
 
   
@@ -32,7 +32,7 @@
   
 
   
-    <link rel="top" title="PNP2 0.2.0 documentation" href="../../index.html"/> 
+    <link rel="top" title="Research Progress Report  documentation" href="../../index.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -49,7 +49,7 @@
         
 
         
-          <a href="../../index.html" class="icon icon-home"> PNP2
+          <a href="../../index.html" class="icon icon-home"> Research Progress Report
         
 
         
@@ -117,7 +117,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="../../index.html">PNP2</a>
+        <a href="../../index.html">Research Progress Report</a>
       </nav>
 
 
@@ -148,7 +148,7 @@ flow/profile aggregation, routing, link management, and management of
 system level concerns such as multicast-capability.</p>
 <dl class="class">
 <dt id="networkConfig.Node">
-<em class="property">class </em><code class="descclassname">networkConfig.</code><code class="descname">Node</code><span class="sig-paren">(</span><em>_id</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Node</code><span class="sig-paren">(</span><em>_id</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines all the required information for a node in the network.
 This includes:</p>
 <ul class="simple">
@@ -191,7 +191,7 @@ This includes:</p>
 
 <dl class="class">
 <dt id="networkConfig.Route">
-<em class="property">class </em><code class="descclassname">networkConfig.</code><code class="descname">Route</code><span class="sig-paren">(</span><em>path=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Route" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Route</code><span class="sig-paren">(</span><em>path=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Route" title="Permalink to this definition">¶</a></dt>
 <dd><p>Describes how a flow traverse the links of the system&#8217;s network.
 This is specified as a list of nodes, with the source node at the 
 front of the list and the destination node at the end of the list.</p>
@@ -244,7 +244,7 @@ A route is defined as:</p>
 
 <dl class="class">
 <dt id="networkConfig.Topology">
-<em class="property">class </em><code class="descclassname">networkConfig.</code><code class="descname">Topology</code><span class="sig-paren">(</span><em>links={}</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Topology" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Topology</code><span class="sig-paren">(</span><em>links={}</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Topology" title="Permalink to this definition">¶</a></dt>
 <dd><p>Describes the active links between nodes on the system&#8217;s network.
 This is specified as a dictionary of node : list of nodes pairs.</p>
 <dl class="attribute">
@@ -267,7 +267,7 @@ A topology is defined as:</p>
 
 <dl class="class">
 <dt id="networkConfig.Config">
-<em class="property">class </em><code class="descclassname">networkConfig.</code><code class="descname">Config</code><span class="sig-paren">(</span><em>nodes={}</em>, <em>multicast=False</em>, <em>retransmit=False</em>, <em>routes=[]</em>, <em>topology={}</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Config" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Config</code><span class="sig-paren">(</span><em>nodes={}</em>, <em>multicast=False</em>, <em>retransmit=False</em>, <em>routes=[]</em>, <em>topology={}</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.Config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contains the routing and topology information
 to fully describe the system&#8217;s network and provide
 a mapping between application data flows (logical)
@@ -317,7 +317,7 @@ Internally calls <a class="reference internal" href="#networkConfig.Config.Parse
 
 <dl class="function">
 <dt id="networkConfig.main">
-<code class="descclassname">networkConfig.</code><code class="descname">main</code><span class="sig-paren">(</span><em>argv</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.main" title="Permalink to this definition">¶</a></dt>
+<code class="descname">main</code><span class="sig-paren">(</span><em>argv</em><span class="sig-paren">)</span><a class="headerlink" href="#networkConfig.main" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -352,7 +352,7 @@ Internally calls <a class="reference internal" href="#networkConfig.Config.Parse
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.2.0',
+            VERSION:'',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
