@@ -464,34 +464,76 @@ Compositional Analysis
 ======================
 
 Now that we have precise network performance analysis for aggregate
-flows or singular flows on individual nodes of the network, we must
-determine how best to compose these flows and nodes together to
-analyze the overal system.  The aim of this work is to allow the flows
-from each application to be analyzed separately from the other flows
+profiles or singular profiles on individual nodes of the network, we must
+determine how best to compose these profiles and nodes together to
+analyze the overall system.  The aim of this work is to allow the profiles
+from each application to be analyzed separately from the other profiles
 in the network, so that application developers and system integrators
 can derive meaningful perfomance predictions for specific
-applications.  
+applications.  For this goal, let us define:
 
-We have implemented min-plus calculus based compositional operations
-for the network profiles which allow us to compose and decompose
-systems based on functional components.  For network flows, this means
-we can analyze flows individually to determine per-flow performance
-metrics or we can aggregate flows together to determine aggregate
-performance.
+| **Compositionality:**
+|   provides rules and guarantees ensuring that a component's
+|   properties will not change after system integration.
+|
 
-The composition is priority based, with each flow receiving a unique
-priority.  This priority determines the oder in which the flows are
-individually analyzed, with the system's remaining capacity being
-provided to the flow with the next highest priority.  This is similar
-to the modular performance analysis provided by Real-Time Calculus.
+For our analysis techniques to be compositional, an application's
+required profile must be analyzable individually without requiring
+aggregation with the rest of the required profiles in the system.
 
-The basis for this priority-based interaction is the QoS management
-provided by many different types of networking infrastructure.
-DiffServ's DSCP provides one mechanism to implement this
-priority-based transmission and routing.
+For this compositionality, we must not only define mathematical
+operations which allow us to aggregate and separate profiles with/from
+each other, but also the semantics of how these profiles are composed
+with one another.  These semantics govern the relation between
+required profiles, specifically governing the distribution of their
+shared node's provided profile between each other.  For our
+compositional analysis, we defined that each required profile in the
+system be given a unique priority, :math:`U`, with the relation that a
+profile :math:`P_1` has a higher priority than profile :math:`P_2`
+*iff* :math:`U_{P_1} < U_{P_2}`.  Using this priority relation, we can
+define that a profile :math:`P_i` does not receive any capacity from
+its node at time :math:`t` until all other profiles with priority
+:math:`< U_{P_i}` have received their requested capacity from the
+node at :math:`t`.  If the node does not have enough capacity at
+:math:`t` to service :math:`P_i`, then the data :math:`P_i` attempted
+to send at :math:`t` will be placed into its buffer, to be sent at a
+time when the node has available bandwidth for :math:`P_i`.
+
+This priority relation for compositional analysis is similar to the
+task priority used for schedulability analysis in Real-Time Calculus,
+mentioned in :ref:`rtc`.  Similarly to RTC, this priority relation and
+compositionality allow us to capture the effects independent profiles
+have on each other when they share the same network resources.  Just
+as RTC based its priority relation and computation scheduling on a
+fixed-priority scheduler, our priority relation and resource allotment
+is based on the network Quality-of-Service (QoS) management provided
+by different types of networking infrastructure.  One such mechanism
+for implementing this type of priority-based network resource
+allocation is through the use of the DiffServ Code Point
+(DSCP)[RFC2474_].  The DSCP is a bit-field in all packets which have
+an Internet Protocol (IP) header which allows the packet to be
+assigned a specific class for per-hop routing behavior.  Routers and
+forwarders in the network group packets according to their DSCP class
+and provide different service capacities to each class.  For example,
+the *Expedited Forwarding* [RFC3246_] class receives strict priority
+queuing above all other traffic, which makes it a suitable
+implementation of this type of resource allocation.
+
+Mathematically, compositionality requires that we be able to add and
+subtract profiles from each other, for instance to determine the
+remaining service capacity of a node available for a profile
+:math:`P_i` after it serves all profiles with a higher priority.  The
+remaining capacity, :math:`P_P'`, of the node after it services
+:math:`P_i` is given as:
+
+.. math:: P_P' = P_P - ( P_i \otimes P_P )
+
+Where
+
+* :math:`P_P` is the capacity available to profile :math:`P_i`
 
 We are finalizing the design and code for tests which utilize the DSCP
-bit(s) setting on packet flows to show that such priority-based
+bit(s) setting on packet profiles to show that such priority-based
 analysis techniques are correct for these types of systems.
 
 .. _delay_analysis:
@@ -557,18 +599,23 @@ unchanged *iff* the latency profile is **periodic**, i.e.
 Routing Analysis
 ================
 
+Having discussed profile composition and the affects of delaying a
+profile, we can address one more aspect of system analysis: *routing*.
+For this analysis we will specifically focus on statically routed
+networks.
+
 By incorporating both the latency analysis with the compositional
-operations we developed, we can perform system-level analysis of flows
+operations we developed, we can perform system-level analysis of profiles
 which are routed by nodes of the system.  In this paradigm, nodes can
 transmit/receive their own data, i.e. they can host applications which
-act as data sources or sinks, as well as act as routers for flows from
+act as data sources or sinks, as well as act as routers for profiles from
 and to other nodes.  To make such a system amenable to analysis we
-must ensure that we know the routes the flows will take at design
+must ensure that we know the routes the profiles will take at design
 time, i.e. the routes in the network are static and known or
-calculable.  Furthermore, we must, for the sake of flow composition as
-decribed above, ensure that each flow has a priority that is unique
+calculable.  Furthermore, we must, for the sake of profile composition as
+decribed above, ensure that each profile has a priority that is unique
 within the network which governs how the transmitting and routing
-nodes handle the flow's data.
+nodes handle the profile's data.
 
 Let us define the system configuration :math:`C` as:
 
@@ -643,13 +690,15 @@ system:
 	  }
 	  provided_profile = node.provided_profile
 
-	  tuple(output, remaining, received) = convolve(required_profile, provided_profile)
+	  output_profile = convolve(required_profile, provided_profile)
+	  remaining_profile = provided_profile - output_profile
+	  received_profile = delay(output_profile, provided_profile)
 
-	  node.provided_profile = remaining
-	  required_profile = received
+	  node.provided_profile = remaining_profile
+	  required_profile = received_profile
 	  transmitted_nodes.append(node)
 	}
-	tuple(recv_output, recv_remaining) = convolve(required_profile, receiver_profile)
+	receiver_received_profile = convolve(required_profile, receiver_profile)
       }
     }
   }
@@ -682,3 +731,11 @@ We are finishing the design and development of code which will allow
 us to run experiments to validate our routing analysis results.  They
 will be complete in the next two weeks.
 
+.. [RFC2474]  K. Nichols, Cisco Systems, et al., “Definition of the
+	      Differentiated Services Field (DS Field) in the IPv4 and
+	      IPv6 Headers,” IETF, RFC 2474, Dec.
+	      1998. [Online]. Available: https://tools.ietf.org/html/rfc2474
+
+.. [RFC3246]  B. Davie, A. Charny, et al., “An Expedited Forwarding
+	      PHB (Per-Hop Behavior),” IETF, RFC 3246, Mar.
+	      2002. [Online]. Available: https://tools.ietf.org/html/rfc3246

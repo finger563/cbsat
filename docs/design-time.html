@@ -630,30 +630,74 @@ explicitly integrating the TDMA model into the system profile model.</p>
 <div class="section" id="compositional-analysis">
 <span id="id2"></span><h2>Compositional Analysis<a class="headerlink" href="#compositional-analysis" title="Permalink to this headline">¶</a></h2>
 <p>Now that we have precise network performance analysis for aggregate
-flows or singular flows on individual nodes of the network, we must
-determine how best to compose these flows and nodes together to
-analyze the overal system.  The aim of this work is to allow the flows
-from each application to be analyzed separately from the other flows
+profiles or singular profiles on individual nodes of the network, we must
+determine how best to compose these profiles and nodes together to
+analyze the overall system.  The aim of this work is to allow the profiles
+from each application to be analyzed separately from the other profiles
 in the network, so that application developers and system integrators
 can derive meaningful perfomance predictions for specific
-applications.</p>
-<p>We have implemented min-plus calculus based compositional operations
-for the network profiles which allow us to compose and decompose
-systems based on functional components.  For network flows, this means
-we can analyze flows individually to determine per-flow performance
-metrics or we can aggregate flows together to determine aggregate
-performance.</p>
-<p>The composition is priority based, with each flow receiving a unique
-priority.  This priority determines the oder in which the flows are
-individually analyzed, with the system&#8217;s remaining capacity being
-provided to the flow with the next highest priority.  This is similar
-to the modular performance analysis provided by Real-Time Calculus.</p>
-<p>The basis for this priority-based interaction is the QoS management
-provided by many different types of networking infrastructure.
-DiffServ&#8217;s DSCP provides one mechanism to implement this
-priority-based transmission and routing.</p>
+applications.  For this goal, let us define:</p>
+<div class="line-block">
+<div class="line"><strong>Compositionality:</strong></div>
+<div class="line-block">
+<div class="line">provides rules and guarantees ensuring that a component&#8217;s</div>
+<div class="line">properties will not change after system integration.</div>
+<div class="line"><br /></div>
+</div>
+</div>
+<p>For our analysis techniques to be compositional, an application&#8217;s
+required profile must be analyzable individually without requiring
+aggregation with the rest of the required profiles in the system.</p>
+<p>For this compositionality, we must not only define mathematical
+operations which allow us to aggregate and separate profiles with/from
+each other, but also the semantics of how these profiles are composed
+with one another.  These semantics govern the relation between
+required profiles, specifically governing the distribution of their
+shared node&#8217;s provided profile between each other.  For our
+compositional analysis, we defined that each required profile in the
+system be given a unique priority, <img class="math" src="_images/math/73f5e249c88b2b3068263480f576b051cb5c4f6e.png" alt="U"/>, with the relation that a
+profile <img class="math" src="_images/math/26a00c0666e9094d8aac94f0ef300011af9b38a5.png" alt="P_1"/> has a higher priority than profile <img class="math" src="_images/math/6534eb155fcde09dbe8489e513d1925f86997578.png" alt="P_2"/>
+<em>iff</em> <img class="math" src="_images/math/b70132060f3b882366b3a6fa59cdd0cdfa72019e.png" alt="U_{P_1} &lt; U_{P_2}"/>.  Using this priority relation, we can
+define that a profile <img class="math" src="_images/math/0d28dc7d569a7d28cd0a992d11980e9462908d35.png" alt="P_i"/> does not receive any capacity from
+its node at time <img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> until all other profiles with priority
+<img class="math" src="_images/math/b712a53a8674ce08bfb47928271cae4feb4d5d07.png" alt="&lt; U_{P_i}"/> have received their requested capacity from the
+node at <img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>.  If the node does not have enough capacity at
+<img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> to service <img class="math" src="_images/math/0d28dc7d569a7d28cd0a992d11980e9462908d35.png" alt="P_i"/>, then the data <img class="math" src="_images/math/0d28dc7d569a7d28cd0a992d11980e9462908d35.png" alt="P_i"/> attempted
+to send at <img class="math" src="_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> will be placed into its buffer, to be sent at a
+time when the node has available bandwidth for <img class="math" src="_images/math/0d28dc7d569a7d28cd0a992d11980e9462908d35.png" alt="P_i"/>.</p>
+<p>This priority relation for compositional analysis is similar to the
+task priority used for schedulability analysis in Real-Time Calculus,
+mentioned in <a class="reference internal" href="background.html#rtc"><span>Real Time Calculus</span></a>.  Similarly to RTC, this priority relation and
+compositionality allow us to capture the effects independent profiles
+have on each other when they share the same network resources.  Just
+as RTC based its priority relation and computation scheduling on a
+fixed-priority scheduler, our priority relation and resource allotment
+is based on the network Quality-of-Service (QoS) management provided
+by different types of networking infrastructure.  One such mechanism
+for implementing this type of priority-based network resource
+allocation is through the use of the DiffServ Code Point
+(DSCP)[<a class="reference internal" href="#rfc2474">RFC2474</a>].  The DSCP is a bit-field in all packets which have
+an Internet Protocol (IP) header which allows the packet to be
+assigned a specific class for per-hop routing behavior.  Routers and
+forwarders in the network group packets according to their DSCP class
+and provide different service capacities to each class.  For example,
+the <em>Expedited Forwarding</em> [<a class="reference internal" href="#rfc3246">RFC3246</a>] class receives strict priority
+queuing above all other traffic, which makes it a suitable
+implementation of this type of resource allocation.</p>
+<p>Mathematically, compositionality requires that we be able to add and
+subtract profiles from each other, for instance to determine the
+remaining service capacity of a node available for a profile
+<img class="math" src="_images/math/0d28dc7d569a7d28cd0a992d11980e9462908d35.png" alt="P_i"/> after it serves all profiles with a higher priority.  The
+remaining capacity, <img class="math" src="_images/math/b28792cd4c5e2f5fee5373ad329bff567f68055a.png" alt="P_P'"/>, of the node after it services
+<img class="math" src="_images/math/0d28dc7d569a7d28cd0a992d11980e9462908d35.png" alt="P_i"/> is given as:</p>
+<div class="math">
+<p><img src="_images/math/a09d0ddd7194f476fa3e3b672c09b33e7f4fa391.png" alt="P_P' = P_P - ( P_i \otimes P_P )"/></p>
+</div><p>Where</p>
+<ul class="simple">
+<li><img class="math" src="_images/math/8aac03b267c0d6a8b10bada564e2169d6a73179a.png" alt="P_P"/> is the capacity available to profile <img class="math" src="_images/math/0d28dc7d569a7d28cd0a992d11980e9462908d35.png" alt="P_i"/></li>
+</ul>
 <p>We are finalizing the design and code for tests which utilize the DSCP
-bit(s) setting on packet flows to show that such priority-based
+bit(s) setting on packet profiles to show that such priority-based
 analysis techniques are correct for these types of systems.</p>
 </div>
 <div class="section" id="delay-analysis">
@@ -706,18 +750,22 @@ unchanged <em>iff</em> the latency profile is <strong>periodic</strong>, i.e.</p
 </div></div>
 <div class="section" id="routing-analysis">
 <span id="id4"></span><h2>Routing Analysis<a class="headerlink" href="#routing-analysis" title="Permalink to this headline">¶</a></h2>
+<p>Having discussed profile composition and the affects of delaying a
+profile, we can address one more aspect of system analysis: <em>routing</em>.
+For this analysis we will specifically focus on statically routed
+networks.</p>
 <p>By incorporating both the latency analysis with the compositional
-operations we developed, we can perform system-level analysis of flows
+operations we developed, we can perform system-level analysis of profiles
 which are routed by nodes of the system.  In this paradigm, nodes can
 transmit/receive their own data, i.e. they can host applications which
-act as data sources or sinks, as well as act as routers for flows from
+act as data sources or sinks, as well as act as routers for profiles from
 and to other nodes.  To make such a system amenable to analysis we
-must ensure that we know the routes the flows will take at design
+must ensure that we know the routes the profiles will take at design
 time, i.e. the routes in the network are static and known or
-calculable.  Furthermore, we must, for the sake of flow composition as
-decribed above, ensure that each flow has a priority that is unique
+calculable.  Furthermore, we must, for the sake of profile composition as
+decribed above, ensure that each profile has a priority that is unique
 within the network which governs how the transmitting and routing
-nodes handle the flow&#8217;s data.</p>
+nodes handle the profile&#8217;s data.</p>
 <p>Let us define the system configuration <img class="math" src="_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/> as:</p>
 <div class="math">
 <p><img src="_images/math/1665b44bb6ec1578353806fafa7c9f5e674abe68.png" alt="C = \{\{P_S\},\{N\},\{R\}\}"/></p>
@@ -783,13 +831,15 @@ system:</p>
         <span class="p">}</span>
         <span class="n">provided_profile</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">provided_profile</span>
 
-        <span class="n">tuple</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">remaining</span><span class="p">,</span> <span class="n">received</span><span class="p">)</span> <span class="p">=</span> <span class="n">convolve</span><span class="p">(</span><span class="n">required_profile</span><span class="p">,</span> <span class="n">provided_profile</span><span class="p">)</span>
+        <span class="n">output_profile</span> <span class="p">=</span> <span class="n">convolve</span><span class="p">(</span><span class="n">required_profile</span><span class="p">,</span> <span class="n">provided_profile</span><span class="p">)</span>
+        <span class="n">remaining_profile</span> <span class="p">=</span> <span class="n">provided_profile</span> <span class="p">-</span> <span class="n">output_profile</span>
+        <span class="n">received_profile</span> <span class="p">=</span> <span class="n">delay</span><span class="p">(</span><span class="n">output_profile</span><span class="p">,</span> <span class="n">provided_profile</span><span class="p">)</span>
 
-        <span class="n">node</span><span class="p">.</span><span class="n">provided_profile</span> <span class="p">=</span> <span class="n">remaining</span>
-        <span class="n">required_profile</span> <span class="p">=</span> <span class="n">received</span>
+        <span class="n">node</span><span class="p">.</span><span class="n">provided_profile</span> <span class="p">=</span> <span class="n">remaining_profile</span>
+        <span class="n">required_profile</span> <span class="p">=</span> <span class="n">received_profile</span>
         <span class="n">transmitted_nodes</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
       <span class="p">}</span>
-      <span class="n">tuple</span><span class="p">(</span><span class="n">recv_output</span><span class="p">,</span> <span class="n">recv_remaining</span><span class="p">)</span> <span class="p">=</span> <span class="n">convolve</span><span class="p">(</span><span class="n">required_profile</span><span class="p">,</span> <span class="n">receiver_profile</span><span class="p">)</span>
+      <span class="n">receiver_received_profile</span> <span class="p">=</span> <span class="n">convolve</span><span class="p">(</span><span class="n">required_profile</span><span class="p">,</span> <span class="n">receiver_profile</span><span class="p">)</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
@@ -818,6 +868,23 @@ be used as a comparison.</p>
 <p>We are finishing the design and development of code which will allow
 us to run experiments to validate our routing analysis results.  They
 will be complete in the next two weeks.</p>
+<table class="docutils citation" frame="void" id="rfc2474" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[RFC2474]</td><td>K. Nichols, Cisco Systems, et al., “Definition of the
+Differentiated Services Field (DS Field) in the IPv4 and
+IPv6 Headers,” IETF, RFC 2474, Dec.
+1998. [Online]. Available: <a class="reference external" href="https://tools.ietf.org/html/rfc2474">https://tools.ietf.org/html/rfc2474</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="rfc3246" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[RFC3246]</td><td>B. Davie, A. Charny, et al., “An Expedited Forwarding
+PHB (Per-Hop Behavior),” IETF, RFC 3246, Mar.
+2002. [Online]. Available: <a class="reference external" href="https://tools.ietf.org/html/rfc3246">https://tools.ietf.org/html/rfc3246</a></td></tr>
+</tbody>
+</table>
 </div>
 </div>
 
