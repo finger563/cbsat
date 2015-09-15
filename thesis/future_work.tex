@@ -1,0 +1,22 @@
+\chapter{Future Work}
+\label{ch:future_work}
+
+%The DREMS toolsuite makes progress towards an integrated design, analysis, development, and deployment infrastructure for managed cyber-physical applications. While DREMS already provides the modeling language, modeling tools, code generation, secure operating system, secure communications, and middleware infrastructure for developing managed CPS applications, it lacks any design- and run-time analysis or control over the network traffic. 
+
+%This work's goal is to provide more functionality in the DREMS toolsuite towards the analysis and design of a dynamic network and networked applications for managed CPS applications.  Currently the basic network profile has been modeled and verified to be correct for simple application scenarios, but work is still needed before the network Quality of Service control is ready for deployment.  
+
+This work's goal is to provide a design-time analysis of dynamic networks for verification of application performance.  Towards that goal, we have shown an analyzable network model for deterministic time-varying networks.  We have shown the validity of this model and its analysis through experimental results on a time-varying network.  More work is needed however to extend this model for deployment in a run-time system.  
+
+To extend this analysis into the run-time system we are modifying the component connector layer of the middleware to measure the run-time performance of the application. In this layer, the application's network traffic can be monitored and controlled. The monitoring of the network traffic in this layer allows us to ensure that each application gets the network traffic profile it was guaranteed while also providing the developer with a common interface for controlling the QoS on the network regardless of the interaction pattern being used.  Conversely, the control of the network traffic further allows us to ensure that any application's attempts to exceed its traffic profile limits do not affect another application's utilization of the network.  
+
+A few of the key features on which we are currently working include 
+
+\begin{itemize}
+\item Extending the network profile modeling towards dynamic networks whose evolution may not be completely known at design time
+\item Determining the scalability of the analysis for larger networks
+\item Performing constraints analysis between the applications and the network links to determine if applications can execute on the platform successfully
+\item Integrating schedulability analysis to provide information to inadmissible applications about how they need to reschedule their network traffic for admission to the network
+\item Business logic modeling to generate the application traffic profiles
+\item Run-time network traffic management code integrated into the middleware for providing the network queues, monitoring bandwidth and delay, and ensuring conformance of applications to their traffic profiles
+\item Extending the run-time management to include dynamic network load balancing and traffic profile rescheduling based on availability of the network
+\end{itemize}

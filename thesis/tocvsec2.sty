@@ -1,0 +1,112 @@
+%%
+%% This is file `tocvsec2.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% tocvsec2.dtx  (with options: `usc')
+%% 
+%%  Copyright 1998 Peter R. Wilson
+%% 
+%%  This program is provided under the terms of the
+%%  LaTeX Project Public License distributed from CTAN
+%%  archives in directory macros/latex/base/lppl.txt.
+%% 
+%% Author: Peter Wilson (CUA and NIST)
+%%         now at: peter.r.wilson@boeing.com
+%% 
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tocvsec2}[1999/01/24 v1.1 variable ToC section entries]
+\RequirePackage{stdclsdv}
+\RequirePackage{ifthen}
+\ifSCDknownclass
+  \ifSCDnodivs
+    \PackageWarning{tocvsec2}{There are no sectional divisions in this class}
+    \renewcommand{\SCDquit}{\endinput}
+  \fi
+\else
+  \PackageWarning{tocvsec2}%
+    {I don't recognize the class but I'll do my best}
+\fi
+\SCDquit
+\newif\if@knownsect@c
+\newcommand{\@setseccntt@c}[2]{
+  \@knownsect@cfalse
+  \ifthenelse{\equal{#1}{none}}{\setcounter{#2}{-10}
+                                \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{part}}{\ifSCDchapter
+                                  \setcounter{#2}{-1}
+                                \else
+                                  \setcounter{#2}{0}
+                                \fi
+                                \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{chapter}}{\setcounter{#2}{0}
+                                   \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{section}}{\setcounter{#2}{1}
+                                   \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{subsection}}{\setcounter{#2}{2}
+                                      \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{subsubsection}}{\setcounter{#2}{3}
+                                         \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{paragraph}}{\setcounter{#2}{4}
+                                     \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{subparagraph}}{\setcounter{#2}{5}
+                                        \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{all}}{\setcounter{#2}{100}
+                                \@knownsect@ctrue}{}
+  \if@knownsect@c\else
+    \PackageError{tocvsec2}{%
+      Unknown sectioning command name (#1)
+    }{%
+      I'll ignore it. Type \space <return> and I'll continue.\MessageBreak
+      If you haven't mistyped the name then use \protect\setcounter\space instead.}
+  \fi
+}
+\newcommand{\settocdepth}[1]{%
+  \@knownsect@cfalse
+  \ifthenelse{\equal{#1}{none}}{%
+    \addtocontents{toc}{\protect\setcounter{tocdepth}{-10}}
+    \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{part}}{%
+    \ifSCDchapter
+      \addtocontents{toc}{\protect\setcounter{tocdepth}{-1}}
+    \else
+      \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
+    \fi
+    \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{chapter}}{%
+    \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
+    \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{section}}{%
+    \addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
+    \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{subsection}}{
+    \addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
+    \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{subsubsection}}{%
+    \addtocontents{toc}{\protect\setcounter{tocdepth}{3}}
+    \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{paragraph}}{%
+    \addtocontents{toc}{\protect\setcounter{tocdepth}{4}}
+    \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{subparagraph}}{%
+    \addtocontents{toc}{\protect\setcounter{tocdepth}{5}}
+    \@knownsect@ctrue}{}
+  \ifthenelse{\equal{#1}{all}}{%
+    \addtocontents{toc}{\protect\setcounter{tocdepth}{100}}
+    \@knownsect@ctrue}{}
+  \if@knownsect@c\else
+    \PackageError{tocvsec2}{%
+      Unknown sectioning command name (#1)}%
+     {I'll ignore it. Type \space <return> and I'll continue.}
+  \fi
+}
+\newcommand{\maxtocdepth}[1]{
+  \@setseccntt@c{#1}{tocdepth}}
+\newcommand{\setsecnumdepth}[1]{\leavevmode%
+  \@setseccntt@c{#1}{secnumdepth}}
+\newcommand{\maxsecnumdepth}[1]{%
+  \@setseccntt@c{#1}{secnumdepth}}
+\endinput
+%%
+%% End of file `tocvsec2.sty'.

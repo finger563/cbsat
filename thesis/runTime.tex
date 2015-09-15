@@ -1,0 +1,38 @@
+\chapter{Proposed Work: Run-Time Network Performance Monitoring and Management for Distributed CPS Applications}
+\label{ch:runTime}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Network Resource Monitoring and Management Integrated into Component-Based Middleware}
+\label{sec:drems}
+
+\subsection{Problem}
+Distributed, deployed CPS require design-time assurances of system stability and security.  These assurances guarantee that resources and communications must have some protection against propagating software faults or malicious actors.  One such avenue for fault or attack propagation is the system's communications network.  Systems provide the computational resources, hardware access, and communications required for their applications.  For example, the satellite cluster provides (1) distributed processors which are shared by the applications, (2) data from the on-board sensors provided by each satellite, and (3) a wireless communications network.  During deployment, the system enforces resource utilization limits on the applications, e.g. memory or disk space limitations, which must be broad to account for whatever the applications may need to do over their lifetime.  However, application resource limits which do not incorporate temporal behavior (i.e. static limits) are inefficient since they waste resources allocated to applications not using them.  Furthermore, these static resource limits do not provide tight bounds on application behavior and may create avenues for fault or attack propagation.  An example of such resource reservation schemes backfiring is a Distributed Denial of Service (DDoS) attack, in which many compromised applications produce slightly more network traffic than usual (but still within their limits) to generate a combined network traffic profile that can effectively take their target off of the network.  
+
+\subsection{Contributions}
+\begin{itemize}
+	\item We integrated our network resource modeling techniques into a system and application analysis and development tool-suite. The tool verified that the system could provide all the network resources (which varied as a function of time) required by the applications.  The accuracy of the predictions was described in Section~\ref{sec:experimentalVerification}. 
+	\item Into the application's generated middleware interface code we integrated measurement, detection, and mitigation code which (1) measured the characteristics of the application's network traffic, (2) detected if the application's network traffic exceeded its profile that was provided during system analysis, and (3) blocked all traffic from leaving application-space (i.e. it did not get into kernel-space) which was detected as having exceeded the profile.  We showed that this management code allowed properly shaped traffic onto the network and blocked improperly shaped traffic.
+\end{itemize}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Network Application Fault/Anomaly Classification}
+\label{sec:classification}
+
+\subsection{Problem}
+For distributed systems which must ensure resource availability and system stability, a key aspect of the infrastructure is detection and mitigation of faults or anomalies.  With respect to network resources, an example is checking source and destination for communications to enforce only authorized communication flows are present in the system.  However, software glitches or compromised applications can exceed system resources that they have been allocated.  As described in the previous section, higher-fidelity resource modeling and monitoring is required to prevent such faults or compromises from propagating throughout the system.  However, mitigating the propagation only solves part of the problem; ideally the system should classify the type of fault or anomaly and begin diagnostics to trace the fault/anomaly back to its origin.  
+
+\subsection{Proposed Contributions}
+\begin{itemize}
+	\item We will use our testbed to run distributed network tests to classify certain types of anomalies, e.g. DDoS attacks from compromised applications within the cluster.
+	\item We will use the network resource utilization measurements gained from the tests to derive metrics which allow us to differentiate between classes of behavior, e.g. standard/stable application behavior vs. DDoS behavior.
+	\item We will then use the classifications to show that the system can detect these types of attacks, mitigate their propagation, and report the attack to the system's manager.  
+\end{itemize}

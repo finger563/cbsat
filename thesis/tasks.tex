@@ -1,0 +1,55 @@
+% $Id: intro.tex 3799 2013-10-14 16:13:38Z emfinger $
+\chapter{Tasks}
+\label{ch:tasks}
+
+\begin{itemize}
+	\item Run-Time/Dynamic Updates and reevaluation
+	\begin{itemize}
+		\item How to adapt model data for reevaluation at run-time
+		\item What information needs to be changed about the model
+		\item What information comes from the run-time system
+	\end{itemize}
+	\item Traffic classes
+	\begin{itemize}
+		\item TDMA, Time-Triggered, Rate-Constrained, Best-Effort, Critical
+		\item Modeling/Analysis using my framework (vs. others)
+		\item Run-time system
+	\end{itemize}
+	\item Adaptation:
+	\begin{itemize}
+		\item Modeling of adaptable systems
+		\item Modeling of adaptable applications
+		\item Interaction between adaptable application and system
+		\begin{itemize}
+			\item e.g. changing traffic classes at run-time
+			\item System degrades => apps meter their production => extra bandwidth despite degradation => some apps can request more bandwidth
+		\end{itemize}
+		\item Traffic class-based adaptation
+		\item Verification
+		\begin{itemize}
+			\item Design-time/Static based on models
+			\item Run-time/Dynamic based on models and current data
+		\end{itemize}
+	\end{itemize}
+	\item Network QoS Profile generation from Business Logic
+	\begin{itemize}
+		\item Data-driven application profiles?
+		\item Return-path profiles?
+		\item Adaptation architecture integrated into business logic language?
+	\end{itemize}
+	\item ROS component model
+	\begin{itemize}
+		\item simple metamodel
+		\item analysis integrated into modeling tools
+		\item structured development and code generation
+	\end{itemize}
+	\item ROS implementation
+	\begin{itemize}
+		\item component model implementation : component message queues with priority
+		\item network QoS enforcement and arbitration in ROS (with traffic classes?)
+		\item fractionated roscore
+		\item better failure recovery for connected components
+		\item better migration of components
+	\end{itemize}
+\end{itemize}
+	

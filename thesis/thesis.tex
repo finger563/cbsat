@@ -1,0 +1,126 @@
+\documentclass[12pt]{vuthesis}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{courier}
+\usepackage{ifpdf}
+
+\ifpdf
+\usepackage[pdftex]{graphicx}
+\graphicspath{{figures/}}
+\else
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\fi
+
+\usepackage[numbers]{natbib}
+\usepackage{bibentry}
+
+\newcommand{\ignore}[1]{}
+\newcommand{\nobibentry}[1]{{\let\nocite\ignore\bibentry{#1}}}
+% apsrev entries in the text need definitions of these commands
+\newcommand{\bibfnamefont}[1]{#1}
+\newcommand{\bibnamefont}[1]{#1}
+
+\usepackage{float}
+\usepackage{amsfonts,amssymb,amsmath, amsthm}
+\usepackage{tabulary}
+\usepackage{setspace}
+\setlength\tymin{30pt}
+\setlength\tymax{\linewidth}
+\usepackage[font={bf,sf}]{caption}
+%\usepackage[format=hang,margin=10pt,font={bf,sf}]{caption}
+\usepackage{url}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{colortbl}
+\usepackage{textcomp}
+\usepackage{relsize,fancyvrb}
+%\usepackage[ruled,noline]{algorithm2e}
+\usepackage{subcaption}
+\usepackage{rotating}
+\usepackage{tocvsec2}
+\usepackage{chngcntr}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+% algorithm & algorithmic  OR  algorithm, algorithmcx, & algpseudocode
+%\usepackage{algorithm}
+%\usepackage{algorithmicx}
+%\usepackage{algpseudocode}
+\usepackage{tabularx,booktabs,lscape,rotating,multirow}
+\usepackage{listings}
+
+\usepackage{acronym}
+%\usepackage[acronym,toc]{glossaries}
+
+\ifpdf
+\usepackage[pdftex,linktocpage,bookmarks,colorlinks,linkcolor=blue,urlcolor=blue,citecolor=blue,naturalnames]{hyperref}
+\else
+\usepackage[dvips,linktocpage,bookmarks,colorlinks,linkcolor=blue,urlcolor=blue,citecolor=blue,naturalnames]{hyperref}
+\fi
+
+\newcounter{num}
+\newenvironment{NumList}
+{\begin{list}
+{\arabic{num}. }
+{\usecounter{num}
+\setlength{\topsep}{1pt}
+\setlength{\parsep}{0pt}
+\setlength{\itemsep}{1pt}
+\setlength{\parskip}{0pt}
+\setlength{\labelsep}{1pt}
+\setlength{\itemindent}{0pt}
+\setlength{\leftmargin}{8pt}}}
+{\end{list}
+\vspace{2pt}
+}
+
+\floatstyle{boxed}
+\counterwithout{figure}{chapter}
+\counterwithout{table}{chapter}
+\counterwithout{equation}{chapter}
+\renewcommand \thesection{\arabic{chapter}.\arabic{section}}
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+
+\newcommand \fulltool{\textbf{P}recise \textbf{N}etwork \textbf{P}erformance \textbf{P}rediction}
+
+\newcommand \shorttool{$PNP^2$}
+
+\begin{document}
+	
+\nobibliography*
+
+\title{Network Performance Analysis and Network Management for Cyber-Physical Systems and Their Applications}
+\author{William A. Emfinger}
+\submitdate{May, 2015}
+\principaladviser{Dr. Gabor Karsai}
+\academicarea{Electrical Engineering}
+
+\beforepreface
+%\input{copyright}
+\input{dedication}
+\input{acknowledgments}
+%\input{Acronyms}
+\afterpreface
+
+\lstdefinestyle{XML}{basicstyle=\footnotesize, tabsize=2, captionpos=b, breaklines=true, firstnumber=last, keywordstyle=\color{Black}, identifierstyle=\color{Black}, stringstyle=\color{Blue}, commentstyle=\color{Gray}, tagstyle=\color{BrickRed}, markfirstintag=true}
+
+\input{intro}
+
+\input{background}
+
+\input{designTime}
+
+\input{runTime}
+
+\input{conclusions}
+
+\input{publications}
+
+%\balance
+\bibliographystyle{abbrv}
+\begin{spacing}{1}
+\bibliography{./bibliography/f6}
+\end{spacing}
+
+\end{document}

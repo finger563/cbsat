@@ -1,0 +1,2354 @@
+@article{Bonet2011,
+abstract = {The FlexRay protocol is becoming the standard protocol for in-car communications systems. Therefore, there's great effort in searching for a reliable and fast method to model and analyze the performance of the FlexRay bus. The last work regarding this topic was presented in the paper "Performance Analysis of FlexRay-based systems using Real-Time Calculus, Revisited", where the authors claimed to solve this problem using Real-Time Calculus. The main contribution of this paper is to discuss the reliability of the existing algorithm as well as the use of the Real-Time Calculus.},
+author = {Bonet, Eduardo and de Oliveira, Romulo S. and Lange, Rodrigo},
+doi = {10.1109/SBESC.2011.45},
+isbn = {978-1-4673-0427-6},
+journal = {2011 Brazilian Symposium on Computing System Engineering},
+keywords = {FlexRay,Performance Analysis,Real-Time Calculus},
+pages = {83--85},
+title = {{Discussion on the Usage of Real-Time Calculus to Model the FlexRay-Bus}},
+year = {2011}
+}
+@article{Schafer2005,
+abstract = {We present a spatial and temporal logic based on Duration Calculus for the specification and verification of mobile real-time sys- tems. We demonstrate the use of the formalism and apply it to a case study. We extend a pure Duration Calculus specification for the con- troller by spatial assumptions to reason about spatial system properties. We prove that the formalism is undecidable in general for discrete and continuous domains and present a decidable fragment.},
+author = {Sch\"{a}fer, Andreas},
+journal = {LNCS},
+keywords = {Duration Calculus,Mobile Systems,Real-Time Systems,Spatial Logic,Temporal Logic},
+pages = {463--477},
+title = {{A Calculus for Shapes in Time and Space}},
+volume = {3407},
+year = {2005}
+}
+@inproceedings{Phan2008,
+abstract = {The Real-Time Calculus (RTC) framework proposed in [Chakraborty et al., DATE 2003] and subsequently extended in [Wandeler et al., Real-Time Systems 29(2-3), 2005] and a number of other papers is geared towards the analysis of real-time systems that process various types of streaming data. The main strength of RTC is a count-based abstraction, where arrival patterns of event streams are specified as constraints on the number of events that may arrive over any specified time interval. In this framework, algebraic techniques can be used to compute system properties in a compositional way. However, the main drawback of RTC is that it cannot model state information in a natural way. For example, when a scheduling policy depends on the fill-level of a certain buffer or there is a shift from one type of data stream into another. In this paper, we extend RTC in a manner that enables state information to be easily captured while limiting the state-space explosion caused by fine grained state-based models such as timed automata. Our model, called "multi-mode RTC", specifies event streams as finite automata whose states are annotated with functions that specify constraints on the arrival patterns of event streams or the service available to process them. Our new framework combines the expressiveness of state-based models with the algebraic and compositional features of the RTC formalism. In particular, system properties within a single mode can be analyzed using the RTC-based algebraic techniques and state-space exploration can be used to piece together the results obtained algebraically for the individual modes. We show how to determine typical system properties with the focus on efficient approximate techniques and illustrate the advantages of multi-mode RTC using two case studies.},
+author = {Phan, Linh T X and Chakraborty, Samarjit and Thiagarajan, P. S.},
+booktitle = {Proceedings - Real-Time Systems Symposium},
+doi = {10.1109/RTSS.2008.47},
+isbn = {9780769534770},
+issn = {10528725},
+pages = {59--69},
+title = {{A multi-mode real-time calculus}},
+year = {2008}
+}
+@article{Leijon2008,
+abstract = {Page 1. LICENTIATE TH ESI S Lule\aa University of Technology Department of Computer Science and Electrical Engineering EISLAB 2008 },
+author = {Leijon, V},
+journal = {epubl.ltu.se},
+title = {{A time constrained real-time process calculus}},
+url = {http://epubl.ltu.se/1402-1757/2008/33/LTU-LIC-0833-SE.pdf$\backslash$npapers://c142b844-46f9-47f1-9c59-24141d995c3f/Paper/p12132},
+year = {2008}
+}
+@inproceedings{Hansson1990,
+abstract = {A process algebra that extends R. Milner's (1983) calculus of
+communicating systems (CCS) with probabilities and time is presented.
+With this calculus it is possible to describe real-time and reliability
+aspects of distributed systems. A (strong) bisimulation equivalence is
+defined, and a corresponding complete axiomatization is given. Several
+examples are included},
+author = {Hansson, Hans and Jonsson, Bengt},
+booktitle = {Proceedings - Real-Time Systems Symposium},
+doi = {10.1109/REAL.1990.128759},
+isbn = {0818621125},
+issn = {10528725},
+pages = {278--287},
+title = {{A calculus for communicating systems with time and probabilities}},
+year = {1990}
+}
+@inproceedings{Chokshi2008,
+abstract = {Modern real-time embedded systems are highly heterogeneous and distributed. As a result, compositional methods play an important role in the design and analysis of such complex systems. One such compositional analysis method is based on real-time calculus. In this paper, we present an analysis of fixed priority non-preemptive scheduling with the real-time calculus. Although fixed priority non-preemptive scheduling was modeled with the real-time calculus previously, we show that the model gives overly pessimistic results. We also compare our analysis with the existing holistic scheduling analysis through an example of a system using a controller area network (CAN) bus. The proposed method can be automated by incorporating it in the RTC toolbox.},
+author = {Chokshi, Devesh B. and Bhaduri, Purandar},
+booktitle = {Proceedings - 14th IEEE International Conference on Embedded and Real-Time Computing Systems and Applications, RTCSA 2008},
+doi = {10.1109/RTCSA.2008.28},
+isbn = {9780769533490},
+issn = {1533-2306},
+pages = {387--392},
+title = {{Modeling fixed priority non-preemptive scheduling with real-time calculus}},
+year = {2008}
+}
+@article{Leontyev2011,
+abstract = {Many embedded platforms consist of a heterogeneous collection of processing elements, memory modules, and communication subsystems. These components often implement different scheduling/arbitration policies, have different interfaces, and are supplied by different vendors. Hence, compositional techniques for modeling and analyzing such platforms are of interest. In prior work, the real-time calculus framework has proven to be very effective in this regard. However, real-time calculus has heretofore been limited to systems with uniprocessor processing elements, which is a serious impediment given the advent of multicore technologies. In this paper, a two-step approach is proposed that allows the power of real-time calculus to be applied in globally-scheduled multiprocessor systems: first, assuming that job response-time bounds are given, determine whether these bounds are met; second, using these bounds, determine the resulting residual processor supply and streams of job completion events using formalisms from real-time calculus. For this methodology to be applied in settings where response-time bounds are not specified, such bounds must be determined. Though this is an issue that warrants further investigation, a method is discussed for calculating such bounds that is applicable to a large family of fixed job-priority schedulers. The utility of the proposed analysis framework is demonstrated using a case study.},
+author = {Leontyev, Hennadiy and Chakraborty, Samarjit and Anderson, James H.},
+doi = {10.1007/s11241-011-9135-8},
+isbn = {9780769538754},
+issn = {09226443},
+journal = {Real-Time Systems},
+keywords = {Multiprocessor scheduling,Real-time calculus,Response-time analysis,Streaming task model},
+pages = {562--617},
+title = {{Multiprocessor extensions to real-time calculus}},
+volume = {47},
+year = {2011}
+}
+@article{Bertossi1997,
+abstract = {The paper presents a fault tolerant scheduling algorithm for
+multiprocessor hard real time systems. The so called partitioning method
+is used to schedule a set of tasks in a multiprocessor system. Fault
+tolerance is achieved by using a combined duplication technique where
+each task scheduled on a processor has either an active or a passive
+copy scheduled on a different processor. Simulation experiments reveal a
+saving of processors with respect to those needed by the usual approach
+of duplicating the schedule of the non fault tolerant case},
+author = {Bertossi, A.A. and Fusiello, A. and Mancini, L.V.},
+doi = {10.1109/IPPS.1997.580868},
+isbn = {0-8186-7793-7},
+issn = {1063-7133},
+journal = {Proceedings 11th International Parallel Processing Symposium},
+title = {{Fault-tolerant deadline-monotonic algorithm for scheduling
+hard-real-time tasks}},
+year = {1997}
+}
+@misc{Burns1991,
+abstract = {Results of the application of scheduling theory to hard real-time$\backslash$nsystems are reviewed in this paper. The review takes the form of an$\backslash$nanalysis of the problems presented by different application requirements$\backslash$nand characteristics. Issues covered include uniprocessor and$\backslash$nmultiprocessor systems, periodic and aperiodic processes, static and$\backslash$ndynamic algorithms, transient overloads and resource usage. Protocols$\backslash$nthat limit and reduce blocking are discussed. Consideration is also$\backslash$ngiven to scheduling Ada tasks},
+author = {Burns, A.},
+booktitle = {Software Engineering Journal},
+doi = {10.1049/sej.1991.0015},
+isbn = {0268-6961},
+issn = {02686961},
+pages = {116},
+title = {{Scheduling hard real-time systems: a review}},
+volume = {6},
+year = {1991}
+}
+@inproceedings{Deng1997,
+abstract = {The paper focuses on the problem of providing run-time support to
+real-time applications and non-real-time applications in an open system.
+It describes a two-level hierarchical priority-driven scheme for
+scheduling independently developed applications. The scheme allows the
+developer of each real-time application to validate the schedulability
+of the application independently of other applications. Once a real-time
+application is created and accepted by the open system, its
+schedulability is guaranteed regardless of the behaviors of other
+applications that execute concurrently in the system},
+author = {Deng, Z. and Liu, J. W S and Sun, J.},
+booktitle = {Proceedings - Euromicro Conference on Real-Time Systems},
+doi = {10.1109/EMWRTS.1997.613785},
+isbn = {0818680342},
+issn = {10683070},
+pages = {191--199},
+title = {{A scheme for scheduling hard real-time applications in open system environment}},
+year = {1997}
+}
+@article{Bernat2001,
+abstract = {In a hard real-time system, it is assumed that no deadline is
+missed, whereas, in a soft or firm real-time system, deadlines can be
+missed, although this usually happens in a nonpredictable way. However,
+most hard real-time systems could miss some deadlines provided that it
+happens in a known and predictable way. Also, adding predictability on
+the pattern of missed deadlines for soft and firm real-time systems is
+desirable, for instance, to guarantee levels of quality of service. We
+introduce the concept of weakly hard real-time systems to model
+real-time systems that can tolerate a clearly specified degree of missed
+deadlines. For this purpose, we define four temporal constraints based
+on determining a maximum number of deadlines that can be missed during a
+window of time (a given number of invocations). This paper provides the
+theoretical analysis of the properties and relationships of these
+constraints. It also shows the exact conditions under which a constraint
+is harder to satisfy than another constraint. Finally, results on fixed
+priority scheduling and response-time schedulability tests for a wide
+range of process models are presented},
+author = {Bernat, G. and Burns, A. and Liamosi, A.},
+doi = {10.1109/12.919277},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Bernat, Burns, Liamosi - 2001 - Weakly hard real-time systems.pdf:pdf},
+issn = {0018-9340},
+journal = {IEEE Transactions on Computers},
+title = {{Weakly hard real-time systems}},
+volume = {50},
+year = {2001}
+}
+@inproceedings{Bouillard2012,
+abstract = {Arrival and service curves are core functions in the Network Calculus$\backslash$nframework [2], [3]. Based on those curves, we present in this talk$\backslash$na new formalism for data packetization in Network Calculus, the packet$\backslash$ncurves. Indeed, a more precise knowledge of the packet characteristics$\backslash$ncan be efficiently exploited to get tighter performance bounds, for$\backslash$nexample for aggregation of flows, packet-based service policies and$\backslash$nshared buffers. Finally, we will give a model for a wormhole switch$\backslash$nand show how our results can be used to get efficient delay bounds.$\backslash$nDetails and proofs can be found in [1].},
+author = {Bouillard, A and Farhi, N and Gaujal, B},
+booktitle = {Proc. 6th Int Performance Evaluation Methodologies and Tools (VALUETOOLS) Conf},
+doi = {10.4108/valuetools.2012.250208},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Bouillard, Farhi, Gaujal - 2012 - Packetization and packet curves in network calculus.pdf:pdf},
+isbn = {978-1-936968-63-3},
+pages = {136--137},
+title = {{Packetization and packet curves in network calculus}},
+url = {http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=6376314},
+year = {2012}
+}
+@article{Cruz1998,
+author = {Cruz, RL},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Cruz - 1998 - SCED Efficient management of quality of service guarantees.pdf:pdf},
+journal = {INFOCOM'98. Seventeenth Annual Joint Conference \ldots},
+keywords = {delay jitter,high speed packet switching,large scale networks,network calculus,quality of service guarantees,scheduling,statistical multiplexing},
+number = {March},
+pages = {1--10},
+title = {{SCED+: Efficient management of quality of service guarantees}},
+url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=665083},
+year = {1998}
+}
+@inproceedings{Fan2009,
+abstract = {Network calculus is a theory of deterministic queuing systems, which is based on min-plus algebra. This paper shows a novel network calculus that based on other dioids, that is max-plus algebra. Performance bounds can be obtained by max-plus network calculus. We also do a theoretical research on max-plus network calculus by using residuation theory. Finally, we analyze guaranteed rate server as an example to illustrate the efficiency of max-plus based network calculus in performance analysis of network calculus.},
+author = {Fan, Baohua and Zhang, Heying and Dou, Wenhua},
+booktitle = {Proceedings of the 2009 8th IEEE/ACIS International Conference on Computer and Information Science, ICIS 2009},
+doi = {10.1109/ICIS.2009.58},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Fan, Zhang, Dou - 2009 - A max-plus network calculus.pdf:pdf},
+isbn = {9780769536415},
+pages = {149--154},
+title = {{A max-plus network calculus}},
+year = {2009}
+}
+@article{Fidler2006,
+abstract = {Network calculus is a theory of deterministic queuing systems that has successfully been applied to derive performance bounds for communication networks. Founded on min-plus convolution and de-convolution, network calculus obeys a strong analogy to system theory. Yet, system theory has been extended beyond the time domain applying the Fourier transform thereby allowing for an efficient analysis in the frequency domain. A corresponding dual domain for network calculus has not been elaborated, so far. In this paper we show that in analogy to system theory such a dual domain for network calculus is given by convex/concave conjugates referred to also as the Legendre transform. We provide solutions for dual operations and show that min-plus convolution and de-convolution become simple addition and subtraction in the Legendre domain. Additionally, we derive expressions for the Legendre domain to determine upper bounds on backlog and delay at a service element and provide representative examples for the application of conjugate network calculus. ?? 2005 Elsevier B.V. All rights reserved.},
+author = {Fidler, Markus and Recker, Stephan},
+doi = {10.1016/j.comnet.2005.09.004},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Fidler, Recker - 2006 - Conjugate network calculus A dual approach applying the Legendre transform.pdf:pdf},
+issn = {13891286},
+journal = {Computer Networks},
+keywords = {Fenchel duality theorem,Legendre transform,Network calculus},
+pages = {1026--1039},
+title = {{Conjugate network calculus: A dual approach applying the Legendre transform}},
+volume = {50},
+year = {2006}
+}
+@article{Li2011,
+abstract = {Network coding provides a powerful mechanism for improving performance of wireless networks. In this paper, we present an analytical approach for end-to-end delay analysis in wireless networks that employ inter-session coding. Prior work on performance analysis in wireless network coding mainly focuses on the throughput of the overall network. Our approach aims to analyze the end-to-end delay performance of each flow in the network. The theoretical basis of our approach is network calculus. In order to apply network calculus to the analysis of wireless network coding, we address three specific problems: identifying traffic flows, characterizing broadcast links, and measuring coding opportunities. We make three main contributions. First, we obtain theoretical formulations for computing the delay bounds of bursty flows in wireless networks employing network coding. Second, based on the formulations, we figure out the factors that affect the end-to-end delays, and find an interesting phenomenon that, as traffic grows, the overall delay can potentially decrease. Third, in order to exploit the benefit of our findings, we introduce a new scheduling scheme that can improve the performance of current practical wireless network coding.},
+author = {Li, Huanzhong and Liu, Xue and He, Wenbo and Li, Jian and Dou, Wenhua},
+doi = {10.1109/ICDCS.2011.31},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Li et al. - 2011 - End-to-End Delay Analysis in Wireless Network Coding A Network Calculus-Based Approach.pdf:pdf},
+isbn = {978-0-7695-4364-2},
+issn = {1063-6927},
+journal = {2011 31st International Conference on Distributed Computing Systems},
+keywords = {delay,network calculus,network coding,wirless},
+pages = {47--56},
+title = {{End-to-End Delay Analysis in Wireless Network Coding: A Network Calculus-Based Approach}},
+year = {2011}
+}
+@inproceedings{Wang2011,
+abstract = {Stochastic network calculus provides an elegant way to characterize traffic and service processes. However, little effort has been made on applying it to multi-access communication systems such as 802.11. In this paper, we take the first step to apply it to the backlog and delay analysis of an 802.11 wireless local network. We found the derived bounds are very loose in comparison to ns-2 simulation results especially for heavy arriving traffic, indicating that improvements are needed for the current version of stochastic network calculus.},
+archivePrefix = {arXiv},
+arxivId = {1004.3109},
+author = {Wang, Yue and Wang, Tianmei},
+booktitle = {IEEE International Workshop on Quality of Service, IWQoS},
+doi = {10.1109/IWQOS.2011.5931337},
+eprint = {1004.3109},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Wang, Wang - 2011 - Applying stochastic network calculus to 802.11 backlog and delay analysis.pdf:pdf},
+isbn = {9781457701030},
+issn = {1548615X},
+title = {{Applying stochastic network calculus to 802.11 backlog and delay analysis}},
+year = {2011}
+}
+@inproceedings{Bakhouya2009,
+abstract = {Network-on-Chip (NoC) has been proposed as an alternative to bus-based schemes to achieve high performance and scalability in System-on-Chip (SoC) design. Performance evaluation of On-Chip Interconnect (OCI) architectures is widely based on simulation which becomes computationally expensive, especially for large-scale NoCs. In this paper, a performance analysis model using Network Calculus is presented to characterize and evaluate the performance of NoC-based applications. The 2D Mesh on-chip interconnect is analyzed and main performance metrics such as end-to-end delay and buffer size requirements are computed and compared against the results produced by a discrete event simulator. The results shed more light on the potential of this analytical technique as a useful tool for NoC design and performance analysis.},
+author = {Bakhouya, M. and Suboh, S. and Gaber, J. and El-Ghazawi, T.},
+booktitle = {Proceedings - 2009 3rd ACM/IEEE International Symposium on Networks-on-Chip, NoCS 2009},
+doi = {10.1109/NOCS.2009.5071447},
+isbn = {9781424441433},
+pages = {74--79},
+title = {{Analytical modeling and evaluation of on-chip interconnects using network calculus}},
+year = {2009}
+}
+@article{Bouillard2008,
+abstract = {Abstract offers powerful tools to analyze the performances in communication networks, in particular to obtain deterministic bounds. This theory is based on a strong mathematical ground, notably by the use of (min,+) algebra. However, the algorithmic aspects of this},
+author = {Bouillard, Anne and Thierry, \'{E}ric},
+doi = {10.1007/s10626-007-0028-x},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Bouillard, Thierry - 2008 - An algorithmic toolbox for network calculus.pdf:pdf},
+isbn = {0123456789},
+issn = {09246703},
+journal = {Discrete Event Dynamic Systems: Theory and Applications},
+keywords = {Algorithmics,Computational complexity,Functional (min,+) algebra,Network calculus},
+pages = {3--49},
+title = {{An algorithmic toolbox for network calculus}},
+volume = {18},
+year = {2008}
+}
+@inproceedings{Ciucu2010,
+abstract = {The stochastic network calculus is an analytical tool which was mainly developed to compute tail bounds on backlogs and delays. From these, bounds on average backlogs and delays are derived in the literature by integration. This paper improves such bounds on average backlogs by using Jensen's inequality; improved bounds on average delays follow immediately from Little's Law. The gain factor can be substantial especially at high utilizations, e.g., of order \&amp;\#x03A9; (1/1-\&amp;\#x03C1; ) when \&amp;\#x03C1; \&amp;\#x2192; 1. This gain is further numerically illustrated for Markov-modulated On-Off arrival processes. Moreover, the paper shows how to improve standard stochastic network calculus performance bounds by suitably using FIFO service curves.},
+author = {Ciucu, Florin and Hohlfeld, Oliver},
+booktitle = {IEEE International Conference on Communications},
+doi = {10.1109/ICC.2010.5502376},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Ciucu, Hohlfeld - 2010 - On computing bounds on average backlogs and delays with network calculus.pdf:pdf},
+isbn = {9781424464043},
+issn = {05361486},
+title = {{On computing bounds on average backlogs and delays with network calculus}},
+year = {2010}
+}
+@misc{Ciucu2012,
+abstract = {ACM Sigcomm 2006 published a paper [26] which was perceived to unify the deterministic and stochastic branches of the network calculus (abbreviated throughout as DNC and SNC) [39]. Unfortunately, this seemingly fundamental unification---which has raised the hope of a straightforward transfer of all results from DNC to SNC---is invalid. To substantiate this claim, we demonstrate that for the class of stationary and ergodic processes, which is prevalent in traffic modelling, the probabilistic arrival model from [26] is quasi-deterministic, i.e., the underlying probabilities are either zero or one. Thus, the probabilistic framework from [26] is unable to account for statistical multiplexing gain, which is in fact the raison d'\{\^{e}\}tre of packet-switched networks. Other previous formulations of SNC can capture statistical multiplexing gain, yet require additional assumptions [12], [22] or are more involved [14], [9] [28], and do not allow for a straightforward transfer of results from DNC. So, in essence, there is no free lunch in this endeavor. Our intention in this paper is to go beyond presenting a negative result by providing a comprehensive perspective on network calculus. To that end, we attempt to illustrate the fundamental concepts and features of network calculus in a systematic way, and also to rigorously clarify some key facts as well as misconceptions. We touch in particular on the relationship between linear systems, classical queueing theory, and network calculus, and on the lingering issue of tightness of network calculus bounds. We give a rigorous result illustrating that the statistical multiplexing gain scales as \{$\Omega$\}($\backslash$sqrt\{\}N), as long as some small violations of system performance constraints are tolerable. This demonstrates that the network calculus can capture actual system behavior tightly when applied carefully. Thus, we positively conclude that it still holds promise as a valuable systematic methodology for the performance analysis of computer and communication systems, though the unification of DNC and SNC remains an open, yet quite elusive task.},
+author = {Ciucu, Florin and Schmitt, Jens},
+booktitle = {ACM SIGCOMM Computer Communication Review},
+doi = {10.1145/2377677.2377747},
+isbn = {9781450314190},
+issn = {01464833},
+pages = {311},
+title = {{Perspectives on network calculus}},
+volume = {42},
+year = {2012}
+}
+@article{Sun2013,
+author = {Sun, Yifan and Melodia, T},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Sun, Melodia - 2013 - The internet underwater an IP-compatible protocol stack for commercial undersea modems.pdf:pdf},
+isbn = {9781450325844},
+journal = {\ldots Eighth ACM International Conference on Underwater \ldots},
+title = {{The internet underwater: an IP-compatible protocol stack for commercial undersea modems}},
+url = {http://dl.acm.org/citation.cfm?id=2532407},
+year = {2013}
+}
+@article{Richter-Gebert2003,
+abstract = {Tropical algebraic geometry is the geometry of the tropical semiring \$(\backslash mathbb\{R\},\backslash min,+)\$. Its objects are polyhedral cell complexes which behave like complex algebraic varieties. We give an introduction to this theory, with an emphasis on plane curves and linear spaces. New results include a complete description of the families of quadrics through four points in the tropical projective plane and a counterexample to the incidence version of Pappus' Theorem.},
+archivePrefix = {arXiv},
+arxivId = {math/0306366},
+author = {Richter-Gebert, J\"{u}rgen and Sturmfels, Bernd and Theobald, Thorsten},
+eprint = {0306366},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Richter-Gebert, Sturmfels, Theobald - 2003 - First steps in tropical geometry.pdf:pdf},
+month = jun,
+pages = {29},
+primaryClass = {math},
+title = {{First steps in tropical geometry}},
+url = {http://arxiv.org/abs/math/0306366},
+volume = {0000},
+year = {2003}
+}
+@article{Emfinger2014,
+author = {Emfinger, William A},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Emfinger - 2014 - No Title.pdf:pdf},
+title = {{No Title}},
+year = {2014}
+}
+@article{Rey-moreno2013,
+author = {Rey-moreno, Carlos},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Rey-moreno - 2013 - Packet Scheduler and Traffic Control.pdf:pdf},
+title = {{Packet Scheduler and Traffic Control}},
+year = {2013}
+}
+@article{Basanta-Val2010,
+author = {Basanta-Val, P and Garcia-Valls, M and Estevez-Ayres, I},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Basanta-Val, Garcia-Valls, Estevez-Ayres - 2010 - Using switched-ethernet and linux TC for distributed real-time java infrastructures.pdf:pdf},
+journal = {Work‐in‐Progress Proceedings \ldots},
+title = {{Using switched-ethernet and linux TC for distributed real-time java infrastructures}},
+url = {http://scholar.google.com/scholar?hl=en\&btnG=Search\&q=intitle:Using+Switched-Ethernet+and+Linux+TC+for+Distributed+Real-Time+Java+Infrastructures\#0},
+year = {2010}
+}
+@book{,
+address = {London},
+doi = {10.1007/978-1-84800-127-5},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Unknown - 2009 - Stochastic Network Calculus.pdf:pdf},
+isbn = {978-1-84800-126-8},
+publisher = {Springer London},
+title = {{Stochastic Network Calculus}},
+url = {http://www.springerlink.com/index/10.1007/978-1-84800-127-5},
+year = {2009}
+}
+@article{,
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Unknown - Unknown - A Open Research Challenges.pdf:pdf},
+title = {{A Open Research Challenges}}
+}
+@article{Gps2009,
+address = {London},
+author = {Gps, The and Gps, When and Lrd, Since},
+doi = {10.1007/978-1-84800-127-5},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Gps, Gps, Lrd - 2009 - Stochastic Network Calculus.pdf:pdf},
+isbn = {978-1-84800-126-8},
+publisher = {Springer London},
+title = {{Stochastic Network Calculus}},
+url = {http://link.springer.com/10.1007/978-1-84800-127-5},
+year = {2009}
+}
+@misc{McEwen2007,
+abstract = {The HiRISE camera features a 0.5 m diameter primary mirror, 12 m effective focal length, and a focal plane system that can acquire images containing up to 28 Gb (gigabits) of data in as little as 6 seconds. HiRISE will provide detailed images (0.25 to 1.3 m/pixel) covering ∼1\% of the Martian surface during the 2-year Primary Science Phase (PSP) beginning November 2006. Most images will include color data covering 20\% of the potential field of view. A top priority is to acquire ∼1000 stereo pairs and apply precision geometric corrections to enable topographic measurements to better than 25 cm vertical precision. We expect to return more than 12 Tb of HiRISE data during the 2-year PSP, and use pixel binning, conversion from 14 to 8 bit values, and a lossless compression system to increase coverage. HiRISE images are acquired via 14 CCD detectors, each with 2 output channels, and with multiple choices for pixel binning and number of Time Delay and Integration lines. HiRISE will support Mars exploration by locating and characterizing past, present, and future landing sites, unsuccessful landing sites, and past and potentially future rover traverses. We will investigate cratering, volcanism, tectonism, hydrology, sedimentary processes, stratigraphy, aeolian processes, mass wasting, landscape evolution, seasonal processes, climate change, spectrophotometry, glacial and periglacial processes, polar geology, and regolith properties. An Internet Web site (HiWeb) will enable anyone in the world to suggest HiRISE targets on Mars and to easily locate, view, and download HiRISE data products.},
+author = {McEwen, Alfred S. and Eliason, Eric M. and Bergstrom, James W. and Bridges, Nathan T. and Hansen, Candice J. and Delamere, W. Alan and Grant, John A. and Gulick, Virginia C. and Herkenhoff, Kenneth E. and Keszthelyi, Laszlo and Kirk, Randolph L. and Mellon, Michael T. and Squyres, Steven W. and Thomas, Nicolas and Weitz, Catherine M.},
+booktitle = {Journal of Geophysical Research},
+doi = {10.1029/2005JE002605},
+isbn = {0148-0227},
+issn = {0148-0227},
+title = {{Mars Reconnaissance Orbiter's High Resolution Imaging Science Experiment (HiRISE)}},
+volume = {112},
+year = {2007}
+}
+@article{Braden1994,
+abstract = {This memo discusses a proposed extension to the Internet$\backslash$narchitecture and protocols to provide integrated services, i.e., to$\backslash$nsupport real- time as well as the current non-real-time service of IP.$\backslash$nThis extension is necessary to meet the growing need for real-time$\backslash$nservice for a variety of new applications, including teleconferencing,$\backslash$nremote seminars, telescience, and distributed simulation. This memo$\backslash$nrepresents the direct product of recent work by Dave Clark, Scott$\backslash$nShenker, Lixia Zhang, Deborah Estrin, Sugih Jamin, John Wroclawski, Shai$\backslash$nHerzog, and Bob Braden, and indirectly draws upon the work of many$\backslash$nothers.},
+author = {Braden, R and Clark, D. and Shenker, S .},
+journal = {IETF RFC 1633, July},
+pages = {1--28},
+title = {{Integrated Services in the Internet Architecture : an Overview}},
+year = {1994}
+}
+@article{Blake1998,
+abstract = {This document defines an architecture for implementing$\backslash$nscalable service differentiation in the Internet. This architecture$\backslash$nachieves scalability by aggregating traffic classification state which$\backslash$nis conveyed by means of IP-layer packet marking using the DS field$\backslash$n[DSFIELD]. Packets are classified and marked to receive a particular$\backslash$nper-hop forwarding behavior on nodes along their path. Sophisticated$\backslash$nclassification, marking, policing, and shaping operations need only be$\backslash$nimplemented at network boundaries or hosts. Network resources are$\backslash$nallocated to traffic streams by service provisioning policies which$\backslash$ngovern how traffic is marked and conditioned upon entry to a$\backslash$ndifferentiated services-capable network, and how that traffic is$\backslash$nforwarded within that network. A wide variety of services can be$\backslash$nimplemented on top of these building blocks.},
+author = {Blake, S and Microsystems, Sun and Wang, Z},
+isbn = {2475},
+journal = {RFC},
+pages = {1--37},
+title = {{An Architecture for Differentiated Services}},
+year = {1998}
+}
+@article{Thiele2002,
+author = {Thiele, Lothar and Chakraborty, Samarjit},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Thiele, Chakraborty - 2002 - Design space exploration of network processor architectures.pdf:pdf},
+journal = {Network Processor \ldots},
+title = {{Design space exploration of network processor architectures}},
+url = {http://books.google.com/books?hl=en\&lr=\&id=0xRqj8IXCSIC\&oi=fnd\&pg=PA55\&dq=Design+Space+Exploration+of+Network+Processor+Architectures\&ots=46\_8cl\_TbA\&sig=RrLMbN7fdmf3jfqRBp4KNZRVbps},
+year = {2002}
+}
+@article{Schmitt2007a,
+author = {Schmitt, JB and Zdarsky, FA and Fidler, Markus},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Schmitt, Zdarsky, Fidler - 2007 - Delay bounds under arbitrary multiplexing.pdf:pdf},
+journal = {Rapport technique, University of \ldots},
+keywords = {arbitrary multiplexing,feed-forward networks,german research,network calculus,noether grant of the,part by an emmy,performance bounds,performance evaluation,report is supported in,the research in this},
+pages = {1--20},
+title = {{Delay bounds under arbitrary multiplexing}},
+url = {http://disco.cs.uni-kl.de/publicationsfiles/SZF07-1.pdf},
+year = {2007}
+}
+@article{LeBoudec1998a,
+author = {{Le Boudec}, J.-Y.},
+doi = {10.1109/18.669170},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Le Boudec - 1998 - Application of network calculus to guaranteed service networks(2).pdf:pdf},
+issn = {00189448},
+journal = {IEEE Transactions on Information Theory},
+month = may,
+number = {3},
+pages = {1087--1096},
+title = {{Application of network calculus to guaranteed service networks}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=669170},
+volume = {44},
+year = {1998}
+}
+@article{Thiele2002a,
+address = {New York, New York, USA},
+author = {Thiele, Lothar and Chakraborty, Samarjit and Gries, Matthias and K\"{u}nzli, Simon},
+doi = {10.1145/514135.514136},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Thiele et al. - 2002 - A framework for evaluating design tradeoffs in packet processing architectures.pdf:pdf},
+isbn = {1581134614},
+issn = {0738100X},
+journal = {Proceedings of the 39th conference on Design automation - DAC '02},
+pages = {880},
+publisher = {ACM Press},
+title = {{A framework for evaluating design tradeoffs in packet processing architectures}},
+url = {http://portal.acm.org/citation.cfm?doid=513918.514136},
+year = {2002}
+}
+@article{Burchard2007,
+author = {Burchard, a. and Liebeherr, J.},
+doi = {10.1109/TNET.2007.896501},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Burchard, Liebeherr - 2007 - A Network Calculus With Effective Bandwidth.pdf:pdf},
+issn = {1063-6692},
+journal = {IEEE/ACM Transactions on Networking},
+keywords = {effective bandwidth,network calculus,quality-of-service,statistical multiplexing},
+month = dec,
+number = {6},
+pages = {1442--1453},
+title = {{A Network Calculus With Effective Bandwidth}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=4359151},
+volume = {15},
+year = {2007}
+}
+@article{Burchard2006,
+author = {Burchard, Almut},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Burchard - 2006 - A min-plus calculus for end-to-end statistical service guarantees.pdf:pdf},
+journal = {Information Theory, IEEE \ldots},
+number = {August},
+pages = {1--10},
+title = {{A min-plus calculus for end-to-end statistical service guarantees}},
+url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=1683928},
+year = {2006}
+}
+@article{Calinescu2011,
+author = {Calinescu, Radu and Grunske, Lars},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Calinescu, Grunske - 2011 - Dynamic QoS management and optimization in service-based systems.pdf:pdf},
+journal = {Software \ldots},
+number = {3},
+pages = {387--409},
+title = {{Dynamic QoS management and optimization in service-based systems}},
+url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=5611553},
+volume = {37},
+year = {2011}
+}
+@article{Wandeler2006,
+author = {Wandeler, Ernesto and Thiele, Lothar and Verhoef, Marcel and Lieverse, Paul},
+doi = {10.1007/s10009-006-0019-5},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Wandeler et al. - 2006 - System architecture evaluation using modular performance analysis a case study.pdf:pdf},
+issn = {1433-2779},
+journal = {International Journal on Software Tools for Technology Transfer},
+month = jul,
+number = {6},
+pages = {649--667},
+title = {{System architecture evaluation using modular performance analysis: a case study}},
+url = {http://link.springer.com/10.1007/s10009-006-0019-5},
+volume = {8},
+year = {2006}
+}
+@article{Wang2012,
+archivePrefix = {arXiv},
+arxivId = {arXiv:1202.2914v1},
+author = {Wang, Y},
+eprint = {arXiv:1202.2914v1},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Wang - 2012 - On Effectiveness of Backlog Bounds Using Stochastic Network Calculus in 802.11.pdf:pdf},
+journal = {arXiv preprint arXiv:1202.2914},
+keywords = {11,802,backlog,stochastic network calculus},
+number = {February 2012},
+pages = {1--32},
+title = {{On Effectiveness of Backlog Bounds Using Stochastic Network Calculus in 802.11}},
+url = {http://arxiv.org/abs/1202.2914},
+year = {2012}
+}
+@article{Djukic,
+author = {Djukic, P and Valaee, S},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Djukic, Valaee - Unknown - Challenges-application of network calculus to wireless multi-hop wireless networks.pdf:pdf},
+keywords = {network calculus,spatial tdma},
+title = {{Challenges-application of network calculus to wireless multi-hop wireless networks}},
+url = {http://scholar.google.com/scholar?hl=en\&btnG=Search\&q=intitle:Challenges+:+Application+of+Network+Calculus+to+Wireless+Multi-hop+Networks\#2 http://scholar.google.com/scholar?hl=en\&btnG=Search\&q=intitle:Challenges-application+of+network+calculus+to+wireless+multi-hop+wireless+networks\#0}
+}
+@inproceedings{Ferrandiz2011,
+abstract = {Space Wire is a wormhole network standard scheduled to be used as the sole on-board network for future satellites by the ESA. As the network will be shared by real-time and non real-time traffic, network designers require a tool to check that temporal constraints are verified for all the urgent messages. Previously, we proposed a model for a best-effort worm-hole network based on Network Calculus theory. This model is based on new network element that we call the Wormhole Section. Here, we show how to combine Wormhole Section elements to compute the end-to-end service curve offered to a flow and illustrate its use on a industrial case study.},
+author = {Ferrandiz, Thomas and Frances, Fabrice and Fraboul, Christian},
+booktitle = {Proceedings - 17th IEEE International Conference on Embedded and Real-Time Computing Systems and Applications, RTCSA 2011},
+doi = {10.1109/RTCSA.2011.42},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Ferrandiz, Frances, Fraboul - 2011 - A Network Calculus model for SpaceWire networks.pdf:pdf},
+isbn = {9780769545028},
+issn = {1533-2306},
+pages = {295--299},
+title = {{A Network Calculus model for SpaceWire networks}},
+volume = {1},
+year = {2011}
+}
+@inproceedings{Fidler2006a,
+abstract = {Network calculus is an established theory for deterministic quality of service analysis of fixed networks. Due to the failures inherent in fading channels it is, however, not applicable to radio systems. Emerging probabilistic equivalents allow closing this gap. Based on the recent network calculus with moment generating functions we present a methodology for performance analysis of fading channels. We use a service curve representation of radio links which facilitates an efficient analysis of radio networks. We investigate fading channels with memory and our results show that the fading speed impacts service guarantees significantly. Numerical performance bounds are provided for an example taken from cellular radio communications for which the effects of opportunistic scheduling are quantified. Simulation results are shown which confirm the efficiency of the approach.},
+author = {Fidler, Markus},
+booktitle = {GLOBECOM - IEEE Global Telecommunications Conference},
+doi = {10.1109/GLOCOM.2006.699},
+isbn = {142440357X},
+issn = {1930-529X},
+title = {{A network calculus approach to probabilistic quality of service analysis of fading channels}},
+year = {2006}
+}
+@inproceedings{Fidler2006b,
+abstract = {Network calculus is a min-plus system theory for performance evaluation of queuing networks. Its elegance steins from intuitive convolution formulas for concatenation of deterministic servers. Recent research dispenses with the worst-case assumptions of network calculus to develop a probabilistic equivalent that benefits from statistical multiplexing. Significant achievements have been made, owing for example to the theory of effective bandwidths; however, the outstanding scalability set up by concatenation of deterministic servers has not been shown. This paper establishes a concise, probabilistic network calculus with moment generating functions. The presented work features closed-form, end-to-end, probabilistic performance bounds that achieve the objective of scaling linearly in the number of servers in series. The consistent application of moment generating functions put forth in this paper utilizes independence beyond the scope of current statistical multiplexing of flows. A relevant additional gain is demonstrated for tandem servers with independent cross-traffic},
+archivePrefix = {arXiv},
+arxivId = {cs/0507004},
+author = {Fidler, Markus},
+booktitle = {IEEE International Workshop on Quality of Service, IWQoS},
+doi = {10.1109/IWQOS.2006.250477},
+eprint = {0507004},
+isbn = {1424404762},
+issn = {1548615X},
+pages = {261--270},
+primaryClass = {cs},
+title = {{An end-to-end probabilistic network calculus with moment generating functions}},
+year = {2006}
+}
+@article{Chakraborty2003,
+author = {Chakraborty, Samarjit and K\"{u}nzli, S and Thiele, Lothar},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Chakraborty, K\"{u}nzli, Thiele - 2003 - A General Framework for Analysing System Properties in Platform-Based Embedded System Designs.pdf:pdf},
+journal = {DATE},
+title = {{A General Framework for Analysing System Properties in Platform-Based Embedded System Designs.}},
+url = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.67.5231\&rep=rep1\&type=pdf},
+year = {2003}
+}
+@article{Maxiaguine2004,
+author = {Maxiaguine, Alexander and Chakraborty, S},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Maxiaguine, Chakraborty - 2004 - Evaluating schedulers for multimedia processing on buffer-constrained soc platforms.pdf:pdf},
+journal = {IEEE design \& test of \ldots},
+keywords = {cessing,design automation tools,multimedia stream pro-,platform-based design,real-time scheduling,system-on-chip},
+pages = {1--16},
+title = {{Evaluating schedulers for multimedia processing on buffer-constrained soc platforms}},
+url = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.65.9105\&rep=rep1\&type=pdf},
+year = {2004}
+}
+@article{Thiele2001,
+author = {Thiele, Lothar and Chakraborty, Samarjit and Gries, Matthias},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Thiele, Chakraborty, Gries - 2001 - Embedded software in network processors—models and algorithms.pdf:pdf},
+journal = {Embedded \ldots},
+pages = {1--19},
+title = {{Embedded software in network processors—models and algorithms}},
+url = {http://link.springer.com/chapter/10.1007/3-540-45449-7\_29},
+year = {2001}
+}
+@inproceedings{Boudec,
+author = {Boudec, Jean-yves Le and Thiran, Patrick and Epfl, C},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Boudec, Thiran, Epfl - Unknown - Network calculus.pdf:pdf},
+title = {{Network calculus}}
+}
+@article{Bouillard2007,
+author = {Bouillard, Anne and Thierry, \'{E}ric},
+doi = {10.1007/s10626-007-0028-x},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Bouillard, Thierry - 2007 - An Algorithmic Toolbox for Network Calculus.pdf:pdf},
+issn = {0924-6703},
+journal = {Discrete Event Dynamic Systems},
+keywords = {algebra,algorithmics,computational complexity,functional,min,network calculus},
+month = oct,
+number = {1},
+pages = {3--49},
+title = {{An Algorithmic Toolbox for Network Calculus}},
+url = {http://link.springer.com/10.1007/s10626-007-0028-x},
+volume = {18},
+year = {2007}
+}
+@article{Thiele2000,
+author = {Thiele, L},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Thiele - 2000 - Real-time calculus for scheduling hard real-time systems.pdf:pdf},
+journal = {Circuits and Systems, \ldots},
+title = {{Real-time calculus for scheduling hard real-time systems}},
+url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=858698},
+year = {2000}
+}
+@article{Foster2000,
+author = {Foster, Ian and Roy, Alain and Sander, Volker},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Foster, Roy, Sander - 2000 - A quality of service architecture that combines resource reservation and application adaptation.pdf:pdf},
+isbn = {0780362667},
+journal = {Quality of Service, 2000. IWQOS. \ldots},
+title = {{A quality of service architecture that combines resource reservation and application adaptation}},
+url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=847954},
+year = {2000}
+}
+@article{Agrawal1999,
+author = {Agrawal, Rajeev and Cruz, Rene L and Member, Senior and Okino, Clayton and Member, Student and Rajan, Rajendran},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Agrawal et al. - 1999 - Performance Bounds for Flow Control Protocols.pdf:pdf},
+number = {3},
+pages = {310--323},
+title = {{Performance Bounds for Flow Control Protocols}},
+volume = {7},
+year = {1999}
+}
+@article{Boudec1996,
+author = {Boudec, JY Le and Thiran, P},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Boudec, Thiran - 1996 - Network calculus made easy(2).pdf:pdf},
+journal = {preprint},
+keywords = {arrival curves,atm,e ective bandwidth,guaranteed quality of service,max-plus algebra,network calculus,queueing systems,service curves},
+title = {{Network calculus made easy}},
+url = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.56.9914\&rep=rep1\&type=pdf},
+year = {1996}
+}
+@book{Boudec2001,
+author = {Boudec, JY Le and Thiran, P},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Boudec, Thiran - 2001 - Network calculus a theory of deterministic queuing systems for the internet.pdf:pdf},
+title = {{Network calculus: a theory of deterministic queuing systems for the internet}},
+url = {http://books.google.com/books?hl=en\&lr=\&id=f1FarvjDFl8C\&oi=fnd\&pg=PR13\&dq=NETWORK+CALCULUS+A+Theory+of+Deterministic+Queuing+Systems+for+the+Internet\&ots=YbxivP7ztz\&sig=vVCy2o11YIwSDr8KcAugtuVlCWA},
+year = {2001}
+}
+@article{Boyer2010,
+author = {Boyer, Marc},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Boyer - 2010 - NC-maude a rewriting tool to play with network calculus.pdf:pdf},
+journal = {\ldots Applications of Formal Methods, Verification, and \ldots},
+pages = {1--16},
+title = {{NC-maude: a rewriting tool to play with network calculus}},
+url = {http://link.springer.com/chapter/10.1007/978-3-642-16558-0\_14},
+year = {2010}
+}
+@article{Georges2011,
+author = {Georges, JP and Divoux, Thierry and Rondeau, \'{E}ric},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Georges, Divoux, Rondeau - 2011 - Network calculus application to switched real-time networking.pdf:pdf},
+journal = {Proceedings of the 5th International \ldots},
+title = {{Network calculus: application to switched real-time networking}},
+url = {http://dl.acm.org/citation.cfm?id=2151733},
+year = {2011}
+}
+@article{LeBoudec,
+author = {{Le Boudec}, J.Y. and Thiran, P. and Giordano, S.},
+doi = {10.1109/ISCAS.2000.858764},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Le Boudec, Thiran, Giordano - Unknown - A short tutorial on network calculus. II. Min-plus system theory applied to communication networ.pdf:pdf},
+isbn = {0-7803-5482-6},
+journal = {2000 IEEE International Symposium on Circuits and Systems. Emerging Technologies for the 21st Century. Proceedings (IEEE Cat No.00CH36353)},
+number = {2},
+pages = {365--368},
+publisher = {Presses Polytech. Univ. Romandes},
+title = {{A short tutorial on network calculus. II. Min-plus system theory applied to communication networks}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=858764},
+volume = {4}
+}
+@article{LeBoudeca,
+author = {{Le Boudec}, J.-Y. and Thiran, P.},
+doi = {10.1109/ISCAS.2000.858696},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Le Boudec, Thiran - Unknown - A short tutorial on network calculus. I. Fundamental bounds in communication networks.pdf:pdf},
+isbn = {0-7803-5482-6},
+journal = {2000 IEEE International Symposium on Circuits and Systems. Emerging Technologies for the 21st Century. Proceedings (IEEE Cat No.00CH36353)},
+pages = {93--96},
+publisher = {Presses Polytech. Univ. Romandes},
+title = {{A short tutorial on network calculus. I. Fundamental bounds in communication networks}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=858696},
+volume = {4}
+}
+@article{Boudec1996a,
+author = {Boudec, JY Le and Thiran, P},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Boudec, Thiran - 1996 - Network calculus made easy.pdf:pdf},
+journal = {preprint},
+keywords = {arrival curves,atm,e ective bandwidth,guaranteed quality of service,max-plus algebra,network calculus,queueing systems,service curves},
+title = {{Network calculus made easy}},
+url = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.56.9914\&rep=rep1\&type=pdf},
+year = {1996}
+}
+@article{Schioler2007,
+author = {Schioler, Henrik and Schwefel, Hans P. and Hansen, Martin B.},
+doi = {10.4108/valuetools.2007.1804},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Schioler, Schwefel, Hansen - 2007 - CyNC A MATLABSimuLink Toolbox for Network Calculus.pdf:pdf},
+isbn = {978-963-9799-00-4},
+journal = {Proceedings of the 2nd International ICST Conference on Performance Evaluation Methodologies and Tools},
+keywords = {modelling,network calculus,performance,real time systems},
+publisher = {Icst},
+title = {{CyNC: A MATLAB/SimuLink Toolbox for Network Calculus}},
+url = {http://eudl.eu/doi/10.4108/valuetools.2007.1804},
+year = {2007}
+}
+@article{Chakraborty2003a,
+author = {Chakraborty, Samarjit and K\"{u}nzli, Simon and Thiele, Lothar and Herkersdorf, Andreas and Sagmeister, Patricia},
+doi = {10.1016/S1389-1286(02)00454-1},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Chakraborty et al. - 2003 - Performance evaluation of network processor architectures combining simulation with analytical estimation.pdf:pdf},
+issn = {13891286},
+journal = {Computer Networks},
+month = apr,
+number = {5},
+pages = {641--665},
+title = {{Performance evaluation of network processor architectures: combining simulation with analytical estimation}},
+url = {http://linkinghub.elsevier.com/retrieve/pii/S1389128602004541},
+volume = {41},
+year = {2003}
+}
+@article{Xiao2000,
+author = {Xiao, Hannan and Seah, WKG},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Xiao, Seah - 2000 - A flexible quality of service model for mobile ad-hoc networks.pdf:pdf},
+isbn = {0780357183},
+journal = {\ldots Proceedings, 2000. VTC \ldots},
+title = {{A flexible quality of service model for mobile ad-hoc networks}},
+url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=851496},
+year = {2000}
+}
+@article{Fidler2010,
+abstract = {In recent years service curves have proven a powerful and versatile model for performance analysis of network elements, such as schedulers, links, and traffic shapers, up to entire computer networks, like the Internet. The elegance of the concept of service curve is due to intuitive convolution formulas that determine the data departures of a system from its arrivals and its service curve. This fundamental relation constitutes the basis of the network calculus and relates it to systems theory, however, under a different, so-called min-plus algebra. As in systems theory, the particular strength of the minplus convolution is the ability to concatenate tandem systems along a network path. This facilitates the notion of network service curve that has the expressiveness to characterize whole networks by a single transfer function. This paper surveys the state-of-the-art of the deterministic and the recent probabilistic network calculus. It discusses the concept of service curves, its use in the network calculus, and the relation to systems theory under the min-plus algebra. Service curve models of common schedulers and different types of networks are reviewed and methods for identification of a system's service curve representation from measurements are discussed. After recapitulating the state of knowledge on time-varying min-plus systems theory, stochastic service curve models are surveyed. These models allow utilizing the statistical multiplexing gain in a network calculus framework that features end-to-end network analysis by convolution of service curves.},
+author = {Fidler, Markus},
+doi = {10.1109/SURV.2010.020110.00019},
+issn = {1553877X},
+journal = {IEEE Communications Surveys and Tutorials},
+keywords = {Min-plus systems theory,Network calculus,Network performance analysis,Scheduling,Service curves},
+pages = {59--86},
+title = {{A survey of deterministic and stochastic service curve models in the network calculus}},
+volume = {12},
+year = {2010}
+}
+@inproceedings{Henriksson2007,
+abstract = {SoCs for multimedia applications typically use only one port to off-chip DRAM for cost reasons. The sharing of interconnect and the off-chip DRAM port by several IP blocks makes the performance of a SoC under design hard to predict. Network calculus defines the concept of flow and has been successfully used to analyse the performance of communication networks. We propose to apply network calculus to the verification of memory access latencies. Two novel network elements, packet stretcher and packet compressor, are used to model the SoC interconnect and DRAM controller. We further extend the flow concept with a degree and make use of the peak characteristics of a flow to tighten the bounds in the analysis. We present a video playback case study and show that the proposed application of network calculus allows us to statically verify that all requirements on memory access latency are fulfilled.},
+author = {Henriksson, Tomas and {Van Der Wolf}, Pieter and Jantsch, Axel and Bruce, Alistair},
+booktitle = {Proceedings of the 2007 IEEE/ACM/IFIP Workshop on Embedded Systems for Real-Time Multimedia, ESTIMedia 2007},
+doi = {10.1109/ESTMED.2007.4375796},
+isbn = {9781424416547},
+pages = {21--26},
+title = {{Network calculus applied to verification of memory access performance}},
+year = {2007}
+}
+@inproceedings{Jiang2012,
+abstract = {Stochastic network calculus is a theory for performance guarantee analysis of Internet networks. Originated in early 1990s, stochastic network calculus has its foundation on the min-plus convolution and max-plus convolution queueing principles. Although challenging, it has shown tremendous potential in dealing with queueing type problems encountered in Internet networks. By focusing on bounds, stochastic network calculus compliments the classical queueing theory. This paper provides an overview of stochastic network calculus from the queueing principle perspective and presents an outlook by discussing crucial yet still open challenges in the area.},
+author = {Jiang, Yuming},
+booktitle = {2012 International Conference on Computing, Networking and Communications, ICNC'12},
+doi = {10.1109/ICCNC.2012.6167501},
+isbn = {9781467300094},
+pages = {638--644},
+title = {{Stochastic network calculus for performance analysis of Internet networks - An overview and outlook}},
+year = {2012}
+}
+@inproceedings{Jiang2009,
+abstract = {Network calculus is a theory dealing with queueing type problems encountered in computer networks, with particular focus on quality of service guarantee analysis. Queueing theory is the mathematical study of queues, proven to be applicable to a wide area of problems, generally concerning about the (average) quantities in an equilibrium state. Since both network calculus and queueing theory are analytical tools for studying queues, a question arises naturally as is if and where network calculus and queueing theory meet. In this paper, we explore queueing principles that underlie network calculus and exemplify their use. Particularly, based on the network calculus queueing principles, we show that for GI/GI/1, similar inequalities in the theory of queues can be derived. In addition, we prove that the end-to-end performance of a tandem network is independent of the order of servers in the network even under some general settings. Through these, we present a network calculus perspective on queues and relate network calculus to queueing theory.},
+author = {Jiang, Yuming},
+booktitle = {Proceedings of the Fourth International ICST Conference on Performance Evaluation Methodologies and Tools},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Jiang - 2009 - Network calculus and queueing theory two sides of one coin invited paper.pdf:pdf},
+isbn = {9789639799707},
+keywords = {Article No. 37},
+pages = {1--12},
+title = {{Network calculus and queueing theory: two sides of one coin: invited paper}},
+url = {http://portal.acm.org/citation.cfm?id=1698822.1698870},
+year = {2009}
+}
+@article{Kim2009,
+abstract = {In this paper, we propose to speed up the simulation performance for TCP-operated networks by incorporating network calculus-based models in a simulation framework. In the simulation framework, we describes the operational properties of TCP congestion control, additive increase and multiplicative decrease (AIMD) and slow start, together with the queue discipline in the domain of network calculus. In order to determine network calculus models for TCP congestion, we first devise a simple TCP throughput model which approximately determines the range of per-flow throughput that one TCP can attain in a given interval, given the number of packet losses in the interval. We then exploit the TCP model to define a collection of network calculus theorems that regulate TCP flows in the range between the upper- and lower-limits on the TCP per-flow throughput in the corresponding interval. Finally, we incorporate the derived rules (theorems) into ns-2 to obtain a network calculus-based (NC-based) simulation, and carry out both the NC-based and the packet-level simulation to evaluate the performance gain and accuracy of the NC-based simulation, where the former is represented in perspective of the execution time (wall time) incurred in conducting the simulations and the later is evaluated in terms of the difference between results obtained in both the packet-level and NC-based simulation. The simulation results indicate that an order of magnitude or more (maximally 30 times) improvement in the execution time is achieved and the performance improvement becomes more salient as the network size increases in perspective of network-link capacities and the number of flows. The discrepancy observed between the NC-based simulation and the packet-level simulation, on the other hand, is minimally 1-2\% and maximally 8-12\% in a wide spectrum of network topologies and traffic loads. Additionally the results also indicate that the NC-based simulation outperforms a fluid-model-based simulation realized with the use of the time-stepped hybrid simulation technique, and that the performance improvement of the NC-based simulation is still held in IEEE 802.11-based wireless networks and also immune to the type of the simulation platform consisting of ns-2, operating system, and hardware specification. ?? 2008 Elsevier B.V. All rights reserved.},
+author = {Kim, Hwangnam and Hou, Jennifer C.},
+doi = {10.1016/j.comnet.2008.07.015},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Kim, Hou - 2009 - Enabling network calculus-based simulation for TCP congestion control.pdf:pdf},
+issn = {13891286},
+journal = {Computer Networks},
+keywords = {Network calculus,Performance modeling and simulation},
+pages = {1--24},
+title = {{Enabling network calculus-based simulation for TCP congestion control}},
+volume = {53},
+year = {2009}
+}
+@article{LeBoudec1998,
+author = {{Le Boudec}, J.-Y.},
+doi = {10.1109/18.669170},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Le Boudec - 1998 - Application of network calculus to guaranteed service networks.pdf:pdf},
+issn = {00189448},
+journal = {IEEE Transactions on Information Theory},
+month = may,
+number = {3},
+pages = {1087--1096},
+title = {{Application of network calculus to guaranteed service networks}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=669170},
+volume = {44},
+year = {1998}
+}
+@article{Li2007,
+abstract = {This paper establishes a link between two principal tools for the analysis of network traffic, namely, effective bandwidth and network calculus. It is shown that a general version of effective bandwidth can be expressed within the framework of a probabilistic version of the network calculus, where both arrivals and service are specified in terms of probabilistic bounds. By formulating well-known effective bandwidth expressions in terms of probabilistic envelope functions, the developed network calculus can be applied to a wide range of traffic types, including traffic that has self-similar characteristics. As applications, probabilistic lower bounds are presented on the service given by three different scheduling algorithms: static priority, earliest deadline first, and generalized processor sharing. Numerical examples show the impact of specific traffic models and scheduling algorithms on the multiplexing gain in a network.},
+author = {Li, Chengzhi and Burchard, Almut and Liebeherr, J\"{o}rg},
+doi = {10.1109/TNET.2007.896501},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Li, Burchard, Liebeherr - 2007 - A network calculus with effective bandwidth.pdf:pdf},
+issn = {10636692},
+journal = {IEEE/ACM Transactions on Networking},
+keywords = {Effective bandwidth,Network calculus,Probabilistic logic,QoS,Quality of service,Statistical multiplexing},
+pages = {1442--1453},
+title = {{A network calculus with effective bandwidth}},
+volume = {15},
+year = {2007}
+}
+@article{Liu2007,
+abstract = {The issue of Quality of Service (QoS) performance analysis in packet-switched networks has drawn a lot of attention in the networking community. There is a lot of work including an elegant theory under the name of network calculus, which focuses on analysis of deterministic worst case QoS performance bounds. In the meantime, researchers have studied stochastic QoS performance for specific schedulers. However, most previous works on deterministic QoS analysis or stochastic QoS analysis have only considered a server that provides deterministic service, i.e.??deterministically bounded rate service. Few have considered the behavior of a stochastic server that provides input flows with variable rate service, for example wireless links. In this paper, we propose a stochastic network calculus to analyze the end-to-end stochastic QoS performance of a system with stochastically bounded input traffic over a series of deterministic and stochastic servers. We also prove that a server serving an aggregate of flows can be regarded as a stochastic server for individual flows within the aggregate. Based on this, the proposed framework is further applied to analyze per-flow stochastic QoS performance under aggregate scheduling. ?? 2006 Elsevier Ltd. All rights reserved.},
+author = {Liu, Yong and Tham, Chen Khong and Jiang, Yuming},
+doi = {10.1016/j.peva.2006.07.003},
+issn = {01665316},
+journal = {Performance Evaluation},
+keywords = {Generalized stochastically bounded burstiness (gSB,Network calculus,Quality of service,Stochastic service curve},
+pages = {547--572},
+title = {{A calculus for stochastic QoS analysis}},
+volume = {64},
+year = {2007}
+}
+@inproceedings{Malaney1999,
+abstract = { We describe a generalised framework for analysing the delay and backlog bounds in lossless packet networks using the techniques of network calculus. We outline network calculus in terms of matrix operators acting on functions, and couple these operations with the concept of service-curve scheduling. We describe how this combined framework is used to determine delay bounds imposed on packets as they traverse example networks, and compare the results with standard FIFO and virtual clock scheduling algorithms. This comparison highlights the QoS advantages to be gained from the use of network calculus and service-curve scheduling.},
+author = {Malaney, Robert A. and Rogers, Glynn},
+booktitle = {IEEE International Conference on Networks, ICON},
+doi = {10.1109/ICON.1999.796185},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Malaney, Rogers - 1999 - Network calculus and service curve scheduling in heterogeneous networks.pdf:pdf},
+isbn = {0-7695-0243-1},
+issn = {15566463},
+pages = {250--256},
+title = {{Network calculus and service curve scheduling in heterogeneous networks}},
+year = {1999}
+}
+@article{Qian2009,
+abstract = {On-chip traffic of many applications exhibits self-similar characteristics. In this paper, we intend to apply network calculus to analyze the delay and backlog bounds for self-similar traffic in networks on chips. We first prove that self-similar traffic ...},
+author = {Qian, Yue and Lu, Zhonghai and Dou, Wenhua},
+doi = {10.1145/1629435.1629497},
+isbn = {9781605586281},
+journal = {Proceedings of the 7th IEEE/ACM international conference on Hardware/software codesign and system synthesis - CODES+ISSS '09},
+keywords = {lus,network calcu-,network-on-chip,performance analysis,self-similar traffic},
+pages = {453},
+title = {{Applying network calculus for performance analysis of self-similar traffic in on-chip networks}},
+url = {http://portal.acm.org/citation.cfm?doid=1629435.1629497},
+year = {2009}
+}
+@inproceedings{Schmitt2007,
+abstract = {Today's wireless sensor networks (WSN) focus on energy-efficiency as the main metric to optimize. However, an increasing number of scenarios where sensor networks are considered for time-critical purposes in application scenarios like intrusion detection, industrial monitoring, or health care systems demands for an explicit support of performance guarantees in WSNs and, thus, in turn for a respective mathematical framework. In (J. Schmitt and U. Roedig, 2005) , a sensor network calculus was introduced in order to accommodate a worst-case analysis of WSNs. This sensor network calculus focused on the communication aspect in WSNs, but had not yet a possibility to treat in-network processing in WSNs. In this work, we now incorporate in-network processing features as they are typical for WSNs by taking into account computational resources on the sensor nodes. Furthermore, we propose a simple, yet effective priority queue management discipline which achieves a good balance of response times across sensor nodes in the field.},
+author = {Schmitt, Jens B. and Zdarsky, Frank A. and Thiele, Lothar},
+booktitle = {Proceedings - Real-Time Systems Symposium},
+doi = {10.1109/RTSS.2007.17},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Schmitt, Zdarsky, Thiele - 2007 - A comprehensive worst-case calculus for wireless sensor networks with in-network processing.pdf:pdf},
+isbn = {0769530621},
+issn = {10528725},
+pages = {193--202},
+title = {{A comprehensive worst-case calculus for wireless sensor networks with in-network processing}},
+year = {2007}
+}
+@article{She2011,
+abstract = {Deterministic network calculus (DNC) is not suitable for deriving performance guarantees for wireless networks due to their inherently random behaviors. In this paper, we develop a method for Quality of Service (QoS) analysis of wireless channels subject to Rayleigh fading based on stochastic network calculus. We provide closed-form stochastic service curve for the Rayleigh fading channel. With this service curve, we derive stochastic delay and backlog bounds. Simulation results verify that the bounds are reasonably tight. Moreover, through numerical experiments, we show the method is not only capable of deriving stochastic performance bounds, but also can provide guidelines for designing transmission strategies in wireless networks.},
+author = {She, Huimin and Lu, Zhonghai and Jantsch, Axel and Zhou, Dian and Zheng, Li-Rong},
+doi = {10.1109/WCNC.2011.5779306},
+isbn = {978-1-61284-253-0},
+issn = {1525-3511},
+journal = {2011 IEEE Wireless Communications and Networking Conference},
+pages = {1056--1061},
+title = {{Modeling and analysis of Rayleigh fading channels using stochastic network calculus}},
+year = {2011}
+}
+@article{Wang,
+author = {Wang, Hao and Schmitt, Jens B},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Wang, Schmitt - Unknown - On the Way to a Wireless Network Calculus – The Single Node Case with Retransmissions.pdf:pdf},
+keywords = {network calculus,performance bounds,stochas-,wireless channel},
+pages = {1--22},
+title = {{On the Way to a Wireless Network Calculus – The Single Node Case with Retransmissions}}
+}
+@inproceedings{Wang2011a,
+abstract = {The renewable energy generation such as solar and wind will constitute an important part of the next generation grid. As the variations of renewable sources may not match the time distribution of load, energy storage is essential for grid stability. Supplemented with energy storage, we investigate the feasibility of integrating solar photovoltaic (PV) panels and wind turbines into the grid. To deal with the fluctuation in both the power generation and demand, we borrow the ideas from stochastic network calculus and build a stochastic model for the power supply reliability with different renewable energy configurations. To illustrate the validity of the model, we conduct a case study for the integration of renewable energy sources into the power system of an island off the coast of Southern California. Performance of the hybrid system under study is assessed by employing the stochastic model, e.g., with a set of system configurations, the long-term expected Fraction of Time that energy Not-Served (FTNS) of a given period can be obtained.},
+author = {Wang, Kai and Low, Steven and Lin, Chuang},
+booktitle = {2011 IEEE International Conference on Smart Grid Communications, SmartGridComm 2011},
+doi = {10.1109/SmartGridComm.2011.6102385},
+isbn = {9781457717024},
+pages = {55--60},
+title = {{How stochastic network calculus concepts help green the power grid}},
+year = {2011}
+}
+@article{Xia2008,
+author = {Xia, Feng and Ma, Longhua and Dong, Jinxiang and Sun, Youxian},
+doi = {10.1109/ICESS.Symposia.2008.84},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Xia et al. - 2008 - Network QoS management in cyber-physical systems.pdf:pdf},
+isbn = {978-0-7695-3288-2},
+journal = {Embedded Software and Systems \ldots},
+month = jul,
+pages = {302--307},
+publisher = {Ieee},
+title = {{Network QoS management in cyber-physical systems}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=4627176 http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=4627176},
+year = {2008}
+}
+@article{Bouillard2007a,
+author = {Bouillard, Anne and Thierry, \'{E}ric},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Bouillard, Thierry - 2007 - An Algorithmic Toolbox for Network Calculus de recherche.pdf:pdf},
+title = {{An Algorithmic Toolbox for Network Calculus de recherche}},
+year = {2007}
+}
+@article{Dobson2008,
+author = {Dobson, Simon},
+doi = {10.1504/IJAACS.2008.019808},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Dobson - 2008 - An adaptive systems perspective on network calculus, with applications to autonomic control.pdf:pdf},
+issn = {1754-8632},
+journal = {International Journal of Autonomous and Adaptive Communications Systems},
+keywords = {autonomic communications,context-sensitive adaptation,network},
+number = {3},
+pages = {332},
+title = {{An adaptive systems perspective on network calculus, with applications to autonomic control}},
+url = {http://www.inderscience.com/link.php?id=19808},
+volume = {1},
+year = {2008}
+}
+@article{Bouillard2010,
+author = {Bouillard, A and Cottenceau, B and Gaujal, B and Hardouin, L and Lhommeau, M and Thierry, E},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Bouillard et al. - 2010 - COINC Library A Scilab toolbox for Network Calculus Network Calculus.pdf:pdf},
+title = {{COINC Library A Scilab toolbox for Network Calculus Network Calculus}},
+year = {2010}
+}
+@article{Lui,
+author = {Lui, John C S},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Lui - Unknown - Introduction to Network Calculus.pdf:pdf},
+title = {{Introduction to Network Calculus}}
+}
+@article{Xia2008a,
+abstract = {A wireless sensor/actuator network (WSAN) is a group of sensors and actuators that are geographically distributed and interconnected by wireless networks. Sensors gather information about the state of physical world. Actuators react to this information by performing appropriate actions. WSANs thus enable cyber systems to monitor and manipulate the behavior of the physical world. WSANs are growing at a tremendous pace, just like the exploding evolution of Internet. Supporting quality of service (QoS) will be of critical importance for pervasive WSANs that serve as the network infrastructure of diverse applications. To spark new research and development interests in this field, this paper examines and discusses the requirements, critical challenges, and open research issues on QoS management in WSANs. A brief overview of recent progress is given.},
+author = {Xia, Feng},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Xia - 2008 - QoS challenges and opportunities in wireless sensoractuator networks.pdf:pdf},
+journal = {Sensors},
+keywords = {actuator network,architecture,communication protocol,power management,quality of service,self-management,service-oriented,service-oriented architecture,wireless sensor,wireless sensor/actuator network},
+pages = {1099--1110},
+title = {{QoS challenges and opportunities in wireless sensor/actuator networks}},
+url = {http://www.mdpi.com/1424-8220/8/2/1099},
+year = {2008}
+}
+@article{Carey2000,
+author = {Carey, Malachy and Subrahmanian, E},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Carey, Subrahmanian - 2000 - An approach to modelling time-varying flows on congested networks.pdf:pdf},
+journal = {Transportation Research Part B: \ldots},
+keywords = {c assignment,congestion,dynamic tra,fifo,networks,ows,time-varying},
+title = {{An approach to modelling time-varying flows on congested networks}},
+url = {http://www.sciencedirect.com/science/article/pii/S0191261599000193},
+volume = {34},
+year = {2000}
+}
+@article{Georgiadis1996,
+author = {Georgiadis, Leonidas and Gu\'{e}rin, R},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Georgiadis, Gu\'{e}rin - 1996 - Efficient network QoS provisioning based on per node traffic shaping.pdf:pdf},
+journal = {\ldots on Networking (TON)},
+number = {4},
+title = {{Efficient network QoS provisioning based on per node traffic shaping}},
+url = {http://dl.acm.org/citation.cfm?id=234767},
+volume = {4},
+year = {1996}
+}
+@article{Tipsuwan2001,
+author = {Tipsuwan, Yodyium and Chow, MY},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Tipsuwan, Chow - 2001 - Network-based controller adaptation based on QoS negotiation and deterioration.pdf:pdf},
+isbn = {0780371089},
+journal = {\ldots Society, 2001. IECON'01. The 27th \ldots},
+number = {C},
+pages = {1794--1799},
+title = {{Network-based controller adaptation based on QoS negotiation and deterioration}},
+url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=975562},
+volume = {00},
+year = {2001}
+}
+@article{Dubey2009,
+author = {Dubey, Abhishek and Mehrotra, R},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Dubey, Mehrotra - 2009 - Performance modeling of distributed multi-tier enterprise systems.pdf:pdf},
+journal = {\ldots Performance Evaluation \ldots},
+number = {ii},
+pages = {9--11},
+title = {{Performance modeling of distributed multi-tier enterprise systems}},
+url = {http://dl.acm.org/citation.cfm?id=1639566},
+year = {2009}
+}
+@article{Liu1998,
+author = {Liu, Tong and Bahl, Paramvir and Chlamtac, Imrich},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Liu, Bahl, Chlamtac - 1998 - Mobility modeling, location tracking, and trajectory prediction in wireless ATM networks.pdf:pdf},
+journal = {Selected Areas in Communications, \ldots},
+number = {6},
+pages = {922--936},
+title = {{Mobility modeling, location tracking, and trajectory prediction in wireless ATM networks}},
+url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=709453},
+volume = {16},
+year = {1998}
+}
+@article{Sander2001,
+author = {Sander, Vol and Adamson, WA},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Sander, Adamson - 2001 - End-to-end provision of policy information for network qos.pdf:pdf},
+isbn = {0769512968},
+journal = {\ldots , 2001. Proceedings. 10th \ldots},
+title = {{End-to-end provision of policy information for network qos}},
+url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=945182},
+year = {2001}
+}
+@article{Qiu2004,
+author = {Qiu, Dongyu and Srikant, R},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Qiu, Srikant - 2004 - Modeling and performance analysis of BitTorrent-like peer-to-peer networks.pdf:pdf},
+isbn = {1581138628},
+journal = {ACM SIGCOMM Computer Communication Review},
+keywords = {fluid model,game theory,peer-to-peer networks},
+pages = {367--377},
+title = {{Modeling and performance analysis of BitTorrent-like peer-to-peer networks}},
+url = {http://dl.acm.org/citation.cfm?id=1015508},
+year = {2004}
+}
+@article{Dubey2012,
+abstract = {A fractionated spacecraft is a cluster of independent modules that interact wirelessly to maintain cluster flight and realize the functions usually performed by a monolithic satellite. This spacecraft architecture poses novel software challenges because the hardware platform is inherently distributed, with highly fluctuating connectivity among the modules. It is critical for mission success to support autonomous fault management and to satisfy real-time performance requirements. It is also both critical and challenging to support multiple organizations and users whose diverse software applications have changing demands for computational and communication resources, while operating on different levels and in separate domains of security. The solution proposed in this paper is based on a layered architecture consisting of a novel operating system, a middleware layer, and component-structured applications. The operating system provides primitives for concurrency, synchronization, and secure information flows; it also enforces application separation and resource management policies. The middleware provides higher-level services supporting request/response and publish/subscribe interactions for distributed software. The component model facilitates the creation of software applications from modular and reusable components that are deployed in the distributed system and interact only through well-defined mechanisms. Two cross-cutting aspects - multi-level security and multi-layered fault management - are addressed at all levels of the architecture. The complexity of creating applications and performing system integration is mitigated through the use of a domain-specific model-driven development process that relies on a dedicated modeling language and its accompanying graphical modeling tools, software generators for synthesizing infrastructure code, and the extensive use of model-based analysis for verification and validation.},
+author = {Dubey, A. and Emfinger, W. and Gokhale, A. and Karsai, G. and Otte, W. R. and Parsons, J. and Szabo, C. and Coglio, A. and Smith, E. and Bose, P.},
+doi = {10.1109/AERO.2012.6187334},
+isbn = {978-1-4577-0557-1},
+issn = {1095-323X},
+journal = {2012 IEEE Aerospace Conference},
+pages = {1--20},
+publisher = {Ieee},
+title = {{A software platform for fractionated spacecraft}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=6187334},
+year = {2012}
+}
+@article{Akyildiz2006,
+author = {Akyildiz, Ian F. and Lee, Won Yeol and Vuran, Mehmet C. and Mohanty, Shantidev},
+journal = {Computer Networks},
+keywords = {Cognitive radio networks,Dynamic spectrum access networks,Next generation networks,Spectrum management,Spectrum mobility,Spectrum sensing,Spectrum sharing},
+number = {13},
+pages = {2127--2159},
+title = {{NeXt generation/dynamic spectrum access/cognitive radio wireless networks: A survey}},
+volume = {50},
+year = {2006}
+}
+@article{Lowe1999,
+abstract = {An object recognition system has been developed that uses a new
+class of local image features. The features are invariant to image
+scaling, translation, and rotation, and partially invariant to
+illumination changes and affine or 3D projection. These features share
+similar properties with neurons in inferior temporal cortex that are
+used for object recognition in primate vision. Features are efficiently
+detected through a staged filtering approach that identifies stable
+points in scale space. Image keys are created that allow for local
+geometric deformations by representing blurred image gradients in
+multiple orientation planes and at multiple scales. The keys are used as
+input to a nearest neighbor indexing method that identifies candidate
+object matches. Final verification of each match is achieved by finding
+a low residual least squares solution for the unknown model parameters.
+Experimental results show that robust object recognition can be achieved
+in cluttered partially occluded images with a computation time of under
+2 seconds},
+archivePrefix = {arXiv},
+arxivId = {cs/0112017},
+author = {Lowe, D.G.},
+doi = {10.1109/ICCV.1999.790410},
+eprint = {0112017},
+isbn = {0-7695-0164-8},
+issn = {0-7695-0164-8},
+journal = {Proceedings of the Seventh IEEE International Conference on Computer Vision},
+pmid = {15806121},
+primaryClass = {cs},
+title = {{Object recognition from local scale-invariant features}},
+volume = {2},
+year = {1999}
+}
+@article{Arulampalam2002,
+abstract = {Increasingly, for many application areas, it is becoming important
+to include elements of nonlinearity and non-Gaussianity in order to
+model accurately the underlying dynamics of a physical system. Moreover,
+it is typically crucial to process data on-line as it arrives, both from
+the point of view of storage costs as well as for rapid adaptation to
+changing signal characteristics. In this paper, we review both optimal
+and suboptimal Bayesian algorithms for nonlinear/non-Gaussian tracking
+problems, with a focus on particle filters. Particle filters are
+sequential Monte Carlo methods based on point mass (or "particle")
+representations of probability densities, which can be applied to any
+state-space model and which generalize the traditional Kalman filtering
+methods. Several variants of the particle filter such as SIR, ASIR, and
+RPF are introduced within a generic framework of the sequential
+importance sampling (SIS) algorithm. These are discussed and compared
+with the standard EKF through an illustrative example},
+author = {Arulampalam, M.S. and Maskell, S. and Gordon, N. and Clapp, T.},
+doi = {10.1109/78.978374},
+isbn = {1053-587X},
+issn = {1053-587X},
+journal = {IEEE Transactions on Signal Processing},
+number = {2},
+pmid = {978374},
+title = {{A tutorial on particle filters for online nonlinear/non-Gaussian
+Bayesian tracking}},
+volume = {50},
+year = {2002}
+}
+@article{Pedersen2008,
+abstract = {Matrix identities, relations and approximations. A desktop reference for quick overview of mathematics of matrices.},
+author = {Pedersen, Michael Syskind and Baxter, Bill and Templeton, Brian and Rish\o j, Christian and Theobald, Douglas L and Hoegh-rasmussen, Esben and Casteel, Glynne and Gao, Jun Bin and Dedecius, Kamil and Strim, Korbinian and Christiansen, Lars and Hansen, Lars Kai and Wilkinson, Leland and He, Liguo and Bar, Miguel and Winther, Ole and Sakov, Pavel and Hattinger, Stephan and Petersen, Kaare Breandt and Rish\o j, Christian},
+doi = {10.1111/j.1365-294X.2006.03161.x},
+editor = {Bloom, B R},
+institution = {Technical University of Denmark},
+issn = {09621083},
+journal = {Matrix},
+keywords = {acknowledgements,bill baxter,brian templeton,christian,christian rish\o j,contributions,derivative,derivative inverse matrix,determinant,differentiate a matrix,matrix algebra,matrix identities,matrix relations,suggestions,thank following,we would like},
+number = {1},
+pages = {1--71},
+pmid = {17284204},
+publisher = {Citeseer},
+title = {{The Matrix Cookbook}},
+url = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.139.3165\&amp;rep=rep1\&amp;type=pdf},
+volume = {M},
+year = {2008}
+}
+@book{Boyd2004,
+abstract = {We are developing a dual panel breast-dedicated PET system using LSO scintillators coupled to position sensitive avalanche photodiodes (PSAPD). The charge output is amplified and read using NOVA RENA-3 ASICs. This paper shows that the coincidence timing resolution of the RENA-3 ASIC can be improved using certain list-mode calibrations. We treat the calibration problem as a convex optimization problem and use the RENA-3s analog-based timing system to correct the measured data for time dispersion effects from correlated noise, PSAPD signal delays and varying signal amplitudes. The direct solution to the optimization problem involves a matrix inversion that grows order (n3) with the number of parameters. An iterative method using single-coordinate descent to approximate the inversion grows order (n). The inversion does not need to run to convergence, since any gains at high iteration number will be low compared to noise amplification. The system calibration method is demonstrated with measured pulser data as well as with two LSO-PSAPD detectors in electronic coincidence. After applying the algorithm, the 511keV photopeak paired coincidence time resolution from the LSO-PSAPD detectors under study improved by 57\%, from the raw value of 16.30.07 ns FWHM to 6.920.02 ns FWHM (11.520.05 ns to 4.890.02 ns for unpaired photons).},
+archivePrefix = {arXiv},
+arxivId = {1111.6189v1},
+author = {Boyd, Stephen P and Vandenberghe, Lieven},
+booktitle = {Optimization Methods and Software},
+chapter = {1,10,11},
+doi = {10.1080/10556781003625177},
+editor = {Press, Cambridge University},
+eprint = {1111.6189v1},
+isbn = {9780521833783},
+issn = {10556788},
+number = {3},
+pages = {487--487},
+pmid = {20876008},
+publisher = {Cambridge University Press},
+title = {{Convex Optimization}},
+url = {http://www.informaworld.com/openurl?genre=article\&doi=10.1080/10556781003625177\&magic=crossref},
+volume = {25},
+year = {2004}
+}
+@article{Shannon1948,
+abstract = {THE recent development of various methods of modulation such as PCM and PPM which exchange bandwidth for signal-to-noise ratio has intensified the interest in a general theory of communication. A basis for such a theory is contained in the important papers of Nyquist1 and Hartley2 on this subject. In the present paper we will extend the theory to include a number of new factors, in particular the effect of noise in the channel, and the savings possible due to the statistical structure of the original message and due to the nature of the final destination of the information. The fundamental problem of communication is},
+archivePrefix = {arXiv},
+arxivId = {chao-dyn/9411012},
+author = {Shannon, CE},
+doi = {10.1145/584091.584093},
+eprint = {9411012},
+isbn = {0252725484},
+issn = {07246811},
+journal = {ACM SIGMOBILE and \ldots},
+number = {July 1948},
+pages = {379--423},
+pmid = {9230594},
+primaryClass = {chao-dyn},
+title = {{A mathematical theory of communication}},
+url = {http://dl.acm.org/citation.cfm?id=584093},
+volume = {27},
+year = {1948}
+}
+@article{Candes2008,
+abstract = {Conventional approaches to sampling signals or images follow Shannon's theorem: the sampling rate must be at least twice the maximum frequency present in the signal (Nyquist rate). In the field of data conversion, standard analog-to-digital converter (ADC) technology implements the usual quantized Shannon representation - the signal is uniformly sampled at or above the Nyquist rate. This article surveys the theory of compressive sampling, also known as compressed sensing or CS, a novel sensing/sampling paradigm that goes against the common wisdom in data acquisition. CS theory asserts that one can recover certain signals and images from far fewer samples or measurements than traditional methods use.},
+archivePrefix = {arXiv},
+arxivId = {arXiv:1307.1360v1},
+author = {Candes, E.J. and Wakin, M.B.},
+doi = {10.1109/MSP.2007.914731},
+eprint = {arXiv:1307.1360v1},
+isbn = {1053-5888},
+issn = {1053-5888},
+journal = {IEEE Signal Processing Magazine},
+number = {2},
+pmid = {4472240},
+title = {{An Introduction To Compressive Sampling}},
+volume = {25},
+year = {2008}
+}
+@article{Jamalipour2005,
+abstract = {Wireless technology is a truly revolutionary paradigm shift, enabling multimedia communications between people and devices from any location. It also underpins exciting applications such as sensor networks, smart homes, telemedicine, and automated highways. This book provides a comprehensive introduction to the underlying theory, design techniques and analytical tools of wireless communications, focusing primarily on the core principles of wireless system design. The book begins with an overview of wireless systems and standards. The characteristics of the wireless channel are then described, including their fundamental capacity limits. Various modulation, coding, and signal processing schemes are then discussed in detail, including state-of-the-art adaptive modulation, multicarrier, spread spectrum, and multiple antenna techniques. The concluding chapters deal with multiuser communications, cellular system design, and ad-hoc network design. Design insights and tradeoffs are emphasized throughout the book. It contains many worked examples, over 200 figures, almost 300 homework exercises, over 700 references, and is an ideal textbook for students. The book is also a valuable reference for engineers in the wireless industry. Andrea Goldsmith received her Ph.D. from the University of California, Berkeley, and is an Associate Professor of Electrical Engineering at Stanford University. Prior to this she was an Assistant Professor at the California Institute of Technology. She has also held positions in industry at Maxim Technologies and AT\&T Bell Laboratories. She is a Fellow of the IEEE, has received numerous other awards and honors, and is the author of over 150 technical papers in the field of wireless communications.},
+author = {Jamalipour, A. and Ansari, N. and Howlader, M. and Xiao, Chengshan Xiao Chengshan},
+doi = {10.1109/GLOCOM.2005.1578357},
+isbn = {0-7803-9414-3},
+journal = {GLOBECOM '05. IEEE Global Telecommunications Conference, 2005.},
+title = {{Wireless communications}},
+volume = {6},
+year = {2005}
+}
+@article{Burges1998,
+abstract = {The tutorial starts with an overview of the concepts of VC dimension and structural risk minimization. We then describe linear Support Vector Machines (SVMs) for separable and non-separable data, working through a non-trivial example in detail. We describe a mechanical analogy, and discuss when SVM solutions are unique and when they are global. We describe how support vector training can be practically implemented, and discuss in detail the kernel mapping technique which is used to construct SVM solutions which are nonlinear in the data. We show how Support Vector machines can have very large (even infinite) VC dimension by computing the VC dimension for homogeneous polynomial and Gaussian radial basis function kernels. While very high VC dimension would normally bode ill for generalization performance, and while at present there exists no theory which shows that good generalization performance is guaranteed for SVMs, there are several arguments which support the observed high accuracy of SVMs, which we review. Results of some experiments which were inspired by these arguments are also presented. We give numerous examples and proofs of most of the key theorems. There is new material, and I hope that the reader will find that even old material is cast in a fresh light.},
+archivePrefix = {arXiv},
+arxivId = {1111.6189v1},
+author = {Burges, Christopher J C},
+doi = {10.1023/A:1009715923555},
+editor = {Fayyad, Usama},
+eprint = {1111.6189v1},
+institution = {Bell Laboratories, Lucent Technologies},
+isbn = {0818672404},
+issn = {13845810},
+journal = {Data Mining and Knowledge Discovery},
+keywords = {pattern recognition,statistical learning theory,support vector machines,vc dimension},
+number = {2},
+pages = {121--167},
+pmid = {5207842081938259593},
+publisher = {Springer},
+series = {NetGames '06},
+title = {{A Tutorial on Support Vector Machines for Pattern Recognition}},
+url = {http://www.springerlink.com/index/Q87856173126771Q.pdf},
+volume = {2},
+year = {1998}
+}
+@article{Welch2006,
+abstract = {In 1960, R.E. Kalman published his famous paper describing a recursive solution to the discrete-data linear filtering problem. Since that time, due in large part to advances in digital computing, the Kalman filter has been the subject of extensive research and application, particularly in the area of autonomous or assisted navigation. The Kalman filter is a set of mathematical equations that provides an efficient computational (recursive) means to estimate the state of a process, in a way that minimizes the mean of the squared error. The filter is very powerful in several aspects: it supports estimations of past, present, and even future states, and it can do so even when the precise nature of the modeled system is unknown. The purpose of this paper is to provide a practical introduction to the discrete Kalman filter. This introduction includes a description and some discussion of the basic discrete Kalman filter, a derivation, description and some discussion of the extended Kalman filter, and a relatively simple (tangible) example with real numbers \& results.},
+author = {Welch, Greg and Bishop, Gary},
+chapter = {8},
+editor = {{Acm Press}, Addison-WesleyEditor},
+institution = {University of North Carolina at Chapel Hill},
+journal = {In Practice},
+number = {1},
+pages = {1--16},
+pmid = {20578276},
+publisher = {Citeseer},
+title = {{An Introduction to the Kalman Filter}},
+url = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.79.6578\&amp;rep=rep1\&amp;type=pdf},
+volume = {7},
+year = {2006}
+}
+@inproceedings{Wu2010,
+abstract = {Stochastic network calculus requires special care in the search of proper stochastic traffic arrival models and stochastic service models. Tradeoff must be considered between the feasibility for the analysis of performance bounds, the usefulness of performance bounds, and the ease of their numerical calculation. In theory, transform between different traffic arrival models and transform between different service models are possible. Nevertheless, the impact of the model transform on performance bounds has not been thoroughly investigated. This paper is to investigate the effect of the model transform and to provide practical guidance in the model selection in stochastic network calculus.},
+archivePrefix = {arXiv},
+arxivId = {1001.2604},
+author = {Wu, Kui and Jiang, Yuming and Li, Jie},
+booktitle = {IEEE International Workshop on Quality of Service, IWQoS},
+doi = {10.1109/IWQoS.2010.5542751},
+eprint = {1001.2604},
+isbn = {9781424459889},
+issn = {1548615X},
+keywords = {Model transform,Performance,Stochastic network calculus},
+title = {{On the model transform in stochastic network calculus}},
+year = {2010}
+}
+@article{Xie2010,
+author = {Xie, Jing and Jiang, Yuming},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Xie, Jiang - 2010 - A network calculus approach to delay evaluation of IEEE 802.11 DCF.pdf:pdf},
+journal = {Local Computer Networks (LCN), 2010 IEEE \ldots},
+title = {{A network calculus approach to delay evaluation of IEEE 802.11 DCF}},
+url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=5735773},
+year = {2010}
+}
+@inproceedings{Xie2009,
+abstract = {A challenging research issue of analyzing networks where packets are served probabilistically, such as multi-access networks and wireless networks, is to characterize the stochastic nature of service provided to users. This paper proposes a server model for characterizing a service process with the consideration of the stochastic nature of service. The proposed server model is defined based on a probabilistic bound on the cumulative packet service time. In addition, two traffic models characterizing the arrival process by the cumulative packet inter-arrival time are defined. Based on the proposed models, stochastic service guarantees including delay bound and backlog bound and the output characterization are explored. A two-class Probabilistic Priority server system, a generic server model which can model systems serving packets probabilistically, is analyzed to illustrate that the proposed models can facilitate performance analysis.},
+author = {Xie, Jing and Jiang, Yuming},
+booktitle = {GLOBECOM - IEEE Global Telecommunications Conference},
+doi = {10.1109/GLOCOM.2009.5425464},
+isbn = {9781424441488},
+issn = {1930-529X},
+title = {{Stochastic network calculus models under max-plus algebra}},
+year = {2009}
+}
+@article{Zhang2011,
+author = {Zhang, Lianming and Yu, Jianping and Deng, Xiaoheng},
+doi = {10.1186/1687-1499-2011-82},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Zhang, Yu, Deng - 2011 - Modelling the guaranteed QoS for wireless sensor networks a network calculus approach.pdf:pdf},
+issn = {1687-1499},
+journal = {EURASIP Journal on Wireless Communications and Networking},
+keywords = {network calculus,quality of service,upper bounds,wireless sensor networks},
+number = {1},
+pages = {82},
+publisher = {Springer Open Ltd},
+title = {{Modelling the guaranteed QoS for wireless sensor networks: a network calculus approach}},
+url = {http://jwcn.eurasipjournals.com/content/2011/1/82},
+volume = {2011},
+year = {2011}
+}
+@article{Agrawal1999a,
+author = {Agrawal, Rajeev and Cruz, Rene L and Member, Senior and Okino, Clayton and Member, Student and Rajan, Rajendran},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Agrawal et al. - 1999 - Performance Bounds for Flow Control Protocols(2).pdf:pdf},
+number = {3},
+pages = {310--323},
+title = {{Performance Bounds for Flow Control Protocols}},
+volume = {7},
+year = {1999}
+}
+@article{Wang2010,
+author = {Wang, Hao and Schmitt, JB},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Wang, Schmitt - 2010 - On the Way to a Wireless Network Calculus–The Single Node Case with Retransmissions.pdf:pdf},
+keywords = {network calculus,performance bounds,stochas-,wireless channel},
+pages = {1--22},
+title = {{On the Way to a Wireless Network Calculus–The Single Node Case with Retransmissions}},
+url = {https://disco.informatik.uni-kl.de/discofiles/publicationsfiles/WS10-TR375.pdf},
+year = {2010}
+}
+@article{Calinescu2011a,
+abstract = {Service-based systems that are dynamically composed at runtime to provide complex, adaptive functionality are currently one of the main development paradigms in software engineering. However, the Quality of Service (QoS) delivered by these systems remains an important concern, and needs to be managed in an equally adaptive and predictable way. To address this need, we introduce a novel, tool-supported framework for the development of adaptive service-based systems called QoSMOS (QoS Management and Optimization of Service-based systems). QoSMOS can be used to develop service-based systems that achieve their QoS requirements through dynamically adapting to changes in the system state, environment, and workload. QoSMOS service-based systems translate high-level QoS requirements specified by their administrators into probabilistic temporal logic formulae, which are then formally and automatically analyzed to identify and enforce optimal system configurations. The QoSMOS self-adaptation mechanism can handle reliability and performance-related QoS requirements, and can be integrated into newly developed solutions or legacy systems. The effectiveness and scalability of the approach are validated using simulations and a set of experiments based on an implementation of an adaptive service-based system for remote medical assistance.},
+author = {Calinescu, Radu and Grunske, Lars and Kwiatkowska, Marta and Mirandola, Raffaela and Tamburrelli, Giordano},
+doi = {10.1109/TSE.2010.92},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Calinescu et al. - 2011 - Dynamic QoS management and optimization in service-based systems.pdf:pdf},
+isbn = {0098-5589},
+issn = {00985589},
+journal = {IEEE Transactions on Software Engineering},
+keywords = {Adaptive systems,QoS management,QoS optimization,Service-oriented software engineering},
+pages = {387--409},
+title = {{Dynamic QoS management and optimization in service-based systems}},
+volume = {37},
+year = {2011}
+}
+@article{Dobson2008a,
+author = {Dobson, Simon},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Dobson - 2008 - An adaptive systems perspective on network calculus , with applications to autonomic control.pdf:pdf},
+keywords = {autonomic communications,context-sensitive adaptation,network},
+number = {3},
+pages = {332--341},
+title = {{An adaptive systems perspective on network calculus , with applications to autonomic control}},
+volume = {1},
+year = {2008}
+}
+@article{Dobson,
+author = {Dobson, Simon},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Dobson - Unknown - An adaptive systems perspective on network calculus , with applications to autonomic control.pdf:pdf},
+title = {{An adaptive systems perspective on network calculus , with applications to autonomic control}}
+}
+@article{Boyer,
+author = {Boyer, Marc and Navet, Nicolas and Olive, Xavier and Thierry, Eric and Belin, E and Cedex, Tououse},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Boyer et al. - Unknown - The PEGASE project precise and scalable temporal analysis for aerospace communication systems with Network Cal.pdf:pdf},
+title = {{The PEGASE project : precise and scalable temporal analysis for aerospace communication systems with Network Calculus}}
+}
+@article{Boyer2011,
+author = {Boyer, Marc},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Boyer - 2011 - NC-maude a rewriting tool to play with network calculus.pdf:pdf},
+pages = {1--16},
+title = {{NC-maude : a rewriting tool to play with network calculus}},
+year = {2011}
+}
+@article{Mabille2013,
+author = {Mabille, Etienne and Boyer, Marc and Fejoz, Lo\"{\i}c and Merz, Stephan},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Mabille et al. - 2013 - Certifying Network Calculus in a Proof Assistant.pdf:pdf},
+title = {{Certifying Network Calculus in a Proof Assistant}},
+year = {2013}
+}
+@article{Lorenz2002,
+abstract = {We investigate the problem of optimal resource allocation for
+end-to-end QoS requirements on unicast paths and multicast trees.
+Specifically, we consider a framework in which resource allocation is
+based on local QoS requirements at each network link, and associated
+with each link is a cost function that increases with the severity of
+the QoS requirement. Accordingly, the problem that we address is how to
+partition an end-to-end QoS requirement into local requirements, such
+that the overall cost is minimized. We establish efficient (polynomial)
+solutions for both unicast and multicast connections. These results
+provide the required foundations for the corresponding QoS routing
+schemes, which identify either paths or trees that lead to minimal
+overall cost. In addition, we show that our framework provides better
+tools for coping with other fundamental multicast problems, such as
+dynamic tree maintenance},
+author = {Lorenz, Dean H. and Orda, Ariel},
+doi = {10.1109/90.986559},
+isbn = {0-7803-5417-6},
+issn = {10636692},
+journal = {IEEE/ACM Transactions on Networking},
+keywords = {Broadband networks,Convex costs,Multicast,QoS partitioning,QoS-dependent costs,Routing,Unicast},
+pages = {102--114},
+title = {{Optimal partition of QoS requirements on unicast paths and multicast trees}},
+volume = {10},
+year = {2002}
+}
+@article{Luo2010,
+abstract = {We present a number of significant engineering insights on what makes a good configuration for medium- to large-size wireless mesh networks (WMNs) when the objective function is to maximize the minimum throughput among all flows. For this, we first develop efficient and exact computational tools using column generation with greedy pricing that allow us to compute exact solutions for networks significantly larger than what has been possible so far. We also develop very fast approximations that compute nearly optimal solutions for even larger cases. Finally, we adapt our tools to the case of proportional fairness and show that the engineering insights are very similar.},
+author = {Luo, Jun and Rosenberg, Catherine and Girard, Andr\'{e}},
+doi = {10.1109/TNET.2010.2041788},
+isbn = {1063-6692 VO - 18},
+issn = {10636692},
+journal = {IEEE/ACM Transactions on Networking},
+keywords = {Column generation,power control,rate adaptation,routing,scheduling,wireless mesh networks (WMNs)},
+pages = {1387--1400},
+title = {{Engineering wireless mesh networks: Joint scheduling, routing, power control, and rate adaptation}},
+volume = {18},
+year = {2010}
+}
+@article{Acharya2010,
+abstract = {Rate adaptation is a critical component that impacts the performance of IEEE 802.11 wireless networks. In congested networks, traditional rate adaptation algorithms have been shown to choose lower data-rates for packet transmissions, leading to reduced total network throughput and capacity. A primary reason for this behavior is the lack of real-time congestion measurement techniques that can assist in the identification of congestion-related packet losses in a wireless network. In this work, we first propose two real-time congestion measurement techniques, namely an active probe-based method called Channel Access Delay, and a passive method called Channel Busy Time. We evaluate the two techniques in a testbed network and a large WLAN connected to the Internet. We then present the design and evaluation of Wireless cOngestion Optimized Fallback (WOOF), a rate adaptation scheme that uses congestion measurement to identify congestion-related packet losses. Through simulation and testbed implementation we show that, compared to other well-known rate adaptation algorithms, WOOF achieves up to 300 percent throughput improvement in congested networks.},
+author = {Acharya, Prashanth A K and Sharma, Ashish and Belding, Elizabeth M. and Almeroth, Kevin C. and Papagiannaki, Konstantina},
+doi = {10.1109/TMC.2010.108},
+isbn = {2009020057},
+issn = {15361233},
+journal = {IEEE Transactions on Mobile Computing},
+keywords = {Wireless communication,access schemes,algorithm/protocol design and analysis.},
+pages = {1535--1550},
+title = {{Rate adaptation in congested wireless networks through real-time measurements}},
+volume = {9},
+year = {2010}
+}
+@article{Gesbert2007,
+abstract = {A sensible design of wireless networks involves striking a good balance between an aggressive reuse of the spectral resource throughout the network and managing the resulting co-channel interference. Traditionally, this problem has been tackled using a ldquodivide and conquerrdquo approach. The latter consists in deploying the network with a static or semidynamic pattern of resource reutilization. The chosen reuse factor, while sacrificing a substantial amount of efficiency, brings the interference to a tolerable level. The resource can then be managed in each cell so as to optimize the per cell capacity using an advanced air interface design. In this paper, we focus our attention on the overall network capacity as a measure of system performance. We consider the problem of resource allocation and adaptive transmission in multicell scenarios. As a key instance, the problem of joint scheduling and power control simultaneously in multiple transmit-receive links, which employ capacity-achieving adaptive codes, is studied. In principle, the solution of such an optimization hinges on tough issues such as the computational complexity and the requirement for heavy receiver-to-transmitter feedback and, for cellular networks, cell-to-cell channel state information (CSI) signaling. We give asymptotic properties pertaining to rate-maximizing power control and scheduling in multicell networks. We then present some promising leads for substantial complexity and signaling reduction via the use of newly developed distributed and game theoretic techniques.},
+author = {Gesbert, David and Kiani, Saad G. and Gjendemsj, Anders and Ien, Geir Egil},
+doi = {10.1109/JPROC.2007.907125},
+isbn = {0018-9219},
+issn = {00189219},
+journal = {Proceedings of the IEEE},
+keywords = {Distributed resource allocation,Fairness,Interference management,Link adaptation,Multicell scheduling,Power control},
+pages = {2393--2409},
+title = {{Adaptation, coordination, and distributed resource allocation in interference-limited wireless networks}},
+volume = {95},
+year = {2007}
+}
+@article{Sayed2013,
+abstract = {Nature provides splendid examples of real-time learning and adaptation behavior that emerges from highly localized interactions among agents of limited capabilities. For example, schools of fish are remarkably apt at configuring their topologies almost instantly in the face of danger [1]: when a predator arrives, the entire school opens up to let the predator through and then coalesces again into a moving body to continue its schooling behavior. Likewise, in bee swarms, only a small fraction of the agents (about 5\%) are informed, and these informed agents are able to guide the entire swarm of bees to their new hive [2]. It is an extraordinary property of biological networks that sophisticated behavior is able to emerge from simple interactions among lower-level agents [3].},
+author = {Sayed, Ali H. and Tu, Sheng Yuan and Chen, Jianshu and Zhao, Xiaochuan and Towfic, Zaid},
+doi = {10.1109/MSP.2012.2231991},
+issn = {10535888},
+journal = {IEEE Signal Processing Magazine},
+pages = {155--171},
+title = {{Diffusion strategies for adaptation and learning over networks: An examination of distributed strategies and network behavior}},
+volume = {30},
+year = {2013}
+}
+@article{Zafer2009,
+abstract = {Transmission rate adaptation in wireless devices provides a unique opportunity to trade off data service rate with energy consumption. In this paper, we study optimal rate control to minimize transmission energy expenditure subject to strict deadline or other quality-of-service (QoS) constraints. Specifically, the system consists of a wireless transmitter with controllable transmission rate and with strict QoS constraints on data transmission. The goal is to obtain a rate-control policy that minimizes the total transmission energy expenditure while ensuring that the QoS constraints are met. Using a novel formulation based on cumulative curves methodology, we obtain the optimal transmission policy and show that it has a simple and appealing graphical visualization. Utilizing the optimal ldquoofflinerdquo results, we then develop an online transmission policy for an arbitrary stream of packet arrivals and deadline constraints, and show, via simulations, that it is significantly more energy-efficient than a simple head-of-line drain policy. Finally, we generalize the optimal policy results to the case of time-varying power-rate functions.},
+author = {Zafer, Murtaza A. and Modiano, Eytan},
+doi = {10.1109/TNET.2009.2020831},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Zafer, Modiano - 2009 - A calculus approach to energy-efficient data transmission with quality-of-service constraints.pdf:pdf},
+issn = {10636692},
+journal = {IEEE/ACM Transactions on Networking},
+keywords = {Delay,Energy,Network calculus,Quality of service (QoS),Rate control,Wireless},
+pages = {898--911},
+title = {{A calculus approach to energy-efficient data transmission with quality-of-service constraints}},
+volume = {17},
+year = {2009}
+}
+@article{Mukherjee2005,
+abstract = { In order to cater to the diversity of terminals and networks, efficient, and flexible adaptation of multimedia content in the delivery path to end consumers is required. To this end, it is necessary to associate the content with metadata that provides the relationship between feasible adaptation choices and various media characteristics obtained as a function of these choices. Furthermore, adaptation is driven by specification of terminal, network, user preference or rights based constraints on media characteristics that are to be satisfied by the adaptation process. Using the metadata and the constraint specification, an adaptation engine can take an appropriate decision for adaptation, efficiently and flexibly. MPEG-21 Part 7 entitled Digital Item Adaptation standardizes among other things the metadata and constraint specifications that act as interfaces to the decision-taking component of an adaptation engine. This paper presents the concepts behind these tools in the standard, shows universal methods based on pattern search to process the information in the tools to make decisions, and presents some adaptation use cases where these tools can be used.},
+author = {Mukherjee, Debargha and Delfosse, Eric and Kim, Jae Gon and Wang, Yong},
+doi = {10.1109/TMM.2005.846798},
+issn = {15209210},
+journal = {IEEE Transactions on Multimedia},
+keywords = {Adaptation,Decision-taking,Digital item adaptation,MPEG-21,Rate shaping,Requantization,Scalable bit-streams,Terminal and network constraints,Transcoding},
+pages = {454--462},
+title = {{Optimal adaptation decision-taking for terminal and network quality-of-service}},
+volume = {7},
+year = {2005}
+}
+@inproceedings{Francini2012,
+abstract = {Rate adaptation is a family of technologies driven by the expectation that large energy savings can be achieved in packet networks by dynamically adjusting the capacity of network components to the load that they are required to sustain. In this paper we focus on packet-timescale rate adaptation (PTRA) techniques, which apply to individual traffic processing chips in the circuit packs of network systems. We look at the available options for PTRA implementation and compare their performance in realistic multi-device configurations. We find that in linear multi-device topologies the sleep-state-exploitation (SSE) scheme, which only adds a sleep state to the ordinary full-capacity state, offers the best compromise between energy savings and the unavoidable packet delay degradation of PTRA.},
+author = {Francini, Andrea},
+booktitle = {Proceedings - IEEE INFOCOM},
+doi = {10.1109/INFCOM.2012.6195710},
+isbn = {9781467307758},
+issn = {0743166X},
+keywords = {energy efficiency,rate adaptation,sleep mode},
+pages = {2831--2835},
+title = {{Selection of a rate adaptation scheme for network hardware}},
+year = {2012}
+}
+@article{Kalampoukas2002,
+abstract = {We study the performance of the TCP in an internetwork consisting
+of both rate-controlled and non-rate-controlled segments. A common
+example of such an environment occurs when the end systems are part of
+IP datagram networks interconnected by a rate-controlled segment, such
+as an ATM network using the ABR service. In the absence of congestive
+losses in either segment, the TCP keeps increasing its window to its
+maximum size. Mismatch between the TCP window and the bandwidth-delay
+product of the network will result in an accumulation of large queues
+and possibly buffer overflows in the devices at the edges of the
+rate-controlled segment, causing degraded throughput and unfairness. We
+develop an explicit feedback scheme, called explicit window adaptation
+based on modifying the receiver's advertised window in the TCP
+acknowledgments returning to the source. The window size indicated to
+the TCP is a function of the free buffer in the edge device. Results
+from simulations with a wide range of traffic scenarios show that this
+explicit window adaptation scheme can control the buffer occupancy
+efficiently at the edge device, and results in significant improvements
+in packet loss rate, fairness, and throughput over a packet discard
+policy such as drop-from-front or random early detection},
+author = {Kalampoukas, Lampros and Varma, Anujan and Ramakrishnan, K. K.},
+doi = {10.1109/TNET.2002.1012366},
+isbn = {0-7803-4383-2},
+issn = {10636692},
+journal = {IEEE/ACM Transactions on Networking},
+keywords = {Buffer management,Congestion control,Explicit window adaptation,TCP},
+pages = {338--350},
+title = {{Explicit window adaptation: A method to enhance TCP performance}},
+volume = {10},
+year = {2002}
+}
+@inproceedings{Zhang2008,
+abstract = {Rate adaptation is critical to the system performance of wireless networks. Typically, rate adaptation is considered as a MAC layer mechanism in IEEE 802.11. Most previous work relies only on frame losses to infer channel quality, but performs poorly if frame losses are mainly caused by interference. Recently SNR- based rate adaptation schemes have been proposed, but most of them have not been studied in a real environment. In this paper, we first conduct a systematic measurement-based study to confirm that in general SNR is a good prediction tool for channel quality, and identify two key challenges for this to be used in practice: (1) The SNR measures in hardware are often uncalibrated, and thus the SNR thresholds are hardware dependent. (2) The direct prediction from SNR to frame delivery ratio (FDR) is often over optimistic under interference conditions. Based on these observations, we present a novel practical SNR- Guided Rate Adaptation (SGRA) scheme. We implement and evaluate SGRA in a real test-bed and compare it with other three algorithms: ARF, RRAA and HRC. Our results show that SGRA outperforms the other three algorithms in all cases we have tested.},
+author = {Zhang, Jiansong and Tan, Kun and Zhao, Jun and Wu, Haitao and Zhang, Yongguang},
+booktitle = {Proceedings - IEEE INFOCOM},
+doi = {10.1109/INFOCOM.2007.274},
+isbn = {9781424420261},
+issn = {0743166X},
+keywords = {802.11,Rate adaptation,SNR},
+pages = {146--150},
+title = {{A practical SNR-guided rate adaptation}},
+year = {2008}
+}
+@article{Jiang2014,
+abstract = {Modern video players today rely on bit-rate adaptation in order to respond to changing network conditions. Past measurement studies have identified issues with today's commercial players when multiple bit-rate-adaptive players share a bottleneck link with respect to three metrics: fairness, efficiency, and stability. Unfortunately, our current understanding of why these effects occur and how they can be mitigated is quite limited. In this paper, we present a principled understanding of bit-rate adaptation and analyze several commercial players through the lens of an abstract player model consisting of three main components: bandwidth estimation, bit-rate selection, and chunk scheduling. Using framework, we identify the root causes of several undesirable interactions that arise as a consequence of overlaying the video bit-rate adaptation over HTTP. Building on these insights, we develop a suite of techniques that can systematically guide the tradeoffs between stability, fairness, and efficiency and thus lead to a general framework for robust video adaptation. We pick one concrete instance from this design space and show that it significantly outperforms today's commercial players on all three key metrics across a range of experimental scenarios.},
+author = {Jiang, Junchen and Sekar, Vyas and Zhang, Hui},
+doi = {10.1109/TNET.2013.2291681},
+isbn = {9781450317757},
+issn = {10636692},
+journal = {IEEE/ACM Transactions on Networking},
+keywords = {Bit-rate adaptation,DASH,HTTP,Internet video,Quality of experience (QoE)},
+pages = {326--340},
+title = {{Improving fairness, efficiency, and stability in HTTP-based adaptive video streaming with festive}},
+volume = {22},
+year = {2014}
+}
+@article{Wang2011b,
+abstract = {IEEE 802.11-based devices employ rate adaptation algorithms to dynamically switch data rates to accommodate the fluctuating wireless channel conditions. Many studies observed that when there are other stations transmitting in the network, existing rate adaptation performance degrades significantly due to its inability to differentiate losses between wireless noise and contention collisions. In this paper, we first conduct a systematic evaluation on the effectiveness of various rate adaptation protocols, which try to address this issue by exploiting optional RTS frames to isolate the wireless losses from collision losses. We observe that these existing schemes do not perform well in many background traffic scenarios and can mislead the rate adaptation algorithms to persist on using similar data rate combinations regardless of background traffic level, thus resulting in performance penalty in certain scenarios. The fundamental challenge is to dynamically adjust the rate selection decision objectives with respect to different background traffic levels, as well as fluctuating wireless conditions. In light of such observations, we design a new Background traffic-aWAre RatE adaptation algorithm (BEWARE) that addresses the above challenge. BEWARE uses a mathematical model to calculate on the fly the expected packet transmission time based on current wireless channel and background traffic conditions. We implement BEWARE design in a Linux-based driver, and the test-bed experiment results show that BEWARE outperforms other rate adaptation algorithms by up to 250\% in various indoor and outdoor scenarios.},
+author = {Wang, Shao Cheng and Helmy, Ahmed},
+doi = {10.1109/TNET.2011.2106140},
+isbn = {9781424421008},
+issn = {10636692},
+journal = {IEEE/ACM Transactions on Networking},
+keywords = {CSMA/CA,IEEE 802.11,rate adaptation},
+pages = {1164--1177},
+title = {{BEWARE: Background traffic-aware rate adaptation for IEEE 802.11}},
+volume = {19},
+year = {2011}
+}
+@article{Camp2010,
+abstract = {Accurately selecting modulation rates for time-varying channel conditions is critical for avoiding performance degradations due to rate overselection when channel conditions degrade or underselection when channel conditions improve. In this paper, we design a custom cross-layer framework that enables: 1) implementation of multiple and previously unimplemented rate adaptation mechanisms; 2) experimental evaluation and comparison of rate adaptation protocols on controlled, repeatable channels as well as residential urban and downtown vehicular and nonmobile environments in which we accurately measure channel conditions with 100- s granularity; and 3) comparison of performance on a per-packet basis with the ideal modulation rate obtained via exhaustive experimental search. Our evaluation reveals that SNR-triggered protocols are susceptible to overselection from the ideal rate when the coherence time is low (a scenario that we show occurs in practice even in a nonmobile topology), and that \&amp;\#x201C;in situ\&amp;\#x201D; training can produce large gains to overcome this sensitivity. Another key finding is that a mechanism effective in differentiating between collision and fading losses for hidden terminals has severely imbalanced throughput sharing when competing links are even slightly heterogeneous. In general, we find trained SNR-based protocols outperform loss-based protocols in terms of the ability to track vehicular clients, accuracy within outdoor environments, and balanced sharing with heterogeneous links (even with physical layer capture).},
+author = {Camp, Joseph and Knightly, Edward},
+doi = {10.1109/TNET.2010.2051454},
+isbn = {9781605580968},
+issn = {10636692},
+journal = {IEEE/ACM Transactions on Networking},
+keywords = {Cross-layer implemenation,mobility,modulation rate,rate adaptation,urban,vehicular,wireless},
+pages = {1949--1962},
+title = {{Modulation rate adaptation in urban and vehicular environments: Cross-layer implementation and experimental evaluation}},
+volume = {18},
+year = {2010}
+}
+@article{Passos2012,
+abstract = {This work proposes MARA, a joint method for automatic rate selection and route quality evaluation in wireless mesh networks. This method targets at avoiding the problem of inaccurate link quality estimates, common to main existing proposals of multi-hop wireless routing metrics. In this proposal, the statistics collected by the routing protocol are used by the rate adaptation algorithm to compute the best rate for each wireless link. This coordinated decision aims at providing better routing and rate choices. Simulation results indicate that MARA leads to an overall improvement in network performance.},
+author = {Passos, Diego and Albuquerque, C\'{e}lio V N},
+doi = {10.1109/TNET.2011.2170585},
+isbn = {9781424439683},
+issn = {10636692},
+journal = {IEEE/ACM Transactions on Networking},
+keywords = {Automatic rate selection,routing metrics,wireless mesh networks (WMNs)},
+pages = {999--1009},
+title = {{A joint approach to routing metrics and rate adaptation in wireless mesh networks}},
+volume = {20},
+year = {2012}
+}
+@article{Misailovic2010,
+abstract = {Many computations exhibit a trade off between execution time and quality of service. A video encoder, for example, can often encode frames more quickly if it is given the freedom to produce slightly lower quality video. A developer attempting to optimize such computations must navigate a complex trade-off space to find optimizations that appropriately balance quality of service and performance. We present a new quality of service profiler that is designed to help developers identify promising optimization opportunities in such computations. In contrast to standard profilers, which simply identify time-consuming parts of the computation, a quality of service profiler is designed to identify subcomputations that can be replaced with new (and potentially less accurate) subcomputations that deliver significantly increased performance in return for acceptably small quality of service losses. Our quality of service profiler uses loop perforation (which transforms loops to perform fewer iterations than the original loop) to obtain implementations that occupy different points in the performance/quality of service trade-off space. The rationale is that optimizable computations often contain loops that perform extra iterations, and that removing iterations, then observing the resulting effect on the quality of service, is an effective way to identify such optimizable subcomputations. Our experimental results from applying our implemented quality of service profiler to a challenging set of benchmark applications show that it can enable developers to identify promising optimization opportunities and deliver successful optimizations that substantially increase the performance with only small quality of service losses.},
+author = {Misailovic, Sasa and Sidiroglou, Stelios and Hoffmann, Henry and Rinard, Martin},
+doi = {10.1145/1806799.1806808},
+isbn = {978-1-60558-719-6},
+issn = {0270-5257},
+journal = {2010 ACM/IEEE 32nd International Conference on Software Engineering},
+keywords = {loop perforation,profiling,quality of service},
+pages = {25--34},
+title = {{Quality of service profiling}},
+volume = {1},
+year = {2010}
+}
+@inproceedings{Fidler2006c,
+abstract = {Network calculus is an established theory for deterministic quality of service analysis of fixed networks. Due to the failures inherent in fading channels it is, however, not applicable to radio systems. Emerging probabilistic equivalents allow closing this gap. Based on the recent network calculus with moment generating functions we present a methodology for performance analysis of fading channels. We use a service curve representation of radio links which facilitates an efficient analysis of radio networks. We investigate fading channels with memory and our results show that the fading speed impacts service guarantees significantly. Numerical performance bounds are provided for an example taken from cellular radio communications for which the effects of opportunistic scheduling are quantified. Simulation results are shown which confirm the efficiency of the approach.},
+author = {Fidler, Markus},
+booktitle = {GLOBECOM - IEEE Global Telecommunications Conference},
+doi = {10.1109/GLOCOM.2006.699},
+isbn = {142440357X},
+issn = {1930-529X},
+title = {{A network calculus approach to probabilistic quality of service analysis of fading channels}},
+year = {2006}
+}
+@article{Lorenz1998,
+abstract = {We consider the problem of routing connections with quality of
+service (QoS) requirements across networks when the information
+available for making routing decisions is inaccurate. Such uncertainty
+about the actual state of a network component arises naturally in a
+number of different environments. The goal of the route selection
+process is then to identify a path that is most likely to satisfy the
+QoS requirements. For end-to-end delay guarantees, this problem is
+intractable. However, we show that by decomposing the end-to-end
+constraint into local delay constraints, efficient and tractable
+solutions can be established. Moreover, we argue that such decomposition
+better reflects the interoperability between the routing and reservation
+phases. We first consider the simpler problem of decomposing the
+end-to-end constraint into local constraints for a given path. We show
+that, for general distributions, this problem is also intractable.
+Nonetheless, by defining a certain class of probability distributions,
+which includes typical distributions, and restricting ourselves to that
+class, we are able to establish efficient and exact solutions. We then
+consider the general problem of combined path optimization and delay
+decomposition and present efficient solutions. Our findings are
+applicable also to a broader problem of finding a path that meets QoS
+requirements at minimal cost, where the cost of each link is some
+general increasing function of the QoS requirements from the link},
+author = {Lorenz, Dean H. and Orda, Ariel},
+doi = {10.1109/90.748088},
+isbn = {0-7803-4383-2},
+issn = {10636692},
+journal = {IEEE/ACM Transactions on Networking},
+keywords = {Delay,Metric inaccuracy,Networks,QoS,QoS-dependent costs,Routing,Topology aggregation},
+pages = {768--778},
+title = {{QoS routing in networks with uncertain parameters}},
+volume = {6},
+year = {1998}
+}
+@article{Wang2012a,
+abstract = {Emerging applications of wireless sensor networks (WSNs) require real-time quality of service (QoS) guarantees to be provided by the network. However, designing real-time scheduling and communication solutions for these networks is challenging since the characteristics of QoS metrics in WSNs are not well known yet. Due to the nature of wireless connectivity, it is infeasible to satisfy worst-case QoS requirements in WSNs. Instead, probabilistic QoS guarantees should be provided, which requires the definition of probabilistic QoS metrics. To provide an analytical tool for the development of real-time solutions, in this paper, the distribution of end-to-end delay in multi-hop WSNs is investigated. Accordingly, a comprehensive and accurate cross-layer analysis framework, which employs a stochastic queueing model in realistic channel environments, is developed. This framework captures the heterogeneity in WSNs in terms of channel quality, transmit power, queue length, and communication protocols. A case study with the TinyOS CSMA/CA MAC protocol is conducted to show how the developed framework can analytically predict the distribution of end-to-end delay. Testbed experiments are provided to validate the developed model. The cross-layer framework can be used to identify the relationships between network parameters and the distribution of end-to-end delay and accordingly, to design real-time solutions for WSNs. Our ongoing work suggests that this framework can be easily extended to model additional QoS metrics such as energy consumption distribution. To the best of our knowledge, this is the first work to investigate probabilistic QoS guarantees in WSNs.},
+author = {Wang, Yunbo and Vuran, Mehmet C. and Goddard, Steve},
+doi = {10.1109/TNET.2011.2159845},
+isbn = {9780769538754},
+issn = {10636692},
+journal = {IEEE/ACM Transactions on Networking},
+keywords = {Delay distribution,Quality of service (QoS),Realtime systems,Wireless sensor networks},
+pages = {305--318},
+title = {{Cross-layer analysis of the end-to-end delay distribution in wireless sensor networks}},
+volume = {20},
+year = {2012}
+}
+@inproceedings{Wang2005,
+abstract = { A significant challenge of successful application of the service-oriented architecture (SOA) in large-scale distributed systems is the quality of service (QoS) management, which provides various QoS guarantee levels for concurrent clients through effective resource allocations and adaptations. In this paper, we propose a policy-based approach for specifying QoS management strategies and enforcing QoS guarantees. This approach enables easy adaptation of new business rules and adaptation to system resource changes. This approach is also effective for supporting QoS management, as demonstrated in our experiments in a publish/subscribe system.},
+author = {Wang, Changzhou and Wang, Guijun and Chen, Alice and Wang, Haiqin and Pierce, Yichi and Fung, Casey and Uczekaj, Stephen},
+booktitle = {Proceedings - 2005 IEEE International Conference onServices Computing, SCC 2005},
+doi = {10.1109/SCC.2005.15},
+isbn = {0769524087},
+pages = {307--310},
+title = {{A policy-based approach for QoS specification and enforcement in distributed service-oriented architecture}},
+volume = {I},
+year = {2005}
+}
+@article{Jin2004,
+abstract = { Following considerable research into quality-of-service-aware application programming interface design and QoS specification language development for multimedia systems, we present a survey and taxonomy of existing QoS specification languages. As computer and communication technology evolves, distributed multimedia applications are becoming ubiquitous, and quality of service (QoS) is becoming ever more integral to those applications. Because they consume so many resources (such as memory and bandwidth), multimedia applications need resource management at different layers of the communications protocol stack to ensure end-to-end service quality, and to regulate resource contention for equitable resource sharing. However, before an application can invoke any QoS-aware resource management mechanisms and policies - such as admission control, resource reservation, enforcement, and adaptation - it must specify its QoS requirements and the corresponding resource allocations. Furthermore, the application must describe how QoS should be scaled and adapted in cases of resource contention or resource scarcity during runtime. Our goal in this article is to systematically classify and compare the existing QoS specification languages that span several QoS layers with diverse properties. The provided taxonomy and the extensive analysis will give us a detailed look at the existing QoS specification languages along with their properties and relations.},
+author = {Jin, Jingwen and Nahrstedt, Klara},
+doi = {10.1109/MMUL.2004.16},
+isbn = {1070-986X},
+issn = {1070986X},
+journal = {IEEE Multimedia},
+pages = {74--87},
+title = {{QoS specification languages for distributed multimedia applications: A survey and taxonomy}},
+volume = {11},
+year = {2004}
+}
+@article{Ekstrom2009,
+abstract = {In this article we describe the QoS concept of the evolved packet system, which was standardized in 3GPP Release 8. The concept provides access network operators and service operators with a set of tools to enable service and subscriber differentiation. Such tools are becoming increasingly important as operators are moving from a single to a multi-service offering at the same time as both the number of mobile broadband subscribers and the traffic volume per subscriber is rapidly increasing. The "bearer" is a central element of the EPS QoS concept and is the level of granularity for bearer-level QoS control. The network-initiated QoS control paradigm specified in EPS is a set of signaling procedures for managing bearers and controlling their QoS assigned by the network. The EPS QoS concept is class-based, where each bearer is assigned one and only one QoS class identifier by the network. The QCI is a scalar that is used within the access network as a reference to node-specific parameters that control packet forwarding treatment. This class-based approach, together with the network-initiated QoS control paradigm, gives network operators full control over the QoS provided for its offered services for each of its subscriber groups.},
+author = {Ekstr\"{o}m, Hannes},
+doi = {10.1109/MCOM.2009.4785383},
+issn = {01636804},
+journal = {IEEE Communications Magazine},
+keywords = {Bit rate,Downlink,IP networks,Logic gates,Peer to peer computing,Quality of service,Radio access networks},
+pages = {76--83},
+title = {{QoS control in the 3GPP evolved packet system}},
+volume = {47},
+year = {2009}
+}
+@article{Caini2011,
+abstract = {Satellite communications are characterized by long delays, packet losses, and sometimes intermittent connectivity and link disruptions. The TCP/IP stack is ineffective against these impairments and even dedicated solutions, such as performance enhancing proxies (PEPs), can hardly tackle the most challenging environments, and create compatibility issues with current security protocols. An alternative solution arises from the delay- and disruption-tolerant networking (DTN) architecture, which specifies an overlay protocol, called bundle protocol (BP), on top of either transport protocols (TCP, UDP, etc.), or of lower layer protocols (Bluetooth, Ethernet, etc.). The DTN architecture provides long-term information storage on intermediate nodes, suitable for coping with disrupted links, long delays, and intermittent connectivity. By dividing the end-to-end path into multiple DTN hops, in a way that actually extends the TCP-splitting concept exploited in most PEPs, DTN allows the use of specialized protocols on the satellite (or space) links. This paper discusses the prospects for use of DTN in future satellite networks. We present a broad DTN overview, to make the reader familiar with the characteristics that differentiate DTN from ordinary TCP/IP networking, compare the DTN and PEP architectures and stacks, as a preliminary step for the subsequent DTN performance assessment carried out in practical LEO/GEO satellite scenarios. DTN security is studied next, examining the advantages over present satellite architectures, the threats faced in satellite scenarios, and also open issues. Finally, the relation between DTN and quality of service (QoS) is investigated, by focusing on QoS architectures and QoS tools and by discussing the state of the art of DTN research activity in modeling, routing, and congestion control.},
+author = {Caini, Carlo and Cruickshank, Haitham and Farrell, Stephen and Marchese, Mario},
+doi = {10.1109/JPROC.2011.2158378},
+issn = {0018-9219},
+journal = {Proceedings of the IEEE},
+keywords = {Delay- and disruption-tolerant networking (DTN),performance enhancing proxies (PEPs),quality of service (QoS),satellite communications,security},
+pages = {1980--1997},
+title = {{Delay- and Disruption-Tolerant Networking (DTN): An Alternative Solution for Future Satellite Networking Applications}},
+volume = {99},
+year = {2011}
+}
+@inproceedings{Oberle2010,
+abstract = {Current service platform offers that provide Infrastructure as a Service (IaaS) do not adequately meet the requirements expressed by interactive real-time services. Online application response times can not yet be enforced in virtual infrastructures without service level objectives (SLOs) that meet virtual machine interconnection constraints. This paper presents a framework spanning from the service description model over the IaaS platform interface for service level agreement (SLA) negotiation to the management of virtual network resources in an IaaS environment.},
+author = {Oberle, Karsten and Stein, Manuel and Voith, Thomas and Gallizo, Georgina and K\"{u}bert, Roland},
+booktitle = {2010 14th Int. Conference on Intelligence in Next Generation Networks: "Weaving Applications Into the Network Fabric", ICIN 2010 - 2nd Int. Workshop on Business Models for Mobile Platforms, BMMP 10},
+doi = {10.1109/ICIN.2010.5640923},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Oberle et al. - 2010 - The network aspect of Infrastructure-as-a-Service.pdf:pdf},
+isbn = {9781424474455},
+keywords = {Cloud computing,Infrastructure-as-a-Service,Network,Quality of service,SLA,Virtualization},
+title = {{The network aspect of Infrastructure-as-a-Service}},
+year = {2010}
+}
+@article{Kim2012,
+abstract = {In home networks, the device collaboration service has challenging issues to provide QoS (Quality of Service) for its users with heterogeneous consumer electronic devices. However, existing schemes do not guarantee quality of multimedia contents. To cope with these problems, this paper presents a simple but effective media quality control scheme that can improve quality of collaborative streaming-based media contents. The proposed scheme controls collaboration contents according to the number of available collaboration devices at home and media quality based on available network bandwidth. The experimental result shows that the proposed scheme can significantly improve user-perceived quality.},
+author = {Kim, Dongchil and Chung, Kwangsue},
+doi = {10.1109/TCE.2012.6227436},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Kim, Chung - 2012 - A network-aware quality adaptation scheme for device collaboration service in home networks.pdf:pdf},
+isbn = {9781457702310},
+issn = {00983063},
+journal = {IEEE Transactions on Consumer Electronics},
+keywords = {Device collaboration service,QoS (Quality of Service),and multimedia content sharing},
+pages = {374--381},
+title = {{A network-aware quality adaptation scheme for device collaboration service in home networks}},
+volume = {58},
+year = {2012}
+}
+@inproceedings{Ranaweera2011,
+abstract = {We analyze the quality of service (QoS) performance of different traffic classes in optical-wireless converged networks when different resource handling mechanisms are used. We show that in order to achieve the optimum QoS performance in the EPON-WiMAX converged network for all traffic classes, a proper combination of a dynamic bandwidth allocation algorithm, an intra ONU-BS (integrated optical network unit and WiMAX base station) scheduling algorithm, and a QoS mapping mechanism need to be implemented. We propose such a combination that includes novel intra ONU-BS scheduling algorithm which improves the QoS performance of all traffic classes of an EPON-WiMAX converged network.},
+author = {Ranaweera, Chathurika and Wong, Elaine and Lim, Christina and Nirmalathas, Ampalavanapillai},
+booktitle = {2011 IEEE International Topical Meeting on Microwave Photonics - Jointly Held with the 2011 Asia-Pacific Microwave Photonics Conference, MWP/APMP 2011},
+doi = {10.1109/MWP.2011.6088748},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Ranaweera et al. - 2011 - Quality of service assurance in EPON-WiMAX converged network.pdf:pdf},
+isbn = {9781612847184},
+keywords = {EPON,WiMAX,convergence,quality of service,scheduling algorithms},
+pages = {369--372},
+title = {{Quality of service assurance in EPON-WiMAX converged network}},
+year = {2011}
+}
+@inproceedings{Trinh2011,
+abstract = {Virtual network embedding which maps the virtual networks to a substrate network is important for problems in the network virtualization. The conventional mapping methods only provide the exclusive service that allocates the whole bandwidth with a full availability to requests. This kind of service is not flexible enough to serve the variety of demands. With these observations, this paper has proposed to analyze the application of careful overbooking concept that uses flexible levels of availability to provide Service Level Agreements (SLA) to users. Based on this framework, virtual network subscribers are provided with a service that is most suitable with their tolerability to utilize the soft-guaranteed bandwidths. This helps to save the cost of subscribers and to increase the profitability of the provider. Furthermore, to route resultant traffics through a substrate network, we have applied a Mixed-Integer Programming formulation to minimize the virtual network cost. The reported numerical results demonstrate that our method significantly reduces the cost of operating virtual network while guaranteeing the required carefully overbooked quality of service.},
+author = {Trinh, Tri and Esaki, Hiroshi and Aswakul, Chaodit},
+booktitle = {Electrical Engineering/Electronics, Computer, Telecommunications and Information Technology (ECTI-CON), 2011 8th International Conference on},
+doi = {10.1109/ECTICON.2011.5947831},
+pages = {296--299},
+title = {{Quality of service using careful overbooking for optimal virtual network resource allocation}},
+year = {2011}
+}
+@article{Battisha2008,
+abstract = {The current shift from the static access based service model to the dynamic application based service model introduced major challenges for effective forensics of any quality degradation of the provided service. In addition, about 55 percent of the Tier 1 and Tier 2 providers are planning to offer managed security services to guarantee an attack free IP service. In this article, we propose a novel approach of modeling the network behavior in order to select meaningful metrics to be used in tracking the network behavior changes. Based on the deftly selected metrics, we utilize an adaptive exponentially weighted moving average (EWMA) with a moving centerline control chart to monitor the changes of the network behavior. Signaling the network behavior changes in association with the service objective based network behavioral model should provide the required information for effective forensic of the service quality degradation. Our methodology is applied on both simulated and real traces of network behavioral metrics. We illustrate the effectiveness of the forensic analysis model for the selection of relevant behavioral metrics. As well, we show how the adaptive EWMA can be used for tracking the changes in the network behavior from normal to abnormal and vice versa.},
+author = {Battisha, Mohamed and Elmaghraby, Adel and Meleis, Hanafy and Samineni, Satya},
+doi = {10.1109/TNSM.2008.021104},
+issn = {19324537},
+journal = {IEEE Transactions on Network and Service Management},
+keywords = {Network behavioral analysis,Network behavioral forecasting,Service impact and root cause analysis,Service management platform},
+pages = {105--117},
+title = {{Adaptive tracking of network behavioral signals for real time forensic analysis of service quality degradation}},
+volume = {5},
+year = {2008}
+}
+@article{Klein2012,
+abstract = {Service-Oriented Computing (SOC) enables the composition of loosely coupled services provided with varying Quality of Service (QoS) levels. Selecting a (near-)optimal set of services for a composition in terms of QoS is crucial when many functionally equivalent services are available. With the advent of Cloud Computing, both the number of such services and their distribution across the network are rising rapidly, increasing the impact of the network on the QoS of such compositions. Despite this, current approaches do not differentiate between the QoS of services themselves and the QoS of the network. Therefore, the computed latency differs substantially from the actual latency, resulting in suboptimal QoS for service compositions in the cloud. Thus, we propose a network-aware approach that handles the QoS of services and the QoS of the network independently. First, we build a network model in order to estimate the network latency between arbitrary services and potential users. Our selection algorithm then leverages this model to find compositions that will result in a low latency given an employed execution policy. In our evaluation, we show that our approach eficiently computes compositions with much lower latency than current approaches.},
+author = {Klein, Adrian and Ishikawa, Fuyuki and Honiden, Shinichi},
+doi = {10.1145/2187836.2187965},
+isbn = {9781450312295},
+journal = {Proceedings of the 21st international conference on World Wide Web - WWW '12},
+keywords = {cloud,network,optimization,qos,service,web services},
+pages = {959},
+title = {{Towards network-aware service composition in the cloud}},
+url = {http://dl.acm.org/citation.cfm?doid=2187836.2187965},
+year = {2012}
+}
+@unpublished{Shenker1997,
+abstract = {This memo describes the network element behavior required to deliver a guaranteed service (guaranteed delay and bandwidth) in the Internet. Guaranteed service provides firm (mathematically provable) bounds on end-to-end datagram queueing delays. This service makes it possible to provide a service that guarantees both delay and bandwidth. This specification follows the service specification template described in [1].},
+author = {Shenker, Scott and Partridge, Craig and Guerin, Roch},
+booktitle = {IETF},
+pages = {20},
+title = {{RFC-2212: Specification of Guaranteed Quality of Service}},
+year = {1997}
+}
+@article{Bouillard2012a,
+author = {Bouillard, Anne and Gaujal, Bruno},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Bouillard, Farhi, Gaujal - 2012 - Packetization and packet curves in network calculus.pdf:pdf},
+isbn = {9781936968633},
+pages = {136--137},
+title = {{Calculus j j}},
+year = {2012}
+}
+@article{Jiang2009a,
+address = {London},
+author = {Jiang, Y and Liu, Y},
+doi = {10.1007/978-1-84800-127-5},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Jiang, Liu - 2009 - Stochastic Network Calculus(4).pdf:pdf},
+isbn = {978-1-84800-126-8},
+pages = {165--187},
+publisher = {Springer London},
+title = {{Stochastic Network Calculus}},
+url = {http://link.springer.com/10.1007/978-1-84800-127-5},
+year = {2009}
+}
+@article{Jiang2009b,
+address = {London},
+author = {Jiang, Y and Liu, Y},
+doi = {10.1007/978-1-84800-127-5},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Jiang, Liu - 2009 - Stochastic Network Calculus(3).pdf:pdf},
+isbn = {978-1-84800-126-8},
+pages = {145--164},
+publisher = {Springer London},
+title = {{Stochastic Network Calculus}},
+url = {http://link.springer.com/10.1007/978-1-84800-127-5},
+volume = {2008},
+year = {2009}
+}
+@article{Jiang2009c,
+address = {London},
+author = {Jiang, Y and Liu, Y},
+doi = {10.1007/978-1-84800-127-5},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Jiang, Liu - 2009 - Stochastic Network Calculus(2).pdf:pdf},
+isbn = {978-1-84800-126-8},
+pages = {119--143},
+publisher = {Springer London},
+title = {{Stochastic Network Calculus}},
+url = {http://link.springer.com/10.1007/978-1-84800-127-5},
+volume = {119},
+year = {2009}
+}
+@book{Guarantees2009,
+address = {London},
+author = {Guarantees, Service},
+doi = {10.1007/978-1-84800-127-5},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Guarantees - 2009 - Stochastic Network Calculus.pdf:pdf},
+isbn = {978-1-84800-126-8},
+pages = {83--117},
+publisher = {Springer London},
+title = {{Stochastic Network Calculus}},
+url = {http://link.springer.com/10.1007/978-1-84800-127-5},
+year = {2009}
+}
+@article{Stochastic2009,
+address = {London},
+author = {Stochastic, Weak and Curve, Service},
+doi = {10.1007/978-1-84800-127-5},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Stochastic, Curve - 2009 - Stochastic Network Calculus.pdf:pdf},
+isbn = {978-1-84800-126-8},
+publisher = {Springer London},
+title = {{Stochastic Network Calculus}},
+url = {http://link.springer.com/10.1007/978-1-84800-127-5},
+year = {2009}
+}
+@article{,
+address = {London},
+doi = {10.1007/978-1-84800-127-5},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Unknown - 2009 - Stochastic Network Calculus(4).pdf:pdf},
+isbn = {978-1-84800-126-8},
+pages = {41--64},
+publisher = {Springer London},
+title = {{Stochastic Network Calculus}},
+url = {http://link.springer.com/10.1007/978-1-84800-127-5},
+volume = {2008},
+year = {2009}
+}
+@article{Jiang2009d,
+address = {London},
+author = {Jiang, Y and Liu, Y},
+doi = {10.1007/978-1-84800-127-5},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Jiang, Liu - 2009 - Stochastic Network Calculus.pdf:pdf},
+isbn = {978-1-84800-126-8},
+publisher = {Springer London},
+title = {{Stochastic Network Calculus}},
+url = {http://link.springer.com/10.1007/978-1-84800-127-5},
+year = {2009}
+}
+@article{,
+address = {London},
+doi = {10.1007/978-1-84800-127-5},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Unknown - 2009 - Stochastic Network Calculus(3).pdf:pdf},
+isbn = {978-1-84800-126-8},
+pages = {1--17},
+publisher = {Springer London},
+title = {{Stochastic Network Calculus}},
+url = {http://link.springer.com/10.1007/978-1-84800-127-5},
+year = {2009}
+}
+@article{,
+address = {London},
+doi = {10.1007/978-1-84800-127-5},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Unknown - 2009 - Stochastic Network Calculus(2).pdf:pdf},
+isbn = {978-1-84800-126-8},
+publisher = {Springer London},
+title = {{Stochastic Network Calculus}},
+url = {http://www.springerlink.com/index/10.1007/978-1-84800-127-5},
+year = {2009}
+}
+@article{Sariowan1995,
+author = {Sariowan, Hanrijanto},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Sariowan - 1995 - Scheduling for quality of service guarantees via service curves.pdf:pdf},
+isbn = {0818671807},
+journal = {\ldots and Networks, 1995. \ldots},
+title = {{Scheduling for quality of service guarantees via service curves}},
+url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=540168},
+year = {1995}
+}
+@article{,
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Unknown - Unknown - No Title(3).pdf:pdf},
+pages = {2},
+title = {{No Title}}
+}
+@article{Erbad2012,
+author = {Erbad, Aiman and Krasic, Charles},
+doi = {10.1145/2381996.2381998},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Erbad, Krasic - 2012 - Sender-side Buffers and the Case for Multimedia Adaptation.pdf:pdf},
+issn = {15427730},
+journal = {Queue},
+month = oct,
+number = {10},
+pages = {10},
+title = {{Sender-side Buffers and the Case for Multimedia Adaptation}},
+url = {http://dl.acm.org/citation.cfm?doid=2381996.2381998},
+volume = {10},
+year = {2012}
+}
+@article{Nakajima1998,
+author = {Nakajima, Tatsuo},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Nakajima - 1998 - Resource reservation for adaptive qos mapping in real-time mach.pdf:pdf},
+journal = {Parallel and Distributed Processing},
+title = {{Resource reservation for adaptive qos mapping in real-time mach}},
+url = {http://link.springer.com/chapter/10.1007/3-540-64359-1\_770},
+year = {1998}
+}
+@article{Knoche1997,
+author = {Knoche, H and Meer, H De},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Knoche, Meer - 1997 - Quantitative qos-mapping A unifying approach.pdf:pdf},
+journal = {Building QoS into Distributed Systems},
+title = {{Quantitative qos-mapping: A unifying approach}},
+url = {http://link.springer.com/chapter/10.1007/978-0-387-35170-4\_39},
+year = {1997}
+}
+@article{Ito2005,
+author = {Ito, Y. and Tasaka, S.},
+doi = {10.1109/TMM.2005.846785},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Ito, Tasaka - 2005 - Quantitative assessment of user-level QoS and its mapping.pdf:pdf},
+issn = {1520-9210},
+journal = {IEEE Transactions on Multimedia},
+month = jun,
+number = {3},
+pages = {572--584},
+title = {{Quantitative assessment of user-level QoS and its mapping}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=1430732},
+volume = {7},
+year = {2005}
+}
+@article{DaSilva2000,
+author = {DaSilva, L.a.},
+doi = {10.1109/ICC.2000.853592},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/DaSilva - 2000 - QoS mapping along the protocol stack discussion and preliminary results.pdf:pdf},
+isbn = {0-7803-6283-7},
+journal = {2000 IEEE International Conference on Communications. ICC 2000. Global Convergence Through Communications. Conference Record},
+pages = {713--717},
+publisher = {Ieee},
+title = {{QoS mapping along the protocol stack: discussion and preliminary results}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=853592},
+volume = {2},
+year = {2000}
+}
+@article{Huard1997,
+author = {Huard, JF and Lazar, AA},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Huard, Lazar - 1997 - On QOS mapping in multimedia networks.pdf:pdf},
+journal = {\ldots 97. Proceedings., The Twenty-First Annual \ldots},
+title = {{On QOS mapping in multimedia networks}},
+url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=624845},
+year = {1997}
+}
+@article{Peh2008,
+abstract = {The abstract of a scientific paper represents a concise, accurate and factual mini-version of the paper contents. Abstract format may vary according to the individual journal. For original articles, a structured abstract usually consists of the following headings: aims (or objectives), materials and methods, results and conclusion. A few keywords that capture the main topics of the paper help indexing in the medical literature.},
+author = {Peh, W C G and Ng, K H},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Peh, Ng - 2008 - Abstract and keywords.pdf:pdf},
+issn = {0037-5675},
+journal = {Singapore medical journal},
+keywords = {Databases, Bibliographic,Humans,Journalism, Medical,Periodicals as Topic,Terminology as Topic,Writing,Writing: standards},
+month = sep,
+number = {9},
+pages = {664--5; quiz 666},
+pmid = {18830537},
+title = {{Abstract and keywords.}},
+url = {http://www.ncbi.nlm.nih.gov/pubmed/18830537},
+volume = {49},
+year = {2008}
+}
+@article{Burakowski2008,
+author = {Burakowski, W and Beben, A and Sliwinski, J},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Burakowski, Beben, Sliwinski - 2008 - EUQOS END-TO-END QOS OVER HETEROGENEOUS NETWORKS Telef\'{o}nica I D , Madrid , Spain Warsaw Universi.pdf:pdf},
+isbn = {9261124410},
+keywords = {classes of services,end-to-end qos,net neutrality},
+title = {{EUQOS : END-TO-END QOS OVER HETEROGENEOUS NETWORKS Telef\'{o}nica I + D , Madrid , Spain Warsaw University of Technology , Warsaw , Poland France Telecom R \& D , Lannion , France Dipartimento di Ingegneria dell ’ Informazione , University of Pisa , Pisa , Ita}},
+year = {2008}
+}
+@article{Shin2001,
+author = {Shin, Jitae and Kim, Jin-Gyeong and Kim, Jongwon and {Jay Kuo}, C.-C.},
+doi = {10.1002/ett.4460120309},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Shin et al. - 2001 - Dynamic QoS mapping control for streaming video in relative service differentiation networks.pdf:pdf},
+issn = {1124318X},
+journal = {European Transactions on Telecommunications},
+month = may,
+number = {3},
+pages = {217--229},
+title = {{Dynamic QoS mapping control for streaming video in relative service differentiation networks}},
+url = {http://doi.wiley.com/10.1002/ett.4460120309},
+volume = {12},
+year = {2001}
+}
+@article{Cruz1995,
+author = {Cruz, RL},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Cruz - 1995 - Quality of service guarantees in virtual circuit switched networks.pdf:pdf},
+journal = {Selected Areas in Communications, IEEE Journal on},
+number = {6},
+pages = {1048--1056},
+title = {{Quality of service guarantees in virtual circuit switched networks}},
+url = {http://ieeexplore.ieee.org/xpls/abs\_all.jsp?arnumber=400660},
+volume = {13},
+year = {1995}
+}
+@article{Xia2007,
+abstract = {Wireless sensor/actuator networks (WSANs) are emerging rapidly as a new generation of sensor networks. Despite intensive research in wireless sensor networks (WSNs), limited work has been found in the open literature in the field of WSANs. In particular, quality-of-service (QoS) management in WSANs remains an important issue yet to be investigated. As an attempt in this direction, this paper develops a fuzzy logic control based QoS management (FLC-QM) scheme for WSANs with constrained resources and in dynamic and unpredictable environments. Taking advantage of the feedback control technology, this scheme deals with the impact of unpredictable changes in traffic load on the QoS of WSANs. It utilizes a fuzzy logic controller inside each source sensor node to adapt sampling period to the deadline miss ratio associated with data transmission from the sensor to the actuator. The deadline miss ratio is maintained at a pre-determined desired level so that the required QoS can be achieved. The FLC-QM has the advantages of generality, scalability, and simplicity. Simulation results show that the FLC-QM can provide WSANs with QoS support.},
+author = {Xia, Feng and Zhao, Wenhong and Sun, Youxian and Tian, Yu-Chu},
+doi = {10.3390/s7123179},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Xia et al. - 2007 - Fuzzy Logic Control Based QoS Management in Wireless SensorActuator Networks.pdf:pdf},
+issn = {1424-8220},
+journal = {Sensors},
+keywords = {actuator network,adaptive resource,adaptive resource management,deadline miss ratio,fuzzy logic control,management,quality of service,wireless sensor,wireless sensor/actuator network},
+month = dec,
+number = {12},
+pages = {3179--3191},
+title = {{Fuzzy Logic Control Based QoS Management in Wireless Sensor/Actuator Networks}},
+url = {http://www.mdpi.com/1424-8220/7/12/3179/},
+volume = {7},
+year = {2007}
+}
+@article{Simulator2010,
+author = {Simulator, Space Flight},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Simulator - 2010 - Space Flight Simulator 2010.pdf:pdf},
+title = {{Space Flight Simulator 2010}},
+year = {2010}
+}
+@article{,
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Unknown - 2010 - Orb Connect.pdf:pdf},
+title = {{Orb : Connect}},
+year = {2010}
+}
+@article{Schweiger2006,
+author = {Schweiger, Martin},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Schweiger - 2006 - ORBITER.pdf:pdf},
+number = {September},
+pages = {2000--2006},
+title = {{ORBITER}},
+year = {2006}
+}
+@article{Schweiger2006a,
+author = {Schweiger, Martin},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Schweiger - 2006 - ORBITER Programmer ’ s Guide.pdf:pdf},
+number = {June},
+pages = {2000--2006},
+title = {{ORBITER Programmer ’ s Guide}},
+year = {2006}
+}
+@article{,
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Unknown - Unknown - No Title(2).pdf:pdf},
+pages = {1--4},
+title = {{No Title}}
+}
+@misc{,
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Unknown - Unknown - Network Calculus Notes.pdf.pdf:pdf},
+title = {{Network Calculus Notes.pdf}}
+}
+@book{Boudec2001a,
+author = {Boudec, JY Le and Thiran, P},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Boudec, Thiran - 2001 - Network calculus a theory of deterministic queuing systems for the internet(2).pdf:pdf},
+title = {{Network calculus: a theory of deterministic queuing systems for the internet}},
+url = {http://books.google.com/books?hl=en\&lr=\&id=f1FarvjDFl8C\&oi=fnd\&pg=PR13\&dq=NETWORK+CALCULUS+A+Theory+of+Deterministic+Queuing+Systems+for+the+Internet\&ots=Ycp9xT0Ctx\&sig=qaDkwvmgVPprYcngpmYwG0UjFAM},
+year = {2001}
+}
+@article{,
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Unknown - Unknown - No Title.pdf:pdf},
+title = {{No Title}}
+}
+@article{Kim2011,
+author = {Kim, MJ and M\'{e}dard, Muriel and Barros, J},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Kim, M\'{e}dard, Barros - 2011 - Modeling network coded TCP throughput A simple model and its validation.pdf:pdf},
+journal = {Proceedings of the 5th International ICST \ldots},
+title = {{Modeling network coded TCP throughput: A simple model and its validation}},
+url = {http://dl.acm.org/citation.cfm?id=2151704},
+year = {2011}
+}
+@article{Schwarz2009,
+author = {Schwarz, Uwe},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Schwarz - 2009 - Big Mesh.pdf:pdf},
+number = {98},
+pages = {56--59},
+title = {{Big Mesh}},
+year = {2009}
+}
+@article{Ahmed2005,
+author = {Ahmed, Toufik and Boutaba, Raouf and Mehaoua, Ahmed},
+doi = {10.1016/j.comcom.2004.07.043},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Ahmed, Boutaba, Mehaoua - 2005 - A measurement-based approach for dynamic QoS adaptation in DiffServ networks.pdf:pdf},
+issn = {01403664},
+journal = {Computer Communications},
+keywords = {diffserv,monitoring,policy,qos adaptation},
+month = nov,
+number = {18},
+pages = {2020--2033},
+title = {{A measurement-based approach for dynamic QoS adaptation in DiffServ networks}},
+url = {http://linkinghub.elsevier.com/retrieve/pii/S0140366404003068},
+volume = {28},
+year = {2005}
+}
+@article{Gunawardena2003,
+author = {Gunawardena, Jeremy},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Gunawardena - 2003 - From max-plus algebra to nonexpansive mappings a nonlinear theory for discrete event systems.pdf:pdf},
+journal = {Theoretical Computer Science},
+keywords = {cycle time,discrete event system,fixed point,max-plus semiring,nonex-,nonlinear eigenvalue,nonnegative matrix,pansive map,topical function},
+number = {February},
+title = {{From max-plus algebra to nonexpansive mappings: a nonlinear theory for discrete event systems}},
+url = {http://www.sciencedirect.com/science/article/pii/S0304397502002359},
+year = {2003}
+}
+@article{Linux2006,
+author = {Linux, A},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Linux - 2006 - Add a proc file.pdf:pdf},
+pages = {1--8},
+title = {{Add a / proc file}},
+year = {2006}
+}
+@article{,
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Unknown - Unknown - Node 1.pdf:pdf},
+pages = {653},
+title = {{Node 1}}
+}
+@article{Emfinger2013,
+author = {Emfinger, William},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Emfinger - 2013 - F6ACM Memory Test Results Test 1 Default F6ACM(2).pdf:pdf},
+pages = {1--4},
+title = {{F6ACM Memory Test Results Test 1 : Default F6ACM}},
+year = {2013}
+}
+@article{Emfinger2013a,
+author = {Emfinger, William},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Emfinger - 2013 - F6ACM Memory Test Results Test 1 Default F6ACM.pdf:pdf},
+pages = {1--4},
+title = {{F6ACM Memory Test Results Test 1 : Default F6ACM}},
+year = {2013}
+}
+@article{Nussbaum2009,
+author = {Nussbaum, Lucas and Richard, Olivier},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Nussbaum, Richard - 2009 - A comparative study of network link emulators.pdf:pdf},
+journal = {Proceedings of the 2009 Spring Simulation \ldots},
+keywords = {accuracy,com-,emulation,emulation already exist,however,latency,lower bandwidth,network,or degraded network conditions,several solutions for network,software,the accuracy of these,tools has never been},
+title = {{A comparative study of network link emulators}},
+url = {http://dl.acm.org/citation.cfm?id=1639898},
+year = {2009}
+}
+@article{Huang2008,
+author = {Huang, Polly and Ntu, Polly},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Huang, Ntu - 2008 - Testing on Real Systems dummynet Let ’ s Take a Good Look Back Predict for the Future y Nature.pdf:pdf},
+pages = {1--28},
+title = {{Testing on Real Systems dummynet Let ’ s Take a Good Look Back Predict for the Future y Nature}},
+year = {2008}
+}
+@article{Jones2006,
+author = {Jones, Andy},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Jones - 2006 - Fun with Dummynet Maintaining high throughput in large bandwidth-delay product networks.pdf:pdf},
+pages = {1--12},
+title = {{Fun with Dummynet : Maintaining high throughput in large bandwidth-delay product networks}},
+year = {2006}
+}
+@article{Checconi2013,
+author = {Checconi, Fabio and Rizzo, Luigi and Valente, Paolo},
+doi = {10.1109/TNET.2012.2215881},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Checconi, Rizzo, Valente - 2013 - QFQ Efficient Packet Scheduling With Tight Guarantees.pdf:pdf},
+issn = {1063-6692},
+journal = {IEEE/ACM Transactions on Networking},
+month = jun,
+number = {3},
+pages = {802--816},
+title = {{QFQ: Efficient Packet Scheduling With Tight Guarantees}},
+url = {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=6320646},
+volume = {21},
+year = {2013}
+}
+@article{Carbone2011,
+author = {Carbone, Marta and Rizzo, Luigi},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Carbone, Rizzo - 2011 - An emulation tool for PlanetLab.pdf:pdf},
+keywords = {emulation,internet,network testbeds,performance evaluation,planetlab},
+number = {March},
+pages = {1--12},
+title = {{An emulation tool for PlanetLab}},
+year = {2011}
+}
+@article{Rizzo2010,
+author = {Rizzo, Luigi},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Rizzo - 2010 - Porting dummyet to Linux and Windows ( and userland ).pdf:pdf},
+title = {{Porting dummyet to Linux and Windows ( and userland )}},
+year = {2010}
+}
+@article{Rizzo2010a,
+author = {Rizzo, Luigi},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Rizzo - 2010 - A new packet scheduling architecture for FreeBSD.pdf:pdf},
+title = {{A new packet scheduling architecture for FreeBSD}},
+year = {2010}
+}
+@article{Rizzo2010b,
+author = {Rizzo, Luigi},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Rizzo - 2010 - New developments in link emulation and packet scheduling in FreeBSD , linux and Windows.pdf:pdf},
+title = {{New developments in link emulation and packet scheduling in FreeBSD , linux and Windows}},
+year = {2010}
+}
+@article{Carbone2010,
+author = {Carbone, Marta and Rizzo, Luigi},
+doi = {10.1145/1764873.1764876},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Carbone, Rizzo - 2010 - Dummynet revisited(2).pdf:pdf},
+issn = {01464833},
+journal = {ACM SIGCOMM Computer Communication Review},
+keywords = {emulation,network protocols,perfor-,wireless emulation},
+month = apr,
+number = {2},
+pages = {12},
+title = {{Dummynet revisited}},
+url = {http://portal.acm.org/citation.cfm?doid=1764873.1764876},
+volume = {40},
+year = {2010}
+}
+@article{Carbone2010a,
+author = {Carbone, Marta and Rizzo, Luigi},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Carbone, Rizzo - 2010 - Dummynet revisited.pdf:pdf},
+journal = {ACM SIGCOMM Computer Communication \ldots},
+number = {november},
+title = {{Dummynet revisited}},
+url = {http://dl.acm.org/citation.cfm?id=1764876},
+year = {2010}
+}
+@article{Dubey,
+author = {Dubey, Abhishek and Gokhale, Andy and Karsai, Gabor and Willemsen, Johnny and Calabrese, Paul and Mitz, Adam},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Dubey et al. - Unknown - Future Fast , Flexible , Fractionated , Free- Flying Spacecraft ( F6 ).pdf:pdf},
+title = {{Future Fast , Flexible , Fractionated , Free- Flying Spacecraft ( F6 )}}
+}
+@book{Baccelli1992,
+author = {Baccelli, F and Cohen, Guy and Olsder, GJ and Quadrat, JP},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Baccelli et al. - 1992 - Synchronization and linearity.pdf:pdf},
+title = {{Synchronization and linearity}},
+url = {http://cermics.enpc.fr/~cohen-g/documents/BCOQ-book.pdf},
+year = {1992}
+}
+@article{Emfinger,
+author = {Emfinger, William and Karsai, Gabor and Dubey, Abhishek and Gokhale, Aniruddha},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Emfinger et al. - Unknown - Analysis , Verification , and Management Toolsuite for Cyber-Physical Applications on Time-Varying Networks.pdf:pdf},
+pages = {2--5},
+title = {{Analysis , Verification , and Management Toolsuite for Cyber-Physical Applications on Time-Varying Networks ( Work in Progress )}}
+}
+@article{Xu2013,
+abstract = {Wireless Sensor Networks (WSNs) are embracing an increasing number of real-time applications subject to strict delay constraints. Utilizing the methodology of potential field in physics, in this article we effectively address the challenges of real-time routing in WSNs. In particular, based on a virtual composite potential field, we propose the Potential-based Real-Time Routing (PRTR) protocol that supports real-time routing using multipath transmission. PRTR minimizes delay for real-time traffic and alleviates possible congestions simultaneously. Since the delay bounds of real-time flows are extremely important, the end-to-end delay bound for a single flow is derived based on the Network Calculus theory. The simulation results show that PRTR minimizes the end-to-end delay for real-time routing, and also guarantees a tight bound on the delay.},
+author = {Xu, Yinsheng and Ren, Fengyuan and He, Tao and Lin, Chuang and Chen, Canfeng and Das, Sajal K.},
+doi = {10.1145/2480730.2480738},
+issn = {15504859},
+journal = {ACM Transactions on Sensor Networks},
+pages = {1--24},
+title = {{Real-time routing in wireless sensor networks}},
+url = {http://dl.acm.org/citation.cfm?doid=2480730.2480738},
+volume = {9},
+year = {2013}
+}
+@article{Chen1998,
+abstract = {We present a calculus which can transfer specifications to objects
+for the development of real-time systems. The object model is based on a
+practical OO development technique-HRT-HOOD. A real-time logic is
+specified by extending a sound formal method for real-time systems-TAM,
+to formalise the object model. With integration of HRT-HOOD and TAM, the
+advantages of object-oriented structured methods with the stepwise
+refinement techniques are combined. The result is illustrated on a case
+study},
+author = {Chen, Zhiqiang Chen Zhiqiang and Cau, A. and Zedan, H. and Liu, Xiaodong Liu Xiaodong and Yang, Hongji Yang Hongji},
+doi = {10.1109/APSEC.1998.733588},
+isbn = {0-8186-9183-2},
+journal = {Proceedings 1998 Asia Pacific Software Engineering Conference (Cat. No.98EX240)},
+title = {{A refinement calculus for the development of real-time systems}},
+year = {1998}
+}
+@article{Ravn1993,
+abstract = {An approach to specification of requirements and verification of
+design for real-time systems is presented. A system is defined by a
+conventional mathematical model for a dynamic system where application
+specific states denote functions of real time. Specifications are
+formulas in duration calculus, a real-time interval logic, where
+predicates define durations of states. Requirements define safety and
+functionality constraints on the system or a component. A top-level
+design is given by a control law: a predicate that defines an automation
+controlling the transition between phases of operation. Each phase
+maintains certain relations among the system states; this is analogous
+to the control functions known from conventional control theory. The
+top-level design is decomposed into an architecture for a distributed
+system with specifications for sensor, actuator, and program components.
+Programs control the distributed computation through synchronous events.
+Sensors and actuators relate events with system states. Verification is
+a deduction showing that a design implies requirements},
+author = {Ravn, Anders P. and Rischel, Hans and Hansen, Kirsten Mark},
+doi = {10.1109/32.210306},
+isbn = {0-89791-455-4},
+issn = {00985589},
+journal = {IEEE Transactions on Software Engineering},
+pages = {41--55},
+title = {{Specifying and verifying requirements of real-time systems}},
+volume = {19},
+year = {1993}
+}
+@inproceedings{Breuer1995,
+abstract = {A new specification and refinement calculus for real time processes is set out here. Under Jit, a specification is a three-phase ``before, during and after" set of temporal assertions, connected by cross-constraints. Specifications laid out on the page have the look of an Alice-in-Wonderland wardrobe, with a door to enter, a door to peep out of, and a door to exit by, plus a bottom drawer full of undergarments. The specification style is reminiscent of Z and VDM and is intended to appeal to the same technologists. Refinements are pseudo-code containing scheduling and wait statements.},
+author = {Breuer, Peter T and Bowen, Jonathan P and {Martinez Madrid}, Natividad and Sanchez, Luis and Kloos, Carlos Delgado and {Mart\'{\i}nez Madrid}, Natividad and S\'{a}nchez, Luis and {Delgado Kloos}, Carlos},
+booktitle = {Software Engineering Research Forum},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Breuer et al. - 1995 - Just in time -- a specification calculus for real time systems.pdf:pdf},
+keywords = {formal specification,formal verification,logic and semantics,real-time systems,refinement calculus,software engineering},
+pages = {249--258},
+title = {{Just in time -- a specification calculus for real time systems}},
+year = {1995}
+}
+@inproceedings{Wang2008,
+abstract = {Network calculus is a new theory of network QoS which is developed recently, it is the application of the Min-Plus Algebra and Max- Plus Algebra in network analysis. With the aim to resolve the transmitting of the real-time dataflow and get a good performance in dataflow waving ,the network calculus theory is applied to the real-time industrial Ethernet. In the paper ,we gained the real-time arrives curve and other service parameters through the network calculus of the typical model of the network data stream. Then, we calculate the the largest network delay, the largest service time. According to the results of network calculus, we developed a services curve-based strategy for the queue and set up a subsection control model to resolve the rate wobling and other issues in industrial Ethernet, thus ensuring stability of information transmission in the real-time control network. Finally, simulate the algorithm with the NS2 in linux, and analysis of the results to verify its basic performance of real-time transmission and the rate stability.},
+author = {Wang, Guitang and Liu, Jun},
+booktitle = {2008 International Symposium on Information Science and Engineering, ISISE 2008},
+doi = {10.1109/ISISE.2008.177},
+isbn = {9780769534947},
+keywords = {Industrial Ethernet,Network calculus,Real-time},
+pages = {77--79},
+title = {{Network calculus using in real-time industrial Ethernet}},
+volume = {2},
+year = {2008}
+}
+@article{Terrier1994,
+abstract = {Real time systems are more and more complex and, increasingly,
+involve large applications where real time constraints can be only
+roughly defined by use of vague linguistic terms. Generally, real time
+scheduling algorithms provide optimal solution when the application
+context is well known and its behavior completely mastered. But in
+practice, both the real time constraints and the tasks characteristics
+are imprecisely known. This results in suboptimal behaviors generating
+failures which should be avoided. This paper proposes to apply the fuzzy
+calculus to real time tasks scheduling in order to allow both more
+realistic knowledge representations and definitions of more flexible
+real time scheduling algorithms},
+author = {Terrier, F. and Chen, Ziqiang Chen Ziqiang},
+doi = {10.1109/FUZZY.1994.343567},
+isbn = {0-7803-1896-X},
+journal = {Proceedings of 1994 IEEE 3rd International Fuzzy Systems Conference},
+title = {{Fuzzy calculus applied to real time scheduling}},
+year = {1994}
+}
+@inproceedings{Garay2011,
+abstract = {In this paper we compare an analytical framework based on Real-Time Calculus with the existing analytical approaches commonly used for the performance evaluation of network interfaces such as probabilistic queuing models, parallel computation model, and protocol offload models (LAWS and EMO). In particular, we focus on the capabilities of these alternatives that can be employed for the performance evaluation of the NIC's buffer requirements in a network node.},
+author = {Garay, Godofredo R. and Ortega, Julio and Alarcon-Aquino, Vicente},
+booktitle = {CONIELECOMP 2011 - 21st International Conference on Electronics Communications and Computers, Proceedings},
+doi = {10.1109/CONIELECOMP.2011.5749347},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Garay, Ortega, Alarcon-Aquino - 2011 - Comparing Real-Time Calculus with the existing analytical approaches for the performance evaluati.pdf:pdf},
+isbn = {9781424495573},
+pages = {119--124},
+title = {{Comparing Real-Time Calculus with the existing analytical approaches for the performance evaluation of network interfaces}},
+year = {2011}
+}
+@article{,
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Unknown - 2011 - No Title.pdf:pdf},
+number = {September},
+pages = {2011},
+title = {{No Title}},
+year = {2011}
+}
+@article{No2011,
+author = {No, Sdrl and Blvd, West Hibiscus and Technologies, B B N and Cambridge, Moulton Street},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/No et al. - 2011 - SOFTWARE RELEASE NOTE FOR THE BASE PERIOD TECHNICAL DATA PACKAGE OF THE DARPA SYSTEM F6 PROGRAM TECHNICAL AREA 2 F6TA.pdf:pdf},
+title = {{SOFTWARE RELEASE NOTE FOR THE BASE PERIOD TECHNICAL DATA PACKAGE OF THE DARPA SYSTEM F6 PROGRAM TECHNICAL AREA 2 F6TA2 NETWORK SOFTWARE}},
+year = {2011}
+}
+@article{Schmitt,
+author = {Schmitt, Jens B},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Schmitt - Unknown - Towards Predictable Wireless Sensor Networks The Sensor Network Calculus 2 Sensor Network Calculus A Brief Walk-Thr.pdf:pdf},
+title = {{Towards Predictable Wireless Sensor Networks The Sensor Network Calculus 2 Sensor Network Calculus : A Brief Walk-Through}}
+}
+@book{,
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Unknown - 2009 - Network-Calculus-based Performance Analysis for Wireless Sensor Networks Huimin She.pdf:pdf},
+isbn = {9789174153545},
+title = {{Network-Calculus-based Performance Analysis for Wireless Sensor Networks Huimin She}},
+year = {2009}
+}
+@article{Fidler,
+author = {Fidler, Markus and Schmitt, Jens B},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Fidler, Schmitt - Unknown - On the Way to a Distributed Systems Calculus An End-to-End Network Calculus with Data Scaling Categories an.pdf:pdf},
+isbn = {1595933204},
+keywords = {and by,dfg,emmy noether,grant of the german,in part by an,network calculus,packetizers,research foundation,scaling functions,this work was supported},
+title = {{On the Way to a Distributed Systems Calculus : An End-to-End Network Calculus with Data Scaling Categories and Subject Descriptors}}
+}
+@article{May2010,
+abstract = {The principle goal of our research project is to improve the availability of service-oriented systems. This is especially important in systems that cross organizational boundaries. In this paper we outline the main research questions, our approach, which is based on appropriate redundancy strategies, and the progress achieved to date.},
+author = {May, Nicholas},
+doi = {10.1145/1810295.1810376},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/May - 2010 - Dynamic service quality and resource negotiation for high-availability service-oriented systems.pdf:pdf},
+isbn = {978-1-60558-719-6},
+issn = {0270-5257},
+journal = {2010 ACM/IEEE 32nd International Conference on Software Engineering},
+keywords = {availability,redundancy,service-oriented},
+pages = {327--328},
+title = {{Dynamic service quality and resource negotiation for high-availability service-oriented systems}},
+volume = {2},
+year = {2010}
+}
+@article{Zafer2009a,
+abstract = {Transmission rate adaptation in wireless devices provides a unique opportunity to trade off data service rate with energy consumption. In this paper, we study optimal rate control to minimize transmission energy expenditure subject to strict deadline or other quality-of-service (QoS) constraints. Specifically, the system consists of a wireless transmitter with controllable transmission rate and with strict QoS constraints on data transmission. The goal is to obtain a rate-control policy that minimizes the total transmission energy expenditure while ensuring that the QoS constraints are met. Using a novel formulation based on cumulative curves methodology, we obtain the optimal transmission policy and show that it has a simple and appealing graphical visualization. Utilizing the optimal ldquoofflinerdquo results, we then develop an online transmission policy for an arbitrary stream of packet arrivals and deadline constraints, and show, via simulations, that it is significantly more energy-efficient than a simple head-of-line drain policy. Finally, we generalize the optimal policy results to the case of time-varying power-rate functions.},
+author = {Zafer, Murtaza A. and Modiano, Eytan},
+doi = {10.1109/TNET.2009.2020831},
+file = {:C$\backslash$:/Users/William/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Zafer, Modiano - 2009 - A calculus approach to energy-efficient data transmission with quality-of-service constraints.pdf:pdf},
+issn = {10636692},
+journal = {IEEE/ACM Transactions on Networking},
+keywords = {Delay,Energy,Network calculus,Quality of service (QoS),Rate control,Wireless},
+pages = {898--911},
+title = {{A calculus approach to energy-efficient data transmission with quality-of-service constraints}},
+volume = {17},
+year = {2009}
+}
