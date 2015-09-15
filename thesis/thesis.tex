@@ -36,7 +36,8 @@
 \usepackage{textcomp}
 \usepackage{relsize,fancyvrb}
 %\usepackage[ruled,noline]{algorithm2e}
-\usepackage{subcaption}
+\usepackage{subfigure}
+%\usepackage{subcaption}
 \usepackage{rotating}
 \usepackage{tocvsec2}
 \usepackage{chngcntr}
@@ -82,9 +83,8 @@
 \renewcommand \thesection{\arabic{chapter}.\arabic{section}}
 \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 
-\usepackage{xspace}
-\newcommand \fulltool{\textbf{P}recise \textbf{N}etwork \textbf{P}erformance \textbf{P}rediction\xspace}
-\newcommand \shorttool{$PNP^2$\xspace}
+\def\fulltool/{\textbf{P}recise \textbf{N}etwork \textbf{P}erformance \textbf{P}rediction}
+\def\shorttool/{$PNP^2$}
 
 \begin{document}
 	
