@@ -848,12 +848,12 @@ other profiles in the network, so that application developers and
 system integrators can derive meaningful perfomance predictions for
 specific applications.  For this goal, let us define:
 
-\begin{definition}[Compositionality]
+\begin{definition}[Compositionality]\cite{sifakis2002}
   A system is compositional if its properties can be derived from
   the properties of its components and how they are interconnected.
 \end{definition}
 
-\begin{definition}[Composability]
+\begin{definition}[Composability]\cite{sifakis2002}
   A component is composable if its properties do not change
   when the component is composed with other components.
 \end{definition}
@@ -894,12 +894,12 @@ is based on the network Quality-of-Service (QoS) management provided
 by different types of networking infrastructure.  One such mechanism
 for implementing this type of priority-based network resource
 allocation is through the use of the DiffServ Code Point
-(DSCP)\cite{RFC2474}.  The DSCP is a bit-field in all packets which
+(DSCP)\cite{rfc2474}.  The DSCP is a bit-field in all packets which
 have an Internet Protocol (IP) header which allows the packet to be
 assigned a specific class for per-hop routing behavior.  Routers and
 forwarders in the network group packets according to their DSCP class
 and provide different service capacities to each class.  For example,
-the \emph{Expedited Forwarding} \cite{RFC3246} class receives strict
+the \emph{Expedited Forwarding} \cite{rfc3246} class receives strict
 priority queuing above all other traffic, which makes it a suitable
 implementation of this type of resource allocation.
 
@@ -1288,69 +1288,3 @@ simulated.
           generated profiles.
 \end{itemize}
 
-\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Statically Routed Network Analysis}
-\label{sec:staticRoute}
-
-\subsection{Problem}
-As CPS become more distributed in nature and begin to act as
-infrastructure for distributed applications towards IoT systems, they
-will necessarily need to handle more network resource management and
-network connection routing within their network as well as between
-their own network and any external networks to which they are
-connected.  Such networks generally rely on routing to allow more
-flexibility in the system with respect to node placement and
-connectivity.  Adding routing to the network also has the effect of
-increasing the complexity of the network performance analysis and can
-cause drastic differences in application network performance when
-compared with networks without routing.  Therefore the design-time
-analysis tools which help predict application network performance must
-take this routing into account.  It should be noted that this is a
-special case of routing in ad-hoc networks, where one or more nodes
-can route messages for other nodes.
-
-\subsection{Contributions}
-\begin{itemize}
-	\item We will extend our network resource modeling and
-          analysis techniques to support networks in which system
-          nodes can act as routers for packets in the network.
-	\item We will show experimentally the validity of the analysis
-          results using our testbed and test applications.
-\end{itemize}
-
-\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Comparing \shorttool/ to Network Calculus}
-\label{sec:equivalence}
-
-\subsection{Problem}
-Network Calculus has been around for a couple decades so far, and has
-seen numerous improvements and extensions.  Mathematically analyzing
-the equivalence between the methods of the proposed analysis with
-those of Network Calculus would pave the way for enhancing the
-proposed work with similar extensions as have been developed for
-Network Calculus.  This equivalence analysis should hold, since both
-techniques are based on the min-plus calculus dioid.  By showing the
-equivalence, we would show that the proposed analysis techniques have
-similar system-theory based applications.
-
-\subsection{Contributions}
-\begin{itemize}
-	\item We will mathematically analyze the differences between
-          the proposed technique and Network Calculus, showing that
-          compositionality (i.e. concatenation of nodes in NC) applies
-          to our analysis techniques
-	\item We will analyze network flow composition to formalize
-          operations for flow aggregation.
-\end{itemize}
