@@ -347,9 +347,9 @@ communications.  Since each node transmits on its own frequency,
 collisions between nodes transmitting simultaneously are reduced.
 Communications paradigms of this type, i.e. shared medium with
 collision-free simultaneous transmission between nodes, can be modeled
-easily by our MAReN modeling paradigm described above, since the
-network resource model for each node can be developed without taking
-into account the transmissions of other nodes.
+easily by our :math:`PNP^2` modeling paradigm described above, since
+the network resource model for each node can be developed without
+taking into account the transmissions of other nodes.
 
 In TDMA, each node on the network is assigned one or more time-slots
 per communications period in which only that node is allowed to

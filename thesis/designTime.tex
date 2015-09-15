@@ -552,8 +552,8 @@ which implies that:
 \end{equation}
 
 meaning that the amount of data in the buffer versus time is a
-\emph{periodic function}, therefore the buffer size does not grow between
-periods, and the system has a \emph{finite buffer}.
+\emph{periodic function}, therefore the maximum buffer size does not
+grow between periods, and the system has a \emph{finite buffer}.
 
 If we are only concerned with buffer growth, we do not need to
 calculate $R$, and can instead infer buffer growth by comparing
@@ -678,7 +678,7 @@ data production mentioned above.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Point-to-Point TDMA Network Analysis}
+\section{Analysis of TDMA Scheduling}
 \label{sec:tdma}
 
 Medium channel access protocols are used in networking systems to
@@ -731,27 +731,270 @@ the application or the buffering delay may exceed the application's
 acceptable latency.
 
 \subsection{Contributions}
-\iffalse
-\begin{itemize}
-	\item We extended our system and application network resource
-          models to encompass TDMA based networks, reported in
-          \cite{ISIS_F6_ISORC_QOS:15}.
-	\item We derived formulas which abstracted away the TDMA
-          scheduling to remove the requirement to explicitly
-          incorporate the TDMA scheduling into the system and
-          application models, reported in \cite{ISIS_F6_ISORC_QOS:15}.
-\end{itemize}
-\fi
 
-We developed a model of TDMA in our \shorttool/ paradigm and analyzed
-its affect on the performance metrics.  Through analysis of the
-explicit TDMA schedule integrated into a system network resource
+So far, the description of the system provided network service profile
+($p[t]=y$), has been abstracted as simply the available
+bandwidth as a function of time integrated to produce the amount of
+data serviced as a function of time. We show how to model and analyze
+the network's lower-level TDMA MAC protocol using our network modeling
+semantics.  We then derive general formulas for determining the affect
+TDMA has on buffer size and delay predictions.
+
+As an example TDMA system which benefits from our analysis techniques,
+consider an application platform provided by a fractionated satellite
+cluster.  A fractionated satellite cluster consists of many small
+satellites that may each have different hardware, computing, and
+communications capabilities.  These capabilities are provided to
+distributed components of the satellite cluster's applications.  Such
+a system has the combined challenges of (1) being expensive to
+develop, test, and deploy, (2) being very difficult to repair or
+replace in the event of failure, and (3) having to support
+mixed-criticality and possibly multiple levels of security
+applications.  For this system, the network between these satellites
+is a precious resource shared between each of the applications'
+components in the cluster.  To ensure the stability of the network
+resources, each satellite has a direct connection to every other
+satellite and is assigned a slot in the TDMA schedule during which the
+satellite may transmit.  Each TDMA slot has a sinusoidally
+time-varying bandwidth profile which may differ from the other TDMA
+slot bandwidth profiles.  The time-varying profile of the slot
+bandwidth comes from the coupling between the radios' inverse-squared
+bandwidth-as-a-function-of-distance and the satellites' sinusoidal
+distance-as-a-function-of-orbital-position.
+
+Such a system and applications necessitates design-time guarantees
+about resource utilization and availability.  Applications which
+utilize the satellite network need assurances that the network
+resources they require during each part of the orbital period will be
+satisfied.  To provide these assurances, we provide the application
+developers and system integrators the ability to specify and analyze
+the network profiles as (possibly periodic) functions of time.
+Furthermore, the requirement for accurate predictions necessitates the
+incorporation of the TDMA scheduling and bandwidth profiling into the
+network modeling and analysis tools.
+
+TDMA schedules can be described by their period, their number of
+slots, and the bandwidth available to each slot as a function of time.
+For simplicity of explanation, we assume that each node only gets a
+single slot in the TDMA period and all slots have the same length, but
+the results are valid for all static TDMA schedules.  Note that each
+slot still has a bandwidth profile which varies as a function of time
+and that each slots may have a different bandwidth profile.  In a
+given TDMA period ($T$), the node can transmit a certain number of
+bits governed by its slot length ($t_{slot}$) and the slot's available
+bandwidth ($bw_{slot}$).  During the rest of the TDMA period, the
+node's available bandwidth is $0$.  This scheduling has the effect of
+amortizing the node's slot bandwidth into an effective bandwidth of
+$bw_{effective} = bw_{slot} * \dfrac{t_{slot}}{T}$.  The addition of
+the TDMA scheduling can affect the buffer and delay calculations,
+based on the slot's bandwidth, the number of slots, and the slot
+length.  The maximum additional delay is $\Delta_{delay} = T -
+t_{slot}$, and the maximum additional buffer space is $\Delta_{buffer}
+= \Delta_{delay} * bw_{effective}$.  These deviations are shown below.
+Clearly, $\Delta_{delay}$ is bounded by $T$ and $\Delta_{buffer}$ is
+governed by $t_{slot}$.  Therefore, because $t_{slot}$ is dependent on
+$T$, minimizing $T$ minimizes both the maximum extra delay and maximum
+extra buffer space.
+
+\begin{figure}[ht!]
+  \centering
+  \subfigure[In-Phase TDMA Profile vs Abstract]{
+    \includegraphics[width=0.8\textwidth]{../doc/src/images/results/tdma_phase0.png}
+  }
+  \subfigure[Out-of-Phase TDMA Profile vs Abstract]{
+    \includegraphics[width=0.8\textwidth]{../doc/src/images/results/tdma_phase1.png}
+  }
+  \caption{Effects of TDMA scheduling in the MAC layer on system
+    network performance.}
+  \label{fig:tdma}
+\end{figure}
+
+Following from this analysis, we see that if: (1) the TDMA effective
+bandwidth profile is provided as the abstract system network service
+profile, and (2) the TDMA period is much smaller than the duration of
+the shortest profile interval; then the system with explicit modeling
+of the TDMA schedule has similar predicted application network
+characteristics as the abstract system.  Additionally, the maximum
+deviation formulas derived above provide a means for application
+developers to analyze the their application on a TDMA system without
+explicitly integrating the TDMA model into the system profile model.
+
+We developed this model of TDMA in our \shorttool/ paradigm and
+analyzed its affect on the performance metrics.  Through analysis of
+the explicit TDMA schedule integrated into a system network resource
 model, we were able to derive analytical formulas for the effect of
 TDMA scheduling on application network buffering and delay.  We showed
 how using these formulas removes the requirement for the explicit
 integration of the TDMA schedule into the system network resource
 model.  The TDMA modeling and analysis extension to our paradigm was
-reported in \cite{ISIS_F6_ISORC_QOS:15}.
+published in \cite{ISIS_F6_ISORC_QOS:15}.
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Compositional Analysis}
+\label{sec:compositional_analysis}
+
+Now that we have precise network performance analysis for aggregate
+profiles or singular profiles on individual nodes of the network, we must
+determine how best to compose these profiles and nodes together to
+analyze the overall system.  The aim of this work is to allow the profiles
+from each application to be analyzed separately from the other profiles
+in the network, so that application developers and system integrators
+can derive meaningful perfomance predictions for specific
+applications.  For this goal, let us define:
+
+\begin{definition}[Compositionality]
+  A system is compositional if its properties can be derived from
+  the properties of its components and how they are interconnected.
+\end{definition}
+
+\begin{definition}[Composability]
+  A component is composable if its properties do not change
+  when the component is composed with other components.
+\end{definition}
+
+For our analysis techniques to be compositional, an application's
+required profile must be analyzable individually without requiring
+aggregation with the rest of the required profiles in the system.
+This means that the system's performance, i.e. the peformance of all
+the applications on the system, can be determined by analyzing the
+performance of each application individually.
+
+For this compositionality, we must not only define mathematical
+operations which allow us to aggregate and separate profiles with/from
+each other, but also the semantics of how these profiles are composed
+with one another.  These semantics govern the relation between
+required profiles, specifically governing the distribution of their
+shared node's provided profile between each other.  For our
+compositional analysis, we defined that each required profile in the
+system be given a unique priority, $U$, with the relation that a
+profile $P_1$ has a higher priority than profile $P_2$
+\emph{iff} $U_{P_1} < U_{P_2}$.  Using this priority relation, we can
+define that a profile $P_i$ does not receive any capacity from
+its node at time $t$ until all other profiles with priority
+$< U_{P_i}$ have received their requested capacity from the
+node at $t$.  If the node does not have enough capacity at
+$t$ to service $P_i$, then the data $P_i$ attempted
+to send at $t$ will be placed into its buffer, to be sent at a
+time when the node has available bandwidth for $P_i$.
+
+This priority relation for compositional analysis is similar to the
+task priority used for schedulability analysis in Real-Time Calculus,
+mentioned in :ref:$rtc$.  Similarly to RTC, this priority relation and
+compositionality allow us to capture the effects independent profiles
+have on each other when they share the same network resources.  Just
+as RTC based its priority relation and computation scheduling on a
+fixed-priority scheduler, our priority relation and resource allotment
+is based on the network Quality-of-Service (QoS) management provided
+by different types of networking infrastructure.  One such mechanism
+for implementing this type of priority-based network resource
+allocation is through the use of the DiffServ Code Point
+(DSCP)\cite{RFC2474}.  The DSCP is a bit-field in all packets which have
+an Internet Protocol (IP) header which allows the packet to be
+assigned a specific class for per-hop routing behavior.  Routers and
+forwarders in the network group packets according to their DSCP class
+and provide different service capacities to each class.  For example,
+the \emph{Expedited Forwarding} \cite{RFC3246} class receives strict priority
+queuing above all other traffic, which makes it a suitable
+implementation of this type of resource allocation.
+
+Mathematically, compositionality requires that we be able to add and
+subtract profiles from each other, for instance to determine the
+remaining service capacity of a node available for a profile
+$P_i$ after it serves all profiles with a higher priority.  The
+remaining capacity, $P_P'$, of the node after it services
+$P_i$ is given as:
+
+\begin{equation}
+  P_P' = P_P - ( P_i \otimes P_P )
+\end{equation}
+
+Where
+
+\begin{itemize}
+\item $P_P$ is the capacity available to profile $P_i$
+\end{itemize}
+  
+We are finalizing the design and code for tests which utilize the DSCP
+bit(s) setting on packet profiles to show that such priority-based
+analysis techniques are correct for these types of systems.
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Delay Analysis}
+\label{sec:delay}
+
+When dealing with queueing systems (esp. networks) where precise
+design-time guarantees are required, the delay in the links of the
+network must be taken into account.
+
+The delay is modeled as a continuous function of latency (seconds)
+versus time.  In the profiles, the latency is specified discretely as
+$(time, latency)$ pairs, and is interpolated linearly between
+successive pairs.
+
+Using these latency semantics, the delay convolution of a profile
+becomes
+
+\begin{equation}
+  r[t + \delta[t]] = l[t]
+\end{equation}
+
+Where
+
+\begin{itemize}
+\item $l[t]$ is the \emph{link} profile describing the data as a function
+  of time as it enters the link
+\item $\delta[t]$ is the \emph{delay} profile describing the latency as a
+  function of time on the link
+\item $r[t]$ is the \emph{received} profile describing the data as a
+  function of time as it is received at the end of the link
+\end{itemize}
+  
+When analyzing delay in a periodic system, it is important to
+determine the effects of delay on the system's periodicity.  We know
+that the period of the periodic profiles is defined by the time
+difference between the start of the profile and the end of the
+profile.  Therefore, we can show that if the time difference between
+the\textbf{start time} of the \emph{received} profile and the\textbf{end time} of
+the \emph{received} profile is the same as the\textbf{period} of the \emph{link}
+profile, the periodicity of the profile is unchanged.
+
+\begin{itemize}
+\item $T_p$ is the period of the \emph{link} profile
+\item $r[t + \delta[t]]$ is the beginning of the \emph{received} profile
+\item $r[(t + T_p) + \delta[(t + T_p)]]$ is the end of the
+  \emph{received} profile
+\end{itemize}
+
+We determine the condition for which $(t_{end}) - (t_{start}) =
+T_p$:
+
+\begin{equation}
+  \begin{split}
+    (T_p + t + \delta[T_p + t]) - (t + \delta[t]) &= T_p \\
+    T_p + \delta[T_p + t] - \delta[t] &= T_p \\
+    \delta[T_p + t] - \delta[t] &= 0\\
+    \delta[T_p + t] &= \delta[t]
+  \end{split}
+\end{equation}
+
+Which is just confirms that the periodicity of the delayed profile is
+unchanged \emph{iff} the latency profile is\textbf{periodic}, i.e.
+
+\begin{equation}
+\delta[t] = \delta[t + k*T_p], \forall k\in\mathbb{N} > 0
+\end{equation}
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
