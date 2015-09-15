@@ -6,6 +6,215 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Middleware-Integrated Measurement, Detection, and Enforcement}
+\label{sec:drems}
+
+
+\begin{figure}{ht!}
+  \centering
+  \includegraphics[width=0.85\textwidth]{../doc/src/images/results/ros_component.png}
+  \caption{Schematic representation of a software component.}
+  \label{fig:component}
+\end{figure}
+
+Our run-time research and development of measurement, detection, and
+enforcement code for networked applications is built on the foundation
+of component-based software engineering (CBSE).  The goal of CBSE is
+to provide a reusable framework for the development of application
+building-blocks, called \emph{components} so that developers can develop
+and \emph{analyze} applications in a more robust and scalable manner.  In
+CBSE, a \emph{component}, shown schematically in
+Figure~\ref{fig:component}, is the smallest deployable part of an
+application and is defined as:
+
+\begin{equation}
+  C = \{\{T\},\{P\},H\}
+\end{equation}
+
+Where
+
+\begin{itemize}
+\item $\{T\}$ is the \emph{set} of all \emph{timers} within the component.  A
+  timer provides a periodic event trigger to the component which
+  triggers the callback associated with $T$.
+\item $\{P\}$ is the \emph{set} of all \emph{input/output ports} within the
+  component.  An i/o port provides a mechanism for message passing and
+  event triggering between components, and may take the form of
+  asynchronous \emph{publish/subscribe} or synchronous \emph{client/server}
+  interaction patterns.  Similarly to timers, each incoming event
+  triggers the callback associated with $P$.
+\item $H$ is the single thread which executes all event events for
+  the component, in FIFO order, without preemption.  
+\end{itemize}
+
+From this component definition, we can define an application as:
+
+\begin{equation}
+  A = \{\{C\},\{M\}\}
+\end{equation}
+
+Where
+
+\begin{itemize}
+\item $\{C\}$ is the \emph{set} of components in the application $\{M\}$ is the
+\item \emph{set} of \emph{mappings} between ports of the components in $\{C\}$, for
+\item instance connecting a subscriber of $C_x$ to a publisher of $C_y$,
+\item $M_{x,y} : C_x\{P_S\}\mapsto C_y\{P_P\}$.
+\end{itemize}
+
+And finally, an application's components are grouped into processes
+and distributed onto the nodes of a system through a deployment
+defined as:
+
+\begin{equation}
+  D = \{\{N\},\{U\},\{M\}\}
+\end{equation}
+
+Where
+
+\begin{itemize}
+\item $\{N\}$ is the \emph{set} of hardware \emph{nodes} in the system
+\item $\{U\}$ is the \emph{set} of \emph{processes} defining the deployment,
+  where a process is a collection of components
+  $U=\{C\}\subseteq A\{\{C\}\}$.
+\item $\{M\}$ is the \emph{set} of \emph{mappings} between processes and nodes
+  in the system, e.g. $M_{U_1,N_1} : U_1\mapsto N_1$.
+\end{itemize}
+
+Note here that though the components may be single threaded
+internally, the application containing these components may run them
+in parallel, e.g. by grouping them into a process or distributing them
+among the hardware nodes of the system.  An example application and
+deployment onto a system of nodes is shown in Figure~\ref{fig:cbse}.
+Note that multiple applications (shades of blue in this figure) may be
+deployed simultaneously onto the same system and may even interact
+with each other.
+
+\begin{figure}{ht!}
+  \centering
+  \includegraphics[width=0.85\textwidth]{../doc/src/images/results/cbse.png}
+  \caption{Two example distributed CBSE applications deployed on a system with
+    4 nodes.}
+  \label{fig:cbse}
+\end{figure}
+   
+We have implemented these features based on our design-time results:
+
+\begin{itemize}
+\item Traffic generators according to profile generated into sender code
+\item Receiver service according to profile generated into receiver code
+\item Measurement of output traffic on sender side and input traffic on
+  server side generated into code
+\item Detection of anomalous sending on sender side
+\item Mitigation of anoumalous sending on sender side
+\item Detection of anomalous sending on receiver side
+\item Push back to sender middleware through out-of-band channel for
+  anomaly detection on server side
+\end{itemize}
+
+Each of these functions uses the same profiles which enable
+design-time system and application analysis.  This integration not
+only helps with running experiments and data collection but also helps
+to ensure model to system consistency.
+  
+\begin{figure}{ht!}
+  \centering
+  \includegraphics[width=0.85\textwidth]{../doc/src/images/results/app_layers.png}
+  \caption{The structure of component-based applications and how their network
+   traffic traverses the middleware and the OS stack.}
+  \label{fig:sender}
+\end{figure}
+
+We have implemented profile-based traffic generators and traffic
+measurement into our code generators that we use with our model-driven
+design software.  We developed this toolsuite to create distributed
+component-based software which uses ROS as the communications
+middleware.  For publish/subscribe interactions between components,
+into the generated code we add generic traffic generators which read
+their associated profile from the deployment XML file and publish
+traffic on their publisher port according to that profile.
+Additionally, these publish operations are generated to use a small
+wrapper which can measure the publish rate and can decide to throw a
+\emph{profile exceeded} exception if the application attempts to send
+too much data or if the receiver has pushed back to the sender
+informing it to stop.  The sender-side middleware layer is shown in
+Figure~\ref{fig:sender}.
+
+This push back from the receiver occurs through the use of an
+out-of-band (OOB) channel using UDP multicast, which receivers use to
+inform specific senders that they are sending too much data to the
+receivers (and possibly overflowing the receiver buffers).  This OOB
+channel provides a mechanism by which the secure middleware layer can
+protect the system from malicious or faulty applications.
+
+Into the receiver code (for subscribers) we additionally generate a
+receive buffer and receiver thread which reads the receiver profile
+from the deployment XML file and pulls data from the buffer according
+to the profile.  In this scenario, the receiver has a capacity with
+which it can handle incoming data, and it has a finite buffer so it
+must use the OOB channel and measurements on the incoming data stream
+to determine which senders to shut down to ensure its buffer does not
+overflow.  When the buffer has had some time empty (so that it's not
+in danger of running out of buffer space), the receiver can use the
+OOB channel to inform the halted senders that it is alright to send
+again.  Example traffic generation accuracy is shown in
+Figure~\ref{fig:generation}. 
+
+\begin{figure}{ht!}
+  \centering
+  \includegraphics[width=0.85\textwidth]{../doc/src/images/results/traffic_generation.png}
+  \caption{Demonstration of the accuracy with which our traffic generators
+   follow the specified profile.}
+  \label{fig:generation}
+\end{figure}
+
+\begin{definition}[Note:]
+The measured bandwidth profile is calculated based on
+recorded time series data of $[reception\_time,
+  message\_size]$, so the bandwidth drops to nearly 0
+periodically since the $\Delta t$ is so large between
+the messages.
+\end{definition}
+
+\begin{definition}[Note:]
+Our original implementation of traffic generators performed
+	  better since they did not utilize a middleware layer and
+	  relied instead on simple point to point ipv6 connections.
+	  However, that code was less useful for system analysis
+	  because it could do nothing aside from traffic generation
+	  and measurement; our current implementation which generates
+	  traffic generation code into component code is more
+	  versatile for several reasons:
+
+          \begin{itemize}
+	  \item The component-based code integrates directly into our development
+	    toolsuite and deployment framework so it can be easily deployed on
+	    our cluster.
+	  \item Configuring different system topologies or component to host
+	    mappings (deployments) is simpler and more robust, allowing us to
+	    perform more and more varied experiments.
+	  \item The traffic generation code can be removed (or the code can be
+	    regenerated without the option selected) and the rest of the
+	    component-based and middleware code is still useful as an actual
+	    application.
+          \end{itemize}
+\end{definition}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Network Resource Monitoring and Management Integrated into Component-Based Middleware}
+\label{sec:drems}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Network Resource Monitoring and Management Integrated into Component-Based Middleware}
 \label{sec:drems}
 
