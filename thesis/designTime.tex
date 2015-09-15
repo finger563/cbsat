@@ -840,13 +840,13 @@ published in \cite{ISIS_F6_ISORC_QOS:15}.
 \label{sec:compositional_analysis}
 
 Now that we have precise network performance analysis for aggregate
-profiles or singular profiles on individual nodes of the network, we must
-determine how best to compose these profiles and nodes together to
-analyze the overall system.  The aim of this work is to allow the profiles
-from each application to be analyzed separately from the other profiles
-in the network, so that application developers and system integrators
-can derive meaningful perfomance predictions for specific
-applications.  For this goal, let us define:
+profiles or singular profiles on individual nodes of the network, we
+must determine how best to compose these profiles and nodes together
+to analyze the overall system.  The aim of this work is to allow the
+profiles from each application to be analyzed separately from the
+other profiles in the network, so that application developers and
+system integrators can derive meaningful perfomance predictions for
+specific applications.  For this goal, let us define:
 
 \begin{definition}[Compositionality]
   A system is compositional if its properties can be derived from
@@ -894,13 +894,13 @@ is based on the network Quality-of-Service (QoS) management provided
 by different types of networking infrastructure.  One such mechanism
 for implementing this type of priority-based network resource
 allocation is through the use of the DiffServ Code Point
-(DSCP)\cite{RFC2474}.  The DSCP is a bit-field in all packets which have
-an Internet Protocol (IP) header which allows the packet to be
+(DSCP)\cite{RFC2474}.  The DSCP is a bit-field in all packets which
+have an Internet Protocol (IP) header which allows the packet to be
 assigned a specific class for per-hop routing behavior.  Routers and
 forwarders in the network group packets according to their DSCP class
 and provide different service capacities to each class.  For example,
-the \emph{Expedited Forwarding} \cite{RFC3246} class receives strict priority
-queuing above all other traffic, which makes it a suitable
+the \emph{Expedited Forwarding} \cite{RFC3246} class receives strict
+priority queuing above all other traffic, which makes it a suitable
 implementation of this type of resource allocation.
 
 Mathematically, compositionality requires that we be able to add and
@@ -953,10 +953,10 @@ becomes
 Where
 
 \begin{itemize}
-\item $l[t]$ is the \emph{link} profile describing the data as a function
-  of time as it enters the link
-\item $\delta[t]$ is the \emph{delay} profile describing the latency as a
-  function of time on the link
+\item $l[t]$ is the \emph{link} profile describing the data as a
+  function of time as it enters the link
+\item $\delta[t]$ is the \emph{delay} profile describing the latency
+  as a function of time on the link
 \item $r[t]$ is the \emph{received} profile describing the data as a
   function of time as it is received at the end of the link
 \end{itemize}
@@ -966,13 +966,15 @@ determine the effects of delay on the system's periodicity.  We know
 that the period of the periodic profiles is defined by the time
 difference between the start of the profile and the end of the
 profile.  Therefore, we can show that if the time difference between
-the\textbf{start time} of the \emph{received} profile and the\textbf{end time} of
-the \emph{received} profile is the same as the\textbf{period} of the \emph{link}
-profile, the periodicity of the profile is unchanged.
+the \textbf{start time} of the \emph{received} profile and the
+\textbf{end time} of the \emph{received} profile is the same as the
+\textbf{period} of the \emph{link} profile, the periodicity of the
+profile is unchanged.
 
 \begin{itemize}
 \item $T_p$ is the period of the \emph{link} profile
-\item $r[t + \delta[t]]$ is the beginning of the \emph{received} profile
+\item $r[t + \delta[t]]$ is the beginning of the \emph{received}
+  profile
 \item $r[(t + T_p) + \delta[(t + T_p)]]$ is the end of the
   \emph{received} profile
 \end{itemize}
@@ -990,11 +992,199 @@ T_p$:
 \end{equation}
 
 Which is just confirms that the periodicity of the delayed profile is
-unchanged \emph{iff} the latency profile is\textbf{periodic}, i.e.
+unchanged \emph{iff} the latency profile is \textbf{periodic}, i.e.
 
 \begin{equation}
 \delta[t] = \delta[t + k*T_p], \forall k\in\mathbb{N} > 0
 \end{equation}
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Analysis of Statically Routed Networks}
+\label{sec:routing}
+
+\subsection{Problem}
+As CPS become more distributed in nature and begin to act as
+infrastructure for distributed applications towards IoT systems, they
+will necessarily need to handle more network resource management and
+network connection routing within their network as well as between
+their own network and any external networks to which they are
+connected.  Such networks generally rely on routing to allow more
+flexibility in the system with respect to node placement and
+connectivity.  Adding routing to the network also has the effect of
+increasing the complexity of the network performance analysis and can
+cause drastic differences in application network performance when
+compared with networks without routing.  Therefore the design-time
+analysis tools which help predict application network performance must
+take this routing into account.  It should be noted that this is a
+special case of routing in ad-hoc networks, where one or more nodes
+can route messages for other nodes.
+
+\subsection{Contributions}
+Having discussed profile composition and the affects of delaying a
+profile, we can address one more aspect of system analysis:
+\emph{routing}.  For this analysis we will specifically focus on
+statically routed networks.
+
+By incorporating both the latency analysis with the compositional
+operations we developed, we can perform system-level analysis of profiles
+which are routed by nodes of the system.  In this paradigm, nodes can
+transmit/receive their own data, i.e. they can host applications which
+act as data sources or sinks, as well as act as routers for profiles from
+and to other nodes.  To make such a system amenable to analysis we
+must ensure that we know the routes the profiles will take at design
+time, i.e. the routes in the network are static and known or
+calculable.  Furthermore, we must, for the sake of profile composition as
+decribed above, ensure that each profile has a priority that is unique
+within the network which governs how the transmitting and routing
+nodes handle the profile's data.
+
+Let us define the system configuration $C$ as:
+
+\begin{equation}
+  C = \{\{P_S\},\{N\},\{R\}\}
+\end{equation}
+
+Where
+
+\begin{itemize}
+\item $\{P_S\}$ is the \emph{set} of all \emph{sender} profiles in the system
+  configuration
+\item $\{N\}$ is the \emph{set} of all \emph{nodes} in the system configuration, and
+\item $\{R\}$ is the \emph{set} of all \emph{routes} in the system configuration
+\end{itemize}
+
+We define a profile $P$ as:
+
+\begin{equation}
+  P = \{N_I,K,T,F,U,\{(t,R_D,D,L)\}\}
+\end{equation}
+
+Where
+
+\begin{itemize}
+\item $N_I$ is the \emph{Node ID} to which the profile applies
+\item $K$ is the \emph{kind} of the profile, where
+  $K\in\{provided,required,receiver\}$
+\item $T$ is the \emph{period} of the profile
+\item $F$ is the \emph{flow ID} of the profile, where two profiles,
+  $P_1,P_2$ belong to the same flow \emph{iff}
+  $F_{P_1}==F_{P_2}$
+\item $U$ is the \emph{priority} of the profile, where profile
+  $P_1$ has a higher priority than profile $P_2$ \emph{iff}
+  $U_{P_1} < U_{P_2}$, and
+\item $\{(t,R_D,D,L)\}$ is a \emph{set} of $(time, data\ rate,
+  data, latency)$ tuples describing how each of $\{data\ rate,
+  data, latency\}$ vary with respect to time.  Semantically, the
+  $data\ rate$ is constant between any two successive values of
+  $t$, while the $data$ and $latency$ are \emph{linearly
+  interpolated} during the same interval.  The initial profile
+  specification does not have the $data$ field; $data$ is
+  calculated based on $data\ rate$.
+\end{itemize}
+
+Then we define a node $N$ as:
+
+\begin{equation}
+  N = \{I,P_P,\{P_R\}\}
+\end{equation}
+
+Where 
+
+\begin{itemize}
+\item $I$ is the \emph{ID} of the node
+\item $P_P$ is the \emph{provided} profile of the node, and
+\item $\{P_R\}$ is the \emph{set} of all \emph{receiver} profiles on the node
+\end{itemize}
+
+And finally, we define a route $R$ as:
+
+\begin{equation}
+  R = \{N_{I_1},N_{I_2},...,N_{I_N}\}
+\end{equation}
+
+Where
+
+\begin{equation}
+  \forall N_X,N_Y \subset N, \exists! R_{X,Y} = \{N_{I_X},...,N_{I_Y}\}
+\end{equation}
+
+We can then run Algorithm~\ref{lst:routing_alg} to iteratively analyze
+the system.  In this algorithm, the remaining capacity of the node is
+provided to each profile with a lower priority iteratively.  Because
+of this iterative recalculation of node provided profiles based on
+routed profiles, we directly take into account the effect of multiple
+independent profiles traversing the same router; the highest priority
+profile receives as much bandwidth as the router can give it, the next
+highest priority profile receives the remaining bandwidth, and so on.
+
+\begin{listing}[ht!]
+  \begin{minted}{python}
+  analyze( sender_profiles )
+  {
+    sender_profiles = sorted(sender_profiles, priority)
+    for required_profile in sender_profiles
+    {
+      transmitted_nodes = list.empty() 
+      for receiver_profile in
+          required_profile.receiver_profiles()
+      {
+        route =
+          getRoute(required_profile, receiver_profile)
+        for node in route
+        {
+          if node in transmitted_nodes
+            and multicast == true
+	  {
+	    continue
+	  }
+	  provided_profile = node.provided_profile
+            
+	  output_profile =
+            convolve(required_profile, provided_profile)
+	  remaining_profile =
+            provided_profile - output_profile
+	  received_profile =
+            delay(output_profile, provided_profile)
+            
+	  node.provided_profile = remaining_profile
+	  required_profile = received_profile
+	  transmitted_nodes.append(node)
+        }
+        receiver_received_profile =
+          convolve(required_profile, receiver_profile)
+      }
+    }
+  }
+  \end{minted}
+  \caption{Algorithm for iteratively analyzing profiles in a
+    distributed system with static routing and profile priorities.}
+  \label{lst:routing_alg}
+\end{listing}
+
+We take care of matching all senders to their respective receivers,
+and ensure that if the system supports multicast, a no retransmissions
+occur; only nodes which must route the profile to a new part of the
+network retransmit the data.  However, if the system does not support
+multicast, then the sender must issue a separate transmission, further
+consuming network resources.  In this way, lower-level transport
+capabilities can be at least partially accounted for by our analysis.
+
+We have implmented these functions for statically routed network
+analysis into our tool, which automatically parses the profiles, the
+network configuration and uses the algorithm and the implemented
+mathematics to iteratively analyze the network.  Analytical results
+for example systems will be provided when the experimental results can
+be used as a comparison.
+
+We are finishing the design and development of code which will allow
+us to run experiments to validate our routing analysis results.  They
+will be complete in the next two weeks.
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
