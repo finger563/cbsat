@@ -929,10 +929,11 @@ Where
 \begin{itemize}
 \item $P_P$ is the capacity available to profile $P_i$
 \end{itemize}
-  
-We are finalizing the design and code for tests which utilize the DSCP
-bit(s) setting on packet profiles to show that such priority-based
-analysis techniques are correct for these types of systems.
+
+Experimental validation of these compositional techniques,
+specifically with respect to priority relation, adding, and
+subtracting of profiles is presented at the end of
+Section~\ref{sec:routing}.
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1007,6 +1008,9 @@ unchanged \emph{iff} the latency profile is \textbf{periodic}, i.e.
 \begin{equation}
 \delta[t] = \delta[t + k*T_p], \forall k\in\mathbb{N} > 0
 \end{equation}
+
+Experimental validation of this delay analysis is presented at the end
+of Section~\ref{sec:routing}.
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1213,8 +1217,25 @@ validation of the routing, composition, and delay analysis techniques.
 We configure the system's routing, network delay, and network
 bandwidth capacity using Linux's built-in TC tool, which allows for
 the configuration of static routing, heirarchical class-based traffic
-scheduling, and traffic shaping.  
+scheduling, and traffic shaping.
 
+This experimental setup allows us to examine the validity of our
+analysis techniques in the following ways:
+
+\begin{itemize}
+  \item Because the system implements the strict priority queueing of
+    flows, especially independent interacting flows, we can compare
+    the delay and buffering measurements to the same delay and buffer
+    predictions from the model.
+  \item Router buffer space requirements can be measured and compared
+    with their predicted requirements to validate routed network
+    analysis.
+  \item Link delay composition can be validated by examining the
+    receiver buffer requirements compared with the predicted receiver
+    buffer sizes.  
+\end{itemize}
+
+\iffalse
 Using this system and application configuration, we can validate the
 analysis results by comparing:
 
@@ -1232,6 +1253,7 @@ size of these queues, we can show that if we configure their sizes to
 be the analysis' predicted sizes and we lose no messages then the
 predicted buffer sizes are sufficient for the system and application
 configuration.  
+\fi
 
 The results of our experiments using this application and system
 configuration are shown in Table~\ref{table:routing_results}.
