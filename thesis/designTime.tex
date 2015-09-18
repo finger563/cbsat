@@ -911,7 +911,12 @@ forwarders in the network group packets according to their DSCP class
 and provide different service capacities to each class.  For example,
 the \emph{Expedited Forwarding} \cite{rfc3246} class receives strict
 priority queuing above all other traffic, which makes it a suitable
-implementation of this type of resource allocation.
+implementation of this type of resource allocation.  Similarly, the
+Linux Traffic Control\cite{linux_tc} utility provides many mechanisms
+for shaping, policing, routing, and classifying traffic.  Its
+class-based queuing disciplines and filtering mechanisms provide the
+capability for such strict priority-based network resource
+allocation.  
 
 Mathematically, compositionality requires that we be able to add and
 subtract profiles from each other, for instance to determine the
@@ -1215,9 +1220,23 @@ validation of the routing, composition, and delay analysis techniques.
 \end{figure}
 
 We configure the system's routing, network delay, and network
-bandwidth capacity using Linux's built-in TC tool, which allows for
-the configuration of static routing, heirarchical class-based traffic
-scheduling, and traffic shaping.
+bandwidth capacity using Linux's built-in Traffic Control
+(TC)\cite{linux_tc} tool, which allows for the configuration of static
+routing, heirarchical class-based traffic scheduling, and traffic
+shaping.  We configured the output interfaces on each node as
+a combination of two queueing disciplines (qdiscs): 1) a network
+emulator (netem) which enforces the link delay, and 2) a token-bucket
+filter (TBF) which enforces the rate control to enforce the link's
+bandwidth profile.  On the routing node, we added an additional
+priority qdisc (prio), with multiple priority queues.  We configured
+TC to filter packets into these queues by matching packet source IP
+address and destination IP address.  This filtering ensured that the
+high priority flow's packets would be filtered into the high-prioirty
+queue of the prio qdisc, while the lower priority flow's packets would
+be filtered into the lower priority queue of the prio qdisc.  All
+traffic out of the priority qdisc was fed into the TBF to ensure that
+all traffic, regardless of priority, shared and was shaped by the
+node's link capacity profile.  
 
 This experimental setup allows us to examine the validity of our
 analysis techniques in the following ways:
