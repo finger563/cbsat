@@ -32,7 +32,7 @@ fi
 ###### uplink
 
 $TC qdisc add dev ${DEV} root handle 1: netem delay 100ms
-$TC qdisc add dev ${DEV} parent 1:1 handle 11: tbf rate 20kbit burst 20kB peakrate 20kbit mtu 1500
+$TC qdisc add dev ${DEV} parent 1:1 handle 11: tbf rate 20kbit buffer 100kB peakrate 20kbit mtu 1500
 $TC qdisc add dev ${DEV} parent 11:1 handle 111: prio
 $TC qdisc add dev ${DEV} parent 111:1 handle 1111: pfifo
 $TC qdisc add dev ${DEV} parent 111:2 handle 1112: pfifo
