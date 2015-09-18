@@ -1,13 +1,36 @@
 \chapter{Future Work}
 \label{ch:future_work}
 
-Describe possible extensions to this work:
+In this work we have described the beginning of precise, comprehensive
+network system performance analysis and prediction.  However, we could
+not possibly cover the modeling and analysis of all possible system
+configurations, communication protocols, or interaction paradigms.
+Furthermore, we have examined the affect certain system configuration
+parameters or modeling choices have on our analysis techniques and
+results, but such examination is not exhaustive.
+
+Extending this work would focus on these areas in the following ways:
 
 \begin{itemize}
-\item effect of time synchronization resolution on performance
-  prediction metrics
-\item Investigate run-time classification of anomalies
-\item investigate alternative methods for mitigation of attacks
-\item Investigate effects other layers/protocols/etc have on the
-  analysis and how they can be modeled
+  \item Moding and analysis support for more (commonly used)
+    transmission protocols
+  \item Relaxing modeling constraints and analyzing the affect of such
+    relaxation on the predicted performance of the system
+  \item Investigating run-time implementation alternatives and data
+    analysis techniques
 \end{itemize}
+
+Towards the first area, a primary extension to the modeling framework
+would be the support of retun-path communications and the impact they
+have on the system.  Such modeling and analysis would allow for the
+inclusion of TCP-based communications and could pave the way for
+reactive system analysis using these techniques.  
+
+Similarly, one of the model constraints which can be relaxed and
+analyzed is the system-wide time-synchronization constraint.  If that
+constraint is relaxed such that the nodes are known be re-synchronized
+periodically with some predictable drift, then such behavior can be
+directly analyzed similarly to the TDMA analysis.  From this
+information, maximum deviations on the required buffer and delay can
+be calculated, similarly to the deviations calculated for TDMA
+systems.
