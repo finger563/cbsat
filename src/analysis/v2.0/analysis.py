@@ -156,6 +156,8 @@ def parse_profiles(config, options):
         if os.path.isdir(profDir):
             print "Analyzing profiles in {}".format( profDir )
             fNames = glob.glob(profDir + os.sep + "*.csv")
+            fNames.extend(glob.glob(profDir + os.sep + "*.pnp"))
+            fNames.extend(glob.glob(profDir + os.sep + "*.snp"))
         else:
             print "ERROR: cannot find {}".format(profDir)
     else:
@@ -167,7 +169,14 @@ def parse_profiles(config, options):
         if newProf.ParseFromFile(fName) == -1:
             print "ERROR: could not parse {}".format(fName)
             return -1
-        print "Profile {} has a period of {} seconds".format(fName, newProf.period)
+        print "Profile {} has:".format(fName)
+        print "\tperiod = {} seconds".format(newProf.period)
+        print "\tnode ID = {}".format(newProf.node_id)
+        print "\tkind = {}".format(newProf.kind)
+        if newProf.flow_type:
+            print "\tflow type = {}".format(newProf.flow_type)
+        if newProf.priority:
+            print "\tpriority = {}".format(newProf.priority)
         config.addProfile(newProf)
 
 def analyze_config(config, options):
@@ -334,7 +343,7 @@ class Options:
                 self.profile_folderName = args[argind+1]
                 argind += 1
             elif args[argind] == "--network_config":
-                self.network_config = args[argind+1]
+                self.network_configName = args[argind+1]
                 argind += 1
             elif args[argind] == "--help":
                 self.print_usage(args[0])
