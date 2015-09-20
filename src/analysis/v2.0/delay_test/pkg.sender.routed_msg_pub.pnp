@@ -1,9 +1,9 @@
 # period = 20
-# priority = 2
+# priority = 1
 # start = 0
-# kind = sender
-# node ID = node_3
-# flow type = routed_msg_flow2
+# kind = required
+# node ID = node_1
+# flow type = routed_msg_flow1
 0,800000,0,0
 1,850000,0,0
 2,1024000,0,0
