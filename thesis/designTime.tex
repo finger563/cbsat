@@ -457,7 +457,7 @@ Typically, periodicity is defined for functions as the equality:
 
 but for our type of system analysis this cannot hold since we deal
 with cumulative functions (of data vs. time).  Instead we must define
-a these functions to be \textbf{repeating}, where a function is repeating
+a these functions to be repeating, where a function is repeating
 \emph{iff}:
 
 \begin{equation}
@@ -764,36 +764,20 @@ TDMA has on buffer size and delay predictions.
 
 As an example TDMA system which benefits from our analysis techniques,
 consider an application platform provided by a fractionated satellite
-cluster.  A fractionated satellite cluster consists of many small
-satellites that may each have different hardware, computing, and
-communications capabilities.  These capabilities are provided to
-distributed components of the satellite cluster's applications.  Such
-a system has the combined challenges of (1) being expensive to
-develop, test, and deploy, (2) being very difficult to repair or
-replace in the event of failure, and (3) having to support
-mixed-criticality and possibly multiple levels of security
-applications.  For this system, the network between these satellites
-is a precious resource shared between each of the applications'
-components in the cluster.  To ensure the stability of the network
-resources, each satellite has a direct connection to every other
-satellite and is assigned a slot in the TDMA schedule during which the
-satellite may transmit.  Each TDMA slot has a sinusoidally
-time-varying bandwidth profile which may differ from the other TDMA
-slot bandwidth profiles.  The time-varying profile of the slot
-bandwidth comes from the coupling between the radios' inverse-squared
+cluster.  For this system, the network between these satellites is a
+precious resource shared between each of the applications' components
+in the cluster.  To ensure the stability of the network resources,
+each satellite has a direct connection to every other satellite and is
+assigned a slot in the TDMA schedule during which the satellite may
+transmit.  Each TDMA slot has a sinusoidally time-varying bandwidth
+profile which may differ from the other TDMA slot bandwidth profiles.
+The time-varying profile of the slot bandwidth comes from the coupling
+between the radios' inverse-squared
 bandwidth-as-a-function-of-distance and the satellites' sinusoidal
-distance-as-a-function-of-orbital-position.
-
-Such a system and applications necessitates design-time guarantees
-about resource utilization and availability.  Applications which
-utilize the satellite network need assurances that the network
-resources they require during each part of the orbital period will be
-satisfied.  To provide these assurances, we provide the application
-developers and system integrators the ability to specify and analyze
-the network profiles as (possibly periodic) functions of time.
-Furthermore, the requirement for accurate predictions necessitates the
-incorporation of the TDMA scheduling and bandwidth profiling into the
-network modeling and analysis tools.
+distance-as-a-function-of-orbital-position, as described in
+Section~\ref{sec:intro}. The requirement for accurate performance
+prediction necessitates the incorporation of the TDMA schedule into
+the network modeling and analysis.
 
 TDMA schedules can be described by their period, their number of
 slots, and the bandwidth available to each slot as a function of time.
@@ -801,23 +785,43 @@ For simplicity of explanation, we assume that each node only gets a
 single slot in the TDMA period and all slots have the same length, but
 the results are valid for all static TDMA schedules.  Note that each
 slot still has a bandwidth profile which varies as a function of time
-and that each slots may have a different bandwidth profile.  In a
-given TDMA period ($T$), the node can transmit a certain number of
-bits governed by its slot length ($t_{slot}$) and the slot's available
-bandwidth ($bw_{slot}$).  During the rest of the TDMA period, the
-node's available bandwidth is $0$.  This scheduling has the effect of
-amortizing the node's slot bandwidth into an effective bandwidth of
-$bw_{effective} = bw_{slot} * \dfrac{t_{slot}}{T}$.  The addition of
-the TDMA scheduling can affect the buffer and delay calculations,
-based on the slot's bandwidth, the number of slots, and the slot
-length.  The maximum additional delay is $\Delta_{delay} = T -
-t_{slot}$, and the maximum additional buffer space is $\Delta_{buffer}
-= \Delta_{delay} * bw_{effective}$.  These deviations are shown below.
-Clearly, $\Delta_{delay}$ is bounded by $T$ and $\Delta_{buffer}$ is
-governed by $t_{slot}$.  Therefore, because $t_{slot}$ is dependent on
-$T$, minimizing $T$ minimizes both the maximum extra delay and maximum
-extra buffer space.
+and that each slots may have a different bandwidth profile.
 
+In a given TDMA period $T$, a node $n$ can transmit a certain number
+of bits governed by its slot length $t_{n}$ and the slot's available
+bandwidth $bw_{n}$.  During the rest of the TDMA period, the node's
+available bandwidth is $0$.  This scheduling has the effect of
+amortizing the node's slot bandwidth into an effective bandwidth of
+$bw_{effective}$.  The addition of the TDMA scheduling can affect the
+buffer and delay calculations, based on the slot's bandwidth, the
+number of slots, and the slot length.  The maximum additional delay is
+$\Delta_{delay}$, and the maximum additional buffer space is
+$\Delta_{buffer}$.  These deviations are shown graphically by
+Figure~\ref{fig:tdma} and calculated by
+\begin{equation}
+  \begin{split}
+    bw_{effective} &= bw_{n} * \dfrac{t_n}{T}\\
+    \Delta_{delay} &= T - t_{n}\\
+    \Delta_{buffer} &= \Delta_{delay} * bw_{effective}
+  \end{split}
+  \label{eq:tdma}
+\end{equation}
+Where:
+\begin{itemize}
+\item $T$ is the period of the TDMA schedule
+\item $t_n$ is the length of node $n$'s TDMA slot
+\item $bw_n$ is the bandwidth available to node $n$ during its slot
+\item $bw_{effective}$ is the perceived bandwidth available to the
+  node during the TDMA period
+\item $\Delta_{delay}$ is the change in the predicted delay
+  experienced by application traffic on the network
+\item $\Delta_{buffer}$ is the change in the predicted buffer space
+  required for lossless transmission of application traffic
+\end{itemize}
+Clearly, $\Delta_{delay}$ is bounded by $T$
+and $\Delta_{buffer}$ is governed by $t_{n}$.  Therefore, because
+$t_{n}$ is dependent on $T$, minimizing $T$ minimizes both the maximum
+extra delay and maximum extra buffer space.
 \begin{figure}[ht!]
   \centering
   \subfigure[In-Phase TDMA Profile vs Abstract]{
@@ -841,15 +845,14 @@ deviation formulas derived above provide a means for application
 developers to analyze the their application on a TDMA system without
 explicitly integrating the TDMA model into the system profile model.
 
-We developed this model of TDMA in our \shorttool/ paradigm and
-analyzed its affect on the performance metrics.  Through analysis of
-the explicit TDMA schedule integrated into a system network resource
-model, we were able to derive analytical formulas for the effect of
-TDMA scheduling on application network buffering and delay.  We showed
-how using these formulas removes the requirement for the explicit
-integration of the TDMA schedule into the system network resource
-model.  The TDMA modeling and analysis extension to our paradigm was
-published in \cite{ISIS_F6_ISORC_QOS:15}.
+Through the analysis of TDMA scheduling's effect on application level
+performance prediction, we derived analytical formulas for the maximum
+deviation between the abstract system model and the model with
+explicitly encoded TDMA scheduling.  The use of these formulas frees
+developers and system integrators from having to explicitly
+incorporate the TDMA schedule in their application and system models.
+This TDMA modeling and analysis was published in
+\cite{ISIS_F6_ISORC_QOS:15}.
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
