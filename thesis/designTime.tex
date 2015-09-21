@@ -935,20 +935,36 @@ allocation.
 
 Mathematically, compositionality requires that we be able to add and
 subtract profiles from each other, for instance to determine the
-remaining service capacity of a node available for a profile
-$P_i$ after it serves all profiles with a higher priority.  The
-remaining capacity, $P_P'$, of the node after it services
-$P_i$ is given as:
-
+remaining service capacity of a node available for a profile $P_i$
+after it serves all profiles with a higher priority.  Queuing of the
+lower priority profiles is taken into account when the lower priorty
+profile is convolved with the remaining capacity the node has
+available to service it.  The calculation of the remaining capacity,
+$P_P'$, of the node after it services $P_i$ is given as:
 \begin{equation}
   P_P' = P_P - ( P_i \otimes P_P )
 \end{equation}
-
 Where
-
 \begin{itemize}
 \item $P_P$ is the capacity available to profile $P_i$
 \end{itemize}
+
+Mathematically, addition and subtraction of two profiles $f[t],g[t]$ is given by:
+\begin{equation}
+  \begin{split}
+    \dot s[t] &= \dot f[t] + \dot g[t]\\
+    s[t] &= \int_{0}^t\dot s[\tau]d\tau
+  \end{split}
+\end{equation}
+and
+\begin{equation}
+  \begin{split}
+    \dot s[t] &= \dot f[t] - \dot g[t]\\
+    s[t] &= \int_{0}^t\dot s[\tau]d\tau
+  \end{split}
+\end{equation}
+meaning that addition and subtraction are performed on the data rate
+representations of the profiles, which are periodic functions of time.
 
 Experimental validation of these compositional techniques,
 specifically with respect to priority relation, adding, and
@@ -972,9 +988,10 @@ network must be taken into account.
 The delay is modeled as a continuous function of latency (seconds)
 versus time.  In the profiles, the latency is specified discretely as
 $(time, latency)$ pairs, and is interpolated linearly between
-successive pairs.
+successive pairs.  Specifically, $time$ is a time point at which the
+latency on the link is given by $latency$.  
 
-Using these latency semantics, the delay convolution of a profile
+Using this latency semantics, the delay convolution of a profile
 becomes
 
 \begin{equation}
