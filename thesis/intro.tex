@@ -83,39 +83,51 @@ resources, e.g. the end-to-end latency of traffic on the network
 links, the bandwidth of the links, and the buffer space available to
 the applications on each satellite.
 
-The link between these network resources and the system provides a
-contract which specifies the service that users require from the
-system and that the system can provide to each user.  The quality of
-this service as seen by the users of the system is defined as the
-Quality of Service (QoS) of the network and is the overall performance
-of the network as seen by its users.  The specific aspects of QoS
-which we focus on are the network bandwidth, end-to-end network
-latency, and availability of the network resources.  For critical
-systems such as those described above which may be quite difficult to
-repair or replace, such requirements must be analyzed at design-time
-and verified to ensure that they are met.  For any distributed CPS,
-the network performance of the system is affected by the physical
-environment of the system as it affects the network.  For systems
-whose physical network layer is comprised of wired connections, this
-effect may stem from the temporal properties of the control systems
-and their periodic or sporadic network load.  For systems whose
-physical network layer is made up of wireless connections, the
-physical environment has an even larger effect on the network
-resources and availability.  Environmental interference or obstruction
-leading to multi-path self-interference or signal degradation can
-combine with the distance-based signal-to-noise ratio loss due to the
-nature of wireless media.  Such effects can induce hysteresis or
-instability in control systems through loss of data on the network, or
-increased variability in the response-time of the control loops.
-Because the network performance of such a system is so tightly coupled
-with the physics governing the system, the physical dynamics must be
-taken into account when predicting the run-time characteristics of the
-network.  Additionally, such resource constrained systems which are
-expensive to develop and deploy must maximize their return on
-investment through the hosting of payload applications (e.g. for
-scientific research), while ensuring that the resource requirements
-are not exceeded.  This design-time analysis of time-varying resources
-and their constraints is paramount to ensuring a stable system.
+The system provides network resources to applications and users of the
+system as a service.  The quality of this service as seen by the users
+of the system is defined as the Quality of Service (QoS) of the
+network and is the overall performance of the network as seen by its
+users.  The specific aspects of QoS which we focus on are the network
+bandwidth, end-to-end network latency, and availability of the network
+resources.  For critical systems such as those described above which
+may be quite difficult to repair or replace, such requirements must be
+analyzed at design-time and verified to ensure that they are met.  In
+any distributed CPS, the network performance of the system is affected
+by the physical environment of the system as it affects the network.
+
+For systems using wired networks, the delay caused by the networks can
+affect the performance of the control systems.  Further, during
+periods of high network load, the network performance as seen by the
+application traffic will degrade, which can increase the latency and
+buffer space required by the applications.  Therefore, even in wired
+networks, analyzing the affect of applications' network traffic on
+each other is important for understanding the quality of the network
+service as seen by the applications.  For systems whose physical
+network layer is made up of wireless connections, the physical
+environment has an even larger effect on the network resources and
+availability.  Environmental interference or obstruction leading to
+multi-path self-interference or signal degradation can combine with
+the distance-based signal-to-noise ratio loss due to the nature of
+wireless media.  Such effects can induce hysteresis or instability in
+control systems through loss of data on the network, or increased
+variability in the response-time of the control loops.  Because the
+network performance of such a system is so tightly coupled with the
+physics governing the system, the physical dynamics must be taken into
+account when predicting the run-time characteristics of the network.
+Additionally, such resource constrained systems which are expensive to
+develop and deploy must maximize their return on investment through
+the hosting of payload applications (e.g. for scientific research),
+while ensuring that the resource requirements are not exceeded.  This
+design-time analysis of time-varying resources and their constraints
+is paramount to ensuring a stable system, where we define stability
+here as 1) all applications have finite bounded network resource
+requirements, 2) All application's network resource requirements can
+be satisfied by the system.  Such stability means that applications'
+data will be serviced by the system without loss and within the time
+required by the application.  For networked distributed control
+systems, this definition of stability with respect to the network is
+required for meeting stability requirements of the control system
+itself.  
 
 Incorporating the physical dynamics into the model of the system
 network resources addresses only half of the problem, however.  To
@@ -182,13 +194,17 @@ performance prediction, as might be required by mission- or
 safety-critical application developers.  Furthermore, an application
 which consumes more resources than specified at design-time, either
 through malicious or faulty code, can send these CPS into an unstable
-state by starving critical control processes of resources.  Such
-resource over-utilization should be prevented at run-time to ensure
-such unstable states are avoided.  In this section we outline the main
-challenges facing application developers and system integrators
-pertaining to network performance prediction and management and we
-separate these two classes of challenges into Design-Time Analysis
-challenges and Run-Time Management challenges.
+state by starving critical control processes of resources.  Control
+systems can be forced into unstable system states, for example by high
+network latency exceeding the timing requirements of the control
+loops.  Many systems may have a looser definition of stability,
+i.e. defined by the application with respect to that application, but
+we will consider loss of data or exceeding the latency requirements to
+be unstable behavior. In this section we outline the main challenges
+facing application developers and system integrators pertaining to
+network performance prediction and management and we separate these
+two classes of challenges into Design-Time Analysis challenges and
+Run-Time Management challenges.
 
 \subsection{Design-Time Network Performance Analysis of Distributed CPS Applications}
 A principal challenge of system design is the performance analysis of
