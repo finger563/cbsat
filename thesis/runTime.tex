@@ -161,10 +161,12 @@ again.  Example traffic generation accuracy is shown in
 Figure~\ref{fig:generation}. 
 
 \begin{figure}[ht!]
-  \centering
-  \includegraphics[width=0.85\textwidth]{../doc/src/images/results/traffic_generation.png}
-  \caption{Demonstration of the accuracy with which our traffic generators
-   follow the specified profile.}
+  %\centering
+  \includegraphics[width=1.1\textwidth]{../doc/src/images/results/traffic_generation.png}
+  \caption{Demonstration of the accuracy with which our traffic
+    generators follow the specified profile.  The sloped regions
+    (ca. 10, 20, 30 seconds) are a plotting artifact where the system
+    has no data because the bandwidth is 0.}
   \label{fig:generation}
 \end{figure}
 
@@ -237,7 +239,7 @@ detection.
 Whereas previously, profiles captured in their definition the
 $data\ rate$ as a function of time that the application
 produced, we now alter the definition to capture two parameters:
-$mean\ data\ rate$ ($mDR$) and $max\ data\ rate$
+$mean\ data\ rate$ ($\mu$) and $max\ data\ rate$
 ($MDR$), which again are both functions of time.  Just as
 before, these functions are constant-valued between successive values
 of $t$ and are time-integrated to produce the $mean\ data$
@@ -248,18 +250,14 @@ provided two values by the developer: the $mean$ and
 $max$.
 
 Now that we have these two profiles for the application, we could
-simply analyze the $max$ data profile to determine buffer and
-latency requirements, but this would end up wasting resources by
-allocating memory and network resources of the system to the
-application even if is not producing data at its \emph{max rate}.  Instead,
-we analyze the system according to the $mean$ data profile to
-determine buffer requirements and latency for the application in the
-system.  In doing so, two buffer overflow risks are possible:
-
-\begin{itemize}
-\item Sender-side buffer overflow
-\item Receiver-side buffer overflow
-\end{itemize}
+simply analyze the $max$ data profile to determine buffer and latency
+requirements, but this would end up wasting resources by allocating
+memory and network resources of the system to the application even if
+is not producing data at its \emph{max rate}.  Instead, we analyze the
+system according to the $mean$ data profile to determine buffer
+requirements and latency for the application in the system.  In doing
+so, two buffer overflow risks are possible: 1) Sender-side buffer
+overflow, and 2) Receiver-side buffer overflow.
 
 We make the assumption that the application meters its sending to
 prevent the first scenario, so that its data is not lost before making
@@ -283,17 +281,17 @@ this OOB channel as a UDP multicast group.
 Because the goal of this work is to only meter senders which are
 producing \emph{too much} data, we must define what \emph{too much data} is.
 Because we have developed these application profiles for analysis, and
-these profiles describe the $mDR$ and $MDR$ of the
+these profiles describe the $\mu$ and $MDR$ of the
 senders, they will be used to determine when a sender is sending too
 much data.  In this paradigm, a sender is determined as behaving
 anomalously (i.e. sending too much data) if the sender, $S_i$ is
-sending data at a rate $DR_i > mDR_i$.  The assumption implicit
+sending data at a rate $DR_i > \mu_i$.  The assumption implicit
 in this comparison is that the sender, to be able to make this
-comparison, has full knowledge of $mDR_i$, since $DR_i$ is
+comparison, has full knowledge of $\mu_i$, since $DR_i$ is
 calculable on the receiver side.  If the receiver's buffer is filling
 up, it looks through the all of the measured $DR$ for each of
 the senders it has been receiving data from, and compares it against
-the sender's $mDR$.  If the comparison is \emph{true}, it uses the
+the sender's $\mu$.  If the comparison is \emph{true}, it uses the
 OOB channel to push back to that specific sender, informing the
 sender-side middleware to stop transmitting data until the receiver
 has re-enabled that sender's transmission.  When the receiver has
