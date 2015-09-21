@@ -145,8 +145,8 @@ management is simply enforcing a static cap on resource utilization
 for each application.  For such trivial resource management, often the
 operating system or other platform infrastructure is used to enforce
 these bounds on the applications' resources, e.g. open file descriptor
-limits or maximum buffer size limits being enforced in the Linux
-kernel.  However, higher fidelity design-time models which more
+limits or maximum buffer size limits being enforced in the operating
+system kernel.  However, higher fidelity design-time models which more
 precisely capture the behavior and resource requirements of the
 applications can allow more sophisticated, time-varying resource
 monitoring and management.
@@ -207,30 +207,37 @@ Such challenges for design-time network performance analysis are
 \item Modeling the interaction of the system with the physical world
   is difficult, esp. with respect to how the interaction directly or
   indirectly affects system resources and performance.
-\item Application network utilization models can be imprecise and
+\item Models of application network utilization can be imprecise and
   difficult to derive without a running system
-\item Application network models may not represent actual application
-  traffic on the network due to implementation details such as
-  transport protocol selection (e.g. UDP vs TCP), which may alter the
-  required bandwidth or buffering latency.
+\item Application models may not represent actual application traffic
+  on the network due to implementation details such as transport
+  protocol selection (e.g. UDP vs TCP), which may alter the required
+  bandwidth or buffering latency.
 \item Developing distributed applications for such systems is
   difficult, and should be done in a way that is amenable to modeling,
   analysis, and verification.
 \item Infrastructural code which handles low level system functions or
-  network communications complicates application development
+  network communications may obscure the application's network
+  behavior from the application developer, making modeling of the
+  application's network requirements difficult
 \item Network resources are becoming more critical to distributed CPS,
-  but design-time analysis of network resource utilization and
-  performance is difficult
-\item For resource constrained systems, no buffer-space or processor
-  time should be wasted, but without accurate and precise design-time
-  analysis, it is difficult to properly specify network resource
-  requirements.
+  but existing tools and techniques for design-time analysis of
+  network resource utilization and performance do not support robust,
+  precise analysis of such time-varying constraints
+\item For resource constrained systems, no processor or memory
+  resources should be wasted, but without accurate and precise
+  design-time analysis, systems must conservatively over-approximate
+  network resource requirements.
 \item For application/system data flows in the network which require
   tight and/or real-time guarantees on temporal properties,
   design-time analysis is critical.
-\item Most systems have some form of routing, either static or
-  dynamic; dynamic routing is difficult to analyze for precise
-  performance prediction
+\item Most systems route network traffic for nodes which cannot
+  directly communicate. These routes may be defined at design-time and
+  remain constant for the duration of the sytem, or may be unknown at
+  design-time, changing dynamically during the run-time of the system.
+  Dynamic routing is difficult to analyze for precise performance
+  prediction because the the routes used by traffic may be unknown at
+  design-time.  
 \end{itemize}
 
 \subsection{Run-Time Network Resource Monitoring and Management}
@@ -246,19 +253,19 @@ under-utilize the system's resources.  For such systems, higher
 fidelity resource management is needed to maximize the utilization of
 the system's resources.  Further, these higher fidelity system and
 application network resource models pave the way for more accurate and
-robust failure or attack detection which in turn can provide higher
-system stability.  Challenges towards the development of such run-time
-network resource management are
+robust failure or network attack (e.g. Denial of Service) detection
+which in turn can provide higher system stability.  Challenges towards
+the development of such run-time network resource management are
 \begin{itemize}
 \item Available network resources at run-time should not be wasted if
   applications can use them, but allowing run-time management is
   difficult because the behavior is difficult to analyze at
   design-time for performance analysis and prediction.
-\item Applications which attempt (due to either faults or attacks) to
-  use more network resources than they originally specified should be
-  detected and mitigated; the detection of coordinated attacks,
-  e.g. distributed denial of service (DDoS), requires more
-  sophisticated detection and mitigation techniques
+\item Anomalies caused by applications attempting (due to either
+  faults or attacks) to use more network resources than they
+  originally specified should be detected and mitigated; the detection
+  of coordinated attacks, e.g. distributed denial of service (DDoS),
+  requires more sophisticated detection and mitigation techniques
 \item Systems are becoming more adaptive in nature and reacting to
   events at run-time (essentially data-dependent traffic); this
   adaptability is hard to provide performance metrics or guarantees
