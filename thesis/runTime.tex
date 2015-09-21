@@ -9,7 +9,7 @@
 \section{Middleware-Integrated Measurement, Detection, and Enforcement}
 \label{sec:middleware}
 
-\begin{figure}{ht!}
+\begin{figure}[ht!]
   \centering
   \includegraphics[width=0.85\textwidth]{../doc/src/images/results/ros_component.png}
   \caption{Schematic representation of a software component.}
@@ -55,10 +55,11 @@ From this component definition, we can define an application as:
 Where
 
 \begin{itemize}
-\item $\{C\}$ is the \emph{set} of components in the application $\{M\}$ is the
-\item \emph{set} of \emph{mappings} between ports of the components in $\{C\}$, for
-\item instance connecting a subscriber of $C_x$ to a publisher of $C_y$,
-\item $M_{x,y} : C_x\{P_S\}\mapsto C_y\{P_P\}$.
+\item $\{C\}$ is the \emph{set} of components in the application
+\item $\{M\}$ is the \emph{set} of \emph{mappings} between ports of
+  the components in $\{C\}$, for instance connecting a subscriber of
+  $C_x$ to a publisher of $C_y$, $M_{x,y} : C_x\{P_S\}\mapsto
+  C_y\{P_P\}$.
 \end{itemize}
 
 And finally, an application's components are grouped into processes
@@ -89,7 +90,7 @@ Note that multiple applications (shades of blue in this figure) may be
 deployed simultaneously onto the same system and may even interact
 with each other.
 
-\begin{figure}{ht!}
+\begin{figure}[ht!]
   \centering
   \includegraphics[width=0.85\textwidth]{../doc/src/images/results/cbse.png}
   \caption{Two example distributed CBSE applications deployed on a system with
@@ -116,7 +117,7 @@ design-time system and application analysis.  This integration not
 only helps with running experiments and data collection but also helps
 to ensure model to system consistency.
   
-\begin{figure}{ht!}
+\begin{figure}[ht!]
   \centering
   \includegraphics[width=0.85\textwidth]{../doc/src/images/results/app_layers.png}
   \caption{The structure of component-based applications and how their network
@@ -159,7 +160,7 @@ OOB channel to inform the halted senders that it is alright to send
 again.  Example traffic generation accuracy is shown in
 Figure~\ref{fig:generation}. 
 
-\begin{figure}{ht!}
+\begin{figure}[ht!]
   \centering
   \includegraphics[width=0.85\textwidth]{../doc/src/images/results/traffic_generation.png}
   \caption{Demonstration of the accuracy with which our traffic generators
@@ -299,7 +300,7 @@ has re-enabled that sender's transmission.  When the receiver has
 emptied it's buffer enough it can then use the OOB channel to
 re-enable the disabled senders.  
 
-\begin{figure}{ht!}
+\begin{figure}[ht!]
   \centering
   \includegraphics[width=0.85\textwidth]{../doc/src/images/results/example_setup.png}
   \caption{Nodes in an example network and how they communicate (using
@@ -318,6 +319,8 @@ that, for example, a receiver side buffer size of 400000 bits, which
 would normally grow to 459424 bits because of excessive data pumps on
 the sender sides, is kept to 393792 by utilizing this out-of-band
 channel and secure middleware.
+
+\iffalse
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -411,3 +414,5 @@ fault/anomaly back to its origin.
           system can detect these types of attacks, mitigate their
           propagation, and report the attack to the system's manager.
 \end{itemize}
+
+\fi
