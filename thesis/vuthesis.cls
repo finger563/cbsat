@@ -214,7 +214,7 @@ acceptable looking results, but it may be omitted to get smaller print.
                 \@author\\
                 \vfil
                 \begin{doublespace}
-                Doctoral Thesis\\
+                Dissertation\\
                 Submitted to the Faculty of the \\
                 Graduate School of Vanderbilt University \\
                 in partial fulfillment of the requirements\\

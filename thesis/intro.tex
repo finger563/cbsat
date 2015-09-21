@@ -10,60 +10,165 @@
 \section{Motivation}
 \label{sec:motivation}
 
-\iffalse
-\begin{itemize}
-	\item What's needed in system design today?
-	\begin{itemize}
-		\item need for verification (high criticality / hard to access)
-		\item need for precision (low resources, predictability)
-		\item need for adaptation at run-time
-		\item need for analyzable model of run-time adaptation
-	\end{itemize}
-	\item types of systems:
-	\begin{itemize}
-		\item clusters of satellites (fractionated satellite platform, research platforms, infrastructure)
-		\item unmanned aerial vehicles (UAVs: search and rescue, military assistance, etc.)
-		\item unmanned underwater vehicles (UUVs: search and rescue, research, etc.)
-		\item autonomous vehicles (cars and the infrastructure)
-		\item CCTV infrastructure
-	\end{itemize}
-	\item mention what CPS are: what they're made of, what makes them different, and what parts of technology they belong to
-	\item mention the challenges associated with developing CPS: safety, modeling, verification, distribution, management, reconfiguration, adaptability, etc.
-	\item CPS are becoming increasingly more common; many more types of devices are being given processors and network connectivity
-	\item This push towards IoT creates systems and infrastructure which are heavily dependent on the network resources
-	\item These systems are designed to be deployed once and provide the infrastructure for remotely deploying and managing applications 
-	\item Application verification is required to ensure the stability of the system with respect to the resources provided by the system and required by the applications
-	\item Networking resources are becoming increasingly more relevant to the stability of the system and its applications
-	\item Analyzing these networks and their applications proves difficult, so many systems are over-provisioned / under-utilized; means they cost more to make and can generate less revenue (fewer deployed applications)
-	\item By modeling the applications as well as the systems, we can more precisely determine the resource requirements 
-	\item Component-based software allows for better application modeling and development
-	\item By integrating the network resource requirements into the component models, we can precisely describe th resource requirements of the component-based applications
-	\item Composing the application profiles and the system profiles together allows us to analyse the performance of the system running the applications given the system's provided network capabilities and the applications' required network resources
-	\item Furthermore, component-based software allows us to integrate monitoring and management infrastructure into the applications which can ensure system stability
-\end{itemize}
+Cyber-Physical Systems (CPS) are defined as classes of systems in
+which embedded computers run sensing and actuation control software to
+interact closely with a physical system in a physical environment.  In
+these systems, the computer controls some or multiple aspects of the
+physical system; this control aspect tightly couples the software with
+the computer's physical environment.  Because of this tightly coupled
+nature, the software not only affects the computer and its surrounding
+environment, but also is affected by the surrounding environment.
+Many different types of systems fit this CPS description:
+e.g. autonomous vehicles including Unmanned Aerial Vehicles, Unmanned
+Underwater Vehicles, autonomous cars, and embedded or wireless
+sensors/actuators.  As an example, consider a satellite and its
+control software.  The control software reads the sensor data from the
+satellite's sensors to determine the current state vector of the
+satellite.  Using this state information, the software's feedback
+control loop governing the orbital position of the satellite may
+determine that a thruster on the satellite must be activated to
+correct the satellite's orbit, e.g. orbit degradation caused by
+atmospheric friction or gravitational perturbations.  The satellite
+has very limited resources, both with respect to physical resources
+like propellant, as well as computing resources, like power and
+processor time.  Because of these resource constraints, if the
+software component involved with determining the state of the system
+does not meet its timing deadlines and instead calculates the
+satellite state too late (e.g. high computational load causing the
+Kalman-filter state estimation to miss its deadline), the satellite's
+orbit correction may be too late.  Similarly, the software component
+involved with activating the satellite's thruster must meet its
+deadlines otherwise the satellite will not achieve the proper orbit.
 
+As these types of CPS are being scaled-up, they are becoming more
+distributed in nature.  The systems mentioned above could scale up to
+unmanned swarms of search and rescue drones, for instance, or large
+sensor/actuator networks for power distribution and control. Because
+each subsystem can directly and indirectly affect the others, all
+subsystems must communicate their states to each other, closing the
+control loop through the network.  We continue our satellite example,
+whose scaling up could lead to a cluster of satellites cooperating,
+communicating and running distributed applications in service of the
+mission goals.  Because of this trend towards cooperating distribution
+of system resources, the network facilitating the cooperation and
+communications becomes a critical resource to the system.  Whereas the
+single satellite's internal communications bus (direct physical
+connection system internal to a single satellite which allows sensing
+and actuation controlled by the computer) was ignored in the previous
+example, the wireless communications network enabling the satellite
+cluster cannot be ignored when analyzing the properties of the system.
+Because the satellites are expensive to deploy, impossible to repair,
+and must last for a long time to satisfy both budgetary constraints
+and mission goals, the application developers and system integrators
+for the cluster must ensure that the software on the cluster does not
+compromise its ability to meet the mission goals.  For instance, the
+same orbit maintenance described previously now necessitates the use
+of the cluster's network.  For a satellite to activate its thruster to
+maintain or modify its orbit, it must first ensure that such an action
+will not cause a collision with another of the satellites in the
+cluster.  Therefore, every satellite must know the state of every
+satellite in the system, and any thruster activation must be a
+coordinated action to ensure the safety and continued operation of the
+cluster.  All of this state distribution and coordination occurs over
+the wireless network between the satellites, which (1) has limited
+resources, (2) is shared between all applications on all the
+satellites, and (3) varies as a function of time throughout the orbits
+of the satellites according to the orbital mechanics defining the
+system.  The third point is especially important, since it highlights
+how the physics of the system directly and drastically affects system
+resources and therefore system performance and stability.  Again, we
+must ensure the timing requirements of the control loops are met,
+except now those timing properties are directly related to the network
+resources, e.g. the end-to-end latency of traffic on the network
+links, the bandwidth of the links, and the buffer space available to
+the applications on each satellite.
 
-\begin{itemize}
-	\item Start very general and work towards specifics by narrowing down with assumptions and constraints
-	\item Describe the field : CPS, distributed, mobile, wireless, mixed-criticality, etc.
-	\item Describe the area : verification of system performance and constraints at both design time and at run time
-	\item Describe the specific constraints: : network QoS constraints which affect system and application resources and utilization
-	\item Describe the underlying \textbf{assumptions} around the system, its properties, and the constraints
-	\item NEW: talk about ROS, robotic systems, need for analysis and MDD
-\end{itemize}
-\fi
+The link between these network resources and the system provides a
+contract which specifies the service that users require from the
+system and that the system can provide to each user.  The quality of
+this service as seen by the users of the system is defined as the
+Quality of Service (QoS) of the network and is the overall performance
+of the network as seen by its users.  The specific aspects of QoS
+which we focus on are the network bandwidth, end-to-end network
+latency, and availability of the network resources.  For critical
+systems such as those described above which may be quite difficult to
+repair or replace, such requirements must be analyzed at design-time
+and verified to ensure that they are met.  For any distributed CPS,
+the network performance of the system is affected by the physical
+environment of the system as it affects the network.  For systems
+whose physical network layer is comprised of wired connections, this
+effect may stem from the temporal properties of the control systems
+and their periodic or sporadic network load.  For systems whose
+physical network layer is made up of wireless connections, the
+physical environment has an even larger effect on the network
+resources and availability.  Environmental interference or obstruction
+leading to multi-path self-interference or signal degradation can
+combine with the distance-based signal-to-noise ratio loss due to the
+nature of wireless media.  Such effects can induce hysteresis or
+instability in control systems through loss of data on the network, or
+increased variability in the response-time of the control loops.
+Because the network performance of such a system is so tightly coupled
+with the physics governing the system, the physical dynamics must be
+taken into account when predicting the run-time characteristics of the
+network.  Additionally, such resource constrained systems which are
+expensive to develop and deploy must maximize their return on
+investment through the hosting of payload applications (e.g. for
+scientific research), while ensuring that the resource requirements
+are not exceeded.  This design-time analysis of time-varying resources
+and their constraints is paramount to ensuring a stable system.
 
-Cyber-Physical Systems (CPS) are defined as classes of systems in which embedded computers run sensing and actuation control software to interact closely with a physical system in a physical environment.  In these systems, the physical environment in which the computer operates is tightly coupled with the computer and its software since the computer controls some aspect of the physical system.  Because of this tightly coupled nature, the software not only affects the computer and its surrounding environment, but also is affected by the surrounding environment.  Many different types of systems fit this CPS description: e.g. autonomous vehicles including Unmanned Aerial Vehicles, Unmanned Underwater Vehicles, autonomous cars, and embedded or wireless sensors/actuators.  As an example, consider a satellite and its control software.  The control software reads the sensor data from the satellite's sensors to determine the current state vector of the satellite.  Using this state information, the software's feedback control loop governing the orbital position of the satellite may determine that a thruster on the satellite must be activated to correct the satellite's orbit, e.g. orbit degradation caused by atmospheric friction or gravitational perturbations.  The satellite has very limited resources, both with respect to physical resources like propellant, as well as computing resources, like power and processor time.  Because of these resource constraints, if the software component involved with determining the state of the system does not meet its timing deadlines and instead calculates the satellite state too late (e.g. high computational load causing the Kalman-filter state estimation to miss its deadline), the satellite's orbit correction may be too late.  Similarly, the software component involved with activating the satellite's thruster must meet its deadlines otherwise the satellite will not achieve the proper orbit. 
+Incorporating the physical dynamics into the model of the system
+network resources addresses only half of the problem, however.  To
+facilitate accurate, meaningful resource constraint analysis, the
+application developers are expected to model and describe the resource
+and timing constraints of their applications.  As stated above, many
+of these systems have long-term missions, for which simple, static
+minimum/maximum resource and timing requirements lead to inefficient,
+underutilized, over-specified systems.  To increase the fidelity of
+the application resource utilization model with respect to the actual
+application's resource usage, the time-varying nature of the
+application's network utilization should be modeled.  In this way,
+tighter bounds on performance characteristics and resource utilization
+can be achieved.  Tighter bounds on application performance and
+resource utilization allow system integrators to increase overall
+system resource utilization to maximize the mission-specific or
+scientific return of the system while still ensuring all applications
+receive their required services.
 
-As these types of CPS are being scaled-up, they are becoming more distributed in nature.  The systems mentioned above could scale up to unmanned swarms of search and rescue drones, for instance, or large sensor/actuator networks for power distribution and control.  The scaling of these systems is possible through the use of the system's network, which facilitates the communications between the nodes of the system and in doing so acts as the critical backbone allowing distributed systems to function.  We continue our satellite example, whose scaling up could lead to a cluster of satellites cooperating, communicating and running distributed applications in service of the mission goals.  Because of this trend towards cooperating distribution of system resources, the network facilitating the cooperation and communications becomes a critical resource to the system.  Whereas the single satellite's internal communications bus (direct physical connection system internal to a single satellite which allows sensing and actuation controlled by the computer) was ignored in the previous example, the wireless communications network enabling the satellite cluster cannot be ignored when analyzing the properties of the system.  Because the satellites are expensive to deploy, impossible to repair, and must last for a long time to satisfy both budgetary constraints and mission goals, the application developers and system integrators for the cluster must ensure that the software on the cluster does not compromise its ability to meet the mission goals.  For instance, the same orbit maintenance described previously now necessitates the use of the cluster's network.  For a satellite to activate its thruster to maintain or modify its orbit, it must first ensure that such an action will not cause a collision with another of the satellites in the cluster.  Therefore, every satellite must know the state of every satellite in the system, and any thruster activation must be a coordinated action to ensure the safety and continued operation of the cluster.  All of this state distribution and coordination occurs over the wireless network between the satellites, which (1) has limited resources, (2) is shared between all applications on all the satellites, and (3) varies as a function of time throughout the orbits of the satellites according to the orbital mechanics defining the system.  The third point is especially important, since it highlights how the physics of the system directly and drastically affects system resources and therefore system performance and stability.  Again, we must ensure the timing properties of the sensing and actuation are met, except now those timing properties are directly related to the network resources, e.g. the transmission and buffering delay in the network links, the bandwidth of the links, and the memory buffer space available to the applications on each satellite.
+In addition to the design-time modeling and analysis which facilitates
+the calculation of performance guarantees about such critical CPS, the
+run-time systems require monitoring and management of resources and
+their utilization to prevent faulty or malicious applications from
+causing resource over-utilization and possibly making the system
+unstable or completely bringing the system down.  Often this resource
+management is simply enforcing a static cap on resource utilization
+for each application.  For such trivial resource management, often the
+operating system or other platform infrastructure is used to enforce
+these bounds on the applications' resources, e.g. open file descriptor
+limits or maximum buffer size limits being enforced in the Linux
+kernel.  However, higher fidelity design-time models which more
+precisely capture the behavior and resource requirements of the
+applications can allow more sophisticated, time-varying resource
+monitoring and management.
 
-The link between these network resources and the system provides a contract which specifies the service that users require from the system and that the system can provide to each user.  The quality of this service as seen by the users of the system is defined as the Quality of Service (QoS) of the network and is the overall performance of the network as seen by its users.  The specific aspects of QoS which we focus on are the network bandwidth, transmission and buffering delay, and availability of the network resources.  For critical systems such as those described above which may be quite difficult to repair or replace, such requirements must be analyzed at design-time and verified to ensure that they are met.  For any distributed CPS, the network performance of the system is affected by the physical environment of the system.  For systems whose physical network layer is comprised of wired connections, this effect may stem from the temporal properties of the control systems and their periodic or sporadic network load.  For systems whose physical network layer is made up of wireless connections, the physical environment has an even larger effect on the network resources and availability.  Environmental interference or obstruction leading to multi-path self-interference or signal degradation can combine with the distance-based signal-to-noise ratio loss due to the nature of wireless media.  Because the network performance of such a system is so tightly coupled with the physics governing the system, the physical dynamics must be taken into account when predicting the run-time characteristics of the network.  Additionally, such resource constrained systems which are expensive to develop and deploy must maximize their return on investment through the hosting of payload applications (e.g. for scientific research), while ensuring that the resource requirements are not exceeded.  This design-time analysis of time-varying resources and their constraints is paramount to ensuring a stable system.  
-
-Incorporating the physical dynamics into the model of the system network resources addresses only half of the problem, however.  To facilitate accurate, meaningful resource constraint analysis, the application developers are expected to model and describe the resource and timing constraints of their applications.  As stated above, many of these systems have long-term missions, for which simple, static minimum/maximum resource and timing requirements lead to inefficient, underutilized, over-specified systems.  To increase the fidelity of the application resource utilization model with respect to the actual application's resource usage, the time-varying nature of the application's network utilization should be modeled.  In this way, tighter bounds on performance characteristics and resource utilization can be achieved.  Tighter bounds on application performance and resource utilization allow system integrators to increase overall system resource utilization to maximize the mission-specific or scientific return of the system while still ensuring all applications receive their required services.  
-
-In addition to the design-time modeling and analysis which facilitates the calculation of performance guarantees about such critical CPS, the run-time systems require monitoring and management of resources and their utilization to prevent faulty or malicious applications from causing resource over-utilization and possibly making the system unstable or completely bringing the system down.  Often this resource management is simply enforcing a static cap on resource utilization for each application.  For such trivial resource management, often the operating system or other platform infrastructure is used to enforce these bounds on the applications' resources, e.g. open file descriptor limits or maximum buffer size limits being enforced in the Linux kernel.  However, higher fidelity design-time models which more precisely capture the behavior and resource requirements of the applications can allow more sophisticated, time-varying resource monitoring and management. 
-
-Another type of adaptive resource management falls under the class of self-adaptive systems, which are capable of self-management at run-time.  Using recent developments in autonomic computing, systems can use the sensors at their disposal to monitor their available resources as well as their environment, estimate the current state of the system, and use the available system actions to transition into a new state\cite{ibmAutonomicComputing2003}.  A relevant example for such an adaptive system would be to eschew the design-time network modeling and analysis of what at run-time would be a relatively static system in favor of an adaptive network which manages the network resources for the applications based on the available resources the system has.  Such a design has the benefits of possibly better utilization of system resources and better resilience to unplanned or unforeseen system events or states, but has the drawback of difficult design-time analysis.  Currently, analyzing these adaptive systems at design time to derive guarantees about system behavior, resource availability, or performance is quite difficult and in many cases infeasible.  
+Another type of adaptive resource management falls under the class of
+self-adaptive systems, which are capable of self-management at
+run-time.  Using recent developments in autonomic computing, systems
+can use the sensors at their disposal to monitor their available
+resources as well as their environment, estimate the current state of
+the system, and use the available system actions to transition into a
+new state\cite{ibmAutonomicComputing2003}.  A relevant example for
+such an adaptive system would be to eschew the design-time network
+modeling and analysis of what at run-time would be a relatively static
+system in favor of an adaptive network which manages the network
+resources for the applications based on the available resources the
+system has.  Such a design has the benefits of possibly better
+utilization of system resources and better resilience to unplanned or
+unforeseen system events or states, but has the drawback of difficult
+design-time analysis.  Currently, analyzing these adaptive systems at
+design time to derive guarantees about system behavior, resource
+availability, or performance is quite difficult and in many cases
+infeasible.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -72,38 +177,92 @@ Another type of adaptive resource management falls under the class of self-adapt
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Challenges}
 \label{sec:challenges}
-The systems described above face many challenges for network performance prediction, as might be required by mission- or safety-critical application developers.  Furthermore, an application which consumes more resources than specified at design-time, either through malicious or faulty code, can send these CPS into an unstable state by starving critical control processes of resources.  Such resource over-utilization should be prevented at run-time to ensure such unstable states are avoided.  In this section we outline the main challenges facing application developers and system integrators pertaining to network performance prediction and management and we separate these two classes of challenges into Design-Time Analysis challenges and Run-Time Management challenges.  
-
-\iffalse
-\begin{itemize}
-	\item System time-varying network resource model is very precise, can be difficult to derive; many systems are not as deterministic or periodic as this type of modeling requires
-	\item The application and system network resource profiles require precise specification, which can be difficult to provide
-	\item many types of applications cannot be easily modeled with this type of precise, periodic, deterministic paradigm (esp. data-dependent application network traffic)
-	\item run-time systems require time synchronization
-	\item system infrastructural network traffic is not modeled; simply removed from the system capabilities; not all types of infrastructural traffic is constant or predictable enough for this to be accurate
-\end{itemize}
-\fi
+The systems described above face many challenges for network
+performance prediction, as might be required by mission- or
+safety-critical application developers.  Furthermore, an application
+which consumes more resources than specified at design-time, either
+through malicious or faulty code, can send these CPS into an unstable
+state by starving critical control processes of resources.  Such
+resource over-utilization should be prevented at run-time to ensure
+such unstable states are avoided.  In this section we outline the main
+challenges facing application developers and system integrators
+pertaining to network performance prediction and management and we
+separate these two classes of challenges into Design-Time Analysis
+challenges and Run-Time Management challenges.
 
 \subsection{Design-Time Network Performance Analysis of Distributed CPS Applications}
-A principal challenge of system design is the performance analysis of a system, its resources, and its applications at design-time.  Such analysis and prediction is critical for remotely managed systems and allows system integrators to provide guarantees to application developers about the services provided by the system.  However, for complex distributed cyber-physical systems such design-time analysis is challenging.  Such analysis may require capturing the behavior of the system and its applications in models that can then be composed and analyzed.  Ensuring that the models properly capture the relevant characteristics of the run-time system is a challenge by itself, and is compounded by the challenge of composing the models for analysis.  Such challenges for design-time network performance analysis are
+A principal challenge of system design is the performance analysis of
+a system, its resources, and its applications at design-time.  Such
+analysis and prediction is critical for remotely managed systems and
+allows system integrators to provide guarantees to application
+developers about the services provided by the system.  However, for
+complex distributed cyber-physical systems such design-time analysis
+is challenging.  Such analysis may require capturing the behavior of
+the system and its applications in models that can then be composed
+and analyzed.  Ensuring that the models properly capture the relevant
+characteristics of the run-time system is a challenge by itself, and
+is compounded by the challenge of composing the models for analysis.
+Such challenges for design-time network performance analysis are
 \begin{itemize}
-	\item Modeling the interaction of the system with the physical world is difficult, esp. with respect to how the interaction directly or indirectly affects system resources and performance.
-	\item Application network utilization models can be imprecise and difficult to derive without a running system
-	\item Application network models may not represent actual application traffic on the network due to implementation details such as transport protocol selection (e.g. UDP vs TCP), which may alter the required bandwidth or buffering latency.
-	\item Developing distributed applications for such systems is difficult, and should be done in a way that is amenable to modeling, analysis, and verification.
-	\item Infrastructural code which handles low level system functions or network communications complicates application development
-	\item Network resources are becoming more critical to distributed CPS, but design-time analysis of network resource utilization and performance is difficult
-	\item For resource constrained systems, no buffer-space or processor time should be wasted, but without accurate and precise design-time analysis, it is difficult to properly specify network resource requirements.
-	\item For application/system data flows in the network which require tight and/or real-time guarantees on temporal properties, design-time analysis is critical.
-	\item Most systems have some form of routing, either static or dynamic; dynamic routing is difficult to analyze for precise performance prediction
+\item Modeling the interaction of the system with the physical world
+  is difficult, esp. with respect to how the interaction directly or
+  indirectly affects system resources and performance.
+\item Application network utilization models can be imprecise and
+  difficult to derive without a running system
+\item Application network models may not represent actual application
+  traffic on the network due to implementation details such as
+  transport protocol selection (e.g. UDP vs TCP), which may alter the
+  required bandwidth or buffering latency.
+\item Developing distributed applications for such systems is
+  difficult, and should be done in a way that is amenable to modeling,
+  analysis, and verification.
+\item Infrastructural code which handles low level system functions or
+  network communications complicates application development
+\item Network resources are becoming more critical to distributed CPS,
+  but design-time analysis of network resource utilization and
+  performance is difficult
+\item For resource constrained systems, no buffer-space or processor
+  time should be wasted, but without accurate and precise design-time
+  analysis, it is difficult to properly specify network resource
+  requirements.
+\item For application/system data flows in the network which require
+  tight and/or real-time guarantees on temporal properties,
+  design-time analysis is critical.
+\item Most systems have some form of routing, either static or
+  dynamic; dynamic routing is difficult to analyze for precise
+  performance prediction
 \end{itemize}
 
 \subsection{Run-Time Network Resource Monitoring and Management}
-Given specifications for system network resources and application network resource requirements, the system must ensure that no application either purposefully or inadvertently exceeds its allowed resource limits and starves other applications or critical system processes of those precious resources.  Such resource management is crucial for ensuring system stability and proper service quality to applications and end-users.  For systems with highly time-varying application load, system resource availability, or both, static limits under-utilize the system's resources.  For such systems, higher fidelity resource management is needed to maximize the utilization of the system's resources.  Further, these higher fidelity system and application network resource models pave the way for more accurate and robust failure or attack detection which in turn can provide higher system stability.  Challenges towards the development of such run-time network resource management are 
+Given specifications for system network resources and application
+network resource requirements, the system must ensure that no
+application either purposefully or inadvertently exceeds its allowed
+resource limits and starves other applications or critical system
+processes of those precious resources.  Such resource management is
+crucial for ensuring system stability and proper service quality to
+applications and end-users.  For systems with highly time-varying
+application load, system resource availability, or both, static limits
+under-utilize the system's resources.  For such systems, higher
+fidelity resource management is needed to maximize the utilization of
+the system's resources.  Further, these higher fidelity system and
+application network resource models pave the way for more accurate and
+robust failure or attack detection which in turn can provide higher
+system stability.  Challenges towards the development of such run-time
+network resource management are
 \begin{itemize}
-	\item Available network resources at run-time should not be wasted if applications can use them, but allowing run-time management is difficult because the behavior is difficult to analyze at design-time for performance analysis and prediction.
-	\item Applications which attempt (due to either faults or attacks) to use more network resources than they originally specified should be detected and mitigated; the detection of coordinated attacks, e.g. distributed denial of service (DDoS), requires more sophisticated detection and mitigation techniques
-	\item Systems are becoming more adaptive in nature and reacting to events at run-time (essentially data-dependent traffic); this adaptability is hard to provide performance metrics or guarantees for
+\item Available network resources at run-time should not be wasted if
+  applications can use them, but allowing run-time management is
+  difficult because the behavior is difficult to analyze at
+  design-time for performance analysis and prediction.
+\item Applications which attempt (due to either faults or attacks) to
+  use more network resources than they originally specified should be
+  detected and mitigated; the detection of coordinated attacks,
+  e.g. distributed denial of service (DDoS), requires more
+  sophisticated detection and mitigation techniques
+\item Systems are becoming more adaptive in nature and reacting to
+  events at run-time (essentially data-dependent traffic); this
+  adaptability is hard to provide performance metrics or guarantees
+  for
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -113,13 +272,17 @@ Given specifications for system network resources and application network resour
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Organization}
 \label{sec:organization}
-The rest of this proposal is organized as follows
+The rest of this thesis is organized as follows
 \begin{itemize}
-	\item Chapter~\ref{ch:background} describes the related work in network analysis and management of distributed applications
-	\item Chapter~\ref{ch:designTime} describes design-time network performance analysis and prediction for CPS applications, including completed and proposed work
-	\item Chapter~\ref{ch:runTime} describes run-time network performance monitoring and management for CPS applications, including completed and proposed work
-	\item Chapter~\ref{ch:conclusions} concludes the proposal and provides a tentative time-line for the proposed research
-	\item Chapter~\ref{ch:publications} lists the publications so far
+\item Chapter~\ref{ch:background} describes the related work in
+  network analysis and management of distributed applications
+\item Chapter~\ref{ch:designTime} describes design-time network
+  performance analysis and prediction for CPS applications
+\item Chapter~\ref{ch:runTime} describes run-time network performance
+  monitoring and management for CPS applications
+\item Chapter~\ref{ch:conclusions} concludes the thesis and describes
+  possible extensions to the work in the future
+\item Appendix~\ref{ch:publications} lists the publications so far
 \end{itemize}
 
 
@@ -134,26 +297,98 @@ The rest of this proposal is organized as follows
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\iffalse
-In our work, we developed analysis techniques for very accurately and precisely predicting run-time application network performance and resource utilization from design-time models of the application network resource requirement profiles and system network resource provision profiles.  We showed how these models could be used to describe applications on wireless networks communicating using shared channel protocols, e.g. TDMA, as well as other medium access protocols, e.g. FDMA.  We experimentally validated these analysis techniques using run-time network emulation to enforce the system network resource profiles and application code which generated network traffic according to the applications' network resource requirement profiles.  Furthermore, we extended these analysis techniques to be implemented in a middleware stack that provided anonymous publish/subscribe and asynchronous/synchronous method invocation.  Our middleware extension measured the data production of each application and compared it against the application's network resource requirement profile.  By comparing the stated resource requirements to the application's actual resource utilization, we could detect deviations from the supplied profile and take action based on some condition.  For our implementation, we assumed any traffic which violated the supplied profile was anomalous and therefore we discarded it before it made it into kernel space.  Finally, we developed a component model for Robot Operating System (ROS) middleware, into which we are integrating our monitoring and analysis techniques.  We plan on using this infrastructure and our distributed Resilient CPS testbed to perform application and system network modeling and analysis tests, such as network anomaly classification.  We hope our modeling and analysis techniques and tools will be useful for designing, verifying, and deploying resilient distributed CPS.
+\iffalse In our work, we developed analysis techniques for very
+accurately and precisely predicting run-time application network
+performance and resource utilization from design-time models of the
+application network resource requirement profiles and system network
+resource provision profiles.  We showed how these models could be used
+to describe applications on wireless networks communicating using
+shared channel protocols, e.g. TDMA, as well as other medium access
+protocols, e.g. FDMA.  We experimentally validated these analysis
+techniques using run-time network emulation to enforce the system
+network resource profiles and application code which generated network
+traffic according to the applications' network resource requirement
+profiles.  Furthermore, we extended these analysis techniques to be
+implemented in a middleware stack that provided anonymous
+publish/subscribe and asynchronous/synchronous method invocation.  Our
+middleware extension measured the data production of each application
+and compared it against the application's network resource requirement
+profile.  By comparing the stated resource requirements to the
+application's actual resource utilization, we could detect deviations
+from the supplied profile and take action based on some condition.
+For our implementation, we assumed any traffic which violated the
+supplied profile was anomalous and therefore we discarded it before it
+made it into kernel space.  Finally, we developed a component model
+for Robot Operating System (ROS) middleware, into which we are
+integrating our monitoring and analysis techniques.  We plan on using
+this infrastructure and our distributed Resilient CPS testbed to
+perform application and system network modeling and analysis tests,
+such as network anomaly classification.  We hope our modeling and
+analysis techniques and tools will be useful for designing, verifying,
+and deploying resilient distributed CPS.
 
-Cyber-Physical Systems (CPS) are becoming increasingly more distributed in nature, following the trend towards the internet of things (IoT) devices.  These distributed systems interact closely with the physical world and require the use of communications channels between the hardware nodes of the system as well as to external systems.  Since such systems are generally remotely deployed and managed, applications which are deployed onto the systems must be analyzed and verified in some way to ensure that the system can provide the application's required services and that the application will not degrade the overall system's functionality.  As these systems become more distributed in nature and rely more heavily on the network for communications, the network utilization and resources are becoming larger factors in the analysis and verification of distributed CPS and their applications.    
+Cyber-Physical Systems (CPS) are becoming increasingly more
+distributed in nature, following the trend towards the internet of
+things (IoT) devices.  These distributed systems interact closely with
+the physical world and require the use of communications channels
+between the hardware nodes of the system as well as to external
+systems.  Since such systems are generally remotely deployed and
+managed, applications which are deployed onto the systems must be
+analyzed and verified in some way to ensure that the system can
+provide the application's required services and that the application
+will not degrade the overall system's functionality.  As these systems
+become more distributed in nature and rely more heavily on the network
+for communications, the network utilization and resources are becoming
+larger factors in the analysis and verification of distributed CPS and
+their applications.
 
-Many CPS applications require networking of some form in order for the system to function nominally.  This networking often performs a key role in the system, such as facilitating the communication and control of distributed sensors and control systems.  Traditionally, these networks of CPS have been both isolated from external influences and predefined at system design-time.  This isolation and pre-determination creates a static network with respect to both the topology of the network and the capacity of each network link.
-More recently however, CPS have become less isolated and more dynamic by utilizing heterogeneous and wireless networks and incorporating mobility.  
+Many CPS applications require networking of some form in order for the
+system to function nominally.  This networking often performs a key
+role in the system, such as facilitating the communication and control
+of distributed sensors and control systems.  Traditionally, these
+networks of CPS have been both isolated from external influences and
+predefined at system design-time.  This isolation and
+pre-determination creates a static network with respect to both the
+topology of the network and the capacity of each network link.  More
+recently however, CPS have become less isolated and more dynamic by
+utilizing heterogeneous and wireless networks and incorporating
+mobility.
 %Additionally, high-criticality or mixed-criticality systems require that the design and analysis ensure a minimum of failures once the system has been deployed.
 
 %As design and analysis tools as well as the deployment systems grow in capability, these static constraints are being relaxed in favor of more capable systems with mobile system nodes, whose communication network can have both dynamic topology and dynamic link capacity.  
 
-Some wireless mobile CPS networks, such as the network between a cluster of satellites orbiting Earth, 
+Some wireless mobile CPS networks, such as the network between a
+cluster of satellites orbiting Earth,
 %vary with respect to time but 
-vary periodically with respect to time, \emph{e.g.} according to the cluster's orbital period.  For such networks, the physical dynamics of the nodes in the cluster are well understood and predictable, therefore the network dynamics can be fairly predictable as well.  For such predictable or periodic dynamic networks, the use of worst-case network performance for analysis and constraint verification wastes the network resources over much of the lifecycle of the system. Integrating the physical dynamics of the network into the modeling and analysis tools improves the performance of the systems without degrading its reliability. 
+vary periodically with respect to time, \emph{e.g.} according to the
+cluster's orbital period.  For such networks, the physical dynamics of
+the nodes in the cluster are well understood and predictable,
+therefore the network dynamics can be fairly predictable as well.  For
+such predictable or periodic dynamic networks, the use of worst-case
+network performance for analysis and constraint verification wastes
+the network resources over much of the lifecycle of the
+system. Integrating the physical dynamics of the network into the
+modeling and analysis tools improves the performance of the systems
+without degrading its reliability.
 
 %Currently, many cyber-physical systems being developed have the technical capability for dynamic networking, however the analysis and design tools often lack the ability to fully utilize this dynamic network.  High-criticality or mixed-criticality systems require that the design and analysis ensure a minimum of failures once the system has been deployed. Such strict analysis and verification requirements are at odds with variable networks.  
 
 
 %To facilitate the design, analysis, and deployment of such critical, managed cyber-physical systems, we have developed an integrated design, analysis, and deployment toolsuite for \textbf{D}istributed \textbf{R}eal-Time \textbf{E}mbedded \textbf{M}anaged \textbf{S}ystems (\textbf{DREMS})\cite{ISIS_F6_Aerospace:12} \cite{DREMS13Software}. The DREMS platform consists of a run-time architecture leveraging an operating system with secure communication and task partitioning as well as middleware layers supporting application interface abstraction. Additionally, the design and analysis toolsuite facilitates component-based application and system design and integration.  This design toolsuite allows application developers to design distributed applications for cyber-physical systems which communicate through pre-defined interaction patterns.  The restriction of component interactions and behavior to predefined interaction patterns enables the generation of much of the \emph{glue code} which allows application components to communicate with each other.
 
-However, our current design tools do not incorporate the physical dynamics of the network for analysis of network constraints on the applications.  Towards these goals, we have developed time-varying network traffic models that can be specified by the application developer and analyzed against the system network profiles, specified as $[time,data]$ series. By analyzing these profiles, we can determine exactly how the system will transfer the application data. Analysis of this transmitted data profile vs. the application data profile provides the developer with information about both the minimum buffer required for application communication without loss of information and the maximum buffer delay in communication caused by the network.  Metrics such as these allow the developer to guarantee in design time that the application will not exceed its memory and latency constraints at run-time.  
+However, our current design tools do not incorporate the physical
+dynamics of the network for analysis of network constraints on the
+applications.  Towards these goals, we have developed time-varying
+network traffic models that can be specified by the application
+developer and analyzed against the system network profiles, specified
+as $[time,data]$ series. By analyzing these profiles, we can determine
+exactly how the system will transfer the application data. Analysis of
+this transmitted data profile vs. the application data profile
+provides the developer with information about both the minimum buffer
+required for application communication without loss of information and
+the maximum buffer delay in communication caused by the network.
+Metrics such as these allow the developer to guarantee in design time
+that the application will not exceed its memory and latency
+constraints at run-time.
 
 \fi
