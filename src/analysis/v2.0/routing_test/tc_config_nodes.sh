@@ -24,7 +24,7 @@ fi
 ###### uplink
 
 $TC qdisc add dev ${DEV} root handle 1: tbf \
-    rate 100Mbit peakrate 101Mbit mtu 8192 latency 1ms burst 1540
+    rate 100Mbit peakrate 101Mbit mtu 8192 latency 1ms burst 1540000000
 
 $TC qdisc add dev ${DEV} parent 1:1 handle 11: prio
 
