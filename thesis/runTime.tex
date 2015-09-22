@@ -279,24 +279,51 @@ our component model and communications middleware, we have implemented
 this OOB channel as a UDP multicast group.
 
 Because the goal of this work is to only meter senders which are
-producing \emph{too much} data, we must define what \emph{too much data} is.
-Because we have developed these application profiles for analysis, and
-these profiles describe the $\mu$ and $MDR$ of the
+producing \emph{too much} data, we must define what \emph{too much
+  data} is.  Because we have developed these application profiles for
+analysis, and these profiles describe the $\mu$ and $MDR$ of the
 senders, they will be used to determine when a sender is sending too
 much data.  In this paradigm, a sender is determined as behaving
-anomalously (i.e. sending too much data) if the sender, $S_i$ is
-sending data at a rate $DR_i > \mu_i$.  The assumption implicit
-in this comparison is that the sender, to be able to make this
-comparison, has full knowledge of $\mu_i$, since $DR_i$ is
-calculable on the receiver side.  If the receiver's buffer is filling
-up, it looks through the all of the measured $DR$ for each of
-the senders it has been receiving data from, and compares it against
-the sender's $\mu$.  If the comparison is \emph{true}, it uses the
-OOB channel to push back to that specific sender, informing the
-sender-side middleware to stop transmitting data until the receiver
-has re-enabled that sender's transmission.  When the receiver has
-emptied it's buffer enough it can then use the OOB channel to
-re-enable the disabled senders.  
+anomalously (i.e. sending too much data) if the sender $S_i$ is
+sending data at a rate $DR_i > \mu_i$.  The assumption implicit in
+this comparison is that the receiver, to be able to make this
+comparison, has full knowledge of $\mu_i$, since $DR_i$ is calculable
+on the receiver side.  If the receiver's buffer is filling up, it
+looks through the the measured $DR$ (within a certain window of time)
+for each of the senders it has been receiving data from, and compares
+it against the sender's $\mu$.  If the comparison is \emph{true}, it
+uses the OOB channel to push back to that specific sender, informing
+the sender-side middleware to stop transmitting data until the
+receiver has re-enabled that sender's transmission.  When the receiver
+has emptied it's buffer enough it can then use the OOB channel to
+re-enable the disabled senders.  The algorithm used by the receiver to
+determine which senders to limit is shown in Listing~\ref{lst:ddos_alg}.
+
+\begin{listing}[ht!]
+  \begin{minted}{python}
+  reciever::limit_ddos( t_start, t_end )
+  {
+    for sender in senders
+    {
+      d_start = sender.received_data(t_start)
+      d_end = sender.received_data(t_end)
+      profile_d_start =
+        sender.profile(t_start)
+      profile_d_end =
+        sender.profile(t_end)
+      allowed_data = profile_d_end - profile_d_start
+      actual_data = d_end - d_start
+      if actual_data > allowed_data
+      {
+        sender.disable()
+      }
+    }
+  }
+  \end{minted}
+  \caption{Algorithm used by receivers to determine which senders to limit.}
+  \label{lst:ddos_alg}
+\end{listing}
+
 
 \begin{figure}[ht!]
   \centering

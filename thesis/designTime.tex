@@ -74,21 +74,23 @@ resources the application will receive.
 
 \subsection{Problem}
 Current design tools do not incorporate the physical dynamics of the
-network for analysis of network constraints on the
-applications. Because of the diversity of CPS, IoT systems, and other
-networked embedded systems in general, modeling and analysis tools
-targeted towards these systems must support a wide range of
-configurations, architectures, standards, and interfaces.  The same
-compatibility is required in network modeling and analysis frameworks.
-Because many of these systems may support different types of network
-communications hardware, often using multiple types of network
-interface hardware within the same system, the models of the network
-must be able to express network resources in a way that can capture
-these differences.  Because of this diversity and the modeling
-semantics of the commonly used paradigms (e.g. Real-Time Calculus),
-developing very precise predictions is difficult, since the models are
-not very precise with respect to the actual behavior of the
-applications on the system.
+network for analysis of network constraints on the applications. For
+systems with known models of system dynamics, the system's dynamics
+should be incorporated into the modeling tool and should integrate
+with the other models of the system, e.g. the system's network models.
+Because of the diversity of CPS, IoT systems, and other networked
+embedded systems in general, modeling and analysis tools targeted
+towards these systems must support a wide range of configurations,
+architectures, standards, and interfaces.  The same compatibility is
+required in network modeling and analysis frameworks.  Because many of
+these systems may support different types of network communications
+hardware, often using multiple types of network interface hardware
+within the same system, the models of the network must be able to
+express network resources in a way that can capture these differences.
+Because of this diversity and the modeling semantics of the commonly
+used paradigms (e.g. Real-Time Calculus), developing very precise
+predictions is difficult, since the models are not very precise with
+respect to the actual behavior of the applications on the system.
 
 \subsection{Mathematical Formalism}
 \label{subsec:math_formalism}
