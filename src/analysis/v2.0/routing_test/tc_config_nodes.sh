@@ -37,5 +37,11 @@ $TC filter add dev ${DEV} protocol ip parent 1: prio 1 u32 \
 $TC filter add dev ${DEV} protocol ip parent 1: prio 1 u32 \
     match ip dst 10.1.1.0/24 flowid 1:1
 
+$TC filter add dev ${DEV} protocol ip parent 1: prio 1 u32 \
+    match ip dst 192.168.122.2 flowid 1:1
+
+$TC filter add dev ${DEV} protocol ip parent 1: prio 1 u32 \
+    match ip dst 192.168.122.4 flowid 1:1
+
 $TC filter add dev ${DEV} protocol ip parent 1: prio 2 u32 \
     match ip src 192.168.122.0/24 flowid 1:2
