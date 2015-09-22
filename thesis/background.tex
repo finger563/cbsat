@@ -61,6 +61,24 @@ respect to the behavior of the real system testbed, but for other
 types of traffic (e.g. FTP traffic), the simulation did not accurately
 model the dynamic behavior of FTP traffic.
 
+NS-3\cite{ns3} is a more recent rewrite of the NS-2 simulator designed
+to increase the realism of the network simulation by adding the
+ability to directly incorporate the actual code which implements the
+network protocols in the network software stack.  Additionally, NS-3
+has been extended to support distributed simulation of networks among
+multiple simulator machines.  However, despite NS-3 performing better,
+it still produces the same results as NS-2\cite{bingmann2009accuracy}
+for certain protocols which may be inaccurate or unrealistic.
+Additionally, NS-3 modeling and simulation of the physical layer in
+networking systems has been shown to be incomplete or
+non-existent\cite{ns3_accuracy2} which prevents the analysis of frame
+construction or reception effects on higher layers.
+\cite{ns3_accuracy2} points out that without modeling such physical
+layer mechanisms, other aspects of the simulation model, such as the
+signal to interference noise ratios, are not valid because they are
+based on unrealistic assumptions which can only be removed by
+incorporating lower layer effects.
+
 Despite the wide-spread use of these simulation toolsuites, it is
 clear that they are not a viable candidate for providing both accurate
 and precise design-time guarantees about network performance and

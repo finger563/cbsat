@@ -74,14 +74,23 @@ the wireless network between the satellites, which (1) has limited
 resources, (2) is shared between all applications on all the
 satellites, and (3) varies as a function of time throughout the orbits
 of the satellites according to the orbital mechanics defining the
-system.  The third point is especially important, since it highlights
-how the physics of the system directly and drastically affects system
-resources and therefore system performance and stability.  Again, we
-must ensure the timing requirements of the control loops are met,
-except now those timing properties are directly related to the network
-resources, e.g. the end-to-end latency of traffic on the network
-links, the bandwidth of the links, and the buffer space available to
-the applications on each satellite.
+system.  The equations of motion for the satellites define the orbital
+paths taken by the satellites\cite{fundamentals_astrodynamics}.  These
+paths are, for our purposes, cicular or elliptical orbits, where each
+satellite in the clsuter has the same orbital period and speed.  Since
+these orbits have the same period, the distances between the
+satellites will vary periodically as a function of time.  Because the
+satellites use a wireless network where the latency and bandwidth are
+directly proportional to distance, the wireless network capacity of
+the satellites will vary proprotionally with respect to time.  This
+final point about the equations of motion and their effect on network
+capacity is especially important, since it highlights how the physics
+of the system directly and drastically affects system resources and
+performance.  Again, we must ensure the timing requirements of the
+control loops are met, except now those timing properties are directly
+related to the network resources, e.g. the end-to-end latency of
+traffic on the network links, the bandwidth of the links, and the
+buffer space available to the applications on each satellite.
 
 The system provides network resources to applications and users of the
 system as a service.  The quality of this service as seen by the users
