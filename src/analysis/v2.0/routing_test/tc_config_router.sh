@@ -35,16 +35,16 @@ $TC qdisc add dev ${DEV} parent 2:1 handle 21: pfifo
 $TC qdisc add dev ${DEV} parent 2:2 handle 22: pfifo
 
 # FILTER APPLICATION TRAFFIC VERSUS NON APP TRAFIC
-$TC filter add dev ${DEV} protocol ip parent 11: prio 1 u32 \
+$TC filter add dev ${DEV} protocol ip parent 1: prio 1 u32 \
     match ip src 10.1.1.1 flowid 1:1
 
-$TC filter add dev ${DEV} protocol ip parent 11: prio 1 u32 \
+$TC filter add dev ${DEV} protocol ip parent 1: prio 1 u32 \
     match ip src 10.1.1.3 flowid 1:1
 
-$TC filter add dev ${DEV} protocol ip parent 11: prio 2 u32 \
+$TC filter add dev ${DEV} protocol ip parent 1: prio 2 u32 \
     match ip src 10.1.1.0/24 flowid 1:2
 
-$TC filter add dev ${DEV} protocol ip parent 11: prio 2 u32 \
+$TC filter add dev ${DEV} protocol ip parent 1: prio 2 u32 \
     match ip src 192.168.122.0/24 flowid 1:2
 
 # PRIORITIZE CERTAIN APPLICATION TRAFFIC
