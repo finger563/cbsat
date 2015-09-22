@@ -21,25 +21,21 @@ then
 fi
 
 ###### uplink
-###### uplink
 
-$TC qdisc add dev ${DEV} root handle 1: tbf \
-    rate 100Mbit peakrate 101Mbit mtu 8192 latency 1ms burst 1540000000
+$TC qdisc add dev ${DEV} root handle 1: prio
 
-$TC qdisc add dev ${DEV} parent 1:1 handle 11: prio
+$TC qdisc add dev ${DEV} parent 1:1 handle 11: netem delay 100ms
+$TC qdisc add dev ${DEV} parent 1:2 handle 12: pfifo
 
-$TC qdisc add dev ${DEV} parent 11:1 handle 111: netem delay 100ms
-$TC qdisc add dev ${DEV} parent 11:2 handle 112: pfifo
-
-$TC qdisc add dev ${DEV} parent 111:1 handle 1111: tbf \
+$TC qdisc add dev ${DEV} parent 11:1 handle 111: tbf \
     rate 1Mbit peakrate 1001kbit mtu 8192 latency 100s burst 154000000
 
 # FILTER APPLICATION TRAFFIC VERSUS NON APP TRAFIC
-$TC filter add dev ${DEV} protocol ip parent 11: prio 1 u32 \
-    match ip src 10.1.1.0/24 flowid 11:1
+$TC filter add dev ${DEV} protocol ip parent 1: prio 1 u32 \
+    match ip src 10.1.1.0/24 flowid 1:1
 
-$TC filter add dev ${DEV} protocol ip parent 11: prio 1 u32 \
-    match ip dst 10.1.1.0/24 flowid 11:1
+$TC filter add dev ${DEV} protocol ip parent 1: prio 1 u32 \
+    match ip dst 10.1.1.0/24 flowid 1:1
 
-$TC filter add dev ${DEV} protocol ip parent 11: prio 2 u32 \
-    match ip src 192.168.122.0/24 flowid 11:2
+$TC filter add dev ${DEV} protocol ip parent 1: prio 2 u32 \
+    match ip src 192.168.122.0/24 flowid 1:2
