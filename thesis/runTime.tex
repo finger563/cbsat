@@ -320,7 +320,10 @@ determine which senders to limit is shown in Listing~\ref{lst:ddos_alg}.
     }
   }
   \end{minted}
-  \caption{Algorithm used by receivers to determine which senders to limit.}
+  \caption{Algorithm used by receivers to determine which senders to
+    limit.  The receiver only looks at the behavior of senders within
+    the time window between $t_{start}$ and $t_{end}$, which is
+    configurable.}
   \label{lst:ddos_alg}
 \end{listing}
 
