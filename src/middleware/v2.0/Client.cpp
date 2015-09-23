@@ -40,25 +40,25 @@ int main(int argc, char **argv) {
   clock_gettime(CLOCK_REALTIME,&startTime);
 
   long id = 0;
-  std::vector<Network::Message*> messages;
+  std::vector<Network::Message> messages;
 
   while (true) {
-    Network::Message* data = new Network::Message(messageBitLength, id++);
+    Network::Message data = Network::Message(messageBitLength, id++);
     messages.push_back(data);      
-    data->TimeStamp();
+    data.TimeStamp();
     
-    interface->Send( data->Buffer().c_str(),
-		     data->Bytes() );
+    interface->Send( data.Buffer().c_str(),
+		     data.Bytes() );
 
-    timeDiff = (double)(data->FirstEpochTime().tv_sec - 
+    timeDiff = (double)(data.FirstEpochTime().tv_sec - 
 			startTime.tv_sec);
-    timeDiff += (double)(data->FirstEpochTime().tv_nsec - 
+    timeDiff += (double)(data.FirstEpochTime().tv_nsec - 
 			 startTime.tv_nsec)/1000000000.0f;
 
     if ( timeDiff >= runTime )
       break;
 
-    timerDelay = profile.Delay(data->Bits(),data->FirstEpochTime());
+    timerDelay = profile.Delay(data.Bits(),data.FirstEpochTime());
     if ( timerDelay > 0 ) {
       double fractpart,intpart;
       fractpart = modf(timerDelay,&intpart);
@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
   double maxLatency = 0;
   double latency = 0;
   for (long i=0; i<messages.size(); i++) {
-    std::vector<timespec> times(messages[i]->EpochTimes());
+    std::vector<timespec> times(messages[i].EpochTimes());
     latency = (double)(times.back().tv_sec - times.front().tv_sec);
     latency += ((double)(times.back().tv_nsec - times.front().tv_nsec)/1000000000.0f);
     if ( latency > maxLatency )
@@ -79,12 +79,6 @@ int main(int argc, char **argv) {
   }
 
   Network::write_data(outputFile.c_str(), messages);
-
-  for ( long i=0; i<messages.size(); i++) {
-    if ( messages[i] != NULL )
-      delete messages[i];
-  }
-  messages.clear();
 
   TG_LOG("Max bits in UDP socket buffer: %d\n",
 	 interface->bufferSize*8);

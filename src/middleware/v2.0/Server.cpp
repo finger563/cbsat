@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
 	msg.TimeStamp();
 	msg.Id(id);
 	msg.Bytes(strlen(messageData));
-	Network::append_data(outputFile.c_str(), &msg);
+	Network::append_data(outputFile.c_str(), msg);
       }
 
       timerDelay = profile.Delay(msg.Bits(),msg.FirstEpochTime());
