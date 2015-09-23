@@ -52,8 +52,8 @@ public:
   
   void Print() {
     TG_LOG("Options():\n");
-    TG_LOG("\t profile name\t\t: %s\n",this->profile.c_str());
-    TG_LOG("\t interface name\t\t: %s\n",this->interface.c_str());
+    TG_LOG("\t profile name\t\t: %s\n", profile.c_str());
+    TG_LOG("\t interface name\t\t: %s\n", interface.c_str());
   }
 };
 

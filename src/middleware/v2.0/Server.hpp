@@ -62,11 +62,11 @@ public:
   
   void Print() {
     TG_LOG("Options():\n");
-    TG_LOG("\t profile filename\t\t: %s\n",tgFile.c_str());
-    TG_LOG("\t output filename\t\t: %s\n",outputFile.c_str());
-    TG_LOG("\t server ip address\t\t: %s\n",ip.c_str());
-    TG_LOG("\t server port number\t\t: %lu\n",port);
-    TG_LOG("\t bits in message\t\t: %lu\n",bitLength);
+    TG_LOG("\t profile filename\t\t: %s\n", tgFile.c_str());
+    TG_LOG("\t output filename\t\t: %s\n", outputFile.c_str());
+    TG_LOG("\t server ip address\t\t: %s\n", ip.c_str());
+    TG_LOG("\t server port number\t\t: %lu\n", port);
+    TG_LOG("\t bits in message\t\t: %lu\n", bitLength);
   }
 };
 
