@@ -206,7 +206,7 @@ public:
     }  
     
     if (bind(sockfd,(struct sockaddr *)&local_addr, sizeof(local_addr))<0) {
-      TG_LOG("Couldn't bind!");
+      TG_LOG("Couldn't bind!\n");
       close(sockfd);
       return -1;
     }
@@ -380,7 +380,7 @@ public:
     }  
     
     if (bind(sockfd,(struct sockaddr *)&local_addr, sizeof(local_addr))<0) {
-      TG_LOG("Couldn't bind!");
+      TG_LOG("Couldn't bind!\n");
       close(sockfd);
       return -1;
     }

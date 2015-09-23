@@ -22,7 +22,7 @@ public:
   Options() {
     this->port = 7777;
     this->bitLength = 4096;
-    this->ip = "2001:470:489e::3";
+    this->ip = "10.1.1.2";
     this->outputFile = "serverOutput.csv";
     this->tgFile = "receiver.csv";
   }
