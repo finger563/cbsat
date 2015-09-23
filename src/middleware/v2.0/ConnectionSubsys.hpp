@@ -25,22 +25,19 @@
 class Connection {
 public:
   bool isServer;
-  bool hasReturnPath;
   std::string serverIP;
   int bufferSize;
   int serverPort;
   int receiveTimeout;
   
-  Connection (bool returnPath)
-    : hasReturnPath (returnPath),
-      bufferSize (0),
+  Connection ()
+    : bufferSize (0),
       receiveTimeout (1)
   {
   }
 
   Connection (const Connection &s)
-    : hasReturnPath (s.hasReturnPath),
-      isServer (s.isServer),
+    : isServer (s.isServer),
       bufferSize (s.bufferSize),
       serverIP (s.serverIP),
       serverPort (s.serverPort),
@@ -61,7 +58,6 @@ public:
   virtual void swap (Connection &s) 
   {
     std::swap (isServer, s.isServer);
-    std::swap (hasReturnPath, s.hasReturnPath);
     std::swap (bufferSize, s.bufferSize);
     std::swap (serverPort, s.serverPort);
     std::swap (receiveTimeout, s.receiveTimeout);
@@ -73,14 +69,13 @@ public:
     return new Connection( *this );
   }
 
-  int Initialize(bool server, bool returnPath = true ) {
+  int Initialize(bool server) {
     isServer = server;
-    hasReturnPath = returnPath;
     if (isServer) {
-      return InitializeServer();
+      return this->InitializeServer();
     }
     else {
-      return InitializeClient();
+      return this->InitializeClient();
     }
   }
 
@@ -112,7 +107,7 @@ public:
   struct sockaddr_in remote_addr;
 
   IPV4_Connection()
-    : Connection(true)
+    : Connection()
   {
     serverPort = 7777;
     receiveTimeout = 5;
@@ -159,7 +154,7 @@ public:
     Close();
   }
 
-  virtual long send(const char *buffer, long len) {
+  virtual long Send(const char *buffer, long len) {
     long bytes;
     if ((bytes = sendto(sockfd, buffer, len, 0, (struct sockaddr *) &remote_addr, sizeof(remote_addr))) == -1 ) {
       int errsv = errno;
@@ -172,7 +167,7 @@ public:
     return bytes;
   }
 
-  virtual long receive(char *buffer, long len) {
+  virtual long Receive(char *buffer, long len) {
     socklen_t remote_addr_len = sizeof(remote_addr);
     long bytes;
     if ((bytes = recvfrom(sockfd, buffer, len,0,(struct sockaddr *)&remote_addr, &remote_addr_len)) == -1) {
@@ -285,7 +280,7 @@ public:
   struct sockaddr_in6 remote_addr;
 
   IPV6_Connection()
-    : Connection(true)
+    : Connection()
   {
     serverPort = 7777;
     receiveTimeout = 5;
@@ -332,7 +327,7 @@ public:
     Close();
   }
 
-  virtual long send(const char *buffer, long len) {
+  virtual long Send(const char *buffer, long len) {
     long bytes;
     if ((bytes = sendto(sockfd, buffer, len, 0, (struct sockaddr *) &remote_addr, sizeof(remote_addr))) == -1 ) {
       int errsv = errno;
@@ -345,7 +340,7 @@ public:
     return bytes;
   }
 
-  virtual long receive(char *buffer, long len) {
+  virtual long Receive(char *buffer, long len) {
     socklen_t remote_addr_len = sizeof(remote_addr);
     long bytes;
     if ((bytes = recvfrom(sockfd, buffer, len,0,(struct sockaddr *)&remote_addr, &remote_addr_len)) == -1) {

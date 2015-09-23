@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     interface = new IPV6_Connection();
   interface->serverIP = options.ip;
   interface->serverPort = options.port;
-  if ( interface->Initialize(true,false) != 0 ) {
+  if ( interface->Initialize(true) != 0 ) {
     TG_LOG("ERROR: Couldn't initialize interface!\n");
     return -1;
   }
