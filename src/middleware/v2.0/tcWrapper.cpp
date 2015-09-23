@@ -2,6 +2,48 @@
 
 Network::NetworkProfile profile;
 
+void setTC( unsigned long long bandwidth, double latency,
+	    std::string interface, std::string handle, std::string parent )
+{
+  std::string tc_binary = "/sbin/tc";
+  char bw_str[100];
+  sprintf(bw_str,"%llu",bandwidth);
+
+  std::string tc_args = "class replace dev " + interface
+    + " parent " + parent + " classid " + handle + " htb rate "
+    + bw_str + "bit ceil " + bw_str + "bit";
+
+  // FORK
+  pid_t parent_pid = getpid();
+  pid_t my_pid = fork();
+  if ( my_pid == -1 )
+    {
+      TG_LOG("ERROR: COULDNT FORK\n");
+    }
+  else if ( my_pid == 0 ) // child
+    {
+      std::vector<std::string> string_args;
+      string_args.push_back(tc_binary);
+      std::string s;
+      std::istringstream f(tc_args);
+      while ( getline(f, s, ' ') )
+	{
+	  string_args.push_back(s);
+	}
+      // build args
+      char *args[string_args.size() + 1]; // must be NULL terminated
+      args[string_args.size()] = NULL;
+      for (int i=0; i < string_args.size(); i++)
+	{
+	  args[i] = new char[string_args[i].length()];
+	  sprintf(args[i], "%s", string_args[i].c_str());
+	}
+      // EXECV
+      execvp(args[0], args);
+      TG_LOG("ERROR: EXEC COULDN'T COMPLETE\n");
+    }
+}
+
 int main(int argc, char **argv) {
   Options options;
   if ( options.Parse(argc,argv) == -1 )
@@ -18,55 +60,17 @@ int main(int argc, char **argv) {
   unsigned long long bandwidth;
   double latency;
   timespec remainingTime, wakeTime;
-  int pid = 1;
   while ( true ) {
     if ( profile.getNextInterval( wakeTime, bandwidth, latency ) == 0 ) {
       TG_LOG("Sleeping until %lu.%09lu\n", wakeTime.tv_sec, wakeTime.tv_nsec);
-      while ( clock_nanosleep( CLOCK_REALTIME, TIMER_ABSTIME, &wakeTime, &remainingTime ) == EINTR ) {
-	TG_LOG("WHO HAS AWOKEN ME FROM MY SLUMBER?!\n");
-      }
+      while ( clock_nanosleep( CLOCK_REALTIME, TIMER_ABSTIME, &wakeTime, &remainingTime ) == EINTR )
+	{
+	  TG_LOG("WHO HAS AWOKEN ME FROM MY SLUMBER?!\n");
+	}
 
       TG_LOG("Setting bandwidth to %llu bps and latency to %fs\n",bandwidth, latency);
 
-      char tcCommand[256];
-      sprintf( tcCommand,
-	       "qdisc replace dev %s root tbf rate %llu.0bit latency %fs burst 1540", 
-	       interface.c_str(),
-	       bandwidth,
-	       latency);
-
-      char *pch;
-      char *tc_argv[50];
-
-      int num_args = 1;
-
-      tc_argv[0] = (char*)malloc(strlen("/sbin/tc")+1);
-      sprintf(tc_argv[0],"/sbin/tc");
-
-      pch = strtok(tcCommand," ");
-      while ( pch != NULL && num_args < 50 ) {
-	tc_argv[num_args] = (char*)malloc(strlen(pch)+1);
-	sprintf(tc_argv[num_args],"%s",pch);
-	num_args++;
-	pch = strtok(NULL," ");
-      }
-
-      tc_argv[num_args] = (char *)NULL;
-
-      pid = vfork();
-      if ( pid == 0 ) { // child
-	int tc_ret_val = execv(tc_argv[0],tc_argv);
-	TG_LOG("ERROR: execv failed with retval: %d\n",tc_ret_val);
-	exit(1);
-      }
-      else if ( pid > 0 ) { // parent
-	for (int i=0;i<num_args;i++) {
-	  free(tc_argv[i]);
-	}
-      }
-      else { // error
-	TG_LOG("ERROR: could not spawn child to run tc!\n");
-      }
+      setTC(bandwidth, latency, interface, "111:", "111:1");
     }
   }
 }

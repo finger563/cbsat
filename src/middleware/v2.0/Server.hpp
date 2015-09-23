@@ -20,11 +20,11 @@ public:
   long bitLength;
 
   Options() {
-    this->port = 7777;
-    this->bitLength = 4096;
-    this->ip = "10.1.1.2";
-    this->outputFile = "serverOutput.csv";
-    this->tgFile = "receiver.csv";
+    port = 7777;
+    bitLength = 4096;
+    ip = "10.1.1.2";
+    outputFile = "serverOutput.csv";
+    tgFile = "receiver.csv";
   }
 
   int Parse(int argc, char **argv) {
@@ -32,19 +32,19 @@ public:
       {
 	if (!strcmp(argv[i], "--output_file"))
 	  {
-	    this->outputFile = argv[i+1];
+	    outputFile = argv[i+1];
 	  }
 	if (!strcmp(argv[i], "--ip"))
 	  {
-	    this->ip = argv[i+1];
+	    ip = argv[i+1];
 	  }
 	if (!strcmp(argv[i], "--port"))
 	  {
-	    this->ip = atoi(argv[i+1]);
+	    ip = atoi(argv[i+1]);
 	  }
 	if (!strcmp(argv[i], "--message_bit_length"))
 	  {
-	    this->bitLength = atoi(argv[i+1]);
+	    bitLength = atoi(argv[i+1]);
 	  }
 	if (!strcmp(argv[i], "--help"))
 	  {
@@ -62,11 +62,11 @@ public:
   
   void Print() {
     TG_LOG("Options():\n");
-    TG_LOG("\t profile filename\t\t: %s\n",this->tgFile.c_str());
-    TG_LOG("\t output filename\t\t: %s\n",this->outputFile.c_str());
-    TG_LOG("\t server ip address\t\t: %s\n",this->ip.c_str());
-    TG_LOG("\t server port number\t\t: %lu\n",this->port);
-    TG_LOG("\t bits in message\t\t: %lu\n",this->bitLength);
+    TG_LOG("\t profile filename\t\t: %s\n",tgFile.c_str());
+    TG_LOG("\t output filename\t\t: %s\n",outputFile.c_str());
+    TG_LOG("\t server ip address\t\t: %s\n",ip.c_str());
+    TG_LOG("\t server port number\t\t: %lu\n",port);
+    TG_LOG("\t bits in message\t\t: %lu\n",bitLength);
   }
 };
 

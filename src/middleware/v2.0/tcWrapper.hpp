@@ -8,6 +8,7 @@
 
 #include <math.h>
 #include <string>
+#include <sstream>
 
 #include "NetworkProfile.hpp"
 #include "log_macro.hpp"
