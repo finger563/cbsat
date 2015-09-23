@@ -84,26 +84,72 @@ Extending this work would focus on these areas in the following ways:
 
 \begin{itemize}
   \item Modeling and analysis support for more (commonly used)
-    transmission protocols
-  \item Relaxing modeling constraints and analyzing the affect of such
-    relaxation on the predicted performance of the system
+    transmission protocols, such as TCP or SCTP.
+  \item Developing models of other MAC protocols such as CSMA
+  \item Deriving models of packet loss or transmission error and
+    analyzing their effects on the prediction results
+  \item Analyzing the effects of uncertainty in the modeling of
+    applications and systems
+  \item Research into methods for including models of data-dependent
+    network traffic and analyzing such applications
+  \item Analyzing the affects of timing and time synchronization
+    inaccuracies on the prediction results
   \item Investigating run-time implementation alternatives and data
     analysis techniques
 \end{itemize}
 
-Towards the first area, a primary extension to the modeling framework
-would be the support of retun-path communications and the impact they
-have on the system.  Such modeling and analysis would allow for the
-inclusion of TCP-based communications and could pave the way for
-reactive system analysis using these techniques.  
+To support modeling and analysis of protocols such as TCP, which are
+reactive to return-path information, return-path modeling semantics
+and analysis techniques would be needed.  Return-path modeling can be
+challenging because in the non-trivial case, return-path information
+is used to make the application or system protocol reactive to the
+current state of the system.  This is the case for instance in TCP
+where the timing of the return packets or the lack or return packets
+alters the outgoing data flow.  Similarly, lower-level protocol
+implementation details like connection management and handshaking can
+be affected by variable network capacity, therefore they can
+indirectly affect application performance.
 
-Similarly, one of the model constraints which can be relaxed and
-analyzed is the system-wide time-synchronization constraint.  If that
-constraint is relaxed such that the nodes are known be re-synchronized
-periodically with some predictable drift, then such behavior can be
-directly analyzed similarly to the TDMA analysis.  From this
-information, maximum deviations on the required buffer and delay can
-be calculated, similarly to the deviations calculated for TDMA
-systems.
+This type of return-path modeling and feedback system needed for
+modeling such protocols would also benefit the analysis of
+data-dependent application profiles, since they similarly are
+dependent on some external input which at least partially governs the
+characteristics of the traffic they produce.
 
+Similarly, forwarding protocols in the lower layers, such as the store
+and forward mechanisms used by certain routers, are also reactive to
+data driven events, such as packet loss or packet corruption.  The
+modeling and analysis extensions described above would pave the way
+for the analysis of the effects on application performance caused by
+these lower level protocol mechanisms.
 
+As an extension to the application and system level models, which
+currently are precisely defined and assumed to be exactly known,
+research into uncertainty analysis of these profiles would allow
+performance prediction for systems that do not meet these assumptions
+about full knowledge.  If instead of exact knowledge about the system
+and application profiles, the application developers and system
+integrators have uncertainties associated with their models, then
+analysis of the uncertainty and its effect on the predictions would
+expand the scope of systems to which the techniques could be applied.
+
+In a similar way to the modeling uncertainty analysis, timing
+uncertainty analysis could be performed to determine the affects of
+incomplete time synchronization between the nodes of the system.  Such
+analysis would allow for the relaxation of the system-wide
+time-synchronization constraint.  If that constraint is relaxed such
+that the nodes are known be re-synchronized periodically with some
+predictable drift, then such behavior can be directly analyzed
+similarly to the TDMA analysis.  From this information, maximum
+deviations on the required buffer and delay can be calculated,
+similarly to the deviations calculated for TDMA systems.
+
+Finally, the analysis of application traffic profiles provides a
+possible avenue for precise categorization of application behavior.
+Given an application which is supposed to produce traffic with a
+certain profile, middleware-based measurements of the actual traffic
+profile produced by the application can allow the middleware or other
+management entity to classify the behavior of the application.
+Analyzing this behavior and comparing it with the behavior of other
+applications in the system would allow for better detection of faults,
+malicious behavior, or other anomalies.  
