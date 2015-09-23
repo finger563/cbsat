@@ -41,8 +41,8 @@ public:
 	if (!strcmp(argv[i], "--help"))
 	  {
 	    TG_LOG("usage: \n\t%s\n"
-		   "\t\t -p <profile name>\n"
-		   "\t\t -i <interface name>\n"
+		   "\t\t --profile <profile name>\n"
+		   "\t\t --interface <interface name>\n"
 		   ,argv[0]);
 	    return -1;
 	  }
