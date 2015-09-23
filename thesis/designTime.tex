@@ -1273,7 +1273,7 @@ validation of the routing, composition, and delay analysis techniques.
 
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=\textwidth]{../doc/src/images/results/routing_example.png}
+  \includegraphics[width=\textwidth]{./figs/routing_example.png}
   \caption{Experimental setup to validate routing, delay, and
     compositional analysis of network profiles.}
   \label{fig:routing_example}
@@ -1296,7 +1296,16 @@ queue of the prio qdisc, while the lower priority flow's packets would
 be filtered into the lower priority queue of the prio qdisc.  All
 traffic out of the priority qdisc was fed into the TBF to ensure that
 all traffic, regardless of priority, shared and was shaped by the
-node's link capacity profile.  
+node's link capacity profile.  The configuration and function of TC is
+shown in Figure~\ref{fig:tc_diagram}.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{./figs/tc_diagram.png}
+  \caption{Diagram illustrating the TC configuration used to implement
+    priority flows, traffic shaping, and delay.}
+  \label{fig:tc_diagram}
+\end{figure}
 
 This experimental setup allows us to examine the validity of our
 analysis techniques in the following ways:
