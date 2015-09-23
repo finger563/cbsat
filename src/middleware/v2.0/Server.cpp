@@ -6,6 +6,7 @@ char *messageData;
 std::string outputFile;
 IPV6_Connection interface;
 
+Network::NetworkProfile profile;
 
 void *recvFunc(Network::Message* data) {
   if ( data != NULL )
