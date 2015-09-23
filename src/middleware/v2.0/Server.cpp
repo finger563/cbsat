@@ -1,54 +1,32 @@
 #include "Server.hpp"
 
-long messageBitLength;
-long messageStrLength;
-char *messageData;
-std::string outputFile;
-IPV6_Connection interface;
-
-Network::NetworkProfile profile;
-
-void *recvFunc(Network::Message* data) {
-  if ( data != NULL )
-    {
-      memset(messageData,0,messageStrLength+2);
-      if ( interface.receive(messageData,messageStrLength) > 0 )
-	{
-	  long id = atol(messageData);
-	  if ( id >=0 )
-	    {
-	      data->TimeStamp();
-	      data->Id(id);
-	      data->Bytes(strlen(messageData));
-	      append_data(outputFile,*data);
-	    }
-	}
-    }
-  else
-    return (void *)NULL;
-}
-
 int main(int argc, char **argv) {
   Options options;
   if ( options.Parse(argc,argv) == -1 )
     return -1;
   options.Print();
 
-  outputFile = options.outputFile;
+  std::string outputFile = options.outputFile;
 
-  messageBitLength = options.bitLength;
-  messageStrLength = ceil((double)messageBitLength/8.0f);
-  messageData = new char[messageStrLength+2];
+  long messageBitLength = options.bitLength;
+  long messageStrLength = ceil((double)messageBitLength/8.0f);
+  char *messageData = new char[messageStrLength+2];
 
+  Network::NetworkProfile profile;
   std::string profileFile = options.tgFile;  
   if ( profile.initializeFromFile(profileFile.c_str()) != 0 ) {
     TG_LOG("ERROR: couldn't initialize TG profile!\n");
     return -1;
   }
 
-  interface.serverIP = options.ip;
-  interface.serverPort = options.port;
-  if ( interface.Initialize(true,false) != 0 ) {
+  Connection* interface;
+  if ( options.ip.find(".") != std::string::npos )
+    interface = new IPV4_Connection();
+  else
+    interface = new IPV6_Connection();
+  interface->serverIP = options.ip;
+  interface->serverPort = options.port;
+  if ( interface->Initialize(true,false) != 0 ) {
     TG_LOG("ERROR: Couldn't initialize interface!\n");
     return -1;
   }
@@ -60,7 +38,7 @@ int main(int argc, char **argv) {
   while ( true ) {
     memset(messageData,0,messageStrLength+2);
 
-    if ( interface.receive(messageData,messageStrLength) > 0 ) {
+    if ( interface->Receive(messageData,messageStrLength) > 0 ) {
 
       Network::Message msg;
       long id = atol(messageData);

@@ -1,15 +1,7 @@
 
 #include "Client.hpp"
 
-Network::NetworkProfile profile;
 static std::vector <Network::Message*> messages;
-IPV6_Connection interface;
-
-double maxLatency=0;
-
-long messageBitLength;
-long messageStrLength;
-static long id = 0;
 
 long precision = 30;// for file output
 
@@ -20,6 +12,7 @@ int main(int argc, char **argv) {
     return -1;
   options.Print();
 
+  Network::NetworkProfile profile;
   std::string profileFile = options.tgFile;  
   if ( profile.initializeFromFile(profileFile.c_str()) != 0 ) {
     TG_LOG("ERROR: couldn't initialize TG profile!\n");
@@ -27,13 +20,18 @@ int main(int argc, char **argv) {
   }
 
   std::string outputFile = options.outputFile;
-  messageBitLength = options.bitLength;
-  messageStrLength = ceil((double)messageBitLength/8.0f);
+  long messageBitLength = options.bitLength;
+  long messageStrLength = ceil((double)messageBitLength/8.0f);
   double runTime = ( options.runTime > 0 ) ? options.runTime : profile.period*options.numPeriods ;
 
-  interface.serverIP = options.ip;
-  interface.serverPort = options.port;
-  if ( interface.Initialize(false,false) != 0 ) {
+  Connection* interface;
+  if ( options.ip.find(".") != std::string::npos )
+    interface = new IPV4_Connection();
+  else
+    interface = new IPV6_Connection();
+  interface->serverIP = options.ip;
+  interface->serverPort = options.port;
+  if ( interface->Initialize(false,false) != 0 ) {
     TG_LOG("ERROR: Couldn't initialize interface!\n");
     return -1;
   }
@@ -45,13 +43,15 @@ int main(int argc, char **argv) {
   timespec startTime;
   clock_gettime(CLOCK_REALTIME,&startTime);
 
+  long id = 0;
+
   while (true) {
     Network::Message* data = new Network::Message(messageBitLength, id++);
     messages.push_back(data);      
     data->TimeStamp();
     
-    interface.send( data->Buffer().c_str(),
-	       data->Bytes() );
+    interface->Send( data->Buffer().c_str(),
+		     data->Bytes() );
 
     timeDiff = (double)(data->FirstEpochTime().tv_sec - 
 			startTime.tv_sec);
@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
   messages.clear();
 
   TG_LOG("Max bits in UDP socket buffer: %d\n",
-	 interface.bufferSize*8);
+	 interface->bufferSize*8);
   TG_LOG("Max message latency: %f seconds\n",
 	 maxLatency);
 }

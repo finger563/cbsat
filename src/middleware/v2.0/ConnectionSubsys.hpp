@@ -105,13 +105,13 @@ public:
   }
 };
 
-class IPV4Connection : public Connection {
+class IPV4_Connection : public Connection {
 public:
   int sockfd;
   struct sockaddr_in local_addr;
   struct sockaddr_in remote_addr;
 
-  IPV4Connection()
+  IPV4_Connection()
     : Connection(true)
   {
     serverPort = 7777;
@@ -119,7 +119,7 @@ public:
     serverIP = "10.1.1.1";
   }
 
-  IPV4Connection(const IPV4Connection &s)
+  IPV4_Connection(const IPV4_Connection &s)
     : Connection(s),
       sockfd(s.sockfd),
       local_addr(s.local_addr),
@@ -127,22 +127,22 @@ public:
   {
   }
 
-  IPV4Connection & operator= (const IPV4Connection &s)
+  IPV4_Connection & operator= (const IPV4_Connection &s)
   {
     if (&s != this)
       {
-        IPV4Connection tmp (s);
+        IPV4_Connection tmp (s);
         swap (tmp);
       }
     return *this;
   }
 
-  virtual IPV4Connection* clone() const 
+  virtual IPV4_Connection* clone() const 
   {
-    return new IPV4Connection( *this );
+    return new IPV4_Connection( *this );
   }
 
-  virtual void swap (IPV4Connection &s)
+  virtual void swap (IPV4_Connection &s)
   {
     std::swap (sockfd, s.sockfd);
     std::swap (local_addr, s.local_addr);
@@ -154,7 +154,7 @@ public:
     close(sockfd);
   }
 
-  ~IPV4Connection() 
+  ~IPV4_Connection() 
   {
     Close();
   }
