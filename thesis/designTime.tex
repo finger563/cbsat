@@ -5,22 +5,22 @@ In this chapter, we describe research results related to the
 challenge of accurately predicting network QoS for systems which may
 require strict guarantees about performance and resource utilization.
 
-Many CPS applications require networking of some form in order for the
-system to function nominally.  This networking often performs a key
-role in the system, such as facilitating the communication and control
-of distributed sensors and control systems.  Traditionally, these
-networks of CPS have been both isolated from external influences and
-predefined at system design-time.  This isolation and
-pre-determination creates a static network with respect to both the
-topology of the network and the capacity of each network link.  More
-recently however, CPS have become less isolated and more dynamic by
-utilizing heterogeneous and wireless networks and incorporating
-mobility.  Such systems include wireless sensor networks (WSN), mobile
-ad-hoc networks (MANETs), and distributed real-time embedded systems
-(DRES).  These types of systems are being developed to provide remote
-sensing and control capabilities, smart grid and smart city
-infrastructure, and smart vehicle communications networks, to name a
-few.
+\iffalse
+Networking often performs a key role in CPS, such as facilitating
+the communication and control of distributed sensors and control
+systems.  Traditionally, these networks of CPS have been both isolated
+from external influences and predefined at system design-time.  This
+isolation and pre-determination creates a static network with respect
+to both the topology of the network and the capacity of each network
+link.  More recently however, CPS have become less isolated and more
+dynamic by utilizing heterogeneous and wireless networks and
+incorporating mobility.  Such systems include wireless sensor networks
+(WSN), mobile ad-hoc networks (MANETs), and distributed real-time
+embedded systems (DRES).  These types of systems are being developed
+to provide remote sensing and control capabilities, smart grid and
+smart city infrastructure, and smart vehicle communications networks,
+to name a few.
+\fi
 
 Analyzing application and system network Quality of Service (QoS)
 requires either design-time models and analysis techniques or
@@ -282,6 +282,12 @@ on their hardware node.  Similarly, we assume that under all
 circumstances, the service profile of a hardware node will be adhered
 to.
 
+Our current modeling and analysis techniques have not incorporated the
+concepts of packet loss, transmission errors, and other integrity loss
+for data transmitted on the network.  Such concepts are especially
+important with respect to how they influence the behavior of the
+network software stack, including user-space applications.  
+
 Finally, we have currently not incorporated the ways different
 reactive protocols would affect system network analysis.  A common
 example of such a reactive protocol is TCP and its congestion
@@ -290,7 +296,7 @@ information through the use of handshaking/acknowledgements they
 provide greater difficulty in modeling and analysis.  As such, we have
 focused primarly on one-way transmission and reception style
 interactions for our modeling and analysis.  Such types of
-interactions are found for instance in UDP transmissions.  
+interactions are found for instance in UDP transmissions.
 
 \subsection{Factors Impacting Analysis}
 \label{subsec:impacts}

@@ -21,8 +21,31 @@ this tightly coupled nature, the software not only affects the
 computer and its surrounding environment, but also is affected by the
 surrounding environment.  Many different types of systems fit this CPS
 description: e.g. autonomous vehicles including Unmanned Aerial
-Vehicles, Unmanned Underwater Vehicles, autonomous cars, and embedded
-or wireless sensors/actuators.  As an example, consider a satellite
+Vehicles, Unmanned Underwater Vehicles, autonomous cars, satellites,
+extra-terrestrial rovers, and embedded or wireless sensors/actuators.
+
+Consider a quadcopter and its flight control software.  The flight
+control software must monitor the orientation and positioning sensors
+of the quadcopter, estimate the state based on the sensor data, and
+then calculate control outputs to drive the system to a goal state.
+Such a system deals with many constraints, ranging from weight, power,
+and size constraints, to processor speed, memory capacity, and
+wireless operational range constraints.  Despite these constraints,
+the flight control software must complete the
+sense-estimate-calculate-actuate loop within enough time to ensure
+that the quadcopter's state does not transition into an unstable
+state.  Such an unstable state might be the quadcopter flipping over
+or crashing into an obstacle.  The dynamics of the control system,
+i.e. the physics of the quadcopter's motion and its control input
+response, define the bounds on the time the flight control software
+can spend in each iteration of the control loop.  If the sensing, or
+state estimation tasks of the control loop take too long to complete,
+the state estimated may no longer be accurate and thus the control
+outputs may send the quadcopter into an unstable state or the
+quadcopter may have transitioned into an unstable state.
+
+\iffalse
+As an example, consider a satellite
 and its control software.  The control software reads the sensor data
 from the satellite's sensors to determine the current state vector of
 the satellite.  Using this state information, the software's feedback
@@ -40,6 +63,7 @@ Kalman-filter state estimation to miss its deadline), the satellite's
 orbit correction may be too late.  Similarly, the software component
 involved with activating the satellite's thruster must meet its
 deadlines otherwise the satellite will not achieve the proper orbit.
+\fi
 
 As these types of CPS are being scaled-up, they are becoming more
 distributed in nature.  The systems mentioned above could scale up to
@@ -47,21 +71,27 @@ unmanned swarms of search and rescue drones, for instance, or large
 sensor/actuator networks for power distribution and control. Because
 each subsystem can directly and indirectly affect the others, all
 subsystems must communicate their states to each other, closing the
-control loop through the network.  We continue our satellite example,
-whose scaling up could lead to a cluster of satellites cooperating,
-communicating and running distributed applications in service of the
-mission goals.  Because of this trend towards cooperating distribution
-of system resources, the network facilitating the cooperation and
-communications becomes a critical resource to the system.  Whereas the
-single satellite's internal communications bus (direct physical
-connection system internal to a single satellite which allows sensing
-and actuation controlled by the computer) was ignored in the previous
-example, the wireless communications network enabling the satellite
-cluster cannot be ignored when analyzing the properties of the system.
-Because the satellites are expensive to deploy, impossible to repair,
-and must last for a long time to satisfy both budgetary constraints
-and mission goals, the application developers and system integrators
-for the cluster must ensure that the software on the cluster does not
+control loop through the network.
+
+An example of such scaling up is the recent research into developing
+fractionated spacecraft\cite{fractionated_spacecraft}.  A fractionated
+spacecraft is a cluster of satellites cooperating, communicating and
+running distributed applications in service of the mission goals.
+Such a cluster design replacese the traditional monolithic satellites
+which are more expensive to develop, deploy, repair, and are more
+difficult to upgrade with new functionality.  Because of this trend
+towards cooperating distribution of system resources, the network
+facilitating the cooperation and communications becomes a critical
+resource to the system.  Whereas the single satellite's internal
+communications bus (direct physical connection system internal to a
+single satellite which allows sensing and actuation controlled by the
+computer) was ignored in the previous example, the wireless
+communications network enabling the satellite cluster cannot be
+ignored when analyzing the properties of the system.  Because the
+satellites are expensive to deploy, impossible to repair, and must
+last for a long time to satisfy both budgetary constraints and mission
+goals, the application developers and system integrators for the
+cluster must ensure that the software on the cluster does not
 compromise its ability to meet the mission goals.  For instance, the
 same orbit maintenance described previously now necessitates the use
 of the cluster's network.  For a satellite to activate its thruster to

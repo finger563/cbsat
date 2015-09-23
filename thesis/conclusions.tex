@@ -10,21 +10,68 @@ applications and the run-time monitoring and management of application
 and CPS network resources.
 
 Subsequently, the completed research towards precise network
-performance prediction, \shorttool/, was presented.  We showed how
-different aspects of applications and systems could be analyzed,
-culminating in the composition of multiple applications in a
-distributed, statically routed system configuration.
+performance prediction, \shorttool/, was presented. 
 
-Run-time network monitoring and anomaly detection mechanisms were
-presented which used the modeling semantics from the design-time
-techniques and showed how such models could be used for ensuring
-quality of service (QoS) at run-time for distributed, networked
-systems.
+First, the formalization for the modeling and analysis semantics and
+techniques were defined, building off of the $(\wedge,+)-calculus$
+used by Network Calculus.  Models of systems and applications were
+presented and convolution ($\otimes$) of application profiles with
+system profiles was defined.  Using $(\wedge,+)-calclulus$, the
+computation of delay and backlog bounds were defined.
 
-Finally, some areas of future work were presented which would extend
-the capabilities of our techniques and would increase the domain over
-which our analysis would be applicable.
+Given the definition of the fundamental operations of \shorttool/,
+analysis of periodic systems was presented.  We described how periodic
+data rate profiles can be time-integrated to produce repeating data
+profiles as functions of time.  We proved that the minimum amount of
+time for which the system and its applications must be analyzed to
+determine if there is unbounded buffer growth is two hyperperiods.
 
+Using experimental system data, we determined the benefit of
+\shorttool/ versus similar techniques such as Network Calculus.  We
+showed how our techniques provide more accurate predictions with
+respect to the actual system but are still conservative predictions.  
+
+We then showed how a model of MAC protocols, such as TDMA, could be
+incorporated into the system and application models.  Using these
+modles, we analytically derived equations for the effects of such
+protocols on the predicted delay and backlog bounds.
+
+The mathematical operations of \shorttool/ were extended to support
+compositional system analysis by defining the concepts of profile
+addition and subtraction.  For this compositional analysis, the
+concept of profile priority was introduced to determine service
+precedence by the transmitting node between two profiles.
+
+Since latency is such a critical aspect of networking systems, we
+introduced semantics for modeling the delay of network links as a
+linear, continuous function of time.  Convolution of a profile with a
+delay profile was introduced and its effects on the profile's
+periodicity were analyzed.
+
+To support more complex systems which include nodes that can act as
+routers and forwarders for traffic from other nodes, we presented an
+algorithm that uses the concepts we developed for delay analysis and
+compositional analysis to iteratively analyze a system which contains
+statically routed traffic.  Experimental validation of this
+integrated, system-level analysis was provided to demonstrate the
+accuracy and precision of the analysis techniques.  
+
+To support experimental validation and run-time testing, we developed
+code generators that generate traffic producer/consumer and
+measurement code into the component models we defined.  Using these
+producers and consumers, which operate based on the same profiles used
+for design-time analysis, we ran experiments which corroborated our
+analysis results.
+
+Finally, we extended our traffic producer/consumer code to enable
+management of the network traffic by the communications middleware.
+Detection code was developed for the receivers to detect when and
+which senders were overflowing the receiver's buffer and use an
+out-of-band communications channel to inform the sender's middleware
+to limit the sender's data production.  
+
+\subsection{Future Work}
+\label{subsec:future_work}
 In this work we have described the beginning of precise, comprehensive
 network system performance analysis and prediction.  However, we could
 not possibly cover the modeling and analysis of all possible system
