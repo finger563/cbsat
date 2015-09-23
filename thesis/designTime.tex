@@ -1084,18 +1084,38 @@ profile, we can address one more aspect of system analysis:
 \emph{routing}.  For this analysis we will specifically focus on
 statically routed networks.
 
-By incorporating both the latency analysis with the compositional
-operations we developed, we can perform system-level analysis of profiles
-which are routed by nodes of the system.  In this paradigm, nodes can
-transmit/receive their own data, i.e. they can host applications which
-act as data sources or sinks, as well as act as routers for profiles from
-and to other nodes.  To make such a system amenable to analysis we
-must ensure that we know the routes the profiles will take at design
-time, i.e. the routes in the network are static and known or
-calculable.  Furthermore, we must, for the sake of profile composition as
-decribed above, ensure that each profile has a priority that is unique
-within the network which governs how the transmitting and routing
-nodes handle the profile's data.
+Firstly, we must define the assumptions we make about the router nodes
+with respect to how they forward the network traffic.  In our modeling
+and analysis, because we have not considered transmission
+error/corruption, we are most closely modeling cut-through routing /
+wormhole switching in which the routing and forwarding nodes in the
+system forward all packets without checking them for corruption or
+integrity.  This forwarding mechanism differs from store and forward
+routing in which each packet is checked for errors in its entirety
+before sending it to the next node on its route.  In the case of store
+and forward, when a corrupt packet is received by a routing node, it
+will not forward that packet along its path, and may optionally
+request retransmission of the packet from the previous node.  Under
+the assumption of no transmission errors, we can incorporate the added
+latency incurred by store and forward into the latency profile of the
+router node.  In this way, these two forwarding techniques can be
+modeling in a simple way using our semantics (where they both simply
+affect the latency of the node).  
+
+Given these assumptions about the forwarding techniques of the routing
+nodes, we can describe system-level analysis.  By incorporating both
+the latency analysis with the compositional operations we developed,
+we can perform system-level analysis of profiles which are routed by
+nodes of the system.  In this paradigm, nodes can transmit/receive
+their own data, i.e. they can host applications which act as data
+sources or sinks, as well as act as routers for profiles from and to
+other nodes.  To make such a system amenable to analysis we must
+ensure that we know the routes the profiles will take at design time,
+i.e. the routes in the network are static and known or calculable.
+Furthermore, we must, for the sake of profile composition as decribed
+above, ensure that each profile has a priority that is unique within
+the network which governs how the transmitting and routing nodes
+handle the profile's data.
 
 Let us define the system configuration $C$ as:
 
