@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
 	msg.TimeStamp();
 	msg.Id(id);
 	msg.Bytes(strlen(messageData));
-	append_data(outputFile,msg);
+	Network::append_data(outputFile.c_str(), &msg);
       }
 
       timerDelay = profile.Delay(msg.Bits(),msg.FirstEpochTime());
@@ -60,17 +60,4 @@ int main(int argc, char **argv) {
       }
     }
   }
-}
-
-long precision = 30;// for file output
-int append_data(std::string fname, Network::Message& data) {
-  std::ofstream file(fname.c_str(),std::ofstream::app);
-  if ( !file.is_open() )
-    return -1;
-  file << data.Id() << "," << std::setprecision(precision)
-       << data.LastDoubleTime() << ","
-       << data.Bits()
-       << "\n";
-  file.close();
-  return 0;
 }

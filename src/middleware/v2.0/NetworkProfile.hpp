@@ -391,23 +391,36 @@ namespace Network {
   };
   
   static long precision = 30;// for file output
-  static int write_data(const char* fname, const std::vector<Message>& messages) {
+  static int write_data(const char* fname, const std::vector<Message*>& messages) {
     std::ofstream file(fname);
     if ( !file.is_open() )
       return -1;
     file << "%index, %time, %length (bits)\n";
     for (long i=0;i<messages.size();i++) {
-      file << messages[i].Id() << ",";
-      std::vector<double> dtimes = messages[i].DoubleTimes();
+      file << messages[i]->Id() << ",";
+      std::vector<double> dtimes = messages[i]->DoubleTimes();
       for (auto it = dtimes.begin(); it != dtimes.end(); ++it)
 	{
 	  file << std::setprecision(precision)
 	       << *it << ",";
 	}
-      file << messages[i].Bytes() * 8 << "\n";
+      file << messages[i]->Bytes() * 8 << "\n";
     }
     return 0;
   }
 
+  static int append_data(std::string fname, const Network::Message* data) {
+    std::ofstream file(fname.c_str(), std::ofstream::app);
+    if ( !file.is_open() ) {
+      return -1;
+    }
+    file << data->Id() << "," << std::setprecision(precision)
+	 << data->FirstDoubleTime() << ","
+	 << data->LastDoubleTime() << ","
+	 << data->Bits()
+	 << "\n";
+    file.close();
+    return 0;
+  }
 };
 #endif

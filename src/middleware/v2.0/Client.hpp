@@ -11,12 +11,6 @@
 
 #include <string>
 
-void *sendFunc(std::string data);
-void labelMessage(long index);
-int write_data(std::string fname);
-int append_data(std::string fname, Network::Message* data);
-
-
 class Options {
 public:
   long port;

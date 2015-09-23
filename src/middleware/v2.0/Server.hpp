@@ -9,8 +9,6 @@
 #include "Message.hpp"
 #include "NetworkProfile.hpp"
 
-int append_data(std::string fname, Network::Message& data);
-
 class Options {
 public:
   std::string ip;

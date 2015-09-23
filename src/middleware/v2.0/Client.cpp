@@ -1,10 +1,6 @@
 
 #include "Client.hpp"
 
-static std::vector <Network::Message*> messages;
-
-long precision = 30;// for file output
-
 int main(int argc, char **argv) {
 
   Options options;
@@ -44,6 +40,7 @@ int main(int argc, char **argv) {
   clock_gettime(CLOCK_REALTIME,&startTime);
 
   long id = 0;
+  std::vector<Network::Message*> messages;
 
   while (true) {
     Network::Message* data = new Network::Message(messageBitLength, id++);
@@ -81,7 +78,7 @@ int main(int argc, char **argv) {
       maxLatency = latency;
   }
 
-  write_data(outputFile);
+  Network::write_data(outputFile.c_str(), messages);
 
   for ( long i=0; i<messages.size(); i++) {
     if ( messages[i] != NULL )
@@ -93,28 +90,4 @@ int main(int argc, char **argv) {
 	 interface->bufferSize*8);
   TG_LOG("Max message latency: %f seconds\n",
 	 maxLatency);
-}
-
-int write_data(std::string fname) {
-  for (long i=0;i<messages.size();i++) {
-    if ( append_data(fname,messages[i]) == -1 ) {
-      TG_LOG("Couldn't append message %lu to file %s\n",i,fname.c_str());
-    }
-  }  
-  return 0;
-}
-
-int append_data(std::string fname, Network::Message* data) {
-  std::ofstream file(fname.c_str(), std::ofstream::app);
-  if ( !file.is_open() ) {
-    TG_LOG("ERROR: Couldn't open %s for appending!\n",fname.c_str());
-    return -1;
-  }
-  file << data->Id() << "," << std::setprecision(precision)
-       << data->FirstDoubleTime() << ","
-       << data->LastDoubleTime() << ","
-       << data->Bits()
-       << "\n";
-  file.close();
-  return 0;
 }
