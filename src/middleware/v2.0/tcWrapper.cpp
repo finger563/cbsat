@@ -2,16 +2,18 @@
 
 Network::NetworkProfile profile;
 
-void setTC( unsigned long long bandwidth, double latency,
+void setTC( unsigned long long bandwidth, unsigned long long ceil, double latency,
 	    std::string interface, std::string handle, std::string parent )
 {
   std::string tc_binary = "/sbin/tc";
   char bw_str[100];
   sprintf(bw_str,"%llu",bandwidth);
+  char ceil_str[100];
+  sprintf(ceil_str,"%llu",ceil);
 
   std::string tc_args = "class replace dev " + interface
     + " parent " + parent + " classid " + handle + " htb rate "
-    + bw_str + "bit ceil " + bw_str + "bit";
+    + bw_str + "bit ceil " + ceil_str + "bit";
 
   // FORK
   pid_t parent_pid = getpid();
@@ -70,7 +72,9 @@ int main(int argc, char **argv) {
 
       TG_LOG("Setting bandwidth to %llu bps and latency to %fs\n",bandwidth, latency);
 
-      setTC(bandwidth, latency, interface, "111:", "111:1");
+      if (bandwidth == 0)
+	bandwidth = 10;
+      setTC(bandwidth, bandwidth, latency, interface, "111:", "111:1");
     }
   }
 }
