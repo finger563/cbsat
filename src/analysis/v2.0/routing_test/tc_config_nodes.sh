@@ -32,16 +32,18 @@ $TC class add dev ${DEV} parent 111: classid 111:1 htb rate 1Mbit ceil 1Mbit
 
 # FILTER APPLICATION TRAFFIC VERSUS NON APP TRAFIC
 $TC filter add dev ${DEV} protocol ip parent 1: prio 1 u32 \
-    match ip src 10.1.1.0/24 flowid 1:1
+    match ip dst 10.1.1.2 flowid 1:1
 
 $TC filter add dev ${DEV} protocol ip parent 1: prio 1 u32 \
-    match ip dst 10.1.1.0/24 flowid 1:1
+    match ip dst 10.1.1.4 flowid 1:1
 
 $TC filter add dev ${DEV} protocol ip parent 111: prio 1 u32 \
-    match ip src 10.1.1.0/24 flowid 111:1
+    match ip dst 10.1.1.2 flowid 111:1
 
 $TC filter add dev ${DEV} protocol ip parent 111: prio 1 u32 \
-    match ip dst 10.1.1.0/24 flowid 111:1
+    match ip dst 10.1.1.4 flowid 111:1
 
 $TC filter add dev ${DEV} protocol ip parent 1: prio 2 u32 \
     match ip src 192.168.122.0/24 flowid 1:2
+$TC filter add dev ${DEV} protocol ip parent 1: prio 2 u32 \
+    match ip src 10.1.1.0/24 flowid 1:2

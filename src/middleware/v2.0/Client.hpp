@@ -6,7 +6,6 @@
 
 #include "log_macro.hpp"
 #include "ConnectionSubsys.hpp"
-#include "NetworkMiddleware.hpp"
 #include "Message.hpp"
 #include "NetworkProfile.hpp"
 
@@ -15,7 +14,7 @@
 void *sendFunc(std::string data);
 void labelMessage(long index);
 int write_data(std::string fname);
-int append_data(std::string fname, Message* data);
+int append_data(std::string fname, Network::Message* data);
 
 
 class Options {

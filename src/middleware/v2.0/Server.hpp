@@ -8,7 +8,7 @@
 #include "ConnectionSubsys.hpp"
 #include "Message.hpp"
 
-int append_data(std::string fname, Message& data);
+int append_data(std::string fname, Network::Message& data);
 
 class Options {
 public:

@@ -1,6 +1,6 @@
 #include "tcWrapper.hpp"
 
-NetworkProfile profile;
+Network::NetworkProfile profile;
 
 int main(int argc, char **argv) {
   Options options;
@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
   }
 
   unsigned long long bandwidth;
-  unsigned long long latency;
+  double latency;
   timespec remainingTime, wakeTime;
   int pid = 1;
   while ( true ) {
@@ -26,11 +26,11 @@ int main(int argc, char **argv) {
 	TG_LOG("WHO HAS AWOKEN ME FROM MY SLUMBER?!\n");
       }
 
-      TG_LOG("Setting bandwidth to %llu bps and latency to %llu ms\n",bandwidth, latency);
+      TG_LOG("Setting bandwidth to %llu bps and latency to %fs\n",bandwidth, latency);
 
       char tcCommand[256];
       sprintf( tcCommand,
-	       "qdisc replace dev %s root tbf rate %llu.0bit latency %llu.0ms burst 1540", 
+	       "qdisc replace dev %s root tbf rate %llu.0bit latency %fs burst 1540", 
 	       interface.c_str(),
 	       bandwidth,
 	       latency);

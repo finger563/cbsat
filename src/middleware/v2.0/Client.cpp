@@ -1,8 +1,8 @@
 
 #include "Client.hpp"
 
-NetworkProfile profile, bufferProfile;
-static std::vector <Message*> messages;
+Network::NetworkProfile profile;
+static std::vector <Network::Message*> messages;
 IPV6_Connection interface;
 
 double maxLatency=0;
@@ -32,24 +32,21 @@ int main(int argc, char **argv) {
   messageStrLength = ceil((double)messageBitLength/8.0f);
   double runTime = ( options.runTime > 0 ) ? options.runTime : profile.period*options.numPeriods ;
 
-  std::string bufferProfileFile = options.bufferFile;
-  bufferProfile.initializeFromFile(bufferProfileFile.c_str());
-
-  uint64_t clientID = 0;
-  if ( clientID = NetworkMiddleware::InitClient(bufferProfile,options.ip,options.port) < 0 ) {
-    TG_LOG("ERROR: couldn't initialize network middleware!\n");
-    return -1;
-  }
+  interface.serverIP = options.ip;
+  interface.serverPort = options.port;
+  interface.Initialize(false,false);
 
   double timeDiff = 0;
   timespec startTime;
   clock_gettime(CLOCK_REALTIME,&startTime);
 
   while (true) {
-    Message* data = new Message(messageBitLength, id, clientID);
+    Network::Message* data = new Network::Message(messageBitLength, id);
     messages.push_back(data);      
     data->TimeStamp();
-    NetworkMiddleware::send(data);
+    
+    interface.send( data->Buffer().c_str(),
+	       data->Bytes() );
 
     timeDiff = (double)(data->FirstEpochTime().tv_sec - 
 			startTime.tv_sec);
@@ -69,8 +66,6 @@ int main(int argc, char **argv) {
       int return_code = nanosleep (&timeout, &remaining);
     }
   }
-
-  NetworkMiddleware::Exit();
 
   double maxLatency = 0;
   double latency = 0;
@@ -92,8 +87,6 @@ int main(int argc, char **argv) {
 
   TG_LOG("Max bits in UDP socket buffer: %d\n",
 	 interface.bufferSize*8);
-  TG_LOG("Max bits in middleware buffer: %lu\n",
-	 NetworkMiddleware::buffer.MaxSize());
   TG_LOG("Max message latency: %f seconds\n",
 	 maxLatency);
 }
@@ -107,7 +100,7 @@ int write_data(std::string fname) {
   return 0;
 }
 
-int append_data(std::string fname, Message* data) {
+int append_data(std::string fname, Network::Message* data) {
   std::ofstream file(fname.c_str(), std::ofstream::app);
   if ( !file.is_open() ) {
     TG_LOG("ERROR: Couldn't open %s for appending!\n",fname.c_str());

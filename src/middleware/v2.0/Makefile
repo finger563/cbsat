@@ -1,6 +1,6 @@
 IDIR =./
 CC=g++
-CFLAGS=-I$(IDIR)
+CFLAGS=-I$(IDIR) -std=c++11
 
 LIBS=-lpthread
 

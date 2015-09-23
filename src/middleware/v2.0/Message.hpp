@@ -22,19 +22,16 @@ namespace Network {
     std::string buffer;
     long bits;
     long id;
-    uint64_t connection_id;
     std::vector<timespec> times;
     Message ()
       : bits(0),
-	id(0),
-	connection_id(0)
+	id(0)
     {
     }
 
-    Message ( long len, long i, uint64_t conn_id )
+    Message ( long len, long i )
       : bits (len),
-	id(i),
-	connection_id(conn_id)
+	id(i)
     {
       buffer = std::string(this->Bytes()+2,'A');
       long templen = 256;
@@ -84,7 +81,7 @@ namespace Network {
       return buffer;
     }
 
-    std::vector<double> DoubleTimes() {
+    std::vector<double> DoubleTimes() const {
       std::vector<double> retTimes;
       double time = 0;
       for (int i=0;i<times.size();i++) {

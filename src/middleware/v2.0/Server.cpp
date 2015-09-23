@@ -7,7 +7,7 @@ std::string outputFile;
 IPV6_Connection interface;
 
 
-void *recvFunc(Message* data) {
+void *recvFunc(Network::Message* data) {
   if ( data != NULL )
     {
       memset(messageData,0,messageStrLength+2);
@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
     if ( interface.receive(messageData,messageStrLength) > 0 ) {
       long id = atol(messageData);
       if ( id >=0 ) {
-	Message msg;
+	Network::Message msg;
 	msg.TimeStamp();
 	msg.Id(id);
 	msg.Bytes(strlen(messageData));
@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
 }
 
 long precision = 30;// for file output
-int append_data(std::string fname, Message& data) {
+int append_data(std::string fname, Network::Message& data) {
   std::ofstream file(fname.c_str(),std::ofstream::app);
   if ( !file.is_open() )
     return -1;
