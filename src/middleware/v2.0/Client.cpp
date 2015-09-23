@@ -14,7 +14,6 @@ static long id = 0;
 long precision = 30;// for file output
 
 int main(int argc, char **argv) {
-  timespec timeout, remaining;
 
   Options options;
   if ( options.Parse(argc,argv) == -1 )
@@ -34,14 +33,20 @@ int main(int argc, char **argv) {
 
   interface.serverIP = options.ip;
   interface.serverPort = options.port;
-  interface.Initialize(false,false);
+  if ( interface.Initialize(false,false) != 0 ) {
+    TG_LOG("ERROR: Couldn't initialize interface!\n");
+    return -1;
+  }
+
+  double timerDelay = 0;
+  timespec timeout, remaining;
 
   double timeDiff = 0;
   timespec startTime;
   clock_gettime(CLOCK_REALTIME,&startTime);
 
   while (true) {
-    Network::Message* data = new Network::Message(messageBitLength, id);
+    Network::Message* data = new Network::Message(messageBitLength, id++);
     messages.push_back(data);      
     data->TimeStamp();
     
@@ -56,8 +61,7 @@ int main(int argc, char **argv) {
     if ( timeDiff >= runTime )
       break;
 
-    double timerDelay = profile.Delay(data->Bits(),data->FirstEpochTime());
-    id++;
+    timerDelay = profile.Delay(data->Bits(),data->FirstEpochTime());
     if ( timerDelay > 0 ) {
       double fractpart,intpart;
       fractpart = modf(timerDelay,&intpart);
