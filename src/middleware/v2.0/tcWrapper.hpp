@@ -24,48 +24,25 @@ public:
 
   int Parse(int argc, char **argv) {
     
-    if ( argc < 2 )
-      return 0;
-    int c;
-    char str[256];
-    sprintf(str,"%s",argv[1]);
-    if ( argc > 2 ) {
-      for (int i=2;i<argc;i++) {
-	sprintf(str,"%s %s",str,argv[i]);
+    for (int i=0; i < argc; i++)
+      {
+	if (!strcmp(argv[i], "--profile"))
+	  {
+	    profile = argv[i+1];
+	  }
+	if (!strcmp(argv[i], "--interface"))
+	  {
+	    interface = argv[i+1];
+	  }
+	if (!strcmp(argv[i], "--help"))
+	  {
+	    TG_LOG("usage: \n\t%s\n"
+		   "\t\t -p <profile name>\n"
+		   "\t\t -i <interface name>\n"
+		   ,argv[0]);
+	    return -1;
+	  }
       }
-    }
-    char *p = strtok(str,"-");
-    while (p != 0) {
-      switch (p[0])
-	{
-	case 'p':
-	  for (int i=0;i<=strlen(p+2);i++) {
-	    if ( (p+2)[i] == ' ' ) {
-	      (p+2)[i] = 0;
-	      break;
-	    }
-	  }
-	  this->profile = p+2;
-	  break;
-	case 'i':
-	  for (int i=0;i<=strlen(p+2);i++) {
-	    if ( (p+2)[i] == ' ' ) {
-	      (p+2)[i] = 0;
-	      break;
-	    }
-	  }
-	  this->interface = p+2;
-	  break;
-	case '?':
-	default:
-	  TG_LOG("usage: \n\t%s\n"
-		 "\t\t -p <profile name>\n"
-		 "\t\t -i <interface name>\n"
-		 ,argv[0]);
-	  return -1;
-	}
-      p = strtok(NULL,"-");
-    }
     return 0;
   }
   
