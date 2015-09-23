@@ -13,6 +13,9 @@
 #include "NetworkProfile.hpp"
 #include "log_macro.hpp"
 
+void setTC( unsigned long long bandwidth, unsigned long long ceil, double latency,
+	    std::string interface, std::string handle, std::string parent );
+
 class Options {
 public:
   std::string interface;

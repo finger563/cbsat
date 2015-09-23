@@ -1,7 +1,42 @@
 #include "tcWrapper.hpp"
 
-Network::NetworkProfile profile;
+// Main function: loops forever-> sleep, setTC, sleep, setTC, ...
+int main(int argc, char **argv) {
+  Options options;
+  if ( options.Parse(argc,argv) == -1 )
+    return -1;
+  options.Print();
 
+  std::string interface  = options.interface;
+
+  Network::NetworkProfile profile;
+  std::string profileFile = options.profile;
+  if ( profile.initializeFromFile(profileFile.c_str()) != 0 ) {
+    TG_LOG("ERROR: couldn't initialize node profile!\n");
+    return -1;
+  }
+
+  unsigned long long bandwidth;
+  double latency;
+  timespec remainingTime, wakeTime;
+  while ( true ) {
+    if ( profile.getNextInterval( wakeTime, bandwidth, latency ) == 0 ) {
+      TG_LOG("Sleeping until %lu.%09lu\n", wakeTime.tv_sec, wakeTime.tv_nsec);
+      while ( clock_nanosleep( CLOCK_REALTIME, TIMER_ABSTIME, &wakeTime, &remainingTime ) == EINTR )
+	{
+	  TG_LOG("WHO HAS AWOKEN ME FROM MY SLUMBER?!\n");
+	}
+
+      TG_LOG("Setting bandwidth to %llu bps and latency to %fs\n",bandwidth, latency);
+
+      if (bandwidth == 0)
+	bandwidth = 10;
+      setTC(bandwidth, bandwidth, latency, interface, "111:", "111:1");
+    }
+  }
+}
+
+// Forks/Execs to call TC for setting HTB bandwidth
 void setTC( unsigned long long bandwidth, unsigned long long ceil, double latency,
 	    std::string interface, std::string handle, std::string parent )
 {
@@ -44,37 +79,4 @@ void setTC( unsigned long long bandwidth, unsigned long long ceil, double latenc
       execvp(args[0], args);
       TG_LOG("ERROR: EXEC COULDN'T COMPLETE\n");
     }
-}
-
-int main(int argc, char **argv) {
-  Options options;
-  if ( options.Parse(argc,argv) == -1 )
-    return -1;
-  options.Print();
-
-  std::string interface  = options.interface;
-  std::string profileFile = options.profile;
-  if ( profile.initializeFromFile(profileFile.c_str()) != 0 ) {
-    TG_LOG("ERROR: couldn't initialize node profile!\n");
-    return -1;
-  }
-
-  unsigned long long bandwidth;
-  double latency;
-  timespec remainingTime, wakeTime;
-  while ( true ) {
-    if ( profile.getNextInterval( wakeTime, bandwidth, latency ) == 0 ) {
-      TG_LOG("Sleeping until %lu.%09lu\n", wakeTime.tv_sec, wakeTime.tv_nsec);
-      while ( clock_nanosleep( CLOCK_REALTIME, TIMER_ABSTIME, &wakeTime, &remainingTime ) == EINTR )
-	{
-	  TG_LOG("WHO HAS AWOKEN ME FROM MY SLUMBER?!\n");
-	}
-
-      TG_LOG("Setting bandwidth to %llu bps and latency to %fs\n",bandwidth, latency);
-
-      if (bandwidth == 0)
-	bandwidth = 10;
-      setTC(bandwidth, bandwidth, latency, interface, "111:", "111:1");
-    }
-  }
 }
