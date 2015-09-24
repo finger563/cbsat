@@ -109,7 +109,7 @@ We have implemented these features based on our design-time results:
 \item Measurement of output traffic on sender side and input traffic on
   server side generated into code
 \item Detection of anomalous sending on sender side
-\item Mitigation of anoumalous sending on sender side
+\item Mitigation of anomalous sending on sender side
 \item Detection of anomalous sending on receiver side
 \item Push back to sender middleware through out-of-band channel for
   anomaly detection on server side
@@ -307,7 +307,7 @@ determine which senders to limit is shown in Listing~\ref{lst:ddos_alg}.
 
 \begin{listing}[ht!]
   \begin{minted}{python}
-  reciever::limit_ddos( t_start, t_end )
+  receiver::limit_ddos( t_start, t_end )
   {
     for sender in senders
     {
