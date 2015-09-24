@@ -958,22 +958,14 @@ Where
 \item $P_P$ is the capacity available to profile $P_i$
 \end{itemize}
 
-Mathematically, addition and subtraction of two profiles $f[t],g[t]$ is given by:
+Mathematically, addition and subtraction of two profiles $f[t],g[t]$ are given by:
 \begin{equation}
-  \begin{split}
-    \dot s[t] &= \dot f[t] + \dot g[t]\\
-    s[t] &= \int_{0}^t\dot s[\tau]d\tau
-  \end{split}
+  s[t] = f[t] + g[t]
 \end{equation}
 and
 \begin{equation}
-  \begin{split}
-    \dot s[t] &= \dot f[t] - \dot g[t]\\
-    s[t] &= \int_{0}^t\dot s[\tau]d\tau
-  \end{split}
+  s[t] = f[t] - g[t]
 \end{equation}
-meaning that addition and subtraction are performed on the data rate
-representations of the profiles, which are periodic functions of time.
 
 Experimental validation of these compositional techniques,
 specifically with respect to priority relation, adding, and

@@ -1,0 +1,37 @@
+- saying only that results have been reported already (e.g. 3.1.3)
+  does disservice to your own work. I suggest to reuse text from the
+  paper in the thesis and report it again.
+
+- tc description: for the uninitated this is hard to understand. It
+  either has to be expanded with more details, or a more abstract, yet
+  more understandable summary has to be written up. Try to use a
+  queuing system diagram, or a signal flow diagram to illustrate the
+  different actions in the different layers. And avoid the use of
+  Linux-specific acronyms. Nobody knows what a qdisc is.
+
+- I would like to see the structure of the table for the routing
+  problem (if not the actual numbers).
+
+- Don't start a chapter with a figure. 4.1 Also, some of this chapter
+  reads like a powerpoint slide. It should read like a thesis - you
+  need to clearly communicate.
+
+- 4.2 has the same problem - it reads like a superficial summary. You
+  are doing a disservice to your own work if you don't explain it
+  well, so I suggest to expand this, and explain it better.
+
+- clean up the references (bibtex) ... ... ...
+
+DONE:
+-----
+
+- obviously you need a better quality figure 8, and/or a
+  reference. You may be able to generate it yourself using Matlab, but
+  in that case you will have to give some references. SFFMT 2013
+  should have some refs for sat cluster orbits.
+
+- 3.5: I thought differentiation and integration are linear operators,
+  so why do you have to do this on the derivatives?
+
+- do you have a spell checker? use it. Calclulus ? 
+

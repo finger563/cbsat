@@ -9,13 +9,6 @@
 \section{Middleware-Integrated Measurement, Detection, and Enforcement}
 \label{sec:middleware}
 
-\begin{figure}[ht!]
-  \centering
-  \includegraphics[width=0.85\textwidth]{../doc/src/images/results/ros_component.png}
-  \caption{Schematic representation of a software component.}
-  \label{fig:component}
-\end{figure}
-
 Our run-time research and development of measurement, detection, and
 enforcement code for networked applications is built on the foundation
 of component-based software engineering (CBSE).  The goal of CBSE is
@@ -46,6 +39,13 @@ Where
 \item $H$ is the single thread which executes all event events for
   the component, in FIFO order, without preemption.  
 \end{itemize}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.85\textwidth]{../doc/src/images/results/ros_component.png}
+  \caption{Schematic representation of a software component.}
+  \label{fig:component}
+\end{figure}
 
 From this component definition, we can define an application as:
 
