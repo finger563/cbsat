@@ -52,7 +52,7 @@ physical dynamics of the nodes in the cluster are well understood and
 predictable, therefore the network dynamics can be fairly predictable
 as well.  For such predictable or periodic dynamic networks, the use
 of worst-case network performance for analysis and constraint
-verification wastes the network resources over much of the lifecycle
+verification wastes the network resources over much of the life-cycle
 of the system. Integrating the physical dynamics of the network into
 the modeling and analysis tools improves the performance of the
 systems without degrading its reliability.
@@ -293,9 +293,9 @@ Finally, we have currently not incorporated the ways different
 reactive protocols would affect system network analysis.  A common
 example of such a reactive protocol is TCP and its congestion
 avoidance algorithm.  Because such algorithms rely on return-path
-information through the use of handshaking/acknowledgements they
+information through the use of handshaking/acknowledgments they
 provide greater difficulty in modeling and analysis.  As such, we have
-focused primarly on one-way transmission and reception style
+focused primarily on one-way transmission and reception style
 interactions for our modeling and analysis.  Such types of
 interactions are found for instance in UDP transmissions.
 
@@ -307,13 +307,13 @@ analyze how the analysis time and results are affected by changes in
 the model.  This is especially true when trying to determine how
 applicable new techniques are to large scale systems.  Models are
 provided by the application and system developers and are described in
-the form of bandwdith (bps) vs time that the application requires or
+the form of bandwidth (bps) vs time that the application requires or
 the system provides.  These profiles are a time series that maps a
-given time to a given bandwdith.  Between two successive intervals,
+given time to a given bandwidth.  Between two successive intervals,
 the bandwidth is held constant.  Clearly, to represent changing
 bandwidth over time, the developer must use sufficiently short enough
 time intervals to allow step-wise approximation of the curve.
-However, as with any system, there is a tradeoff between precision of
+However, as with any system, there is a trade-off between precision of
 the model and the analysis time and results.
 
 Because the fundamental mathematics are linear for our convolution,
@@ -436,7 +436,7 @@ every period we add to the analysis.
 We have discovered a system level property that can be calculated from
 these profiles, but we must determine what it means and how it can be
 used.  First, we see that in system \emph{(1)}, the predicted required
-buffer size does not change regarless of the number of periods over
+buffer size does not change regardless of the number of periods over
 which we analyze the system.  Second, we see that for system \emph{(2)},
 the predicted required buffer size changes depending on how many
 periods of activity we choose for our analysis window.  Third, we see
@@ -483,7 +483,7 @@ data vs. time profiles we deal with, are the result of \textbf{integrating}
 use to describe application network traffic and system network
 capacity.  All periodic functions, when integrated, produce repeating
 functions and similarly, all repeating functions, when differentiated,
-procduce periodic functions.
+produce periodic functions.
 
 Now we will consider a deterministic, \emph{repeating} queuing system
 providing a data service function $S$ to input data function
@@ -647,7 +647,7 @@ same system analyzed using Network Calculus.
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=0.85\textwidth]{../doc/src/images/results/maren_namek_data_zoom.png}
-  \caption{Zoomed-in verion of
+  \caption{Zoomed-in version of
     Figure~\ref{subfig:pnp_analysis_comparison}, focusing on the
     predicted buffer and delay.}
   \label{fig:zoom_pnp}
@@ -879,7 +879,7 @@ must determine how best to compose these profiles and nodes together
 to analyze the overall system.  The aim of this work is to allow the
 profiles from each application to be analyzed separately from the
 other profiles in the network, so that application developers and
-system integrators can derive meaningful perfomance predictions for
+system integrators can derive meaningful performance predictions for
 specific applications.  For this goal, let us define:
 
 \begin{definition}[Compositionality]\cite{sifakis2002}
@@ -895,7 +895,7 @@ specific applications.  For this goal, let us define:
 For our analysis techniques to be compositional, an application's
 required profile must be analyzable individually without requiring
 aggregation with the rest of the required profiles in the system.
-This means that the system's performance, i.e. the peformance of all
+This means that the system's performance, i.e. the performance of all
 the applications on the system, can be determined by analyzing the
 performance of each application individually.
 
@@ -946,7 +946,7 @@ Mathematically, compositionality requires that we be able to add and
 subtract profiles from each other, for instance to determine the
 remaining service capacity of a node available for a profile $P_i$
 after it serves all profiles with a higher priority.  Queuing of the
-lower priority profiles is taken into account when the lower priorty
+lower priority profiles is taken into account when the lower priority
 profile is convolved with the remaining capacity the node has
 available to service it.  The calculation of the remaining capacity,
 $P_P'$, of the node after it services $P_i$ is given as:
@@ -990,7 +990,7 @@ Section~\ref{sec:routing}.
 \section{Delay Analysis}
 \label{sec:delay}
 
-When dealing with queueing systems (esp. networks) where precise
+When dealing with queuing systems (esp. networks) where precise
 design-time guarantees are required, the delay in the links of the
 network must be taken into account.
 
@@ -1102,7 +1102,7 @@ routing in which each packet is checked for errors in its entirety
 before sending it to the next node on its route.  In the case of store
 and forward, when a corrupt packet is received by a routing node, it
 will not forward that packet along its path, and may optionally
-request retransmission of the packet from the previous node.  Under
+request re-transmission of the packet from the previous node.  Under
 the assumption of no transmission errors, we can incorporate the added
 latency incurred by store and forward into the latency profile of the
 router node.  In this way, these two forwarding techniques can be
@@ -1119,7 +1119,7 @@ sources or sinks, as well as act as routers for profiles from and to
 other nodes.  To make such a system amenable to analysis we must
 ensure that we know the routes the profiles will take at design time,
 i.e. the routes in the network are static and known or calculable.
-Furthermore, we must, for the sake of profile composition as decribed
+Furthermore, we must, for the sake of profile composition as described
 above, ensure that each profile has a priority that is unique within
 the network which governs how the transmitting and routing nodes
 handle the profile's data.
@@ -1248,14 +1248,14 @@ highest priority profile receives the remaining bandwidth, and so on.
 \end{listing}
 
 We take care of matching all senders to their respective receivers,
-and ensure that if the system supports multicast, a no retransmissions
+and ensure that if the system supports multicast, a no re-transmissions
 occur; only nodes which must route the profile to a new part of the
-network retransmit the data.  However, if the system does not support
+network re-transmit the data.  However, if the system does not support
 multicast, then the sender must issue a separate transmission, further
 consuming network resources.  In this way, lower-level transport
 capabilities can be at least partially accounted for by our analysis.
 
-We have implmented these functions for statically routed network
+We have implemented these functions for statically routed network
 analysis into our tool, which automatically parses the profiles, the
 network configuration and uses the algorithm and the implemented
 mathematics to iteratively analyze the network.  Analytical results
@@ -1283,16 +1283,16 @@ validation of the routing, composition, and delay analysis techniques.
 We configure the system's routing, network delay, and network
 bandwidth capacity using Linux's built-in Traffic Control
 (TC)\cite{linux_tc} tool, which allows for the configuration of static
-routing, heirarchical class-based traffic scheduling, and traffic
+routing, hierarchical class-based traffic scheduling, and traffic
 shaping.  We configured the output interfaces on each node as
-a combination of two queueing disciplines (qdiscs): 1) a network
+a combination of two queuing disciplines (qdiscs): 1) a network
 emulator (netem) which enforces the link delay, and 2) a token-bucket
 filter (TBF) which enforces the rate control to enforce the link's
 bandwidth profile.  On the routing node, we added an additional
 priority qdisc (prio), with multiple priority queues.  We configured
 TC to filter packets into these queues by matching packet source IP
 address and destination IP address.  This filtering ensured that the
-high priority flow's packets would be filtered into the high-prioirty
+high priority flow's packets would be filtered into the high-priority
 queue of the prio qdisc, while the lower priority flow's packets would
 be filtered into the lower priority queue of the prio qdisc.  All
 traffic out of the priority qdisc was fed into the TBF to ensure that
@@ -1312,7 +1312,7 @@ This experimental setup allows us to examine the validity of our
 analysis techniques in the following ways:
 
 \begin{itemize}
-  \item Because the system implements the strict priority queueing of
+  \item Because the system implements the strict priority queuing of
     flows, especially independent interacting flows, we can compare
     the delay and buffering measurements to the same delay and buffer
     predictions from the model.
