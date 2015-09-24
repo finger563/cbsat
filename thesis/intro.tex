@@ -24,7 +24,7 @@ description: e.g. autonomous vehicles including Unmanned Aerial
 Vehicles, Unmanned Underwater Vehicles, autonomous cars, satellites,
 extra-terrestrial rovers, and embedded or wireless sensors/actuators.
 
-Consider a quadcopter and its flight control software.  The flight
+Consider a quad-copter and its flight control software.  The flight
 control software must monitor the orientation and positioning sensors
 of the quadcopter, estimate the state based on the sensor data, and
 then calculate control outputs to drive the system to a goal state.
@@ -77,7 +77,7 @@ An example of such scaling up is the recent research into developing
 fractionated spacecraft\cite{fractionated_spacecraft}.  A fractionated
 spacecraft is a cluster of satellites cooperating, communicating and
 running distributed applications in service of the mission goals.
-Such a cluster design replacese the traditional monolithic satellites
+Such a cluster design replaces the traditional monolithic satellites
 which are more expensive to develop, deploy, repair, and are more
 difficult to upgrade with new functionality.  Because of this trend
 towards cooperating distribution of system resources, the network
@@ -107,13 +107,13 @@ satellites, and (3) varies as a function of time throughout the orbits
 of the satellites according to the orbital mechanics defining the
 system.  The equations of motion for the satellites define the orbital
 paths taken by the satellites\cite{fundamentals_astrodynamics}.  These
-paths are, for our purposes, cicular or elliptical orbits, where each
-satellite in the clsuter has the same orbital period and speed.  Since
+paths are, for our purposes, circular or elliptical orbits, where each
+satellite in the cluster has the same orbital period and speed.  Since
 these orbits have the same period, the distances between the
 satellites will vary periodically as a function of time.  Because the
 satellites use a wireless network where the latency and bandwidth are
 directly proportional to distance, the wireless network capacity of
-the satellites will vary proprotionally with respect to time.  This
+the satellites will vary proportionally with respect to time.  This
 final point about the equations of motion and their effect on network
 capacity is especially important, since it highlights how the physics
 of the system directly and drastically affects system resources and
@@ -289,7 +289,7 @@ Such challenges for design-time network performance analysis are
   design-time analysis is critical.
 \item Most systems route network traffic for nodes which cannot
   directly communicate. These routes may be defined at design-time and
-  remain constant for the duration of the sytem, or may be unknown at
+  remain constant for the duration of the system, or may be unknown at
   design-time, changing dynamically during the run-time of the system.
   Dynamic routing is difficult to analyze for precise performance
   prediction because the the routes used by traffic may be unknown at
@@ -429,7 +429,7 @@ the nodes in the cluster are well understood and predictable,
 therefore the network dynamics can be fairly predictable as well.  For
 such predictable or periodic dynamic networks, the use of worst-case
 network performance for analysis and constraint verification wastes
-the network resources over much of the lifecycle of the
+the network resources over much of the life-cycle of the
 system. Integrating the physical dynamics of the network into the
 modeling and analysis tools improves the performance of the systems
 without degrading its reliability.
