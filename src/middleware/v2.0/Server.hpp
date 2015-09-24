@@ -28,6 +28,10 @@ public:
   int Parse(int argc, char **argv) {
     for (int i=0; i < argc; i++)
       {
+	if (!strcmp(argv[i], "--profile"))
+	  {
+	    tgFile = argv[i+1];
+	  }
 	if (!strcmp(argv[i], "--output_file"))
 	  {
 	    outputFile = argv[i+1];
@@ -47,6 +51,7 @@ public:
 	if (!strcmp(argv[i], "--help"))
 	  {
 	    TG_LOG("usage: \n\t%s\n"
+		   "\t\t --profile <TG profile filename>\n"
 		   "\t\t --output_file <filename for data output file>\n"
 		   "\t\t --ip <ipv6 address of server>\n"
 		   "\t\t --port <port number of server>\n"

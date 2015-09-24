@@ -1,5 +1,8 @@
-# period = 8
+# period = 10
 # start = 0
+# kind = receiver
+# node ID = node_2
+# flow type = routed_msg_flow1
 0,240000,0,0
 1,248000,0,0
 2,276000,0,0
