@@ -10,9 +10,37 @@
 \label{sec:middleware}
 
 \subsection{Problem}
+Many networking solutions, especially for large-scale systems, utilize
+a communications middleware of some sort, which allows the lower layer
+networking implementations to be abstracted into a uniform application
+programming interface.  Furthermore, these middleware often support
+higher-level communications, resource management, and reliability
+configurations than the lower layers they are built on.  However,
+these middlewares do not support the kind of time-varying resource
+constraints and provisioning which we have modeled and analyzed.
+Similarly, the lower layer resource allocation supports only static
+resource allocations, such as static bandwidth allocation for
+different flows traversing a network link.
 
+As an example of such static resource allocation, consider two flows
+produced on the same node for the same network interface.  These flows
+produce data with a rate that varies with respect to time, and both
+flows are high-priority flows.  Since both flows are high-priority,
+they should be guaranteed the data rate they need for the link they
+share, but the link cannot support the combination of the flows'
+maximum data rates, even though their maximum data rates do not happen
+simultaneously.
+
+With such resource allocation, it is difficult to guarantee these flows
+the capacities they require while ensuring that excessive data
+produced by one of the flows does not negatively impact the other
+flow.  
 
 \subsection{Results}
+To address this static resource allocation problem, we have integrated
+our modeling semantics into middlewares to provide time-varying
+network resource allocation and capacity sharing.
+
 Our run-time research and development of measurement, detection, and
 enforcement code for networked applications is built on the foundation
 of component-based software engineering (CBSE).  The goal of CBSE is
@@ -21,7 +49,8 @@ building-blocks, called \emph{components} so that developers can develop
 and \emph{analyze} applications in a more robust and scalable manner.  In
 CBSE, a \emph{component}, shown schematically in
 Figure~\ref{fig:component}, is the smallest deployable part of an
-application and is defined as:
+application and is defined as a collection of timers, ports, and a
+executor thread:
 
 \begin{equation}
   C = \{\{T\},\{P\},H\}
@@ -51,7 +80,8 @@ Where
   \label{fig:component}
 \end{figure}
 
-From this component definition, we can define an application as:
+From this component definition, we can define an application as a
+grouping of components and a mapping between the ports of components:
 
 \begin{equation}
   A = \{\{C\},\{M\}\}
@@ -69,7 +99,8 @@ Where
 
 And finally, an application's components are grouped into processes
 and distributed onto the nodes of a system through a deployment
-defined as:
+defined as a collection of nodes, processes, and a mapping from the
+nodes to the processes:
 
 \begin{equation}
   D = \{\{N\},\{U\},\{M\}\}
@@ -86,14 +117,14 @@ Where
   in the system, e.g. $M_{U_1,N_1} : U_1\mapsto N_1$.
 \end{itemize}
 
-Note here that though the components may be single threaded
-internally, the application containing these components may run them
-in parallel, e.g. by grouping them into a process or distributing them
-among the hardware nodes of the system.  An example application and
-deployment onto a system of nodes is shown in Figure~\ref{fig:cbse}.
-Note that multiple applications (shades of blue in this figure) may be
-deployed simultaneously onto the same system and may even interact
-with each other.
+Note here that though the components are single threaded internally,
+the application containing these components may run them in parallel,
+e.g. by grouping them into a process or distributing them among the
+hardware nodes of the system.  An example application and deployment
+onto a system of nodes is shown in Figure~\ref{fig:cbse}.  Note that
+multiple applications (shades of blue in this figure) may be deployed
+simultaneously onto the same system and may even interact with each
+other.
 
 \begin{figure}[ht!]
   \centering
@@ -126,7 +157,7 @@ network.  Using this mechanism, a malicious or faulty application can
 be prevented from flooding the network and degrading the service of
 the network to other applications.
 
-Similarly, since the receiver middleware code is automaticaly
+Similarly, since the receiver middleware code is automatically
 measuring and recording the input traffic from each of its senders, we
 implemented an additional communications channel which is used by the
 sender and receiver middleware and allows out-of-band communication
@@ -278,24 +309,27 @@ targeted receiver.  Towards this goal we make the following changes
 outlined below to our modeling/analysis framework and implementation.
 
 \subsection{Results}
-If we relax the constraint from the design-time section that all
+Because these types of attacks come from systems for which the
+application profiles may not be completely or fully known, we must
+alter our modeling semantics such that we can model these types of
+applications and the uncertainty surrounding their data rates.  
+
+If we relax the constraint on the modeling semantics that all
 sender profiles are absolute and the system behavior is completely
 known at design-time, then we not only expand the scope of
 applications that can be supported but also enable meaningful anomaly
 detection.
 
-Whereas previously, profiles captured in their definition the
-$data\ rate$ as a function of time that the application
-produced, we now alter the definition to capture two parameters:
-$mean\ data\ rate$ ($\mu$) and $max\ data\ rate$
-($MDR$), which again are both functions of time.  Just as
-before, these functions are constant-valued between successive values
-of $t$ and are time-integrated to produce the $mean\ data$
-and $max\ data$ cumulative profiles as functions of time.  With
-this specification, we no longer know exactly how much data an
-application will produce at a given point in time, but instead are
-provided two values by the developer: the $mean$ and
-$max$.
+Whereas previously, profiles modeled the exact $data\ rate$ as a
+function of time that the application produced, we now alter the
+definition to capture two parameters: $mean\ data\ rate$ ($\mu$) and
+$max\ data\ rate$ ($MDR$), which again are both functions of time.
+Just as before, these functions are constant-valued between successive
+values of $t$ and are time-integrated to produce the $mean\ data$ and
+$max\ data$ cumulative profiles as functions of time.  With this
+specification, we no longer know exactly how much data an application
+will produce at a given point in time, but instead are provided two
+values by the developer: the $mean$ and $max$.
 
 Now that we have these two profiles for the application, we could
 simply analyze the $max$ data profile to determine buffer and latency
@@ -326,26 +360,27 @@ all senders and receivers that is invisible to the application.  For
 our component model and communications middleware, we have implemented
 this OOB channel as a UDP multicast group.
 
-Because the goal of this work is to only meter senders which are
-producing \emph{too much} data, we must define what \emph{too much
-  data} is.  Because we have developed these application profiles for
-analysis, and these profiles describe the $\mu$ and $MDR$ of the
-senders, they will be used to determine when a sender is sending too
-much data.  In this paradigm, a sender is determined as behaving
-anomalously (i.e. sending too much data) if the sender $S_i$ is
-sending data at a rate $DR_i > \mu_i$.  The assumption implicit in
+Because the goal of this work is to meter only the senders which are
+producing \emph{too much} data, we must define what too much data is.
+Because we have developed these application profiles for analysis, and
+these profiles describe the mean data rate, $\mu$, and the max data
+rate, $MDR$, of the senders, they will be used to determine when a
+sender is sending too much data.  In this paradigm, sender $S_i$ is
+determined as behaving anomalously (i.e. sending too much data) if it
+is sending data at a rate $DR_i > \mu_i$.  The assumption implicit in
 this comparison is that the receiver, to be able to make this
 comparison, has full knowledge of $\mu_i$, since $DR_i$ is calculable
 on the receiver side.  If the receiver's buffer is filling up, it
-looks through the the measured $DR$ (within a certain window of time)
-for each of the senders it has been receiving data from, and compares
-it against the sender's $\mu$.  If the comparison is \emph{true}, it
-uses the OOB channel to push back to that specific sender, informing
-the sender-side middleware to stop transmitting data until the
-receiver has re-enabled that sender's transmission.  When the receiver
-has emptied it's buffer enough it can then use the OOB channel to
-re-enable the disabled senders.  The algorithm used by the receiver to
-determine which senders to limit is shown in Listing~\ref{lst:ddos_alg}.
+looks through the the measured $DR_i$ (within a certain window of
+time) for each of the senders it has been receiving data from, and
+compares it against the sender's $\mu_i$.  If the comparison is
+\emph{true}, it uses the OOB channel to push back to that specific
+sender, informing the sender-side middleware to stop transmitting data
+until the receiver has re-enabled that sender's transmission.  When
+the receiver has emptied it's buffer enough it can then use the OOB
+channel to re-enable any disabled senders.  The algorithm used by the
+receiver to determine which senders to limit is shown in
+Listing~\ref{lst:ddos_alg}.
 
 \begin{listing}[ht!]
   \begin{minted}{python}
