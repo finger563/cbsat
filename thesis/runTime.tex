@@ -169,17 +169,28 @@ protect the system from malicious or faulty applications.
 
 Into the receiver code (for subscribers) we additionally generate a
 receive buffer and receiver thread which pulls data from the buffer
-according to the receiver profile.  In this scenario, the receiver
-has a capacity with which it can handle incoming data, and it has a
-finite buffer so it must use the OOB channel and measurements on the
-incoming data stream to determine which senders to shut down to ensure
-its buffer does not overflow.  When the buffer has had some time empty
-(so that it's not in danger of running out of buffer space), the
-receiver can use the OOB channel to inform the halted senders that it
-is alright to send again.  Example traffic generation accuracy is
-shown in Figure~\ref{fig:generation}.  The complete description of the
-OOB channel, and the way the receiver limits the senders can be found
-in Section~\ref{sec:ddos}.
+according to the receiver profile.  In this scenario, the receiver has
+a capacity with which it can handle incoming data, and it has a finite
+buffer so it must use the OOB channel and measurements on the incoming
+data stream to determine which senders to shut down to ensure its
+buffer does not overflow.  When the buffer has had some time empty (so
+that it's not in danger of running out of buffer space), the receiver
+can use the OOB channel to inform the halted senders that it is
+alright to send again.  Example traffic generation accuracy is shown
+in Figure~\ref{fig:generation}.  The complete description of the OOB
+channel, and the way the receiver limits the senders can be found in
+Section~\ref{sec:ddos}.  For the data in this figure, each message was
+recorded as a tuple of $timestamp, message size$, where the timestamp
+is the time at which the message was either sent or received by the
+application.  From these data, the bandwidth calculated for the
+plot; because the bandwidth is calculated based on message timing,
+there is no data during the parts of the profile in which the
+application does not produce messages.  This lack of data manifests
+itself as a plotting artifact in the figure, where the end of one data
+production period is connected to the start of the next data
+production period with a line.  Because the time difference between
+the two periods is so large, the calculated bandwidth of the next
+message is nearly 0.  
 
 \begin{figure}[ht!]
   %\centering
