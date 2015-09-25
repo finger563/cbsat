@@ -1272,32 +1272,29 @@ validation of the routing, composition, and delay analysis techniques.
   \label{fig:routing_example}
 \end{figure}
 
-We configure the system's routing, network delay, and network
-bandwidth capacity using Linux's built-in Traffic Control
-(TC)\cite{linux_tc} tool, which allows for the configuration of static
-routing, hierarchical class-based traffic scheduling, and traffic
-shaping.  We configured the output interfaces on each node as
-a combination of two queuing disciplines (qdiscs): 1) a network
-emulator (netem) which enforces the link delay, and 2) a token-bucket
-filter (TBF) which enforces the rate control to enforce the link's
-bandwidth profile.  On the routing node, we added an additional
-priority qdisc (prio), with multiple priority queues.  We configured
-TC to filter packets into these queues by matching packet source IP
-address and destination IP address.  This filtering ensured that the
-high priority flow's packets would be filtered into the high-priority
-queue of the prio qdisc, while the lower priority flow's packets would
-be filtered into the lower priority queue of the prio qdisc.  All
-traffic out of the priority qdisc was fed into the TBF to ensure that
-all traffic, regardless of priority, shared and was shaped by the
-node's link capacity profile.  The configuration and function of TC is
-shown in Figure~\ref{fig:tc_diagram}.
+For this experimental setup, we configured the Linux kernel using
+TC\cite{linux_tc} which provides mechanisms for implementing traffic
+prioritization, shaping, and delay, among other features. All
+application traffic on each node passed through shaping and delay
+queues, which shaped the application traffic according to the
+properties of its system profile.  Additionally, for the router node
+we configured priority queuing which filtered the application traffic
+into a high priority queue and a low priority queue.  These queues are
+dequeued in the kernel according to priority FIFO, which means that
+data will not be dequeued from lower priority queues unless all high
+priority queues are empty.  These priority queues feed into traffic
+shaper and delay queues, to enforce the system profile on the
+traffic.  This configuration is shown schematically in
+Figure~\ref{fig:network_traffic}.  A more detailed description of the
+specific configuration and operation of TC is given in
+Appendix~\ref{ch:tc}.
 
 \begin{figure}[ht!]
   \centering
-  \includegraphics[width=\textwidth]{./figs/tc_diagram.png}
-  \caption{Diagram illustrating the TC configuration used to implement
-    priority flows, traffic shaping, and delay.}
-  \label{fig:tc_diagram}
+  \includegraphics[width=\textwidth]{./figs/network_traffic.png}
+  \caption{Diagram illustrating the flow of network traffic through
+    the priority queues and traffic shaping in the kernel.}
+  \label{fig:network_traffic}
 \end{figure}
 
 This experimental setup allows us to examine the validity of our
@@ -1338,6 +1335,12 @@ configuration.
 
 The results of our experiments using this application and system
 configuration are shown in Table~\ref{table:routing_results}.
+Similarly to our earlier experimental results, the predictions of the
+overall delay for both the high and low priority routed flows are
+conservative, but tight bounds on the actual delay experienced by the
+flows in the routed network with delays.  These results validate the
+compositional system analysis, the delay convolution, and the
+iterative analysis of routed networks.  
 
 \begin{table}[htbp]
 \caption{Delay and Buffer Results: Prediction versus Experiment for
@@ -1350,10 +1353,6 @@ Low Priority Flow Delay (s) & 15.7775 & (13.0460 , 0.01344) \\\hline
 \end{tabular}
 \label{table:routing_results}
 \end{table}
-
-We are finishing the design and development of code which will allow
-us to run experiments to validate our routing analysis results.  They
-will be complete in the next two weeks.
 
 
 

@@ -2,16 +2,6 @@
   does disservice to your own work. I suggest to reuse text from the
   paper in the thesis and report it again.
 
-- tc description: for the uninitated this is hard to understand. It
-  either has to be expanded with more details, or a more abstract, yet
-  more understandable summary has to be written up. Try to use a
-  queuing system diagram, or a signal flow diagram to illustrate the
-  different actions in the different layers. And avoid the use of
-  Linux-specific acronyms. Nobody knows what a qdisc is.
-
-- I would like to see the structure of the table for the routing
-  problem (if not the actual numbers).
-
 - Don't start a chapter with a figure. 4.1 Also, some of this chapter
   reads like a powerpoint slide. It should read like a thesis - you
   need to clearly communicate.
@@ -34,4 +24,14 @@ DONE:
   so why do you have to do this on the derivatives?
 
 - do you have a spell checker? use it. Calclulus ? 
+
+- tc description: for the uninitated this is hard to understand. It
+  either has to be expanded with more details, or a more abstract, yet
+  more understandable summary has to be written up. Try to use a
+  queuing system diagram, or a signal flow diagram to illustrate the
+  different actions in the different layers. And avoid the use of
+  Linux-specific acronyms. Nobody knows what a qdisc is.
+
+- I would like to see the structure of the table for the routing
+  problem (if not the actual numbers).
 
