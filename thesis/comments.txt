@@ -1,7 +1,3 @@
-- 4.2 has the same problem - it reads like a superficial summary. You
-  are doing a disservice to your own work if you don't explain it
-  well, so I suggest to expand this, and explain it better.
-
 DONE:
 -----
 
@@ -34,4 +30,8 @@ DONE:
 - Don't start a chapter with a figure. 4.1 Also, some of this chapter
   reads like a powerpoint slide. It should read like a thesis - you
   need to clearly communicate.
+
+- 4.2 has the same problem - it reads like a superficial summary. You
+  are doing a disservice to your own work if you don't explain it
+  well, so I suggest to expand this, and explain it better.
 

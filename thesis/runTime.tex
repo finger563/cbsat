@@ -9,6 +9,10 @@
 \section{Middleware-Integrated Measurement, Detection, and Enforcement}
 \label{sec:middleware}
 
+\subsection{Problem}
+
+
+\subsection{Results}
 Our run-time research and development of measurement, detection, and
 enforcement code for networked applications is built on the foundation
 of component-based software engineering (CBSE).  The goal of CBSE is
@@ -176,29 +180,19 @@ data stream to determine which senders to shut down to ensure its
 buffer does not overflow.  When the buffer has had some time empty (so
 that it's not in danger of running out of buffer space), the receiver
 can use the OOB channel to inform the halted senders that it is
-alright to send again.  Example traffic generation accuracy is shown
-in Figure~\ref{fig:generation}.  The complete description of the OOB
-channel, and the way the receiver limits the senders can be found in
-Section~\ref{sec:ddos}.  For the data in this figure, each message was
-recorded as a tuple of $timestamp, message size$, where the timestamp
-is the time at which the message was either sent or received by the
-application.  From these data, the bandwidth calculated for the
-plot; because the bandwidth is calculated based on message timing,
-there is no data during the parts of the profile in which the
-application does not produce messages.  This lack of data manifests
-itself as a plotting artifact in the figure, where the end of one data
-production period is connected to the start of the next data
-production period with a line.  Because the time difference between
-the two periods is so large, the calculated bandwidth of the next
-message is nearly 0.  
+alright to send again.  The complete description of the OOB channel,
+and the way the receiver limits the senders can be found in
+Section~\ref{sec:ddos}.  An example of our traffic producer's accuracy
+is shown in Figure~\ref{fig:generation}.  For the data in this figure,
+each message was recorded as a tuple of $timestamp, message size$,
+where the timestamp is the time at which the message was either sent
+by the application.
 
 \begin{figure}[ht!]
   %\centering
   \includegraphics[width=1.1\textwidth]{../doc/src/images/results/traffic_generation.png}
   \caption{Demonstration of the accuracy with which our traffic
-    producers follow the specified profile.  The sloped regions
-    (ca. 10, 20, 30 seconds) are a plotting artifact where the system
-    has no data because the bandwidth is 0.}
+    producers follow the specified profile.}
   \label{fig:generation}
 \end{figure}
 
@@ -247,6 +241,23 @@ Our original implementation of traffic producers performed
 \section{Distributed Denial of Service (DDoS) Detection}
 \label{sec:ddos}
 
+\subsection{Problem}
+For distributed systems which must ensure resource availability and
+system stability, a key aspect of the infrastructure is detection and
+mitigation of faults or anomalies.  With respect to network resources,
+an example is checking source and destination for communications to
+enforce only authorized communication flows are present in the system.
+However, software glitches or compromised applications can exceed
+system resources that they have been allocated.  As described in the
+previous section, higher-fidelity resource modeling and monitoring is
+required to prevent such faults or compromises from propagating
+throughout the system.  However, mitigating the propagation only
+solves part of the problem; ideally the system should classify the
+type of fault or anomaly and begin diagnostics to trace the
+fault/anomaly back to its origin.  In this thesis we will address only
+the problem of detecting and mitigating Distributed Denial of Service
+attacks.  
+
 Denial-of-Service (DoS)\cite{rfc4732} and Distributed DoS (DDoS) attacks
 can take many forms, but are generally classified as excessive traffic
 from a large amount of (possibly heterogeneous) sources targeted
@@ -266,6 +277,7 @@ a group of senders performing a DDoS attack can be mitigated by the
 targeted receiver.  Towards this goal we make the following changes
 outlined below to our modeling/analysis framework and implementation.
 
+\subsection{Results}
 If we relax the constraint from the design-time section that all
 sender profiles are absolute and the system behavior is completely
 known at design-time, then we not only expand the scope of
@@ -450,22 +462,6 @@ the network.
 \section{Network Application Fault/Anomaly Classification}
 \label{sec:classification}
 
-\subsection{Problem}
-For distributed systems which must ensure resource availability and
-system stability, a key aspect of the infrastructure is detection and
-mitigation of faults or anomalies.  With respect to network resources,
-an example is checking source and destination for communications to
-enforce only authorized communication flows are present in the system.
-However, software glitches or compromised applications can exceed
-system resources that they have been allocated.  As described in the
-previous section, higher-fidelity resource modeling and monitoring is
-required to prevent such faults or compromises from propagating
-throughout the system.  However, mitigating the propagation only
-solves part of the problem; ideally the system should classify the
-type of fault or anomaly and begin diagnostics to trace the
-fault/anomaly back to its origin.
-
-\subsection{Proposed Contributions}
 \begin{itemize}
 	\item We will use our testbed to run distributed network tests
           to classify certain types of anomalies, e.g. DDoS attacks
