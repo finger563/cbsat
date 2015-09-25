@@ -46,7 +46,11 @@ int main(int argc, char **argv) {
       if ( id >=0 ) {
 	msg.TimeStamp();
 	msg.Id(id);
-	msg.Bytes(strlen(messageData));
+	msg.Bytes( strlen(messageData) +
+		   Network::ipv4_header_bytes +
+		   //Network::ipv4_route_bytes +
+		   //Network::ipv4_header_padding_bytes +
+		   Network::udp_header_bytes );
 	Network::append_data(outputFile.c_str(), &msg);
       }
 

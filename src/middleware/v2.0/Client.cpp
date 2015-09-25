@@ -36,12 +36,22 @@ int main(int argc, char **argv) {
   timespec timeout, remaining;
 
   double timeDiff = 0;
-  timespec startTime;
+  timespec startTime, currentTime;
   clock_gettime(CLOCK_REALTIME,&startTime);
+  clock_gettime(CLOCK_REALTIME,&currentTime);
 
   long id = 0;
   std::vector<Network::Message*> messages;
 
+  double start_delay = profile.period - profile.getOffset(currentTime);
+  if ( start_delay > 0 ) {
+    double fractpart,intpart;
+    fractpart = modf(start_delay,&intpart);
+    timeout.tv_sec = (unsigned long long)(intpart);
+    timeout.tv_nsec = (unsigned long)(fractpart*1000000000.0);
+    int return_code = nanosleep (&timeout, &remaining);
+  }
+  
   while (true) {
     Network::Message *data = new Network::Message(messageBitLength, id++);
     messages.push_back(data);      
@@ -58,6 +68,11 @@ int main(int argc, char **argv) {
     if ( timeDiff >= runTime )
       break;
 
+    data->Bits( data->Bits() +
+		Network::ipv4_header_bytes * 8 +
+		//Network::ipv4_route_bytes * 8 +
+		//Network::ipv4_header_padding_bytes * 8 +
+		Network::udp_header_bytes * 8 );
     timerDelay = profile.Delay(data->Bits(),data->FirstEpochTime());
     if ( timerDelay > 0 ) {
       double fractpart,intpart;
@@ -68,7 +83,7 @@ int main(int argc, char **argv) {
     }
   }
 
-  TG_LOG("Finished sending # messages = %d\n", messages.size());
+  TG_LOG("Finished sending # messages = %lu\n", messages.size());
   
   double maxLatency = 0;
   double latency = 0;

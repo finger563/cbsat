@@ -14,16 +14,22 @@
 #include "log_macro.hpp"
 
 void setTC( unsigned long long bandwidth, unsigned long long ceil, double latency,
-	    std::string interface, std::string handle, std::string parent );
+	    std::string interface, std::string parent, std::string handle, int priority = -1 );
 
 class Options {
 public:
   std::string interface;
+  std::string parent;
+  std::string handle;
   std::string profile;
+  bool isRouter;
 
   Options() {
     interface = "eth0";
+    parent = "11:1";
+    handle = "111:";
     profile = "node_profile.csv";
+    isRouter = false;
   }
 
   int Parse(int argc, char **argv) {
@@ -34,15 +40,30 @@ public:
 	  {
 	    profile = argv[i+1];
 	  }
+	if (!strcmp(argv[i], "--is_router"))
+	  {
+	    isRouter = true;
+	  }
 	if (!strcmp(argv[i], "--interface"))
 	  {
 	    interface = argv[i+1];
+	  }
+	if (!strcmp(argv[i], "--parent"))
+	  {
+	    parent = argv[i+1];
+	  }
+	if (!strcmp(argv[i], "--handle"))
+	  {
+	    handle = argv[i+1];
 	  }
 	if (!strcmp(argv[i], "--help"))
 	  {
 	    TG_LOG("usage: \n\t%s\n"
 		   "\t\t --profile <profile name>\n"
+		   "\t\t --is_router (this node is a router node)\n"
 		   "\t\t --interface <interface name>\n"
+		   "\t\t --parent <parent TC object>\n"
+		   "\t\t --handle <handle TC object>\n"
 		   ,argv[0]);
 	    return -1;
 	  }
@@ -53,7 +74,10 @@ public:
   void Print() {
     TG_LOG("Options():\n");
     TG_LOG("\t profile name\t\t: %s\n", profile.c_str());
+    TG_LOG("\t is router?\t\t: %d\n", isRouter);
     TG_LOG("\t interface name\t\t: %s\n", interface.c_str());
+    TG_LOG("\t parent name\t\t: %s\n", parent.c_str());
+    TG_LOG("\t handle name\t\t: %s\n", handle.c_str());
   }
 };
 

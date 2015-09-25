@@ -8,6 +8,9 @@ int main(int argc, char **argv) {
   options.Print();
 
   std::string interface  = options.interface;
+  std::string parent = options.parent;
+  std::string handle = options.handle;
+  bool isRouter = options.isRouter;
 
   Network::NetworkProfile profile;
   std::string profileFile = options.profile;
@@ -31,24 +34,50 @@ int main(int argc, char **argv) {
 
       if (bandwidth == 0)
 	bandwidth = 10;
-      setTC(bandwidth, bandwidth, latency, interface, "111:", "111:1");
+
+      unsigned long long ceil_bandwidth = bandwidth;
+      ceil_bandwidth = (unsigned long long)((double)bandwidth * 1.01f);
+      if ( ceil_bandwidth == bandwidth )
+	ceil_bandwidth++;
+
+      if ( isRouter )
+	{
+	  setTC(bandwidth, ceil_bandwidth, latency, interface, "11:1", "2:");
+	  //setTC(bandwidth, bandwidth, latency, interface, "2:", "2:1");
+	  //setTC(bandwidth, bandwidth, latency, interface, "2:1", "2:10", 0);
+	  //setTC(bandwidth, bandwidth, latency, interface, "2:1", "2:20", 1);
+	}
+      else
+	{
+	  setTC(bandwidth, ceil_bandwidth, latency, interface, parent, handle);
+	}
     }
   }
 }
 
 // Forks/Execs to call TC for setting HTB bandwidth
 void setTC( unsigned long long bandwidth, unsigned long long ceil, double latency,
-	    std::string interface, std::string handle, std::string parent )
+	    std::string interface, std::string parent, std::string handle, int priority )
 {
   std::string tc_binary = "/sbin/tc";
   char bw_str[100];
   sprintf(bw_str,"%llu",bandwidth);
   char ceil_str[100];
   sprintf(ceil_str,"%llu",ceil);
+  char prio_str[10];
+  sprintf(prio_str, "%d",priority);
 
+  std::string tc_args = "qdisc replace dev " + interface
+    + " parent " + parent + " handle " + handle + " tbf rate "
+    + bw_str + "bit peakrate " + ceil_str + "bit burst 2kb latency 100000ms minburst 1500";
+
+#if 0
   std::string tc_args = "class replace dev " + interface
     + " parent " + parent + " classid " + handle + " htb rate "
-    + bw_str + "bit ceil " + ceil_str + "bit";
+    + bw_str + "bit ceil " + ceil_str + "bit"; // burst 10000000";
+  if ( priority >= 0 )
+    tc_args += " prio " + std::string(prio_str);
+#endif
 
   // FORK
   pid_t parent_pid = getpid();

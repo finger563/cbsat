@@ -21,6 +21,12 @@
 
 namespace Network {
 
+  static const int ipv4_header_bytes = 20;
+  static const int ipv4_route_bytes = 11;
+  static const int ipv4_header_padding_bytes = 1;
+  static const int udp_header_bytes = 8;
+  static const int tcp_header_bytes = 20;
+
   class Exceeded_Production_Profile
   {
   };
@@ -395,7 +401,7 @@ namespace Network {
     std::ofstream file(fname);
     if ( !file.is_open() )
       return -1;
-    file << "%index, %time, %length (bits)\n";
+    //file << "%index, %time, %length (bits)\n";
     for (long i=0;i<messages.size();i++) {
       file << messages[i]->Id() << ",";
       std::vector<double> dtimes = messages[i]->DoubleTimes();
