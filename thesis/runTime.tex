@@ -99,26 +99,41 @@ with each other.
   \label{fig:cbse}
 \end{figure}
    
-We have implemented these features based on our design-time results:
+To facilitate experimentation and testing of our analysis techniques,
+we have developed network traffic production and consumption code
+which produces or consumes traffic on a communications link according
+to either a sender profile or receiver profile.  These profiles are
+the same profiles used in the design-time analysis.  We integrated
+this producer/consumer code into our component code-generators, which
+generate component skeleton code and communications middleware glue
+code based on our component model.  Both sender and receiver
+automatically measure and record the network traffic for offline
+analysis.
 
-\begin{itemize}
-\item Traffic production according to sender profile generated into
-  sender code
-\item Traffic consumption according to receiver profile generated into
-  receiver code
-\item Measurement of output traffic on sender side and input traffic on
-  server side generated into code
-\item Detection of anomalous sending on sender side
-\item Mitigation of anomalous sending on sender side
-\item Detection of anomalous sending on receiver side
-\item Push back to sender middleware through out-of-band channel for
-  anomaly detection on server side
-\end{itemize}
+Since the sender middleware code is automatically measuring and
+recording the output traffic from the application, we implemented
+additional code which can optionally push-back to the application by
+throwing and exception when the application is producing more data
+than specified in its profile.  This push-back helps prevent a single
+application from producing more data than the system was designed for
+and flooding the network.  In the case that such a push-back occurs,
+the application is notified and the data is not transmitted onto the
+network.  Using this mechanism, a malicious or faulty application can
+be prevented from flooding the network and degrading the service of
+the network to other applications.
 
-Each of these functions uses the same profiles which enable
-design-time system and application analysis.  This integration not
-only helps with running experiments and data collection but also helps
-to ensure model to system consistency.
+Similarly, since the receiver middleware code is automaticaly
+measuring and recording the input traffic from each of its senders, we
+implemented an additional communications channel which is used by the
+sender and receiver middleware and allows out-of-band communication
+which is invisible to the application.  This out-of-band channel
+allows the sender to detect anomalies and inform the sender-side
+middleware of such anomalies.  Further details about this capability
+and uses are explained in Section~\ref{sec:ddos}.
+
+The development of this producer/consumer/measurement code not only
+helps with running experiments and data collection but also helps to
+ensure model to system consistency.
   
 \begin{figure}[ht!]
   \centering
@@ -176,10 +191,12 @@ in Section~\ref{sec:ddos}.
   \label{fig:generation}
 \end{figure}
 
+\iffalse
+
 \begin{definition}[Note:]
 The measured bandwidth profile is calculated based on
 recorded time series data of $[reception\_time,
-  message\_size]$, so the bandwidth drops to nearly 0
+message\_size]$, so the bandwidth drops to nearly 0
 periodically since the $\Delta t$ is so large between
 the messages.
 \end{definition}
@@ -207,6 +224,8 @@ Our original implementation of traffic producers performed
 	    application.
           \end{itemize}
 \end{definition}
+
+\fi
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

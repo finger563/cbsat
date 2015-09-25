@@ -150,7 +150,7 @@ can therefore be accounted for in the application profile.
                 (p[t-1] - l[t-1]) )
 	\end{split}
 \end{equation}
-\vspace{-0.5in}
+
 \begin{align}
 	\label{eq:buffer}
 	&\text{buffer}= sup\{r[t] - l[t] : t \in \mathbb{N}\}\\
@@ -220,16 +220,24 @@ applicability of the analysis to their systems and applications.  If
 the error in the predicted performance metrics is too high, the
 analysis results will cease to be useful.
 
-We developed a network emulation testbed which applies the system's
-time-varying network profile to all network traffic in the system, and
-has been reported in \cite{ISIS_F6_CYPHY:14}.  On this testbed we ran
-application network traffic generation code which produces network
-traffic according to the supplied application profile.  This traffic
-generation code measured the delay, throughput, and buffer
-requirements of the traffic that was generated.  By collecting these
-measurements over the course of multiple tests, we measured the
-differences between the predicted and measured buffer size and delay.
-The accuracy of our prediction was reported in
+To verify the validity of these operations and metrics, we developed
+network measurement code which produced data for the network according
+to the supplied profile.  This code executed on a private network
+testbed of nodes connected to each other through a gigabit Ethernet
+switch. We emulated the network link profile using traffic shaping in
+the Linux kernel's traffic control (TC)\cite{linux_tc}, which can be
+configured to control bandwidth, latency, and packet loss.  For these
+experiments, we configured the traffic shaping to control the data
+rate of the application data on the network interface according to the
+system provided network profile.
+
+On this testbed we ran application network traffic producer code which
+produces network traffic according to the supplied application
+profile.  This traffic producer code measured the delay, throughput,
+and buffer requirements of the traffic that was produced.  By
+collecting these measurements over the course of multiple tests, we
+measured the differences between the predicted and measured buffer
+size and delay.  The accuracy of our prediction was reported in
 \cite{ISIS_F6_CYPHY:14} and is shown in \ref{table:results}.
 
 \begin{table}[htbp]

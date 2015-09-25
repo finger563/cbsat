@@ -1,11 +1,3 @@
-- saying only that results have been reported already (e.g. 3.1.3)
-  does disservice to your own work. I suggest to reuse text from the
-  paper in the thesis and report it again.
-
-- Don't start a chapter with a figure. 4.1 Also, some of this chapter
-  reads like a powerpoint slide. It should read like a thesis - you
-  need to clearly communicate.
-
 - 4.2 has the same problem - it reads like a superficial summary. You
   are doing a disservice to your own work if you don't explain it
   well, so I suggest to expand this, and explain it better.
@@ -34,4 +26,12 @@ DONE:
   problem (if not the actual numbers).
 
 - clean up the references (bibtex) ... ... ...
+
+- saying only that results have been reported already (e.g. 3.1.3)
+  does disservice to your own work. I suggest to reuse text from the
+  paper in the thesis and report it again.
+
+- Don't start a chapter with a figure. 4.1 Also, some of this chapter
+  reads like a powerpoint slide. It should read like a thesis - you
+  need to clearly communicate.
 
