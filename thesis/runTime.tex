@@ -380,7 +380,7 @@ until the receiver has re-enabled that sender's transmission.  When
 the receiver has emptied it's buffer enough it can then use the OOB
 channel to re-enable any disabled senders.  The algorithm used by the
 receiver to determine which senders to limit is shown in
-Listing~\ref{lst:ddos_alg}.
+Listing~\ref{lst:ddos_alg}, and has been integrated into our middleware.
 
 \begin{listing}[ht!]
   \begin{minted}{python}
@@ -419,19 +419,29 @@ Listing~\ref{lst:ddos_alg}.
   \label{fig:ddos}
 \end{figure}
 
-We have implemented the OOB channel communication into our sender and
-receiver component code along with the profile measurement and
-comparison.  Using these code generators, we are able to run
-experiments validating that the receiver can properly manage its
-buffer by throttling excessive senders during times of congestion. 
-
 We have shown experimentally (for the system in Figure~\ref{fig:ddos})
-that, for example, a receiver side buffer size of 400000 bits, which
+that, this measurement, detection, and mitigation strategy can protect
+non-malicious clients from being denied service to a server by
+malicious or faulty clients.  In this example, the client's data might
+be lost if the server's buffer overflows.  Using the algorithm and
+implementation described above, we show that the server is able to
+keep its buffer from overflowing despite two of the three publishers
+producing too much data.  In this scenario, the attackers would cause
+dropped packets by producing data at a rate just less than their
+$MDR$, which would require a server side buffer of 459424 bits.
+However, the server detects that its buffer might overflow and that
+the two malicious clients are producing too much data and it signals
+for their middleware to prevent them from sending data.  In this way,
+it maintains available buffer space (maximum buffer of 393792 bits) to
+handle the good client's data and the good client is not denied
+service.
+
+\iffalse
+
+for example, a receiver side buffer size of 400000 bits, which
 would normally grow to 459424 bits because of excessive data pumps on
 the sender sides, is kept to 393792 by utilizing this out-of-band
 channel and secure middleware.
-
-\iffalse
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
