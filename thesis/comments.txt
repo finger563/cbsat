@@ -10,8 +10,6 @@
   are doing a disservice to your own work if you don't explain it
   well, so I suggest to expand this, and explain it better.
 
-- clean up the references (bibtex) ... ... ...
-
 DONE:
 -----
 
@@ -34,4 +32,6 @@ DONE:
 
 - I would like to see the structure of the table for the routing
   problem (if not the actual numbers).
+
+- clean up the references (bibtex) ... ... ...
 
