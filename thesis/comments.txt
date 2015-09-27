@@ -1,22 +1,3 @@
-FIGURE CHANGES:
----------------
-
-- It is not clear what is the Network QoS Arbiter does in a component
-(this wording is not used in the text).
-
-- OK, I am looking at Fig 19 and it is confusing: It seems like 'non
-application' traffic goes directly to the network interface (i.e. no
-shaper/delay). I don't think this is what you mean. I suggest to show 3
-queues on the diagram (use a 'queue' icon for each box, etc.), insert on
-the path the delay/shaper elements, and feed into a common box labeled
-'priority handler' or something similar that feeds into the network
-interface. I attached some old f6 diagrams - you may be able to reuse
-some symbols from these.
-
-- It would also help add a small figure that shows the OOB channel to
-throttle the publisher. You may be able to craft this on Fig 24 -
-hand-drawn lines overlaid the component diagram.
-
 DONE:
 -----
 
@@ -72,3 +53,18 @@ This is 100% difference. Why? Write it up.
 only developer-provided code is the business logic code - everything
 else is generated or comes from a library.
 
+- It is not clear what is the Network QoS Arbiter does in a component
+(this wording is not used in the text).
+
+- OK, I am looking at Fig 19 and it is confusing: It seems like 'non
+application' traffic goes directly to the network interface (i.e. no
+shaper/delay). I don't think this is what you mean. I suggest to show 3
+queues on the diagram (use a 'queue' icon for each box, etc.), insert on
+the path the delay/shaper elements, and feed into a common box labeled
+'priority handler' or something similar that feeds into the network
+interface. I attached some old f6 diagrams - you may be able to reuse
+some symbols from these.
+
+- It would also help add a small figure that shows the OOB channel to
+throttle the publisher. You may be able to craft this on Fig 24 -
+hand-drawn lines overlaid the component diagram.
