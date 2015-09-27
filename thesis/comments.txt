@@ -1,21 +1,3 @@
-- It seems you end many sections with a table (including Table 3, which
-seems to be the new results for the routed network). I suggest (1) to
-add more details for each experiment description (e.g. graph of the
-profiles, with numbers - you have these already), and (2) after each
-table add a paragraph or two that discusses the results. Recall this is
-supposed to be repeatable science and engineering, so anybody else
-should be able to reproduce your results - and your work deserves to be
-written up well.
-
-- Discussion should also include some analysis if the experimental results
-are significantly different from the analytic results. E.g. for the high
-priority flow you predicted 8.96 sec delay and you measured 4.14 sec.
-This is 100% difference. Why? Write it up.
-
-- When you describe the component model, it should come out that the
-only developer-provided code is the business logic code - everything
-else is generated or comes from a library.
-
 FIGURE CHANGES:
 ---------------
 
@@ -71,4 +53,22 @@ need to clearly communicate.
 - 4.2 has the same problem - it reads like a superficial summary. You
 are doing a disservice to your own work if you don't explain it
 well, so I suggest to expand this, and explain it better.
+
+- It seems you end many sections with a table (including Table 3, which
+seems to be the new results for the routed network). I suggest (1) to
+add more details for each experiment description (e.g. graph of the
+profiles, with numbers - you have these already), and (2) after each
+table add a paragraph or two that discusses the results. Recall this is
+supposed to be repeatable science and engineering, so anybody else
+should be able to reproduce your results - and your work deserves to be
+written up well.
+
+- Discussion should also include some analysis if the experimental results
+are significantly different from the analytic results. E.g. for the high
+priority flow you predicted 8.96 sec delay and you measured 4.14 sec.
+This is 100% difference. Why? Write it up.
+
+- When you describe the component model, it should come out that the
+only developer-provided code is the business logic code - everything
+else is generated or comes from a library.
 

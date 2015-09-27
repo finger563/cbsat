@@ -1378,7 +1378,16 @@ configuration are shown in Table~\ref{table:routing_results}.
 Similarly to our earlier experimental results, the predictions of the
 overall delay for both the high and low priority routed flows are
 conservative, but tight bounds on the actual delay experienced by the
-flows in the routed network with delays.
+flows in the routed network with delays.  The delay measurements
+represent the time difference from when the sender application sends
+the message into the kernel for transmission, to when the receiver has
+received the message from its kernel.  In between these two events,
+the message will have been queued and delayed by the sender's kernel,
+and transmitted to the router node.  On the router node the message
+will have been queued and delayed (according to its priority) before
+being transmitted to the receiver node.  On the receiver node the
+message will have been queued until the receiver is able to service
+the message according to its service profile.
 
 \begin{table}[htbp]
 \caption{Delay and Buffer Results: Prediction versus Experiment for
@@ -1393,11 +1402,19 @@ Low Priority Flow Delay (s) & 15.7775 & (13.0460 , 0.01344) \\\hline
 \end{table}
 
 As can be seen in the table, the results for the delay analysis are
-conservative but not as tight as our previous results.  
-
-These results validate the
-compositional system analysis, the delay convolution, and the
-iterative analysis of routed networks.  
+conservative but not as tight as our previous results.  These bounds
+are not as tight because TC does not perfectly constrain the flows to
+their allotted bandwidths, instead allowing bursts through when the
+link has capacity and data enters the shaper.  These bursts have the
+effect of passing traffic through the network faster than the traffic
+should have gone through the network and in turn decreasing the
+latency of the traffic overall.  Whereas our previous results used
+dummynet for traffic shaping on a single traffic shaping node, we
+needed to use a TC based approach to allow for the priority queuing of
+traffic and to better implement shaping of routed network traffic.
+Despite these difference, the results still validate the compositional
+system analysis, the delay convolution, and the iterative analysis of
+routed networks.
 
 \iffalse
 
