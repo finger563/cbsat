@@ -70,8 +70,8 @@ int main(int argc, char **argv) {
 
     data->Bits( data->Bits() +
 		Network::ipv4_header_bytes * 8 +
-		//Network::ipv4_route_bytes * 8 +
-		//Network::ipv4_header_padding_bytes * 8 +
+		Network::ipv4_route_bytes * 8 +
+		Network::ipv4_header_padding_bytes * 8 +
 		Network::udp_header_bytes * 8 );
     timerDelay = profile.Delay(data->Bits(),data->FirstEpochTime());
     if ( timerDelay > 0 ) {
@@ -100,6 +100,7 @@ int main(int argc, char **argv) {
   TG_LOG("Max message latency: %f seconds\n",
 	 maxLatency);
 
+  Network::write_header(outputFile.c_str());
   Network::write_data(outputFile.c_str(), messages);
 
   for (int i=0; i<messages.size(); i++)

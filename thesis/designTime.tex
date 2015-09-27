@@ -233,12 +233,29 @@ system provided network profile.
 
 On this testbed we ran application network traffic producer code which
 produces network traffic according to the supplied application
-profile.  This traffic producer code measured the delay, throughput,
-and buffer requirements of the traffic that was produced.  By
-collecting these measurements over the course of multiple tests, we
-measured the differences between the predicted and measured buffer
-size and delay.  The accuracy of our prediction was reported in
-\cite{ISIS_F6_CYPHY:14} and is shown in \ref{table:results}.
+profile.  The profiles for the application and system are shown in
+Figure~\ref{fig:experimental_validation}.  This traffic producer code
+measured the delay, throughput, and buffer requirements of the traffic
+that was produced.  By collecting these measurements over the course
+of multiple tests, we measured the differences between the predicted
+and measured buffer size and delay.  The accuracy of our prediction
+was reported in \cite{ISIS_F6_CYPHY:14} and is shown in
+Table~\ref{table:results}.
+
+\begin{figure}[ht!]
+  \centering
+  \subfigure[System Data Rate vs. Time]{
+    \includegraphics[width=0.8\textwidth]{../doc/src/images/results/maren_namek_bw.png}
+  }
+  \subfigure[System Data Analyzed with \shorttool/]{
+    \includegraphics[width=0.8\textwidth]{../doc/src/images/results/maren_namek_data.png}
+    \label{subfig:pnp_analysis_comparison}
+  }
+  \caption{System and application profiles used for experimental
+    validation of \shorttool/. The Analysis using \shorttool/ is
+    shown on the right.}
+  \label{fig:experimental_validation}
+\end{figure}
 
 \begin{table}[htbp]
 \caption{Network utilization calculations and measured results using UDP over IPv6.}
@@ -251,6 +268,13 @@ Buffer Size (bytes) & 8000 & (7722.59 , 36.94) \\\hline
 \end{tabular}
 \label{table:results}
 \end{table}
+
+As can be seen in the table, the predictions made by our analysis
+techniques are tight, conservative bounds on the actual performance of
+the application in the experimental system.  Both the predicted delay
+and the predicted buffer size required for the application were less
+than 10 percent different from the actual system's required buffer
+size and delay.  
 
 \subsection{Assumptions Involved}
 \label{subsec:assumptions}
@@ -684,31 +708,39 @@ we are able to derive more precise performance prediction metrics than
 Network Calculus, which compares the 3 seconds of system downtime to
 the 3 seconds of maximum application data production.
 
-We developed software which produces data according to a supplied
-input profile and configured the system's network to provide the
-bandwidth profile described in the system configuration profile.
-Using this experimental infrastructure, we were able to measure the
-transmitted traffic profile, the received traffic profile, the latency
-experienced by the data, and the transmitter's buffer requirements.
-The results are displayed in the table below:
+%We developed software which produces data according to a supplied
+%input profile and configured the system's network to provide the
+%bandwidth profile described in the system configuration profile.
+
+Using the same testbed, traffic production software, and traffic
+measurement software described in Section~\ref{subsec:precision}, we
+were able to measure the transmitted traffic profile, the received
+traffic profile, the latency experienced by the data, and the
+transmitter's buffer requirements.  The results are displayed in
+Table~\ref{table:results} (from the same experimental data as in
+Section~\ref{subsec:precision}):
 
 \begin{table}[htbp]
 \caption{Experimental system measurements}
-\begin{tabular}{| c | c | c |}
+\begin{tabular}{| c | c | c | c |}
 \hline
- & Predicted & Measured ($\mu,\sigma$) \\\hline
-Buffer Delay (s) & 0.0625 & (0.06003 , 0.00029) \\\hline
-Time of Delay (s) & 3.0 & (2.90547 , 0.00025) \\\hline
-Buffer Size (bytes) & 8000 & (7722.59 , 36.94) \\\hline
+ & Network Calculus & $PNP^2$ & Measured ($\mu,\sigma$) \\\hline
+Buffer Delay (s) & 3.0 & 0.0625 & (0.06003 , 0.00029) \\\hline
+Time of Delay (s) & N/A & 3.0 & (2.90547 , 0.00025) \\\hline
+Buffer Size (bits) & 3155000 & 64000 & (61780.72 , 295.52) \\\hline
 \end{tabular}
 \label{table:results}
 \end{table}
 
 Taking the results from our published work, where our methods
-predicted a buffer size of 64000 bits, we show that
-Network Calculus predicts a required buffer size of 3155000 bits. This
-drastic difference comes from the mis-match between down-time and max
-data production mentioned above.
+predicted a buffer size of 64000 bits, we show that Network Calculus
+predicts a required buffer size of 3155000 bits. This drastic
+difference comes from the mis-match between down-time and max data
+production mentioned above.  Note also that Network Calculus does not
+provide a way to predict when (during the run-time of the
+applications) the maximum delay will occur.  Network Calculus lacks
+this capability because it defines its models as functions of
+time-window size instead of as direct functions of time.
 
 \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1346,9 +1378,7 @@ configuration are shown in Table~\ref{table:routing_results}.
 Similarly to our earlier experimental results, the predictions of the
 overall delay for both the high and low priority routed flows are
 conservative, but tight bounds on the actual delay experienced by the
-flows in the routed network with delays.  These results validate the
-compositional system analysis, the delay convolution, and the
-iterative analysis of routed networks.  
+flows in the routed network with delays.
 
 \begin{table}[htbp]
 \caption{Delay and Buffer Results: Prediction versus Experiment for
@@ -1362,7 +1392,12 @@ Low Priority Flow Delay (s) & 15.7775 & (13.0460 , 0.01344) \\\hline
 \label{table:routing_results}
 \end{table}
 
+As can be seen in the table, the results for the delay analysis are
+conservative but not as tight as our previous results.  
 
+These results validate the
+compositional system analysis, the delay convolution, and the
+iterative analysis of routed networks.  
 
 \iffalse
 

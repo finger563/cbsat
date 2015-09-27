@@ -1,37 +1,74 @@
+- It seems you end many sections with a table (including Table 3, which
+seems to be the new results for the routed network). I suggest (1) to
+add more details for each experiment description (e.g. graph of the
+profiles, with numbers - you have these already), and (2) after each
+table add a paragraph or two that discusses the results. Recall this is
+supposed to be repeatable science and engineering, so anybody else
+should be able to reproduce your results - and your work deserves to be
+written up well.
+
+- Discussion should also include some analysis if the experimental results
+are significantly different from the analytic results. E.g. for the high
+priority flow you predicted 8.96 sec delay and you measured 4.14 sec.
+This is 100% difference. Why? Write it up.
+
+- When you describe the component model, it should come out that the
+only developer-provided code is the business logic code - everything
+else is generated or comes from a library.
+
+FIGURE CHANGES:
+---------------
+
+- It is not clear what is the Network QoS Arbiter does in a component
+(this wording is not used in the text).
+
+- OK, I am looking at Fig 19 and it is confusing: It seems like 'non
+application' traffic goes directly to the network interface (i.e. no
+shaper/delay). I don't think this is what you mean. I suggest to show 3
+queues on the diagram (use a 'queue' icon for each box, etc.), insert on
+the path the delay/shaper elements, and feed into a common box labeled
+'priority handler' or something similar that feeds into the network
+interface. I attached some old f6 diagrams - you may be able to reuse
+some symbols from these.
+
+- It would also help add a small figure that shows the OOB channel to
+throttle the publisher. You may be able to craft this on Fig 24 -
+hand-drawn lines overlaid the component diagram.
+
 DONE:
 -----
 
 - obviously you need a better quality figure 8, and/or a
-  reference. You may be able to generate it yourself using Matlab, but
-  in that case you will have to give some references. SFFMT 2013
-  should have some refs for sat cluster orbits.
+reference. You may be able to generate it yourself using Matlab, but
+in that case you will have to give some references. SFFMT 2013
+should have some refs for sat cluster orbits.
 
 - 3.5: I thought differentiation and integration are linear operators,
-  so why do you have to do this on the derivatives?
+so why do you have to do this on the derivatives?
 
 - do you have a spell checker? use it. Calclulus ? 
 
 - tc description: for the uninitated this is hard to understand. It
-  either has to be expanded with more details, or a more abstract, yet
-  more understandable summary has to be written up. Try to use a
-  queuing system diagram, or a signal flow diagram to illustrate the
-  different actions in the different layers. And avoid the use of
-  Linux-specific acronyms. Nobody knows what a qdisc is.
+either has to be expanded with more details, or a more abstract, yet
+more understandable summary has to be written up. Try to use a
+queuing system diagram, or a signal flow diagram to illustrate the
+different actions in the different layers. And avoid the use of
+Linux-specific acronyms. Nobody knows what a qdisc is.
 
 - I would like to see the structure of the table for the routing
-  problem (if not the actual numbers).
+problem (if not the actual numbers).
 
 - clean up the references (bibtex) ... ... ...
 
 - saying only that results have been reported already (e.g. 3.1.3)
-  does disservice to your own work. I suggest to reuse text from the
-  paper in the thesis and report it again.
+does disservice to your own work. I suggest to reuse text from the
+paper in the thesis and report it again.
 
 - Don't start a chapter with a figure. 4.1 Also, some of this chapter
-  reads like a powerpoint slide. It should read like a thesis - you
-  need to clearly communicate.
+reads like a powerpoint slide. It should read like a thesis - you
+need to clearly communicate.
 
 - 4.2 has the same problem - it reads like a superficial summary. You
-  are doing a disservice to your own work if you don't explain it
-  well, so I suggest to expand this, and explain it better.
+are doing a disservice to your own work if you don't explain it
+well, so I suggest to expand this, and explain it better.
 

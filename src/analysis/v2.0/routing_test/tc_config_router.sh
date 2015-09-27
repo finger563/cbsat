@@ -28,7 +28,7 @@ $TC qdisc add dev ${DEV} parent 1:1 handle 11: netem delay 100ms
 $TC qdisc add dev ${DEV} parent 1:2 handle 12: pfifo
 
 $TC qdisc add dev ${DEV} parent 11:1 handle 2: tbf \
-    rate 1Mbit burst 10kb latency 100000ms peakrate 1.01mbit minburst 1540
+    rate 1Mbit burst 10kb latency 100000ms peakrate 1.01mbit mtu 1540
 
 $TC qdisc add dev ${DEV} parent 2: handle 21: prio
 

@@ -13,7 +13,7 @@
 #include "NetworkProfile.hpp"
 #include "log_macro.hpp"
 
-void setTC( unsigned long long bandwidth, unsigned long long ceil, double latency,
+void setTC( unsigned long long bandwidth, unsigned long long ceil, double latency, unsigned long long buffer,
 	    std::string interface, std::string parent, std::string handle, int priority = -1 );
 
 class Options {
@@ -23,6 +23,7 @@ public:
   std::string handle;
   std::string profile;
   bool isRouter;
+  unsigned long long buffer;
 
   Options() {
     interface = "eth0";
@@ -39,6 +40,10 @@ public:
 	if (!strcmp(argv[i], "--profile"))
 	  {
 	    profile = argv[i+1];
+	  }
+	if (!strcmp(argv[i], "--buffer"))
+	  {
+	    buffer = atoi(argv[i+1]);
 	  }
 	if (!strcmp(argv[i], "--is_router"))
 	  {
@@ -75,6 +80,7 @@ public:
     TG_LOG("Options():\n");
     TG_LOG("\t profile name\t\t: %s\n", profile.c_str());
     TG_LOG("\t is router?\t\t: %d\n", isRouter);
+    TG_LOG("\t buffer\t\t\t\t: %llu\n", buffer);
     TG_LOG("\t interface name\t\t: %s\n", interface.c_str());
     TG_LOG("\t parent name\t\t: %s\n", parent.c_str());
     TG_LOG("\t handle name\t\t: %s\n", handle.c_str());

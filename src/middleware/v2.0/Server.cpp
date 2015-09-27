@@ -35,6 +35,8 @@ int main(int argc, char **argv) {
   timespec timeout, remaining;
   long id = 0;
 
+  Network::write_header(outputFile.c_str());
+
   while ( true ) {
     memset(messageData,0,messageStrLength+2);
 
@@ -48,8 +50,8 @@ int main(int argc, char **argv) {
 	msg.Id(id);
 	msg.Bytes( strlen(messageData) +
 		   Network::ipv4_header_bytes +
-		   //Network::ipv4_route_bytes +
-		   //Network::ipv4_header_padding_bytes +
+		   Network::ipv4_route_bytes +
+		   Network::ipv4_header_padding_bytes +
 		   Network::udp_header_bytes );
 	Network::append_data(outputFile.c_str(), &msg);
       }

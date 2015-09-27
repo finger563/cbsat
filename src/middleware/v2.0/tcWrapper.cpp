@@ -11,6 +11,7 @@ int main(int argc, char **argv) {
   std::string parent = options.parent;
   std::string handle = options.handle;
   bool isRouter = options.isRouter;
+  unsigned long long buffer = options.buffer;
 
   Network::NetworkProfile profile;
   std::string profileFile = options.profile;
@@ -42,24 +43,26 @@ int main(int argc, char **argv) {
 
       if ( isRouter )
 	{
-	  setTC(bandwidth, ceil_bandwidth, latency, interface, "11:1", "2:");
+	  setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, "11:1", "2:");
 	  //setTC(bandwidth, bandwidth, latency, interface, "2:", "2:1");
 	  //setTC(bandwidth, bandwidth, latency, interface, "2:1", "2:10", 0);
 	  //setTC(bandwidth, bandwidth, latency, interface, "2:1", "2:20", 1);
 	}
       else
 	{
-	  setTC(bandwidth, ceil_bandwidth, latency, interface, parent, handle);
+	  setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, parent, handle);
 	}
     }
   }
 }
 
 // Forks/Execs to call TC for setting HTB bandwidth
-void setTC( unsigned long long bandwidth, unsigned long long ceil, double latency,
+void setTC( unsigned long long bandwidth, unsigned long long ceil, double latency, unsigned long long buffer,
 	    std::string interface, std::string parent, std::string handle, int priority )
 {
   std::string tc_binary = "/sbin/tc";
+  char buff_str[100];
+  sprintf(buff_str,"%llu",buffer);
   char bw_str[100];
   sprintf(bw_str,"%llu",bandwidth);
   char ceil_str[100];
@@ -69,7 +72,7 @@ void setTC( unsigned long long bandwidth, unsigned long long ceil, double latenc
 
   std::string tc_args = "qdisc replace dev " + interface
     + " parent " + parent + " handle " + handle + " tbf rate "
-    + bw_str + "bit peakrate " + ceil_str + "bit burst 2kb latency 100000ms minburst 1500";
+    + bw_str + "bit peakrate " + ceil_str + "bit burst " + buff_str + "b latency 100000ms mtu 1540 ";
 
 #if 0
   std::string tc_args = "class replace dev " + interface
