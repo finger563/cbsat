@@ -1333,7 +1333,10 @@ Appendix~\ref{ch:tc}.
   \centering
   \includegraphics[width=\textwidth]{./figs/network_traffic.png}
   \caption{Diagram illustrating the flow of network traffic through
-    the priority queues and traffic shaping in the kernel.}
+    the priority queues and traffic shaping in the kernel.  The
+    priority handler ensures that traffic in a lower priority queue is
+    not serviced unless there is no traffic waiting in any higher
+    priority queue.}
   \label{fig:network_traffic}
 \end{figure}
 
