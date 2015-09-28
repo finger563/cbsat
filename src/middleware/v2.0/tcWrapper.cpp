@@ -45,17 +45,23 @@ int main(int argc, char **argv) {
       if ( isRouter )
 	{
 	  if ( useTBF )
+	    setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, "11:1", "2:", useTBF);
+	  else
 	    {
 	      setTC(bandwidth, bandwidth, latency, buffer, interface, "2:", "2:1", useTBF);
 	      setTC(bandwidth, bandwidth, latency, buffer, interface, "2:1", "2:10", useTBF, 0);
-	      setTC(bandwidth, bandwidth, latency, buffer, interface, "2:1", "2:20", useTBF, 1);
+	      setTC(10, bandwidth, latency, buffer, interface, "2:1", "2:20", useTBF, 1);
 	    }
-	  else
-	    setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, "11:1", "2:", useTBF);
 	}
       else
 	{
-	  setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, parent, handle, useTBF);
+	  if ( useTBF )
+	    setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, "11:1", "111:", useTBF);
+	  else
+	    {
+	      setTC(bandwidth, bandwidth, latency, buffer, interface, "2:", "2:1", useTBF);
+	      setTC(bandwidth, bandwidth, latency, buffer, interface, "2:1", "2:10", useTBF);
+	    }
 	}
     }
   }
@@ -87,7 +93,7 @@ void setTC( unsigned long long bandwidth, unsigned long long ceil, double latenc
     {
       tc_args = "class replace dev " + interface
 	+ " parent " + parent + " classid " + handle + " htb rate "
-	+ bw_str + "bit ceil " + ceil_str + "bit"; // burst 10000000";
+	+ bw_str + "bit ceil " + ceil_str + "bit burst " + buff_str;
       if ( priority >= 0 )
 	tc_args += " prio " + std::string(prio_str);
     }
