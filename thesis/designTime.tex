@@ -959,28 +959,28 @@ time when the node has available bandwidth for $P_i$.
 
 This priority relation for compositional analysis is similar to the
 task priority used for schedulability analysis in Real-Time Calculus,
-mentioned in :ref:$rtc$.  Similarly to RTC, this priority relation and
-compositionality allow us to capture the effects independent profiles
-have on each other when they share the same network resources.  Just
-as RTC based its priority relation and computation scheduling on a
-fixed-priority scheduler, our priority relation and resource allotment
-is based on the network Quality-of-Service (QoS) management provided
-by different types of networking infrastructure.  One such mechanism
-for implementing this type of priority-based network resource
-allocation is through the use of the DiffServ Code Point
-(DSCP)\cite{rfc2474}.  The DSCP is a bit-field in all packets which
-have an Internet Protocol (IP) header which allows the packet to be
-assigned a specific class for per-hop routing behavior.  Routers and
-forwarders in the network group packets according to their DSCP class
-and provide different service capacities to each class.  For example,
-the \emph{Expedited Forwarding} \cite{rfc3246} class receives strict
-priority queuing above all other traffic, which makes it a suitable
-implementation of this type of resource allocation.  Similarly, the
-Linux Traffic Control\cite{linux_tc} utility provides many mechanisms
-for shaping, policing, routing, and classifying traffic.  Its
-class-based queuing disciplines and filtering mechanisms provide the
-capability for such strict priority-based network resource
-allocation.  
+mentioned in Section~\ref{subsec:rtc}.  Similarly to RTC, this
+priority relation and compositionality allow us to capture the effects
+independent profiles have on each other when they share the same
+network resources.  Just as RTC based its priority relation and
+computation scheduling on a fixed-priority scheduler, our priority
+relation and resource allotment is based on the network
+Quality-of-Service (QoS) management provided by different types of
+networking infrastructure.  One such mechanism for implementing this
+type of priority-based network resource allocation is through the use
+of the DiffServ Code Point (DSCP)\cite{rfc2474}.  The DSCP is a
+bit-field in all packets which have an Internet Protocol (IP) header
+which allows the packet to be assigned a specific class for per-hop
+routing behavior.  Routers and forwarders in the network group packets
+according to their DSCP class and provide different service capacities
+to each class.  For example, the \emph{Expedited Forwarding}
+\cite{rfc3246} class receives strict priority queuing above all other
+traffic, which makes it a suitable implementation of this type of
+resource allocation.  Similarly, the Linux Traffic
+Control\cite{linux_tc} utility provides many mechanisms for shaping,
+policing, routing, and classifying traffic.  Its class-based queuing
+disciplines and filtering mechanisms provide the capability for such
+strict priority-based network resource allocation.
 
 Mathematically, compositionality requires that we be able to add and
 subtract profiles from each other, for instance to determine the
