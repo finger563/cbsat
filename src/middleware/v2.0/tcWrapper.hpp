@@ -14,7 +14,7 @@
 #include "log_macro.hpp"
 
 void setTC( unsigned long long bandwidth, unsigned long long ceil, double latency, unsigned long long buffer,
-	    std::string interface, std::string parent, std::string handle, int priority = -1 );
+	    std::string interface, std::string parent, std::string handle, bool useTBF = true, int priority = -1 );
 
 class Options {
 public:
@@ -23,6 +23,7 @@ public:
   std::string handle;
   std::string profile;
   bool isRouter;
+  bool useTBF;
   unsigned long long buffer;
 
   Options() {
@@ -31,6 +32,7 @@ public:
     handle = "111:";
     profile = "node_profile.csv";
     isRouter = false;
+    useTBF = true;
   }
 
   int Parse(int argc, char **argv) {
@@ -40,6 +42,18 @@ public:
 	if (!strcmp(argv[i], "--profile"))
 	  {
 	    profile = argv[i+1];
+	  }
+	if (!strcmp(argv[i], "--buffer"))
+	  {
+	    buffer = atoi(argv[i+1]);
+	  }
+	if (!strcmp(argv[i], "--use_tbf"))
+	  {
+	    useTBF = true;
+	  }
+	if (!strcmp(argv[i], "--use_htb"))
+	  {
+	    useTBF = false;
 	  }
 	if (!strcmp(argv[i], "--buffer"))
 	  {
@@ -80,6 +94,7 @@ public:
     TG_LOG("Options():\n");
     TG_LOG("\t profile name\t\t: %s\n", profile.c_str());
     TG_LOG("\t is router?\t\t: %d\n", isRouter);
+    TG_LOG("\t use tbf?\t\t: %d\n", useTBF);
     TG_LOG("\t buffer\t\t\t: %llu\n", buffer);
     TG_LOG("\t interface name\t\t: %s\n", interface.c_str());
     TG_LOG("\t parent name\t\t: %s\n", parent.c_str());

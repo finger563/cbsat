@@ -12,6 +12,7 @@ int main(int argc, char **argv) {
   std::string handle = options.handle;
   bool isRouter = options.isRouter;
   unsigned long long buffer = options.buffer;
+  bool useTBF = options.useTBF;
 
   Network::NetworkProfile profile;
   std::string profileFile = options.profile;
@@ -43,14 +44,18 @@ int main(int argc, char **argv) {
 
       if ( isRouter )
 	{
-	  setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, "11:1", "2:");
-	  //setTC(bandwidth, bandwidth, latency, interface, "2:", "2:1");
-	  //setTC(bandwidth, bandwidth, latency, interface, "2:1", "2:10", 0);
-	  //setTC(bandwidth, bandwidth, latency, interface, "2:1", "2:20", 1);
+	  if ( useTBF )
+	    {
+	      setTC(bandwidth, bandwidth, latency, buffer, interface, "2:", "2:1", useTBF);
+	      setTC(bandwidth, bandwidth, latency, buffer, interface, "2:1", "2:10", useTBF, 0);
+	      setTC(bandwidth, bandwidth, latency, buffer, interface, "2:1", "2:20", useTBF, 1);
+	    }
+	  else
+	    setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, "11:1", "2:", useTBF);
 	}
       else
 	{
-	  setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, parent, handle);
+	  setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, parent, handle, useTBF);
 	}
     }
   }
@@ -58,7 +63,7 @@ int main(int argc, char **argv) {
 
 // Forks/Execs to call TC for setting HTB bandwidth
 void setTC( unsigned long long bandwidth, unsigned long long ceil, double latency, unsigned long long buffer,
-	    std::string interface, std::string parent, std::string handle, int priority )
+	    std::string interface, std::string parent, std::string handle, bool useTBF, int priority )
 {
   std::string tc_binary = "/sbin/tc";
   char buff_str[100];
@@ -70,17 +75,22 @@ void setTC( unsigned long long bandwidth, unsigned long long ceil, double latenc
   char prio_str[10];
   sprintf(prio_str, "%d",priority);
 
-  std::string tc_args = "qdisc replace dev " + interface
-    + " parent " + parent + " handle " + handle + " tbf rate "
-    + bw_str + "bit peakrate " + ceil_str + "bit burst " + buff_str + "b latency 100000ms mtu 1540 ";
-
-#if 0
-  std::string tc_args = "class replace dev " + interface
-    + " parent " + parent + " classid " + handle + " htb rate "
-    + bw_str + "bit ceil " + ceil_str + "bit"; // burst 10000000";
-  if ( priority >= 0 )
-    tc_args += " prio " + std::string(prio_str);
-#endif
+  std::string tc_args;
+  
+  if ( useTBF )
+    {
+      tc_args = "qdisc replace dev " + interface
+	+ " parent " + parent + " handle " + handle + " tbf rate "
+	+ bw_str + "bit peakrate " + ceil_str + "bit burst " + buff_str + "b latency 100000ms mtu 1540 ";
+    }
+  else
+    {
+      tc_args = "class replace dev " + interface
+	+ " parent " + parent + " classid " + handle + " htb rate "
+	+ bw_str + "bit ceil " + ceil_str + "bit"; // burst 10000000";
+      if ( priority >= 0 )
+	tc_args += " prio " + std::string(prio_str);
+    }
 
   // FORK
   pid_t parent_pid = getpid();
