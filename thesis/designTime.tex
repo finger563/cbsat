@@ -250,7 +250,7 @@ Table~\ref{table:results}.
     \label{subfig:pnp_analysis_comparison}
   }
   \caption{System and application profiles used for experimental
-    validation of \shorttool/. The Analysis using \shorttool/ is
+    validation of \shorttool/. The analysis using \shorttool/ is
     shown on the right.}
   \label{fig:experimental_validation}
 \end{figure}
@@ -468,17 +468,17 @@ We have discovered a system level property that can be calculated from
 these profiles, but we must determine what it means and how it can be
 used.  First, we see that in system \emph{(1)}, the predicted required
 buffer size does not change regardless of the number of periods over
-which we analyze the system.  Second, we see that for system \emph{(2)},
-the predicted required buffer size changes depending on how many
-periods of activity we choose for our analysis window.  Third, we see
-that the second period of system \emph{(2)} contains the larger of the two
-predicted buffer sizes.  These observations (with our understanding of
-deterministic periodic systems) lead us to the conclusion: system
-\emph{(2)} can no longer be classified as periodic, since its behavior is
-not consistent between its periods.  Furthermore, because the required
-buffer size predicted for system system \emph{(2)} continually increases,
-we can determine that the system is in fact \emph{unstable} due to
-unbounded buffer growth.
+which we analyze the system.  Second, we see that for system
+\emph{(2)}, the predicted required buffer size changes depending on
+how many periods of activity we choose for our analysis window.
+Third, we see that the second period of system \emph{(2)} contains the
+larger of the two predicted buffer sizes.  These observations (with
+our understanding of deterministic periodic systems) lead us to the
+conclusion: system \emph{(2)} can no longer be classified as periodic,
+since its behavior is not consistent between its periods.
+Furthermore, because the required buffer size predicted for system
+\emph{(2)} continually increases, we can determine that the system is
+in fact \emph{unstable} due to unbounded buffer growth.
 
 \subsection{Proving the Minimum Analysis for System Stability}
 \label{subsec:periodic_proof}
@@ -625,7 +625,7 @@ $m=2$ and $n=1$.
 When developing a new analysis technique to predict application
 network performance, alternative techniques must be evaluated to
 determine the utility of the new techniques.  Application developers
-and system integrators can then use these comparisons as a metric for
+and system integrators can then use these comparisons as metrics for
 choosing between the available analysis tools.  For the tools and
 techniques to affect a meaningful change in system and application
 development, they must be shown to be more effective by some metric
@@ -658,7 +658,7 @@ same system analyzed using Network Calculus.
     \label{subfig:pnp_analysis_comparison}
   }
   \caption{System profile used for comparison of \shorttool/ with
-    Network Calculus.  The Analysis using \shorttool/ is shown on the right.}
+    Network Calculus.  The analysis using \shorttool/ is shown on the right.}
   \label{fig:system_comparison}
 \end{figure}
 
@@ -995,7 +995,7 @@ and
 
 Experimental validation of these compositional techniques,
 specifically with respect to priority relation, adding, and
-subtracting of profiles is presented at the end of
+subtracting of profiles is presented in the end of
 Section~\ref{sec:routing}.
 
 \newpage
@@ -1070,7 +1070,7 @@ unchanged \emph{iff} the latency profile is \textbf{periodic}, i.e.
 \delta[t] = \delta[t + k*T_p], \forall k\in\mathbb{N} > 0
 \end{equation}
 
-Experimental validation of this delay analysis is presented at the end
+Experimental validation of this delay analysis is presented in the end
 of Section~\ref{sec:routing}.
 
 \newpage
@@ -1121,7 +1121,7 @@ request re-transmission of the packet from the previous node.  Under
 the assumption of no transmission errors, we can incorporate the added
 latency incurred by store and forward into the latency profile of the
 router node.  In this way, these two forwarding techniques can be
-modeling in a simple way using our semantics (where they both simply
+modeled in a simple way using our semantics (where they both simply
 affect the latency of the node).  
 
 Given these assumptions about the forwarding techniques of the routing

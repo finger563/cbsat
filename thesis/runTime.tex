@@ -49,7 +49,7 @@ building-blocks, called \emph{components} so that developers can develop
 and \emph{analyze} applications in a more robust and scalable manner.  In
 CBSE, a \emph{component}, shown schematically in
 Figure~\ref{fig:component}, is the smallest deployable part of an
-application and is defined as a collection of timers, ports, and a
+application and is defined as a collection of timers, ports, and an
 executor thread:
 \begin{equation}
   C = \{\{T\},\{P\},H\}
@@ -372,16 +372,17 @@ is sending data at a rate $DR_i > \mu_i$.  The assumption implicit in
 this comparison is that the receiver, to be able to make this
 comparison, has full knowledge of $\mu_i$, since $DR_i$ is calculable
 on the receiver side.  If the receiver's buffer is filling up, it
-looks through the the measured $DR_i$ (within a certain window of
-time) for each of the senders it has been receiving data from, and
-compares it against the sender's $\mu_i$.  If the comparison is
-\emph{true}, it uses the OOB channel to push back to that specific
-sender, informing the sender-side middleware to stop transmitting data
-until the receiver has re-enabled that sender's transmission.  When
-the receiver has emptied it's buffer enough it can then use the OOB
-channel to re-enable any disabled senders.  The algorithm used by the
-receiver to determine which senders to limit is shown in
-Listing~\ref{lst:ddos_alg}, and has been integrated into our middleware.
+looks through the measured $DR_i$ (within a certain window of time)
+for each of the senders it has been receiving data from, and compares
+it against the sender's $\mu_i$.  If the comparison is \emph{true}, it
+uses the OOB channel to push back to that specific sender, informing
+the sender-side middleware to stop transmitting data until the
+receiver has re-enabled that sender's transmission.  When the receiver
+has emptied it's buffer enough it can then use the OOB channel to
+re-enable any disabled senders.  The algorithm used by the receiver to
+determine which senders to limit is shown in
+Listing~\ref{lst:ddos_alg}, and has been integrated into our
+middleware.
 
 \begin{listing}[ht!]
   \begin{minted}{python}
