@@ -97,12 +97,21 @@ network emulation when used on routing nodes in a system, utilizing
 the underlying network traffic shaping and policing tools available in
 Linux.  Dummynet allows the configuration of routing tables, packet
 drop rates, link bandwidths, and link delays to conform the traffic
-passing through it to the supplied network configuration.
+passing through it to the supplied network configuration.  Another
+similar tool for controlling routing, shaping, and policing of network
+traffic is the Traffic Control (TC)\cite{linux_tc} tool in the
+IPRoute2\cite{linux_iproute} suite of tools.  These tools allow for
+link emulation in the operating system kernel for instance to make a
+computer's wired Ethernet connection appear to be a lossy wireless
+connection.  Such network emulation capabilities are useful when
+testing networking applications in a controlled environment, before
+actually deploying them on the real system in the real environment.
 OpenFlow\cite{openflow2009openflow} is an alternative for network
-emulation which instead uses a compatible smart switch to shape the
-network traffic and enforce the proper network topology and
-characteristics for all traffic in the network at a lower network
-layer without requiring the use of a separate traffic shaping node.
+emulation which instead uses compatible hardware such as a smart
+network switch to shape the network traffic and enforce the proper
+network topology and characteristics for all traffic in the network at
+a lower network layer without requiring the use of a separate traffic
+shaping node or specific operating system kernels.
 
 For the types of systems we have described in Chapter~\ref{ch:intro},
 typically these types of simulation and testbed emulation are used to
@@ -650,25 +659,27 @@ stacks and therefore may be managed differently.
 \subsection{Infrastructural Approaches for Network Management}
 \label{subsec:related_part2_infrastructural}
 
-\cite{QT_Giambene2005}, Chapter 3 has a good overview of both IntServ
-and DiffServ.  DiffServ, for Differentiated Services, is designed for
-the provisioning of network resources to provide Quality of Service
-(QoS) to applications on the network but is unable to provide strict
-real-time guarantees about packet loss, delay, and bandwidth
-availability.  Instead, DiffServ was designed to scale well for large
-systems while still providing probabilistic guarantees.  IntServ, for
-Integrated Services, was designed to provide strict real-time
-guarantees about the QoS experienced by a flow on the network.  Unlike
-DiffServ, which does not maintain any state information in the routers
-along network flow paths, IntServ uses a resource reservation protocol
-(RSVP) with explicit setup of flows for deterministically allocating
-bandwidth and buffer space for a flow in each router along the flow's
-path.  While such an explicit out-of-band QoS reservation protocol
-enables similarly explicit resource availability and performance
-guarantees, the trade-off comes in the ability of the system to scale
-to many nodes and many flows.  DiffServ's scalability comes from both
-the lack of explicitly maintaining per-flow state in the routers, by
-assigning traffic to a set of predefined classes, as well as using QoS
+Two of the main infrastructural methods for managing system network
+service are DiffServ\cite{rfc2474}\cite{QT_Giambene2005} and
+Intserv\cite{rfc1633}.  DiffServ, for Differentiated Services, is
+designed for the provisioning of network resources to provide Quality
+of Service (QoS) to applications on the network but is unable to
+provide strict real-time guarantees about packet loss, delay, and
+bandwidth availability.  Instead, DiffServ was designed to scale well
+for large systems while still providing probabilistic guarantees.
+IntServ, for Integrated Services, was designed to provide strict
+real-time guarantees about the QoS experienced by a flow on the
+network.  Unlike DiffServ, which does not maintain any state
+information in the routers along network flow paths, IntServ uses a
+resource reservation protocol (RSVP)\cite{rfc2205} with explicit setup
+of flows for deterministically allocating bandwidth and buffer space
+for a flow in each router along the flow's path.  While such an
+explicit out-of-band QoS reservation protocol enables similarly
+explicit resource availability and performance guarantees, the
+trade-off comes in the ability of the system to scale to many nodes
+and many flows.  DiffServ's scalability comes from both the lack of
+explicitly maintaining per-flow state in the routers, by assigning
+traffic to a set of predefined classes, as well as using QoS
 assignment mechanisms which are built into the flow's messages,
 e.g. the DiffServ Code Point (DSCP) built into the Type of Service
 (ToS) byte in IPv4 headers and the Traffic Class byte of IPv6 headers.
@@ -718,18 +729,18 @@ FQMM\cite{Xiao2000}, attempts to address the issue of run-time QoS
 management and adaptation to changing environmental conditions
 affecting the network.  Recognizing that both environmental and
 application behavior need to be taken into account for QoS management,
-they argue that two methods for providing QoS in the internet,
-IntServ\cite{Braden1994} and DiffServ\cite{Blake1998}, are not
-sufficient for dynamic mobile networks.  While IntServ's scalability
-problem will not affect dynamic mobile networks in the near future,
-they argue that the connection maintenance required by the Resource
-ReSerVation Protocol (RSVP) renders IntServ impractical.  DiffServ, on
-the other hand, might be able to provide long-term QoS to applications
-under the varying network conditions, but is not feasibly able to
-provide the kind of short-term QoS required by real-time applications.
-Furthermore, DiffServ does not handle node mobility and external
-disturbances from the environment well as it was originally designed
-for relatively fixed (topologically) networks.
+they argue that two methods for providing QoS in the internet, IntServ
+and DiffServ, are not sufficient for dynamic mobile networks.  While
+IntServ's scalability problem will not affect dynamic mobile networks
+in the near future, they argue that the connection maintenance
+required by the Resource ReSerVation Protocol (RSVP) renders IntServ
+impractical.  DiffServ, on the other hand, might be able to provide
+long-term QoS to applications under the varying network conditions,
+but is not feasibly able to provide the kind of short-term QoS
+required by real-time applications.  Furthermore, DiffServ does not
+handle node mobility and external disturbances from the environment
+well as it was originally designed for relatively fixed
+(topologically) networks.
 
 To combat the issues in both IntServ and DiffServ, FQMM is designed to
 handle QoS for MANETs.  FQMM focuses on allowing for fine-grained

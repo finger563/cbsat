@@ -14,7 +14,7 @@ Cyber-Physical Systems (CPS) are defined as co-engineered interacting
 networks of physical and computational components.  These classes of
 systems consist of computers running sensing and actuation control
 software to interact closely with a physical system in a physical
-environment.  In these systems, the computer controls some or multiple
+environment.  In these systems, the computer controls one or multiple
 aspects of the physical system; this control aspect tightly couples
 the software with the computer's physical environment.  Because of
 this tightly coupled nature, the software not only affects the
@@ -82,19 +82,18 @@ which are more expensive to develop, deploy, repair, and are more
 difficult to upgrade with new functionality.  Because of this trend
 towards cooperating distribution of system resources, the network
 facilitating the cooperation and communications becomes a critical
-resource to the system.  Whereas the single satellite's internal
-communications bus (direct physical connection system internal to a
-single satellite which allows sensing and actuation controlled by the
-computer) was ignored in the previous example, the wireless
-communications network enabling the satellite cluster cannot be
-ignored when analyzing the properties of the system.  Because the
+resource to the system.  Whereas the CPS' internal communications bus
+(direct physical connection system which allows sensing and actuation
+controlled by the computer) was ignored in the previous example, the
+wireless communications network enabling the satellite cluster cannot
+be ignored when analyzing the properties of the system.  Because the
 satellites are expensive to deploy, impossible to repair, and must
 last for a long time to satisfy both budgetary constraints and mission
 goals, the application developers and system integrators for the
 cluster must ensure that the software on the cluster does not
-compromise its ability to meet the mission goals.  For instance, the
-same orbit maintenance described previously now necessitates the use
-of the cluster's network.  For a satellite to activate its thruster to
+compromise the system's ability to meet the mission goals.  For
+instance, cluster orbit maintenance necessitates the use of the
+cluster's network.  For a satellite to activate its thruster to
 maintain or modify its orbit, it must first ensure that such an action
 will not cause a collision with another of the satellites in the
 cluster.  Therefore, every satellite must know the state of every
@@ -346,11 +345,13 @@ The rest of this thesis is organized as follows
 \item Chapter~\ref{ch:conclusions} concludes the thesis and describes
   possible extensions to the work in the future
 \item Appendix~\ref{ch:publications} lists the publications so far
+\item Appendix~\ref{ch:tc} describes in detail the configuration of
+  traffic control.
 \end{itemize}
 
 
 
-
+\iffalse
 
 %%% TEXT THAT IS NO LONGER NEEDED:
 
@@ -360,7 +361,7 @@ The rest of this thesis is organized as follows
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\iffalse In our work, we developed analysis techniques for very
+In our work, we developed analysis techniques for very
 accurately and precisely predicting run-time application network
 performance and resource utilization from design-time models of the
 application network resource requirement profiles and system network
