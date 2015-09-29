@@ -178,19 +178,16 @@ inverses need not exist) follows.
 
 Min-plus calculus, $(\mathbb{R}\cup\{+\infty\},\wedge,+)$, deals with
 \textit{wide-sense increasing functions} :
-
 \begin{equation}
   \mathpzc{F}=\{f : \mathbb{R}^+ \rightarrow \mathbb{R}^+, \forall s
   \leq t : f(s) \leq f(t), f(0) = 0\}
 \end{equation}
-
 which represent functions whose slopes are always $\geq 0$.
 Intuitively this makes sense for modeling network traffic, as data can
 only ever by sent or not sent by the network, therefore the cumulative
 amount of data sent by the network as a function of time can only ever
 increase or stagnate.  A wide-sense increasing function can further be
 classified as a sub-additive function if
-
 \begin{equation}
   \forall s,t : f(s+t) \leq f(s) + f(t)
 \end{equation}
@@ -218,14 +215,12 @@ Network Calculus are shown in Figure~\ref{fig:wsi}.
 The main operations of min-plus calculus are the convolution and
 deconvolution operations, which act on sub-additive functions.
 Convolution is a function of the form:
-
 \begin{equation}
   (f\otimes g)(t)\equiv inf_{\{0\leq s \leq t\}}\{f(t-s)+g(s)\}
 \end{equation}
 
 Note that if the functions $f,g$ are concave, this convolution
 simplifies into the computation of the minimum:
-
 \begin{equation}
   (f\otimes g)(t)=min(f,g)
 \end{equation}
@@ -243,7 +238,6 @@ Convolution in min-plus calculus has the properties of
 \end{enumerate}
 
 Similarly, deconvolution is a function of the form:
-
 \begin{equation} 
   (f\oslash g)(t)\equiv sup_{\{0\leq u\}}\{f(t+u)-g(u)\}
 \end{equation}
@@ -265,7 +259,6 @@ characteristics of the integration of the application and the network.
 Given an arrival function $R(t)$ for the data flow describing the
 number of bits seen on the flow during the time interval $[0,t)$, the
 arrival curve $\alpha$ constrains the flow if and only if
-
 \begin{equation}
   \forall s\leq t : R(t) -R(s) \leq \alpha(t-s)
 \end{equation}
@@ -287,9 +280,8 @@ R \otimes \alpha$.
 
 Similarly, service curves transform the output data flow $R^*(t)$
 into a minimum service curve $\beta$ according to the relation:
-
 \begin{equation}
-  R(t)-R^*(t_0)\leq \beta(t-t_0), \forall t\geq 0\ \exists\ t_0\geq
+  R^*(t)-R^*(t_0)\geq \beta(t-t_0), \forall t\geq 0\ \exists\ t_0\geq
   0,t_0\leq t
 \end{equation}
 
@@ -313,13 +305,10 @@ node is constrained by the arrival curve $\alpha^* =
 \alpha\oslash\beta$.  Given the arrival curve and service curve for a
 node or system, we can compute the backlog and delay bounds, see
 Figure~\ref{fig:nc_bounds}; the backlog bound is given by:
-
 \begin{equation}
   R(t)-R^*(t)\leq sup_{\{s\geq 0\}}\{\alpha(s)-\beta(s)\}
 \end{equation}
-
 and the delay bound is given by: 
-
 \begin{equation}
   h(\alpha,\beta)=sup_{\{s\geq0\}}[inf\{T:T\geq0\ and\ \alpha(s)\leq\beta(s+T)\}]
 \end{equation}
@@ -432,11 +421,9 @@ RTC develops from this specification the minimum computation request
 curve $\alpha_r$ and the maximum computation demand curve $\alpha_d$.
 Finally, the schedulability of a task $T_i$ is determined by the
 relation:
-
 \begin{equation}
   \beta'(\Delta)\geq\alpha^i_d(\Delta)\ \ \ \forall\Delta
 \end{equation}
-
 which, if satisfied, guarantees that task $T_i$ will meet all of its
 deadlines for a static priority scheduler where tasks are ordered with
 decreasing priority.  Note that the remaining delivery curve
@@ -444,11 +431,9 @@ $\beta'(\Delta)$ is the capacity offered to task $T_i$ after all tasks
 $T_{1\leq j<i}$ have been processed. Similarly to Network Calculus,
 RTC provides analytical techniques for the computation of performance
 metrics such as computation backlog bounds:
-
 \begin{equation}
   \text{backlog}\leq sup_{\{t\geq 0\}}\{\alpha^u(t)-\beta^l(t)\}
 \end{equation}
-
 which is equivalent to the network backlog bound derived in Network
 Calculus.
 

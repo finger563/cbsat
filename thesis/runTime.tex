@@ -51,7 +51,6 @@ CBSE, a \emph{component}, shown schematically in
 Figure~\ref{fig:component}, is the smallest deployable part of an
 application and is defined as a collection of timers, ports, and a
 executor thread:
-
 \begin{equation}
   C = \{\{T\},\{P\},H\}
 \end{equation}
@@ -82,7 +81,6 @@ Where
 
 From this component definition, we can define an application as a
 grouping of components and a mapping between the ports of components:
-
 \begin{equation}
   A = \{\{C\},\{M\}\}
 \end{equation}
@@ -101,7 +99,6 @@ And finally, an application's components are grouped into processes
 and distributed onto the nodes of a system through a deployment
 defined as a collection of nodes, processes, and a mapping from the
 nodes to the processes:
-
 \begin{equation}
   D = \{\{N\},\{U\},\{M\}\}
 \end{equation}
