@@ -566,7 +566,7 @@ buffer, i.e. $R[T_p] < B[T_p]$.  In this scenario,
 $B[2*T_p] > B[T_p]$, i.e. there will be more data in the buffer
 at the end of the second period than there was at the end of the first
 period.  Since the system is deterministic, for any two successive
-periods, $n*T_p$ and $(n+1)*T_p$, $B[n*T_p] >
+periods, $n*T_p$ and $(n+1)*T_p$, $B[n*T_p] <
 B[(n+1)*T_p]$, which extends to:
 \begin{equation}
    B[m*T_p] > B[n*T_p], \forall m>n>0
@@ -1371,7 +1371,7 @@ message will have been queued until the receiver is able to service
 the message according to its service profile.
 
 \begin{table}[htbp]
-\caption{Delay and Buffer Results: Prediction versus Experiment for
+\caption{Delay Results: Prediction versus Experiment for
   Routing Analysis.}
 \begin{tabular}{| c | c | c |}
 \hline
