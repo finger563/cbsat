@@ -218,16 +218,27 @@ applicability of the analysis to their systems and applications.  If
 the error in the predicted performance metrics is too high, the
 analysis results will cease to be useful.
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{figs/network_diagram_cyphy.png}
+  \caption{Diagram of the testbed network and setup.  The CPS nodes are
+    connected to each other, but their network communication is routed
+    through the traffic shaping and delay node.}
+  \label{fig:network_diagram}
+\end{figure}
+
 To verify the validity of these operations and metrics, we developed
 network measurement code which produced data for the network according
 to the supplied profile.  This code executed on a private network
 testbed of nodes connected to each other through a gigabit Ethernet
-switch. We emulated the network link profile using traffic shaping in
-the Linux kernel's traffic control (TC)\cite{linux_tc}, which can be
-configured to control bandwidth, latency, and packet loss.  For these
-experiments, we configured the traffic shaping to control the data
-rate of the application data on the network interface according to the
-system provided network profile.
+switch. We implemented the network link profile using a traffic
+shaping node through which all network traffic flowed.  On this node
+we ran dummynet\cite{Dummynet2010}, which can be configured to control
+bandwidth, latency, and packet loss on a per-link basis.  For these
+experiments, we configured the traffic shaping node to control the
+data rate of the application data on the network interface according
+to the system provided network profile.  This testbed setup is shown
+in Figure~\ref{fig:network_diagram}.
 
 On this testbed we ran application network traffic producer code which
 produces network traffic according to the supplied application
