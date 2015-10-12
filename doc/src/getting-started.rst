@@ -14,23 +14,24 @@ Getting Started
 
 This repository code and its documentation covers a novel technique
 for analyzing and predicting network performance of distributed
-applications, called **Precise Performance Prediction for Networks**
-(**P3N**), which has been implemented into a design-time analysis tool
-that analyzes application and system models. Furthermore, a run-time
-library has been developed which enables application code to generate
-network traffic that adheres to a specified network profile.  Metrics
-about this traffic are automatically recorded for offline analysis.
-Furthermore the library enables management of such networked
-applications by forcing them to adhere to their profiles; in this way
-it acts as a lightweight layer on top of the communications middleware
-layer used by the applications on the system.  Finally, anomalous
-traffic can be detected by receivers and disabled through out-of-band
-(OOB) communication to the sender-side middleware.
+applications, called *Precise Network Performance Prediction*,
+(:math:`PNP^2`), which has been implemented into a design-time
+analysis tool that analyzes application and system
+models. Furthermore, a run-time library has been developed which
+enables application code to generate network traffic that adheres to a
+specified network profile.  Metrics about this traffic are
+automatically recorded for offline analysis.  Furthermore the library
+enables management of such networked applications by forcing them to
+adhere to their profiles; in this way it acts as a lightweight layer
+on top of the communications middleware layer used by the applications
+on the system.  Finally, anomalous traffic can be detected by
+receivers and disabled through out-of-band (OOB) communication to the
+sender-side middleware.
 
 * :ref:`theory` : for readers interested in learning the theory behind
   this analysis and implementation; covers all of the relevant
-  background, theory, and results pertaining to **P3N**.
-* :ref:`users` : for readers interested in using **P3N**; provides an
+  background, theory, and results pertaining to :math:`PNP^2`.
+* :ref:`users` : for readers interested in using :math:`PNP^2`; provides an
   explanation the interfaces provided by the tools and walks through
   some examples to demonstrate how they can be used.
 * :ref:`developers` : for readers interested in extending this work or

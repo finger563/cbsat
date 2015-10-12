@@ -48,12 +48,7 @@ development of robust safety- or mission-critical applications.
    :includehidden:
    :maxdepth: 2
 
-   background
-   math
-   results
-
-
-.. getting-started
+   getting-started
    theory-results
    users
    developers
