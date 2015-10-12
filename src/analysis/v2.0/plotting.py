@@ -17,7 +17,7 @@ class PlotOptions:
                  profileList,
                  labelList,
                  dashList,
-                 line_width,
+                 plotDict,
                  annotationList,
                  title,
                  xlabel,
@@ -28,7 +28,7 @@ class PlotOptions:
         :param list labelList: A list of strings which label the profiles
         :param list dashList: A list of integer lists which specify the dash properties for each profile
         :param list annotationList: A list of annotations to be added to the plot
-        :param int line_width: The thickness of the lines on the plot
+        :param int plotDict: The dictionary containing options for the plot, e.g. line width, etc.
         :param string title: The title to be given to the figure
         :param string xlabel: The label for the x-axis
         :param string ylabel: The label for the y-axis
@@ -38,19 +38,19 @@ class PlotOptions:
         self.labelList = labelList
         self.dashList = dashList
         self.annotationList = annotationList
-        self.line_width = line_width
+        self.plotDict = plotDict
         self.title = title
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.legend_loc = legend_loc
 
-def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_line_width ):
+def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_dict ):
     """
     :param in profList: a list of :class:`networkProfile.Profile` to be plotted
     :param in delay: a delay structure as generated from :func:`networkProfile.Profile.Convolve`
     :param in buffer: a buffer structure as generated from :func:`networkProfile.Profile.Convolve`
     :param in num_periods: how many periods the plot covers
-    :param in plot_line_width: how thick the lines for each plot should be
+    :param in plot_dict: dictionary containing plotting options
     """
     # SET UP THE BANDWIDTH VS TIME PLOT
     profileList = []
@@ -68,7 +68,7 @@ def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_line_wid
         profileList = profileList,
         labelList = labelList,
         dashList = dashList,
-        line_width = plot_line_width,
+        plotDict = plot_dict,
         annotationList = annotationList,
         title = "Network Data Rate vs. Time over {} period(s)".format(num_periods),
         ylabel = "Data Rate (bps)",
@@ -96,7 +96,7 @@ def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_line_wid
         profileList = profileList,
         labelList = labelList,
         dashList = dashList,
-        line_width = plot_line_width,
+        plotDict = plot_dict,
         annotationList = annotationList,
         title = "Network Data vs. Time over {} period(s)".format(num_periods),
         ylabel = "Data (bits)",
@@ -120,14 +120,17 @@ def makeGraphs(pOptionsList):
         for i in range(0,len(pOpt.profileList)):
             line, = plt.plot( pOpt.profileList[i][0], pOpt.profileList[i][1],
                               label = r"{}".format(pOpt.labelList[i]),
-                              linewidth = pOpt.line_width )
+                              linewidth = pOpt.plotDict['linewidth'] )
             line.set_dashes( pOpt.dashList[i] )
-            if pOpt.annotationList[i]: addAnnotation(pOpt.annotationList[i])
+            if pOpt.annotationList[i] and pOpt.plotDict['annotations']: addAnnotation(pOpt.annotationList[i])
         setFigureOpts( title = pOpt.title,
                        ylabel = pOpt.ylabel,
                        xlabel = pOpt.xlabel,
                        legend_loc = pOpt.legend_loc )
         figNum += 1
+        if not pOpt.plotDict['axes_tickmarks']:
+            plt.xticks(())
+            plt.yticks(())
     plt.show()
 
 annotations = []

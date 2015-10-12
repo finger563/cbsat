@@ -50,7 +50,6 @@ def analyze_profile(required, provided, config, options):
     nc_step_size = options.nc_step_size
     print_profiles = options.print_profiles
     plot_dict = options.plot_dict
-    plot_line_width = options.plot_line_width
     
     topology = config.topology
     routes = config.routes
@@ -128,11 +127,11 @@ def analyze_profile(required, provided, config, options):
         for key in plot_dict:
             profList = [x for x in profList if key not in x.kind]
         plot_bandwidth_and_data( profList, maxDelay, maxBuffer,
-                                 num_periods, plot_line_width)
+                                 num_periods, plot_dict)
         if nc_mode:
             profList = [required_nc, provided_nc, output_nc]
             plot_bandwidth_and_data( profList, maxDelay_nc, maxBuffer_nc,
-                                     num_periods, plot_line_width)
+                                     num_periods, plot_dict)
 
     # Shrink the profiles back down so that they can be composed with other profiles
     received.Shrink(received.period)
@@ -287,7 +286,9 @@ class Options:
 \t--help                   (to show this help and exit)
 \t--nc_mode                (to run network calculus calcs)
 \t--no_plot                (to not output any plots)
-\t--no_profile_name        (to not plot 'profile_name', e.g. 'required')
+\t--no_profile_name        (to not plot 'profile_name', e.g. 'no_required')
+\t--no_axes_tickmarks      (to not display axes tickmarks)
+\t--no_annotations         (to not display buffer / delay annotations)
 \t--print                  (to print the profiles as they are analyzed)
 \t--required               <fileName containing the required profile>
 \t--provided               <fileName containing the provided profile>
@@ -299,11 +300,13 @@ class Options:
     """
     def __init__(self):
         self.plot_profiles = havePLT   #: plot the profiles?
-        self.plot_dict = {'plot' : True}  #: dictionary with plot options generated
+        self.plot_dict = {'plot' : True, 
+        'axes_tickmarks' : True, 
+        'annotations' : True ,
+        'linewidth' : 4,
+        'font_size' : 25 }  #: dictionary with plot options generated
         self.print_profiles = False    #: print the profiles?
         self.num_periods = 1           #: number of periods to analyze
-        self.plot_line_width = 4       #: line width for plots
-        self.font_size = 25            #: font size for plots
         self.nc_mode = False           #: analyze using network calculus techniques?
         self.nc_step_size = 1          #: step size for network calculus analysis
         self.required_fileName = "required.csv"  #: what file to load as the required profile
@@ -322,7 +325,7 @@ class Options:
                     return -1
                 argind += 1
             elif "--no_" in args[argind]:
-                self.plot_dict[args[argind].split('_')[-1]] = False
+                self.plot_dict[args[argind].split('_',1)[-1]] = False
             elif args[argind] == '--print':
                 self.print_profiles = True
             elif args[argind] == "--nc_mode":
