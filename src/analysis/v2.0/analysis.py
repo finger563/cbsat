@@ -123,7 +123,7 @@ def analyze_profile(required, provided, config, options):
             print "\t APPLICATION MAY HAVE UNBOUNDED BUFFER GROWTH ON NETWORK\n" +\
                 bcolors.ENDC
 
-    if plot_dict['plot']:
+    if plot_dict['plot'] and havePLT:
         profList = [required,provided,output, remaining, received]
         for key in plot_dict:
             profList = [x for x in profList if key not in x.kind]
