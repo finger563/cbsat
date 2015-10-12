@@ -161,7 +161,10 @@ def get_value_at_time(values, t, interpolate = True):
         nextInd = (i+1) % len(values)
         slope = values[nextInd][1] - values[i][1]
         timeDiff = values[nextInd][0] - values[i][0]
-        return values[i][1] + slope / timeDiff * (t - values[i][0])
+        if t == values[i][0] or timeDiff == 0.0:
+            return values[i][1]
+        else:
+            return values[i][1] + slope / timeDiff * (t - values[i][0])
 
 def get_times_at_value(values, value, interpolate = True):
     """
