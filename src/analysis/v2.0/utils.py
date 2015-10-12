@@ -270,7 +270,7 @@ def max_horizontal_difference(values1, values2, interpolate = True, epsilon = 0.
         t_2 = get_times_at_value(values2, d, interpolate)
         if t_1 and t_2:
             if d > 0:
-                diff = abs(t_2[0] - t_1[0])
+                diff = abs(t_2[1] - t_1[0])
             else: # if d is 0, we want to know the full max distance
                 diff = abs(t_2[1] - t_1[0])
             if diff > max_diff[2] and diff > epsilon:
