@@ -135,6 +135,7 @@ def makeGraphs(pOptionsList):
 
 annotations = []
 def clearAnnotations():
+    global annotations
     annotations = []
 
 def addAnnotation(annotation):
@@ -144,16 +145,15 @@ def addAnnotation(annotation):
     :param in list annotation: a :func:`list` of the form [ <string>, <x position>, <y position> ]
     """
     xy = (annotation[1],annotation[2])
-    xytext = (10,-10)
+    xt = 20
+    yt = -20
     frame1 = plt.gca()
-    if annotations and abs(annotations[-1].xy[1] - xy[1]) < xy[1]/5.0:
-        if xy[1] > annotations[-1].xy[1]:
-            xytext = (10, 30)
-        else:
-            xytext = (10, -10)
+    if annotations and abs(annotations[-1].xy[1] - xy[1]) < xy[1]/10.0:
+        yt -= 20
+    print xt,yt
     ann = frame1.annotate(annotation[0],
                           xy=xy, xycoords='data',
-                          xytext=xytext, textcoords="offset points",
+                          xytext=(xt,yt), textcoords="offset points",
                           bbox=dict(boxstyle="round", fc="w"),
                           arrowprops=dict(arrowstyle="-|>",
                                           connectionstyle="arc3,rad=-0.2",
