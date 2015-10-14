@@ -71,6 +71,7 @@ def analyze_profile(required, provided, config, options):
     # CONVOLVE REQUIRED WITH PROVIDED TO PRODUCE OUTPUT
     output = required.Convolve(provided)
     output.period = hyperPeriod
+    output.name = "transmitted"
     # CALCULATE SENDER-SIDE BUFFER AND DELAY FROM OUTPUT AND REQUIRED
     maxBuffer = required.CalcBuffer(output)
     maxDelay = required.CalcDelay(output)
@@ -79,11 +80,13 @@ def analyze_profile(required, provided, config, options):
     # this determines the characteristics of the data at the receiver end
     received = output.Delay(provided)
     received.Kind("received")
+    received.name = "received"
     received.period = hyperPeriod
 
     # calculate the remaining capacity of the node's link
     remaining = provided.SubtractProfile(output)
     remaining.Kind("leftover")
+    remaining.name = "remaining"
     remaining.period = hyperPeriod
     remaining.Integrate(hyperPeriod * num_periods)
 
@@ -304,6 +307,7 @@ class Options:
         'axes_tickmarks' : True, 
         'annotations' : True ,
         'linewidth' : 4,
+        'dashes' : True,
         'font_size' : 25 }  #: dictionary with plot options generated
         self.print_profiles = False    #: print the profiles?
         self.num_periods = 1           #: number of periods to analyze

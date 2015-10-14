@@ -60,7 +60,7 @@ def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_dict, xa
     dashBase = 4
     for p in profList:
         profileList.append(p.MakeGraphPointsSlope())
-        labelList.append('{} bandwidth'.format(p.name))
+        labelList.append('{}'.format(p.name))
         dashList.append([dashBase,dashBase/2])
         annotationList.append([])
         dashBase += 2
@@ -83,7 +83,7 @@ def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_dict, xa
     dashBase = 4
     for p in profList:
         profileList.append(p.MakeGraphPointsData())
-        labelList.append('{}[t]: {} data'.format(p.kind[0], p.name))
+        labelList.append('{}'.format(p.name))
         dashList.append([dashBase,dashBase/2])
         annotationList.append([])
         dashBase += 2
@@ -98,8 +98,8 @@ def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_dict, xa
         dashList = dashList,
         plotDict = plot_dict,
         annotationList = annotationList,
-        title = "Network Data vs. Time over {} period(s)".format(num_periods),
-        ylabel = "Data (bits)",
+        title = "Network Capacity vs. Time over {} period(s)".format(num_periods),
+        ylabel = "Cumulative Capacity (bits)",
         xlabel = xaxislabel,
         legend_loc = "upper left"
     )
@@ -121,7 +121,8 @@ def makeGraphs(pOptionsList):
             line, = plt.plot( pOpt.profileList[i][0], pOpt.profileList[i][1],
                               label = r"{}".format(pOpt.labelList[i]),
                               linewidth = pOpt.plotDict['linewidth'] )
-            line.set_dashes( pOpt.dashList[i] )
+            if pOpt.dashList and pOpt.plotDict['dashes']:
+                line.set_dashes( pOpt.dashList[i] )
             if pOpt.annotationList[i] and pOpt.plotDict['annotations']: addAnnotation(pOpt.annotationList[i])
         setFigureOpts( title = pOpt.title,
                        ylabel = pOpt.ylabel,
