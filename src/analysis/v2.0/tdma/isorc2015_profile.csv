@@ -1,6 +1,6 @@
 # period = 5
 # kind = provided
-# name = tdma
+# name = slot
 # node ID = 1
 0.0,0,0,0
 1.0,5,0,0
