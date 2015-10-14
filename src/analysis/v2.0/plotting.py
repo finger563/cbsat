@@ -146,12 +146,16 @@ def addAnnotation(annotation):
     """
     xy = (annotation[1],annotation[2])
     xt = 20
-    yt = -20
-    frame1 = plt.gca()
-    if annotations and abs(annotations[-1].xy[1] - xy[1]) < xy[1]/10.0:
+    xmax = plt.xlim()[1]
+    ymax = plt.ylim()[1]
+    if abs(xy[0] - xmax) < xmax/5.0:
+        xt = -100
+    yt = 20 
+    if abs(xy[1] - ymax) < ymax/5.0:
+        yt = -20
+    if annotations and abs(annotations[-1].xy[1] - xy[1]) < ymax/5.0:
         yt -= 20
-    print xt,yt
-    ann = frame1.annotate(annotation[0],
+    ann = plt.annotate(annotation[0],
                           xy=xy, xycoords='data',
                           xytext=(xt,yt), textcoords="offset points",
                           bbox=dict(boxstyle="round", fc="w"),
