@@ -1,6 +1,7 @@
-# period = 2
+# period = 1
 # priority = 1
 # kind = required
+# name = effective
 # node ID = 1
 # flow type = topic1
 0,1,1,0

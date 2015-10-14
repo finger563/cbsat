@@ -60,7 +60,7 @@ def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_dict ):
     dashBase = 4
     for p in profList:
         profileList.append(p.MakeGraphPointsSlope())
-        labelList.append('{} bandwidth'.format(p.kind))
+        labelList.append('{} bandwidth'.format(p.name))
         dashList.append([dashBase,dashBase/2])
         annotationList.append([])
         dashBase += 2
@@ -83,7 +83,7 @@ def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_dict ):
     dashBase = 4
     for p in profList:
         profileList.append(p.MakeGraphPointsData())
-        labelList.append('{}[t]: {} data'.format(p.kind[0], p.kind))
+        labelList.append('{}[t]: {} data'.format(p.kind[0], p.name))
         dashList.append([dashBase,dashBase/2])
         annotationList.append([])
         dashBase += 2

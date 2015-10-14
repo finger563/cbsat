@@ -30,9 +30,10 @@ class Profile:
     #: Which profiles are interpolated between points
     interpolated_profiles = ['data','latency']
     
-    def __init__(self, kind = None, period = 0, priority = 0,
+    def __init__(self, name = None, kind = None, period = 0, priority = 0,
                  node = 0, flow_type = None, num_periods = 1, sender_names = []):
         """
+        :param string name: what is the name of the profile?
         :param string kind: what kind of profile is it?
         :param double period: what is the periodicity (in seconds) of the profile
         :param int priority: what is the priority of the flow in the system
@@ -40,6 +41,9 @@ class Profile:
         :param int dest: what is the node id to which the data on this profile will be sent
         """
         self.kind = kind              #: The kind of this profile, e.g. 'required'
+        self.name = name              #: The user-provided name for this profile; defaults to the kind
+        if not self.name:
+            self.name = self.kind
         self.period = period          #: The length of one period of this profile
         self.priority = priority      #: The priority of the profile; relevant for 'required' profiles
         self.node_id = node           #: The node ID which is the source of this profile
@@ -55,6 +59,7 @@ class Profile:
         * node ID
         * flow_type             (for matching senders <--> receivers)
         * profile kind          (provided, required, receiver, output, leftover)
+        * profile name
 
         A profile header is at the top of the file and has the following syntax::
 
@@ -75,6 +80,10 @@ class Profile:
                     self.flow_type = value.strip()
                 elif "kind" in prop:
                     self.kind = value.strip()
+                elif "name" in prop:
+                    self.name = value.strip()
+        if not self.name:
+            self.name = self.kind
 
     def ParseFromFile(self, prof_fName):
         """
