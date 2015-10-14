@@ -44,7 +44,7 @@ class PlotOptions:
         self.ylabel = ylabel
         self.legend_loc = legend_loc
 
-def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_dict ):
+def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_dict, xaxislabel = "Time (s)" ):
     """
     :param in profList: a list of :class:`networkProfile.Profile` to be plotted
     :param in delay: a delay structure as generated from :func:`networkProfile.Profile.Convolve`
@@ -72,7 +72,7 @@ def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_dict ):
         annotationList = annotationList,
         title = "Network Data Rate vs. Time over {} period(s)".format(num_periods),
         ylabel = "Data Rate (bps)",
-        xlabel = "Time (s)",
+        xlabel = xaxislabel,
         legend_loc = "lower left"
     )
     # SET UP THE DATA VS TIME PLOT
@@ -100,7 +100,7 @@ def plot_bandwidth_and_data( profList, delay, buffer, num_periods, plot_dict ):
         annotationList = annotationList,
         title = "Network Data vs. Time over {} period(s)".format(num_periods),
         ylabel = "Data (bits)",
-        xlabel = "Time (s)",
+        xlabel = xaxislabel,
         legend_loc = "upper left"
     )
     # Plot both of the graphs now they have been set up

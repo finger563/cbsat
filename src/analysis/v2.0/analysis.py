@@ -131,7 +131,7 @@ def analyze_profile(required, provided, config, options):
         if nc_mode:
             profList = [required_nc, provided_nc, output_nc]
             plot_bandwidth_and_data( profList, maxDelay_nc, maxBuffer_nc,
-                                     num_periods, plot_dict)
+                                     num_periods, plot_dict, xaxislabel = "Time Window Size (s)")
 
     # Shrink the profiles back down so that they can be composed with other profiles
     received.Shrink(received.period)
