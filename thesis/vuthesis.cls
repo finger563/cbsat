@@ -244,14 +244,19 @@ acceptable looking results, but it may be omitted to get smaller print.
           \leftline{\hbox to 3.75in{Approved:\hss}Date:}
           \ \\
           \underline{\hskip 3.75in}\ \underline{\hskip 2.1in}\\
+          Dr. Gabor Karsai\\
           \\
           \underline{\hskip 3.75in}\ \underline{\hskip 2.1in}\\
+          Dr. Xenofon D. Koutsoukos\\
           \\
           \underline{\hskip 3.75in}\ \underline{\hskip 2.1in}\\
+          Dr. Bharat Bhuva\\
           \\
           \underline{\hskip 3.75in}\ \underline{\hskip 2.1in}\\
+          Dr. Mitch Wilkes\\
           \\
-          \underline{\hskip 3.75in}\ \underline{\hskip 2.1in}
+          \underline{\hskip 3.75in}\ \underline{\hskip 2.1in}\\
+          Dr. Aniruddha Gokhale
         }
         \newpage}}
 
