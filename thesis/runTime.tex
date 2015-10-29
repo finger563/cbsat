@@ -149,7 +149,7 @@ analysis.
 Since the sender middleware code is automatically measuring and
 recording the output traffic from the application, we implemented
 additional code which can optionally push-back to the application by
-throwing and exception when the application is producing more data
+throwing an exception when the application is producing more data
 than specified in its profile.  This push-back helps prevent a single
 application from producing more data than the system was designed for
 and flooding the network.  In the case that such a push-back occurs,
