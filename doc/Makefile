@@ -9,9 +9,6 @@ SPHINX_BUILD = sphinx-build
 SPHINX_AUTOBUILD = sphinx-autobuild
 SPHINX_OPTS = -d $(BUILD_DIR)/doctrees $(SRC_DIR)
 
-INKSCAPE = inkscape
-INKSCAPE_FLAGS = -C -d=90 --export-background-opacity=\#00
-
 # Main targets -----------------------------------------------------------------
 
 .PHONY: all build clean
@@ -20,40 +17,26 @@ all: build
 
 build: html
 
-clean: clean-images
+clean: 
 	rm -rf $(BUILD_DIR) $(PYTHON_API_DIR) $(GH_PAGES_DIR)
 
 # Build specific types of doc---------------------------------------------------
 
 .PHONY: html pdf gh-pages
 
-spelling: images api
+spelling: api
 	$(SPHINX_BUILD) -b spelling $(SPHINX_OPTS) $(BUILD_DIR)/spelling
 
-html: images api
+html: api
 	$(SPHINX_BUILD) -b html $(SPHINX_OPTS) $(BUILD_DIR)/html
 
-pdf: images api
+pdf: api
 	$(SPHINX_BUILD) -b latex $(SPHINX_OPTS) $(BUILD_DIR)/pdf
 	make -C $(BUILD_DIR)/pdf
 
-gh-pages: images api
+gh-pages: api
 	rm -rf $(GH_PAGES_DIR)
 	$(SPHINX_BUILD) -b html $(SPHINX_OPTS) $(GH_PAGES_DIR)
-
-# Images -----------------------------------------------------------------------
-
-.PHONY: images clean-images
-
-PNGS = $(foreach dir, $(IMAGE_DIR), $(patsubst %.svg,%.png,$(wildcard $(IMAGE_DIR)/**/*.svg)))
-
-images: $(PNGS)
-
-clean-images:
-	rm -f $(PNGS)
-
-%.png : %.svg
-	$(INKSCAPE) $(INKSCAPE_FLAGS) -f $< -e $@
 
 # API docs ---------------------------------------------------------------------
 
