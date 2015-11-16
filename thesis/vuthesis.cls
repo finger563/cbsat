@@ -234,29 +234,29 @@ acceptable looking results, but it may be omitted to get smaller print.
         \vfil
         \vfil
         {\baselineskip=35pt
-          %\centerline{Approved:}
-          %\centerline{Dr. Gabor Karsai}
-          %\centerline{Dr. Xenofon D. Koutsoukos}
-          %\centerline{Dr. Bharat Bhuva}
-          %\centerline{Dr. Mitch Wilkes}
-          %\centerline{Dr. Aniruddha Gokhale}
+          \centerline{Approved:}
+          \centerline{Dr. Gabor Karsai}
+          \centerline{Dr. Xenofon D. Koutsoukos}
+          \centerline{Dr. Bharat Bhuva}
+          \centerline{Dr. Mitch Wilkes}
+          \centerline{Dr. Aniruddha Gokhale}
           %
-          \leftline{\hbox to 3.75in{Approved:\hss}Date:}
-          \ \\
+          %\leftline{\hbox to 3.75in{Approved:\hss}Date:}
+          %\ \\
           %\underline{\hskip 3.75in}\ \underline{\hskip 2.1in}\\
-          Dr. Gabor Karsai \hskip 2.51in 10-15-2015\\
-          \\
+          %Dr. Gabor Karsai \hskip 2.51in 10-15-2015\\
+          %\\
           %\underline{\hskip 3.75in}\ \underline{\hskip 2.1in}\\
-          Dr. Xenofon D. Koutsoukos \hskip 1.8in 10-15-2015\\
-          \\
+          %Dr. Xenofon D. Koutsoukos \hskip 1.8in 10-15-2015\\
+          %\\
           %\underline{\hskip 3.75in}\ \underline{\hskip 2.1in}\\
-          Dr. Bharat Bhuva \hskip 2.5in 10-15-2015\\
-          \\
+          %Dr. Bharat Bhuva \hskip 2.5in 10-15-2015\\
+          %\\
           %\underline{\hskip 3.75in}\ \underline{\hskip 2.1in}\\
-          Dr. Mitch Wilkes \hskip 2.51in 10-15-2015\\
-          \\
+          %Dr. Mitch Wilkes \hskip 2.51in 10-15-2015\\
+          %\\
           %\underline{\hskip 3.75in}\ \underline{\hskip 2.1in}\\
-          Dr. Aniruddha Gokhale \hskip 2.1in 10-15-2015
+          %Dr. Aniruddha Gokhale \hskip 2.1in 10-15-2015
         }
         \newpage}}
 
