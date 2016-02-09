@@ -22,3 +22,5 @@ tcWrapper: tcWrapper.cpp
 
 clean:
 	rm -f *~ core $(INCDIR)/*~ *.a *Output*
+test:
+	g++ recursive.cpp -o recursive -std=c++11
