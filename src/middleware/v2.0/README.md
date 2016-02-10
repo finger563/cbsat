@@ -43,7 +43,8 @@ The machine on which TC Wrapper is run must be preconfigured with TC
 to have either a Token Bucket Filter (TBF) or a Heirarchical Token
 Bucket Filter (HTB).  These filters are specified with a parent node
 and a handle ID, in addition to configuration parameters such as
-bandwidth, buffer size, and latency.
+bandwidth, buffer size, and latency.  _It is recommended to simply use
+a single TBF for the entire enterface_.
 
 Such TC configuration can be configured for instance through the
 following command:
