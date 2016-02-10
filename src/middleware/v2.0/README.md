@@ -45,6 +45,19 @@ Bucket Filter (HTB).  These filters are specified with a parent node
 and a handle ID, in addition to configuration parameters such as
 bandwidth, buffer size, and latency.
 
+Such TC configuration can be configured for instance through the
+following command:
+
+```bash
+sudo tc qdisc del dev $INTERFACE root
+sudo tc qdisc add dev $INTERFACE root handle 1: tbf\
+	rate 100Mbit peakrate 101Mbit mtu 8192 latency 1ms burst 1540
+```
+
+where `$INTERFACE` corresponds to the network interface, e.g. `eth0`.
+
+Some example configurations for TC configuration can be found in this repository in various `tc_config*.sh` scripts, in subfolders of the [analysis subfolder](../../analysis/v2.0/).
+
 The TC Wrapper is configured through the command line through the
 following options:
 
