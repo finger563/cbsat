@@ -28,8 +28,8 @@ public:
 
   Options() {
     interface = "eth0";
-    parent = "2:";
-    handle = "2:1";
+    parent = "1:";
+    handle = "1:1";
     profile = "node_profile.csv";
     isRouter = false;
     useTBF = true;
