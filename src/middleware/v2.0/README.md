@@ -14,7 +14,7 @@ profiles have the form:
 # start = <start time in seconds>
 # priority = <priority of the profile>
 # uuid = <uuid of the profile>
-< time (s), bandwidth (bps), max bandwidth (bps), latency (s) >
+< time (s), bandwidth (bps), max bandwidth (bps), latency (ms) >
 ```
 
 ## TC Wrapper
@@ -54,7 +54,7 @@ sudo tc qdisc add dev $INTERFACE root handle 1: tbf\
 	rate 100Mbit peakrate 101Mbit mtu 8192 latency 1ms burst 1540
 ```
 
-where `$INTERFACE` corresponds to the network interface, e.g. `eth0`.
+where `$INTERFACE` corresponds to the network interface, e.g. `eth0`.  In this example, the `parent` of the TBF is `root` and the `handle` is `1:`
 
 Some example configurations for TC configuration can be found in this repository in various `tc_config*.sh` scripts, in subfolders of the [analysis subfolder](../../analysis/v2.0/).
 
@@ -73,6 +73,12 @@ following options:
 ```
 
 ### Usage
+
+The TC Wrapper must be run as `root`, and the arguments available to be interpreted by the program are described above.  TC Wrapper will continue to regulate the interface according to the profile until it is cancelled or killed.  The interface's filter should be removed at the end of the experiment by calling
+
+```bash
+sudo tc qdisc del dev $INTERFACE root
+```
 
 ## Sender
 
