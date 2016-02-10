@@ -45,22 +45,25 @@ int main(int argc, char **argv) {
       if ( isRouter )
 	{
 	  if ( useTBF )
-	    setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, "11:1", "2:", useTBF);
+	    setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, parent, handle, useTBF);
 	  else
 	    {
-	      setTC(bandwidth, bandwidth, latency, buffer, interface, "2:", "2:1", useTBF);
-	      setTC(bandwidth, bandwidth, latency, buffer, interface, "2:1", "2:10", useTBF, 0);
-	      setTC(10, bandwidth, latency, buffer, interface, "2:1", "2:20", useTBF, 1);
+	      setTC(bandwidth, bandwidth, latency, buffer, interface, parent, handle, useTBF);
+	      std::string sub_handle = parent + "10";
+	      setTC(bandwidth, bandwidth, latency, buffer, interface, handle, sub_handle, useTBF, 0);
+	      sub_handle = parent + "20";
+	      setTC(10, bandwidth, latency, buffer, interface, handle, sub_handle, useTBF, 1);
 	    }
 	}
       else
 	{
 	  if ( useTBF )
-	    setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, "11:1", "111:", useTBF);
+	    setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, parent, handle, useTBF);
 	  else
 	    {
-	      setTC(bandwidth, bandwidth, latency, buffer, interface, "2:", "2:1", useTBF);
-	      setTC(bandwidth, bandwidth, latency, buffer, interface, "2:1", "2:10", useTBF);
+	      setTC(bandwidth, bandwidth, latency, buffer, interface, parent, handle, useTBF);
+	      std::string sub_handle = parent + "10";
+	      setTC(bandwidth, bandwidth, latency, buffer, interface, handle, sub_handle, useTBF);
 	    }
 	}
     }
