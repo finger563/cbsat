@@ -33,6 +33,7 @@ public:
     profile = "node_profile.csv";
     isRouter = false;
     useTBF = true;
+    buffer = 10000;
   }
 
   int Parse(int argc, char **argv) {
