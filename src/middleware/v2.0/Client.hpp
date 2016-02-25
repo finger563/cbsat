@@ -38,31 +38,31 @@ public:
 	  {
 	    tgFile = argv[i+1];
 	  }
-	if (!strcmp(argv[i], "--output_file"))
+	else if (!strcmp(argv[i], "--output_file"))
 	  {
 	    outputFile = argv[i+1];
 	  }
-	if (!strcmp(argv[i], "--ip"))
+	else if (!strcmp(argv[i], "--ip"))
 	  {
 	    ip = argv[i+1];
 	  }
-	if (!strcmp(argv[i], "--port"))
+	else if (!strcmp(argv[i], "--port"))
 	  {
 	    ip = atoi(argv[i+1]);
 	  }
-	if (!strcmp(argv[i], "--message_bit_length"))
+	else if (!strcmp(argv[i], "--message_bit_length"))
 	  {
 	    bitLength = atoi(argv[i+1]);
 	  }
-	if (!strcmp(argv[i], "--num_periods"))
+	else if (!strcmp(argv[i], "--num_periods"))
 	  {
 	    numPeriods = atoi(argv[i+1]);
 	  }
-	if (!strcmp(argv[i], "--run_time"))
+	else if (!strcmp(argv[i], "--run_time"))
 	  {
 	    runTime = atof(argv[i+1]);
 	  }
-	if (!strcmp(argv[i], "--help"))
+	else if (!strcmp(argv[i], "--help"))
 	  {
 	    TG_LOG("usage: \n\t%s\n"
 		   "\t\t --profile <TG profile filename>\n"

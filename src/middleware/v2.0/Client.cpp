@@ -59,11 +59,7 @@ int main(int argc, char **argv) {
     interface->Send( data.Buffer().c_str(),
 		     data.Bytes() );
 
-    timeDiff = (double)(data.FirstEpochTime().tv_sec - 
-			startTime.tv_sec);
-    timeDiff += (double)(data.FirstEpochTime().tv_nsec - 
-			 startTime.tv_nsec)/1000000000.0f;
-
+    timeDiff = data.FirstDoubleTime();
     if ( timeDiff >= runTime )
       break;
 
