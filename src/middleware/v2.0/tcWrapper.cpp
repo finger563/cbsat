@@ -88,13 +88,13 @@ void setTC( uint64_t bandwidth, uint64_t ceil, double latency, uint64_t buffer,
   
   if ( useTBF )
     {
-      tc_args = "qdisc replace dev " + interface
+      tc_args = "qdisc change dev " + interface
 	+ " parent " + parent + " handle " + handle + " tbf rate "
 	+ bw_str + "bit peakrate " + ceil_str + "bit burst " + buff_str + "b latency 100000ms mtu 1540 ";
     }
   else
     {
-      tc_args = "class replace dev " + interface
+      tc_args = "class change dev " + interface
 	+ " parent " + parent + " classid " + handle + " htb rate "
 	+ bw_str + "bit ceil " + ceil_str + "bit burst " + buff_str;
       if ( priority >= 0 )
