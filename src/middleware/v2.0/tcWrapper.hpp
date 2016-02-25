@@ -30,6 +30,7 @@ public:
   bool isRouter;
   bool useTBF;
   uint64_t buffer;
+  uint64_t bucket;
 
   Options() {
     interface = "eth0";
@@ -39,6 +40,7 @@ public:
     isRouter = false;
     useTBF = true;
     buffer = 10000;
+    bucket = 100;
   }
 
   int Parse(int argc, char **argv) {
@@ -49,39 +51,43 @@ public:
 	  {
 	    profile = argv[i+1];
 	  }
-	if (!strcmp(argv[i], "--buffer"))
+	else if (!strcmp(argv[i], "--buffer"))
 	  {
 	    buffer = atoi(argv[i+1]);
 	  }
-	if (!strcmp(argv[i], "--use_tbf"))
+	else if (!strcmp(argv[i], "--bucket"))
+	  {
+	    bucket = atoi(argv[i+1]);
+	  }
+	else if (!strcmp(argv[i], "--use_tbf"))
 	  {
 	    useTBF = true;
 	  }
-	if (!strcmp(argv[i], "--use_htb"))
+	else if (!strcmp(argv[i], "--use_htb"))
 	  {
 	    useTBF = false;
 	  }
-	if (!strcmp(argv[i], "--buffer"))
+	else if (!strcmp(argv[i], "--buffer"))
 	  {
 	    buffer = atoi(argv[i+1]);
 	  }
-	if (!strcmp(argv[i], "--is_router"))
+	else if (!strcmp(argv[i], "--is_router"))
 	  {
 	    isRouter = true;
 	  }
-	if (!strcmp(argv[i], "--interface"))
+	else if (!strcmp(argv[i], "--interface"))
 	  {
 	    interface = argv[i+1];
 	  }
-	if (!strcmp(argv[i], "--parent"))
+	else if (!strcmp(argv[i], "--parent"))
 	  {
 	    parent = argv[i+1];
 	  }
-	if (!strcmp(argv[i], "--handle"))
+	else if (!strcmp(argv[i], "--handle"))
 	  {
 	    handle = argv[i+1];
 	  }
-	if (!strcmp(argv[i], "--help"))
+	else if (!strcmp(argv[i], "--help"))
 	  {
 	    TG_LOG("usage: \n\t%s\n"
 		   "\t\t --profile <profile name>\n"
@@ -89,6 +95,7 @@ public:
 		   "\t\t --use_tbf (TC filter is TBF)\n"
 		   "\t\t --use_htb (TC filter is HTB)\n"
 		   "\t\t --buffer <buffer size>\n"
+		   "\t\t --bucket <buffer size>\n"
 		   "\t\t --interface <interface name>\n"
 		   "\t\t --parent <parent TC object>\n"
 		   "\t\t --handle <handle TC object>\n"
@@ -104,7 +111,8 @@ public:
     TG_LOG("\t profile name\t\t: %s\n", profile.c_str());
     TG_LOG("\t is router?\t\t: %d\n", isRouter);
     TG_LOG("\t use tbf?\t\t: %d\n", useTBF);
-    TG_LOG("\t buffer\t\t\t: %lu\n", buffer);
+    TG_LOG("\t buffer\t\t\t: %d\n", buffer);
+    TG_LOG("\t bucket\t\t\t: %d\n", buffer);
     TG_LOG("\t interface name\t\t: %s\n", interface.c_str());
     TG_LOG("\t parent name\t\t: %s\n", parent.c_str());
     TG_LOG("\t handle name\t\t: %s\n", handle.c_str());

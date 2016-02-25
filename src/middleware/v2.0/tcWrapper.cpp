@@ -12,6 +12,7 @@ int main(int argc, char **argv) {
   std::string handle = options.handle;
   bool isRouter = options.isRouter;
   uint64_t buffer = options.buffer;
+  uint64_t bucket = options.bucket;
   bool useTBF = options.useTBF;
 
   Network::NetworkProfile profile;
@@ -35,7 +36,7 @@ int main(int argc, char **argv) {
       TG_LOG("Setting latency to %fs\n", latency);
       setTCLatency(latency, interface, "1:1", "11:");
 
-      TG_LOG("Setting bandwidth to %lu bps\n",bandwidth, latency);
+      TG_LOG("Setting bandwidth to %d bps\n",bandwidth);
 
       if (bandwidth == 0)
 	bandwidth = 10;
@@ -48,25 +49,25 @@ int main(int argc, char **argv) {
       if ( isRouter )
 	{
 	  if ( useTBF )
-	    setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, parent, handle, useTBF);
+	    setTC(bandwidth, ceil_bandwidth, buffer, bucket, interface, parent, handle, useTBF);
 	  else
 	    {
-	      setTC(bandwidth, bandwidth, latency, buffer, interface, parent, handle, useTBF);
+	      setTC(bandwidth, bandwidth, buffer, bucket, interface, parent, handle, useTBF);
 	      std::string sub_handle = parent + "10";
-	      setTC(bandwidth, bandwidth, latency, buffer, interface, handle, sub_handle, useTBF, 0);
+	      setTC(bandwidth, bandwidth, buffer, bucket, interface, handle, sub_handle, useTBF, 0);
 	      sub_handle = parent + "20";
-	      setTC(10, bandwidth, latency, buffer, interface, handle, sub_handle, useTBF, 1);
+	      setTC(10, bandwidth, buffer, bucket, interface, handle, sub_handle, useTBF, 1);
 	    }
 	}
       else
 	{
 	  if ( useTBF )
-	    setTC(bandwidth, ceil_bandwidth, latency, buffer, interface, parent, handle, useTBF);
+	    setTC(bandwidth, ceil_bandwidth, buffer, bucket, interface, parent, handle, useTBF);
 	  else
 	    {
-	      setTC(bandwidth, bandwidth, latency, buffer, interface, parent, handle, useTBF);
+	      setTC(bandwidth, bandwidth, buffer, bucket, interface, parent, handle, useTBF);
 	      std::string sub_handle = parent + "10";
-	      setTC(bandwidth, bandwidth, latency, buffer, interface, handle, sub_handle, useTBF);
+	      setTC(bandwidth, bandwidth, buffer, bucket, interface, handle, sub_handle, useTBF);
 	    }
 	}
     }
@@ -118,6 +119,7 @@ void setTCLatency( double latency,
 void forkTC(std::string tc_args)
 {
   std::string tc_binary = "/sbin/tc";
+  TG_LOG(tc_args.c_str());
   // FORK
   pid_t parent_pid = getpid();
   pid_t my_pid = fork();
