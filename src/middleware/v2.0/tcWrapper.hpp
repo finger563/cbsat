@@ -13,8 +13,13 @@
 #include "NetworkProfile.hpp"
 #include "log_macro.hpp"
 
-void setTC( uint64_t bandwidth, uint64_t ceil, double latency, uint64_t buffer,
+void setTCLatency( double latency,
+		   std::string interface, std::string parent, std::string handle );
+
+void setTC( uint64_t bandwidth, uint64_t ceil, uint64_t buffer, uint64_t bucket,
 	    std::string interface, std::string parent, std::string handle, bool useTBF = true, int priority = -1 );
+
+void forkTC( std::string tc_args );
 
 class Options {
 public:

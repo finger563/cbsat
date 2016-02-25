@@ -32,7 +32,10 @@ int main(int argc, char **argv) {
 	  TG_LOG("WHO HAS AWOKEN ME FROM MY SLUMBER?!\n");
 	}
 
-      TG_LOG("Setting bandwidth to %lu bps and latency to %fs\n",bandwidth, latency);
+      TG_LOG("Setting latency to %fs\n", latency);
+      setTCLatency(latency, interface, "1:1", "11:");
+
+      TG_LOG("Setting bandwidth to %lu bps\n",bandwidth, latency);
 
       if (bandwidth == 0)
 	bandwidth = 10;
@@ -71,36 +74,50 @@ int main(int argc, char **argv) {
 }
 
 // Forks/Execs to call TC for setting HTB bandwidth
-void setTC( uint64_t bandwidth, uint64_t ceil, double latency, uint64_t buffer,
+void setTC( uint64_t bandwidth, uint64_t ceil, uint64_t buffer, uint64_t bucket,
 	    std::string interface, std::string parent, std::string handle, bool useTBF, int priority )
 {
-  std::string tc_binary = "/sbin/tc";
-  char buff_str[100];
-  sprintf(buff_str,"%lu",buffer);
-  char bw_str[100];
-  sprintf(bw_str,"%lu",bandwidth);
-  char ceil_str[100];
-  sprintf(ceil_str,"%lu",ceil);
-  char prio_str[10];
-  sprintf(prio_str, "%d",priority);
-
   std::string tc_args;
-  
   if ( useTBF )
     {
-      tc_args = "qdisc change dev " + interface
-	+ " parent " + parent + " handle " + handle + " tbf rate "
-	+ bw_str + "bit peakrate " + ceil_str + "bit burst " + buff_str + "b latency 100000ms mtu 1540 ";
+      tc_args = "qdisc change "
+	"dev " + interface + " "
+	"parent " + parent + " "
+	"handle " + handle + " tbf "
+	"rate " + std::to_string(bandwidth) + "bit "
+	"burst " + std::to_string(bucket) + "b "
+	"limit " + std::to_string(buffer) + "k ";
     }
   else
     {
-      tc_args = "class change dev " + interface
-	+ " parent " + parent + " classid " + handle + " htb rate "
-	+ bw_str + "bit ceil " + ceil_str + "bit burst " + buff_str;
+      tc_args = "class change "
+	"dev " + interface + " "
+	"parent " + parent + " "
+	"classid " + handle + " htb "
+	"rate " + std::to_string(bandwidth) + "bit "
+	"ceil " + std::to_string(ceil) + "bit ";
       if ( priority >= 0 )
-	tc_args += " prio " + std::string(prio_str);
+	tc_args += "prio " + std::to_string(priority);
     }
+  forkTC(tc_args);
+}
 
+void setTCLatency( double latency,
+		   std::string interface, std::string parent, std::string handle )
+{
+  std::string tc_args;
+  
+  tc_args = "qdisc change "
+    "dev " + interface + " "
+    "parent " + parent + " "
+    "handle " + handle + " netem "
+    "delay " + std::to_string((uint64_t)(latency*1000)) + "ms ";
+  forkTC(tc_args);
+}
+
+void forkTC(std::string tc_args)
+{
+  std::string tc_binary = "/sbin/tc";
   // FORK
   pid_t parent_pid = getpid();
   pid_t my_pid = fork();
