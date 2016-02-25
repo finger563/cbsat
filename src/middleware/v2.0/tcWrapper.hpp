@@ -13,7 +13,7 @@
 #include "NetworkProfile.hpp"
 #include "log_macro.hpp"
 
-void setTC( unsigned long long bandwidth, unsigned long long ceil, double latency, unsigned long long buffer,
+void setTC( uint64_t bandwidth, uint64_t ceil, double latency, uint64_t buffer,
 	    std::string interface, std::string parent, std::string handle, bool useTBF = true, int priority = -1 );
 
 class Options {
@@ -24,7 +24,7 @@ public:
   std::string profile;
   bool isRouter;
   bool useTBF;
-  unsigned long long buffer;
+  uint64_t buffer;
 
   Options() {
     interface = "eth0";
@@ -99,7 +99,7 @@ public:
     TG_LOG("\t profile name\t\t: %s\n", profile.c_str());
     TG_LOG("\t is router?\t\t: %d\n", isRouter);
     TG_LOG("\t use tbf?\t\t: %d\n", useTBF);
-    TG_LOG("\t buffer\t\t\t: %llu\n", buffer);
+    TG_LOG("\t buffer\t\t\t: %lu\n", buffer);
     TG_LOG("\t interface name\t\t: %s\n", interface.c_str());
     TG_LOG("\t parent name\t\t: %s\n", parent.c_str());
     TG_LOG("\t handle name\t\t: %s\n", handle.c_str());

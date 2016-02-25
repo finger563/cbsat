@@ -21,6 +21,6 @@ tcWrapper: tcWrapper.cpp
 .PHONY: clean
 
 clean:
-	rm -f *~ core $(INCDIR)/*~ *.a *Output*
+	rm -f *~ core $(INCDIR)/*~ *.a *Output* server client tcWrapper
 test:
 	g++ recursive.cpp -o recursive -std=c++11

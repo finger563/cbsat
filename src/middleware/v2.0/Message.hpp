@@ -31,7 +31,7 @@ namespace Network {
     {
     }
 
-    Message ( uint64_t len, uint64_t i, uint64_t conn_id )
+    Message ( uint64_t len, uint64_t i, uint64_t conn_id=0 )
       : bits (len),
 	id(i),
 	connection_id(conn_id)

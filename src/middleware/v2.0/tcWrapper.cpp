@@ -11,7 +11,7 @@ int main(int argc, char **argv) {
   std::string parent = options.parent;
   std::string handle = options.handle;
   bool isRouter = options.isRouter;
-  unsigned long long buffer = options.buffer;
+  uint64_t buffer = options.buffer;
   bool useTBF = options.useTBF;
 
   Network::NetworkProfile profile;
@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
     return -1;
   }
 
-  unsigned long long bandwidth;
+  uint64_t bandwidth;
   double latency;
   timespec remainingTime, wakeTime;
   while ( true ) {
@@ -32,13 +32,13 @@ int main(int argc, char **argv) {
 	  TG_LOG("WHO HAS AWOKEN ME FROM MY SLUMBER?!\n");
 	}
 
-      TG_LOG("Setting bandwidth to %llu bps and latency to %fs\n",bandwidth, latency);
+      TG_LOG("Setting bandwidth to %lu bps and latency to %fs\n",bandwidth, latency);
 
       if (bandwidth == 0)
 	bandwidth = 10;
 
-      unsigned long long ceil_bandwidth = bandwidth;
-      ceil_bandwidth = (unsigned long long)((double)bandwidth * 1.01f);
+      uint64_t ceil_bandwidth = bandwidth;
+      ceil_bandwidth = (uint64_t)((double)bandwidth * 1.01f);
       if ( ceil_bandwidth == bandwidth )
 	ceil_bandwidth++;
 
@@ -71,16 +71,16 @@ int main(int argc, char **argv) {
 }
 
 // Forks/Execs to call TC for setting HTB bandwidth
-void setTC( unsigned long long bandwidth, unsigned long long ceil, double latency, unsigned long long buffer,
+void setTC( uint64_t bandwidth, uint64_t ceil, double latency, uint64_t buffer,
 	    std::string interface, std::string parent, std::string handle, bool useTBF, int priority )
 {
   std::string tc_binary = "/sbin/tc";
   char buff_str[100];
-  sprintf(buff_str,"%llu",buffer);
+  sprintf(buff_str,"%lu",buffer);
   char bw_str[100];
-  sprintf(bw_str,"%llu",bandwidth);
+  sprintf(bw_str,"%lu",bandwidth);
   char ceil_str[100];
-  sprintf(ceil_str,"%llu",ceil);
+  sprintf(ceil_str,"%lu",ceil);
   char prio_str[10];
   sprintf(prio_str, "%d",priority);
 

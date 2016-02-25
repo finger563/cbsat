@@ -35,7 +35,8 @@ int main(int argc, char **argv) {
   timespec timeout, remaining;
   long id = 0;
 
-  Network::write_header(outputFile.c_str());
+  std::string fStr;
+  fStr += Network::write_header(1);
 
   while ( true ) {
     memset(messageData,0,messageStrLength+2);
@@ -53,7 +54,7 @@ int main(int argc, char **argv) {
 		   Network::ipv4_route_bytes +
 		   Network::ipv4_header_padding_bytes +
 		   Network::udp_header_bytes );
-	Network::append_data(outputFile.c_str(), &msg);
+	fStr += msg.ToString() + "\n";
       }
 
       timerDelay = profile.Delay(msg.Bits(),msg.FirstEpochTime());
@@ -66,4 +67,10 @@ int main(int argc, char **argv) {
       }
     }
   }
+  std::ofstream file(outputFile.c_str());
+  if (!file.is_open())
+    return -1;
+  file << fStr;
+  file.close();
+  return 0;
 }

@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
   clock_gettime(CLOCK_REALTIME,&currentTime);
 
   long id = 0;
-  std::vector<Network::Message*> messages;
+  std::vector<Network::Message> messages;
 
   double start_delay = profile.period - profile.getOffset(currentTime);
   if ( start_delay > 0 ) {
@@ -53,27 +53,28 @@ int main(int argc, char **argv) {
   }
   
   while (true) {
-    Network::Message *data = new Network::Message(messageBitLength, id++);
-    messages.push_back(data);      
-    data->TimeStamp();
+    Network::Message data = Network::Message(messageBitLength, id++);
+    data.TimeStamp();
     
-    interface->Send( data->Buffer().c_str(),
-		     data->Bytes() );
+    interface->Send( data.Buffer().c_str(),
+		     data.Bytes() );
 
-    timeDiff = (double)(data->FirstEpochTime().tv_sec - 
+    timeDiff = (double)(data.FirstEpochTime().tv_sec - 
 			startTime.tv_sec);
-    timeDiff += (double)(data->FirstEpochTime().tv_nsec - 
+    timeDiff += (double)(data.FirstEpochTime().tv_nsec - 
 			 startTime.tv_nsec)/1000000000.0f;
 
     if ( timeDiff >= runTime )
       break;
 
-    data->Bits( data->Bits() +
-		Network::ipv4_header_bytes * 8 +
-		Network::ipv4_route_bytes * 8 +
-		Network::ipv4_header_padding_bytes * 8 +
-		Network::udp_header_bytes * 8 );
-    timerDelay = profile.Delay(data->Bits(),data->FirstEpochTime());
+    data.Bits( data.Bits() +
+	       Network::ipv4_header_bytes * 8 +
+	       Network::ipv4_route_bytes * 8 +
+	       Network::ipv4_header_padding_bytes * 8 +
+	       Network::udp_header_bytes * 8 );
+    messages.push_back(data);      
+
+    timerDelay = profile.Delay(data.Bits(),data.FirstEpochTime());
     if ( timerDelay > 0 ) {
       double fractpart,intpart;
       fractpart = modf(timerDelay,&intpart);
@@ -88,7 +89,7 @@ int main(int argc, char **argv) {
   double maxLatency = 0;
   double latency = 0;
   for (long i=0; i<messages.size(); i++) {
-    std::vector<timespec> times(messages[i]->EpochTimes());
+    std::vector<timespec> times(messages[i].EpochTimes());
     latency = (double)(times.back().tv_sec - times.front().tv_sec);
     latency += ((double)(times.back().tv_nsec - times.front().tv_nsec)/1000000000.0f);
     if ( latency > maxLatency )
@@ -100,12 +101,5 @@ int main(int argc, char **argv) {
   TG_LOG("Max message latency: %f seconds\n",
 	 maxLatency);
 
-  Network::write_header(outputFile.c_str());
   Network::write_data(outputFile.c_str(), messages);
-
-  for (int i=0; i<messages.size(); i++)
-    {
-      if (messages[i])
-	delete messages[i];
-    }
 }
