@@ -409,7 +409,7 @@ namespace Network {
     bool HasEntries() const { return resources.size() > 0; }
   };
 
-  static std::string write_header(int numTimes) {
+  static std::string header(int numTimes) {
     std::string retStr;
     retStr += "ID";
     for (int i=0; i<numTimes; i++)
@@ -418,12 +418,28 @@ namespace Network {
     return retStr;
   }
 
+  static std::string data(const std::vector<Network::Message> messages) {
+    std::string retStr;
+    for (auto it=messages.begin(); it != messages.end(); ++it) {
+      retStr += (*it).ToString() + "\n";
+    }
+    return retStr;
+  }
+
+  static int append_data(const char* fname, Network::Message& message) {
+    std::string fStr = message.ToString() + "\n";
+    std::ofstream file(fname, std::ofstream::app);
+    if ( !file.is_open() )
+      return -1;
+    file << fStr;
+    file.close();
+    return 0;
+  }
+
   static int write_data(const char* fname, const std::vector<Network::Message> messages) {
     std::string fStr;
-    fStr += Network::write_header(messages[0].NumTimes());
-    for (auto it=messages.begin(); it != messages.end(); ++it) {
-      fStr += (*it).ToString() + "\n";
-    }
+    fStr += Network::header(messages[0].NumTimes());
+    fStr += Network::data(messages);
     std::ofstream file(fname);
     if ( !file.is_open() )
       return -1;

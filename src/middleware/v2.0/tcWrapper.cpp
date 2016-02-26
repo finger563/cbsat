@@ -119,7 +119,7 @@ void setTCLatency( double latency,
 void forkTC(std::string tc_args)
 {
   std::string tc_binary = "/sbin/tc";
-  TG_LOG(tc_args.c_str());
+  TG_LOG("  cmd: %s\n", tc_args.c_str());
   // FORK
   pid_t parent_pid = getpid();
   pid_t my_pid = fork();

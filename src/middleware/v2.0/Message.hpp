@@ -17,6 +17,13 @@
 #include <fstream>
 
 namespace Network {
+  static double EpochToDouble(timespec t) {
+    double retTime = 
+      (double)t.tv_sec + 
+      ((double)t.tv_nsec)/(double)1000000000.0;
+    return retTime;
+  }
+
   class Message {
   public:  
     std::string buffer;
@@ -90,24 +97,18 @@ namespace Network {
       std::vector<double> retTimes;
       double time = 0;
       for (int i=0;i<times.size();i++) {
-	time = (double)times[i].tv_sec + ((double)times[i].tv_nsec)/(double)1000000000.0;
+	time = Network::EpochToDouble(times[i]);
 	retTimes.push_back( time );
       }
       return retTimes;
     }
 
     double FirstDoubleTime() const {
-      double retTime = 
-	(double)times.front().tv_sec + 
-	((double)times.front().tv_nsec)/(double)1000000000.0;
-      return retTime;
+      return Network::EpochToDouble(times.front());
     }
 
     double LastDoubleTime() const {
-      double retTime = 
-	(double)times.back().tv_sec + 
-	((double)times.back().tv_nsec)/(double)1000000000.0;
-      return retTime;
+      return Network::EpochToDouble(times.back());
     }
 
     std::vector<timespec> EpochTimes() const {

@@ -35,9 +35,7 @@ int main(int argc, char **argv) {
   double timerDelay = 0;
   timespec timeout, remaining;
 
-  double timeDiff = 0;
   timespec startTime, currentTime;
-  clock_gettime(CLOCK_REALTIME,&startTime);
   clock_gettime(CLOCK_REALTIME,&currentTime);
 
   long id = 0;
@@ -52,6 +50,11 @@ int main(int argc, char **argv) {
     int return_code = nanosleep (&timeout, &remaining);
   }
   
+  double timeDiff = 0;
+  double start = 0;
+  clock_gettime(CLOCK_REALTIME,&startTime);
+  start = Network::EpochToDouble(startTime);
+
   while (true) {
     Network::Message data = Network::Message(messageBitLength, id++);
     data.TimeStamp();
@@ -59,16 +62,16 @@ int main(int argc, char **argv) {
     interface->Send( data.Buffer().c_str(),
 		     data.Bytes() );
 
-    timeDiff = data.FirstDoubleTime();
-    if ( timeDiff >= runTime )
-      break;
-
     data.Bits( data.Bits() +
 	       Network::ipv4_header_bytes * 8 +
 	       Network::ipv4_route_bytes * 8 +
 	       Network::ipv4_header_padding_bytes * 8 +
 	       Network::udp_header_bytes * 8 );
     messages.push_back(data);      
+
+    timeDiff = data.FirstDoubleTime() - start;
+    if ( timeDiff >= runTime )
+      break;
 
     timerDelay = profile.Delay(data.Bits(),data.FirstEpochTime());
     if ( timerDelay > 0 ) {
